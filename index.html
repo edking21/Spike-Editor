@@ -49,7 +49,7 @@
     window.enableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
     window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = false; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'none'; };
     // Test editor toggle (hidden by default)
-    window.SNIPPET_TEST_EDITOR_ENABLED = true; // set to true to enable on load, false to disable
+    window.SNIPPET_TEST_EDITOR_ENABLED = false; // set to true to enable on load, false to disable
     window.enableSnippetTestEditor = function() {
       window.SNIPPET_TEST_EDITOR_ENABLED = true;
       if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
@@ -79,109 +79,122 @@
     });
     // Cleaned-up snippetData: no duplicate keys, no stray concatenation plus signs
     const snippetData = {
-      1: { snippets: [
-        {
-          id: "m1",
-          buttonText: 'Run shortest distance to absolute 0',
-          emoji: '🧿',
-          color: '#0000FF',
-          textComment: '# Run shortest distance to absolute 0',
-          textPython: `await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
-        }
-      ]},  // motors
+1: { snippets: [
+{
+id: "m1",
+buttonText: 'Run shortest distance to absolute 0',
+emoji: '🧿',
+color: '#0000FF',
+textPython: `
+    # Run shortest distance to absolute 0
+    await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+}
+]},  // motors
 
-      2: { snippets: [
-        {
-          id: "move1",
-          buttonText: 'move forward for 10cm',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# move forward for 10cm',
-          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0, velocity=movement_speed)`
-        },
-        {
-          id: "move2",
-          buttonText: 'move backward for 10cm',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# move backward for 10cm',
-          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0, velocity=movement_speed)`
-        },
-        {
-          id: "move3",
-          buttonText: 'start moving',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# start moving',
-          textPython: `motor_pair.move(motor_pair.PAIR_1, 0)`
-        },
-        {
-          id: "move4",
-          buttonText: 'turn in place right 90',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# turn in place right 90 (180 degrees rotation 100 percent steering)',
-          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
-        }, 
-        {
-          id: "move5",
-          buttonText: 'turn in place left 90',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# turn in place left 90 (-180 degrees rotation 100 percent steering)',
-          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100)`
-        }, 
-        {
-          id: "move6",
-          buttonText: 'pivot turn right 90 degrees',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# pivot turn right 90 degrees (360 degrees rotation 50 percent steering)',
-          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50)`
-        },
-        {
-          id: "move7",
-          buttonText: 'pivot turn left 90 degrees',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# pivot turn left 90 degrees (360 degrees rotation 50 percent steering)',
-          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50)`
-        },
-        {
-          id: "move8",
-          buttonText: 'stop moving',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# stop moving',
-          textPython: `motor_pair.stop(motor_pair.PAIR_1)`
-        },
-        {
-          id: "move9",
-          buttonText: 'set movement speed to 50%',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# set movement speed to 50%',
-          textPython: `movement_speed = int(0.5 * 1100)`
-        },       
-        {
-          id: "move10",
-          buttonText: 'set movement motors to C+D',
-          emoji: '🧿',
-          color: '#FF4CCD',
-          textComment: '# set movement motors to C+D',
-          textPython: `motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
-        }
-      ]},  // Movement
+2: { snippets: [
+{
+id: "move1",
+buttonText: 'move forward for 10cm',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # move forward for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0`
+},
+{
+id: "move2",
+buttonText: 'move backward for 10cm',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # move backward for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0`
+},
+{
+id: "move3",
+buttonText: 'start moving',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0`
+},
+{
+id: "move4",
+buttonText: 'turn in place right 90',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # turn in place right 90 (180 degrees rotation 100 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100`
+}, 
+{
+id: "move5",
+buttonText: 'turn in place left 90',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # turn in place left 90 (-180 degrees rotation 100 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100`
+}, 
+{
+id: "move6",
+buttonText: 'pivot turn right 90 degrees',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # pivot turn right 90 degrees (360 degrees rotation 50 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50`
+},
+{
+id: "move7",
+buttonText: 'pivot turn left 90 degrees',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # pivot turn left 90 degrees (360 degrees rotation 50 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50`
+},
+{
+id: "move8",
+buttonText: 'stop moving',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1`
+},
+{
+id: "move9",
+buttonText: 'set movement speed to 50%',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # set movement speed to 50%
+    movement_speed = int(0.5 * 1100`
+},       
+{
+id: "move10",
+buttonText: 'set movement motors to C+D',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # set movement motors to C+D
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D`
+}
+]},  // Movement
 
-      3: { snippets: [
-        {
-          id: "light1",
-          buttonText: 'Turn On Smiley Face For 2 Seconds',
-          emoji: '🧿',
-          color: '#544AAC',
-          textComment: '# Turn On Smiley Face For 2 Seconds',
-          textPython: `light_matrix.show_image(light_matrix.IMAGE_SMILE)\n    sleep(2)`
-        },
+    3: { snippets: [
+    {
+    id: "light1",
+    buttonText: 'Turn On Smiley Face For 2 Seconds',
+    emoji: '🧿',
+    color: '#544AAC',
+    textPython: `
+    # Turn On Smiley Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_SMILE)
+    sleep(2)`
+    },
         {
           id: "light2",
           buttonText: 'Blinking Eyes',
@@ -247,24 +260,22 @@
           buttonText: 'Blinking Eyes (function)',
           emoji: '🧿',
           color: '#E31A1A',
-          textComment: `\n\n`,
-          textPython: ` `,
-          textFunction: 
+          textPython: 
     `def blinking_eyes():
         # Show a blinking eyes animation on the Light Matrix
         for i in range(3):
 
-        # Show a happy face on the Light Matrix
-        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+            # Show a happy face on the Light Matrix
+            light_matrix.show_image(light_matrix.IMAGE_HAPPY)
 
-        # Wait for one second
-        sleep_ms(1000)
+            # Wait for one second
+            sleep_ms(1000)
 
-        # Show a smile on the light matrix
-        light_matrix.show_image(light_matrix.IMAGE_SMILE)
+            # Show a smile on the light matrix
+            light_matrix.show_image(light_matrix.IMAGE_SMILE)
         
-        # Wait for 0.2 seconds
-        sleep_ms(200)
+            # Wait for 0.2 seconds
+            sleep_ms(200)
         `,
         }
       ]}   // Functions
@@ -287,16 +298,17 @@
         pre.contentEditable = true;
         pre.style.display = 'none';
 
-  // build the copy text: include function definition (if any), comment, then python body
-  // NOTE: do not add a default 4-space prefix here. We only add the extra
-  // indentation when the user pastes into a place where the previous line
-  // ends with a colon. Previously this unconditionally added 4 spaces in
-  // the snippet source which caused unwanted indentation in many cases.
-  const parts = [];
-  if (snippet.textFunction) parts.push(snippet.textFunction);
-  if (snippet.textComment) parts.push(snippet.textComment);
-  if (snippet.textPython) parts.push(snippet.textPython);
-  pre.textContent = '\n' + parts.join('\n') + '\n';
+        // build the copy text: include function definition (if any), comment, then python body
+        // NOTE: do not add a default 4-space prefix here. We only add the extra
+        // indentation when the user pastes into a place where the previous line
+        // ends with a colon. Previously this unconditionally added 4 spaces in
+        // the snippet source which caused unwanted indentation in many cases.
+        const parts = [];
+        // if (snippet.textFunction) parts.push(snippet.textFunction);
+        // if (snippet.textComment) parts.push(snippet.textComment);
+        // if (snippet.textPython) parts.push(snippet.textPython);
+        parts.push(snippet.textPython);
+        pre.textContent = '\n' + parts.join('\n') + '\n';
 
         snippetDiv.appendChild(pre);
 
@@ -776,7 +788,7 @@
         if (bucket && Array.isArray(bucket.snippets) && bucket.snippets[i]) {
           const s = bucket.snippets[i];
           const parts2 = [];
-          if (s.textFunction) parts2.push(ensureMinIndentPerLine(s.textFunction, 4));
+          if (s.textFunction) parts2.push(ensureMinIndentPerLine(s.textFunction, 0));
           if (s.textComment) parts2.push(ensureMinIndentPerLine(s.textComment, 4));
           if (s.textPython) parts2.push(ensureMinIndentPerLine(s.textPython, 4));
           logDebug(`[computeIndentLogic] snippet parts: function=${!!s.textFunction}, comment=${!!s.textComment}, python=${!!s.textPython}\n` + parts2.join('\n'));
@@ -791,13 +803,14 @@
   }
   /**
    * Computes the snippet text to copy without special indentation logic.
-   * Each non-empty line is ensured to have at least 4 leading spaces.
+   * Each non-empty line is not ensured to have at least 4 leading spaces.
+   * This logic was changed to allow functions to start in column 0.
    *
    * @param {string} text - The raw snippet text.
    * @returns {string} The formatted snippet text to copy with minimum indentation.
    */
   function computeFallbackLogic(text) {
-    return ensureMinIndentPerLine(text, 4);
+    return ensureMinIndentPerLine(text, 0);
   }
 
     function fallbackCopy(text) {
