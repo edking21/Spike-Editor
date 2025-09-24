@@ -21,6 +21,7 @@
   </style>
 </head>
 <body>
+  <!-- Left column with emoji buttons -->
   <div class="left-column">
     <div class="emoji-block">
       <div class="emoji-container"><button onclick="refreshSnippets(1)">🔵</button><div class="emoji-label">Motors</div></div>
@@ -39,7 +40,23 @@
   </div>
 
   <!-- Visible debug panel so users can see diagnostic messages without opening devtools -->
-  <div id="snippet-debug" style="position:fixed;right:8px;bottom:8px;width:min(720px,40vw);max-width:90vw;max-height:min(880px,60vh);overflow:auto;padding:8px;background:#111;color:#fff;border-radius:6px;font-size:12px;opacity:0.95;z-index:9999">Debug:</div>
+  <!-- Hidden by default; use enableSnippetDebug() to show and start appending messages -->
+  <div id="snippet-debug" style="display:none;position:fixed;right:8px;bottom:8px;width:min(720px,40vw);max-width:90vw;max-height:min(880px,60vh);overflow:auto;padding:8px;background:#111;color:#fff;border-radius:6px;font-size:12px;opacity:0.95;z-index:9999">Debug:</div>
+
+  <script>
+    // Toggle helpers for the debug panel (default: disabled)
+    window.SNIPPET_DEBUG_ENABLED = false;
+    window.enableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
+    window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = false; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'none'; };
+    // Test editor toggle (hidden by default)
+    window.SNIPPET_TEST_EDITOR_ENABLED = true; // set to true to enable on load, false to disable
+    window.enableSnippetTestEditor = function() {
+      window.SNIPPET_TEST_EDITOR_ENABLED = true;
+      if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
+      const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'block';
+    };
+    window.disableSnippetTestEditor = function() { window.SNIPPET_TEST_EDITOR_ENABLED = false; const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'none'; };
+  </script>
 
   <style>
     /* toast style for immediate visible feedback */
@@ -234,15 +251,19 @@
           textPython: ` `,
           textFunction: 
     `def blinking_eyes():
-    \"\"\"\n+    Show a blinking eyes animation on the Light Matrix
-    \"\"\"\n+    for i in range(3):
-    \n+        # Show a happy face on the Light Matrix
+        # Show a blinking eyes animation on the Light Matrix
+        for i in range(3):
+
+        # Show a happy face on the Light Matrix
         light_matrix.show_image(light_matrix.IMAGE_HAPPY)
-        \n+        # Wait for one second
+
+        # Wait for one second
         sleep_ms(1000)
-        \n+        # Show a smile on the light matrix
+
+        # Show a smile on the light matrix
         light_matrix.show_image(light_matrix.IMAGE_SMILE)
-        \n+        # Wait for 0.2 seconds
+        
+        # Wait for 0.2 seconds
         sleep_ms(200)
         `,
         }
@@ -293,23 +314,27 @@
       });
     }
 
-    // --- Test editor and helpers (visible only on page) ---
-    (function addTestEditor(){
+    // --- Test editor creation (created on demand) ---
+    function createSnippetTestEditor() {
       const container = document.createElement('div');
+      container.id = 'snippet-test-editor-container';
       // keep existing margins but push the test editor down 10px so it doesn't
       // sit under the fixed emoji column; also ensure it stacks above the
       // fixed left column by using a positioned z-index.
       container.style.margin = '12px';
       container.style.marginTop = '22px'; // 12 + 10px downward shift
+  // move test editor right by additional 30px (12px base + 30px = 42px)
+  container.style.marginLeft = '80px';
       container.style.position = 'relative';
       container.style.zIndex = '10001';
-  const ta = document.createElement('textarea');
-  ta.id = 'snippet-test-editor';
-  ta.rows = 10; ta.cols = 60;
-  // Increase width by 25% relative to current 25% (25% * 1.25 = 31.25%)
-  ta.style.width = '31.25%';
-  ta.style.boxSizing = 'border-box';
-      ta.placeholder = 'Use this textarea to test colon detection. Add a line ending with a colon, then place the caret on the next line.';
+      const ta = document.createElement('textarea');
+      ta.id = 'snippet-test-editor';
+      ta.rows = 10; ta.cols = 60;
+      // Increase width by 25% relative to current 25% (25% * 1.25 = 31.25%)
+      ta.style.width = '100%';
+      ta.style.boxSizing = 'border-box';
+      // Remove placeholder and pre-fill the textarea so the first line reads 'dev test:'
+      ta.value = 'dev test:' + '\n';
       container.appendChild(ta);
       const btnFocus = document.createElement('button');
       btnFocus.textContent = 'Focus test editor';
@@ -334,7 +359,10 @@
       };
       container.appendChild(btnPlaceAfterColon);
       document.body.insertBefore(container, document.getElementById('snippet-column').nextSibling);
-    })();
+    }
+
+    // Create the test editor only if enabled on initial load
+    if (window.SNIPPET_TEST_EDITOR_ENABLED) createSnippetTestEditor();
 
   // Helper: prefix non-empty lines with the given prefix
   function indentLines(input, prefix) {
@@ -505,6 +533,8 @@
   function logDebug(msg) {
     try { console.log(msg); } catch (e) {}
     try {
+      // Respect the global toggle; avoid DOM work when debug is disabled
+      if (!window.SNIPPET_DEBUG_ENABLED) return;
       const panel = document.getElementById('snippet-debug');
       if (panel) {
         const p = document.createElement('div');
@@ -564,15 +594,16 @@
 
     showIndentPreview(text, textToCopy, shouldIndent);
 
-    // Write modified (or original) text into the clipboard so the user's next Ctrl+V will paste it
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(textToCopy).catch((err) => {
-        console.error('clipboard.writeText failed', err);
-        fallbackCopy(textToCopy);
-      });
-    } else {
-      fallbackCopy(textToCopy);
-    }
+    navigator.clipboard && navigator.clipboard.writeText
+      ? navigator.clipboard.writeText(textToCopy).catch((err) => {
+          console.error('clipboard.writeText failed', err, {
+            name: err && err.name, message: err && err.message,
+            textType: typeof textToCopy, textLen: textToCopy && textToCopy.length,
+            protocol: location.protocol, hidden: document.hidden
+          });
+          fallbackCopy(textToCopy);
+        })
+      : fallbackCopy(textToCopy);
   }
 
   // Helper function for debug logging
@@ -726,7 +757,6 @@
     return ensureMinIndentPerLine(text, 4);
   }
   
-  
   /**
    * Computes the snippet text to copy with indentation applied.
    * If the snippet contains function, comment, or Python code, each part is indented with at least 4 spaces.
@@ -759,8 +789,13 @@
     }
     return ensureMinIndentPerLine(text, 4);
   }
-
-
+  /**
+   * Computes the snippet text to copy without special indentation logic.
+   * Each non-empty line is ensured to have at least 4 leading spaces.
+   *
+   * @param {string} text - The raw snippet text.
+   * @returns {string} The formatted snippet text to copy with minimum indentation.
+   */
   function computeFallbackLogic(text) {
     return ensureMinIndentPerLine(text, 4);
   }
