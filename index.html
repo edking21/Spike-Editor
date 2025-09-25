@@ -45,11 +45,11 @@
 
   <script>
     // Toggle helpers for the debug panel (default: disabled)
-    window.SNIPPET_DEBUG_ENABLED = false;
+    window.SNIPPET_DEBUG_ENABLED = true;
     window.enableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
-    window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = false; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'none'; };
+    // window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
     // Test editor toggle (hidden by default)
-    window.SNIPPET_TEST_EDITOR_ENABLED = false; // set to true to enable on load, false to disable
+    window.SNIPPET_TEST_EDITOR_ENABLED = true; // set to true to enable on load, false to disable
     window.enableSnippetTestEditor = function() {
       window.SNIPPET_TEST_EDITOR_ENABLED = true;
       if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
@@ -86,8 +86,8 @@ buttonText: 'Run shortest distance to absolute 0',
 emoji: '🧿',
 color: '#0000FF',
 textPython: `
-    # Run shortest distance to absolute 0
-    await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+# Run shortest distance to absolute 0
+await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
 }
 ]},  // motors
 
@@ -286,7 +286,7 @@ buttonText: 'Distance Sensor',
 emoji: '🧿',
 color: '#E31A1A',
 textPython: `
-    # Move forward until object withiin 10cm
+    # Move forward until object within 10cm
     if distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1: pass
    `
 },
@@ -374,8 +374,8 @@ def blinking_eyes():
       const ta = document.createElement('textarea');
       ta.id = 'snippet-test-editor';
       ta.rows = 10; ta.cols = 60;
-      // Increase width by 25% relative to current 25% (25% * 1.25 = 31.25%)
-      ta.style.width = '100%';
+  // Increase width by 25% relative to current 25% (25% * 1.25 = 31.25%)
+  ta.style.width = '50%';
       ta.style.boxSizing = 'border-box';
       // Remove placeholder and pre-fill the textarea so the first line reads 'dev test:'
       ta.value = 'dev test:' + '\n';
@@ -596,7 +596,9 @@ def blinking_eyes():
         const beforeLines = (text || '').split('\n').slice(0, 8);
         const afterLines = (textToCopy || '').split('\n').slice(0, 8);
         logDebug('[snippet] preview before: ' + JSON.stringify(beforeLines));
+        console.log('[snippet] preview before: ' + JSON.stringify(beforeLines));
         logDebug('[snippet] preview after:  ' + JSON.stringify(afterLines));
+        console.log('[snippet] preview after:  ' + JSON.stringify(afterLines));
         try {
           const panel = document.getElementById('snippet-debug');
           if (panel) {
@@ -656,17 +658,24 @@ def blinking_eyes():
       const aeId = ae && (ae.id || ae.name) ? (ae.id || ae.name) : (ae && ae.tagName ? ae.tagName : 'none');
       const lastEditableId = window.__lastEditable && (window.__lastEditable.id || window.__lastEditable.name || window.__lastEditable.tagName) ? (window.__lastEditable.id || window.__lastEditable.name || window.__lastEditable.tagName) : 'none';
       logDebug(`[snippet] lastEditable=${lastEditableId}, activeElement=${aeId}, lastColonLine=${lastColonLine}, caretLine=${caretLine}, shouldIndent=${shouldIndent}`);
+      consol.log(`[snippet] lastEditable=${lastEditableId}, activeElement=${aeId}, lastColonLine=${lastColonLine}, caretLine=${caretLine}, shouldIndent=${shouldIndent}`);
       if (shouldIndent) {
         let idOrName = ae && (ae.id || ae.name || ae.tagName) ? (ae.id || ae.name || ae.tagName) : 'activeElement';
         logDebug(`[snippet] Indenting clipboard for element: ${idOrName} (lastColonLine=${lastColonLine}, caretLine=${caretLine})`);
+        console.log(`[snippet] Indenting clipboard for element: ${idOrName} (lastColonLine=${lastColonLine}, caretLine=${caretLine})`);
       } else {
         if (lastColonLine === -1) {
           logDebug('[snippet] colon not found');
+          console.log('[snippet] colon not found');
         } else {
           logDebug('[snippet] colon found but caret is not immediately after the colon-terminated line');
+          console.log('[snippet] colon found but caret is not immediately after the colon-terminated line');
         }
       }
-    } catch (e) { logDebug('snippet debug logging failed: ' + (e && e.message)); }
+    } catch (e) { 
+      logDebug('snippet debug logging failed: ' + (e && e.message)); 
+      console.log('snippet debug logging failed: ' + (e && e.message)); 
+    }
   }
 
   // Helper for logging snippet click and showing toast
@@ -746,6 +755,7 @@ def blinking_eyes():
     try {
       const prevLineStart = getStartPositionOfLineBeforeCaret();
       logDebug('[computeColonLogic] prevLineStart=' + prevLineStart + ', caretLine=' + caretLine + ', lastColonLine=' + lastColonLine);
+      console.log('[computeColonLogic] prevLineStart=' + prevLineStart + ', caretLine=' + caretLine + ', lastColonLine=' + lastColonLine);
       if (shouldIndent && prevLineStart >= 0) {
         const ae = aeForCheck;
         const tag = (ae && ae.tagName || '').toLowerCase();
@@ -777,6 +787,7 @@ def blinking_eyes():
                   const leading2 = m2 ? m2[0].length : 0;
                   target = leading2;
                   logDebug('[computeColonLogic] two-lines-up leading spaces=' + leading2 + ', applying target=' + target);
+                  console.log('[computeColonLogic] two-lines-up leading spaces=' + leading2 + ', applying target=' + target);
                   return ensureMinIndentPerLine(text, target);
                 }
               } catch (e) { 
@@ -788,6 +799,7 @@ def blinking_eyes():
               const leading = m ? m[0].length : 0;
               target = leading;
               logDebug('[computeColonLogic] previous-line leading spaces=' + leading + ', applying target=' + target);
+              console.log('[computeColonLogic] previous-line leading spaces=' + leading + ', applying target=' + target);
               return ensureMinIndentPerLine(text, target);
             }
             // Return with computed indentation
@@ -824,6 +836,7 @@ def blinking_eyes():
           if (s.textComment) parts2.push(ensureMinIndentPerLine(s.textComment, 4));
           if (s.textPython) parts2.push(ensureMinIndentPerLine(s.textPython, 4));
           logDebug(`[computeIndentLogic] snippet parts: function=${!!s.textFunction}, comment=${!!s.textComment}, python=${!!s.textPython}\n` + parts2.join('\n'));
+          console.log(`[computeIndentLogic] snippet parts: function=${!!s.textFunction}, comment=${!!s.textComment}, python=${!!s.textPython}\n` + parts2.join('\n'));
           return parts2.join('\n');
         }
       }
