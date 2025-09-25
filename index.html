@@ -45,11 +45,11 @@
 
   <script>
     // Toggle helpers for the debug panel (default: disabled)
-    window.SNIPPET_DEBUG_ENABLED = true;
+    window.SNIPPET_DEBUG_ENABLED = false;
     window.enableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
-    // window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
+    window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
     // Test editor toggle (hidden by default)
-    window.SNIPPET_TEST_EDITOR_ENABLED = true; // set to true to enable on load, false to disable
+    window.SNIPPET_TEST_EDITOR_ENABLED = false; // set to true to enable on load, false to disable
     window.enableSnippetTestEditor = function() {
       window.SNIPPET_TEST_EDITOR_ENABLED = true;
       if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
@@ -662,20 +662,17 @@ def blinking_eyes():
       } else {
         if (lastColonLine === -1) {
           logDebug('[snippet] colon not found');
-          console.log('[snippet] colon not found');
         } else {
           logDebug('[snippet] colon found but caret is not immediately after the colon-terminated line');
         }
       }
-    } catch (e) { 
-      logDebug('snippet debug logging failed: ' + (e && e.message)); 
-    }
+    } catch (e) { logDebug('snippet debug logging failed: ' + (e && e.message)); }
   }
 
   // Helper for logging snippet click and showing toast
   function logSnippetClick(preId) {
     try {
-      logDebug(`[snippet] copySnippetWithLineInsert called for ${preId}`);
+      console.log(`[snippet] copySnippetWithLineInsert called for ${preId}`);
       const panel = document.getElementById('snippet-debug');
       if (panel) {
         // Also print the panel's header text each time (fallback to 'Debug:')
@@ -749,7 +746,6 @@ def blinking_eyes():
     try {
       const prevLineStart = getStartPositionOfLineBeforeCaret();
       logDebug('[computeColonLogic] prevLineStart=' + prevLineStart + ', caretLine=' + caretLine + ', lastColonLine=' + lastColonLine);
-      console.log('[computeColonLogic] prevLineStart=' + prevLineStart + ', caretLine=' + caretLine + ', lastColonLine=' + lastColonLine);
       if (shouldIndent && prevLineStart >= 0) {
         const ae = aeForCheck;
         const tag = (ae && ae.tagName || '').toLowerCase();
@@ -781,7 +777,6 @@ def blinking_eyes():
                   const leading2 = m2 ? m2[0].length : 0;
                   target = leading2;
                   logDebug('[computeColonLogic] two-lines-up leading spaces=' + leading2 + ', applying target=' + target);
-                  console.log('[computeColonLogic] two-lines-up leading spaces=' + leading2 + ', applying target=' + target);
                   return ensureMinIndentPerLine(text, target);
                 }
               } catch (e) { 
@@ -793,7 +788,6 @@ def blinking_eyes():
               const leading = m ? m[0].length : 0;
               target = leading;
               logDebug('[computeColonLogic] previous-line leading spaces=' + leading + ', applying target=' + target);
-              console.log('[computeColonLogic] previous-line leading spaces=' + leading + ', applying target=' + target);
               return ensureMinIndentPerLine(text, target);
             }
             // Return with computed indentation
