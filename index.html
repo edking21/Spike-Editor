@@ -99,7 +99,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # move forward for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0)`
 },
 {
 id: "move2",
@@ -108,7 +108,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # move backward for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0)`
 },
 {
 id: "move3",
@@ -117,7 +117,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0`
+    motor_pair.move(motor_pair.PAIR_1, 0)`
 },
 {
 id: "move4",
@@ -126,7 +126,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # turn in place right 90 (180 degrees rotation 100 percent steering
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
 }, 
 {
 id: "move5",
@@ -135,7 +135,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # turn in place left 90 (-180 degrees rotation 100 percent steering
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100)`
 }, 
 {
 id: "move6",
@@ -144,7 +144,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # pivot turn right 90 degrees (360 degrees rotation 50 percent steering
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50)`
 },
 {
 id: "move7",
@@ -153,7 +153,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # pivot turn left 90 degrees (360 degrees rotation 50 percent steering
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50)`
 },
 {
 id: "move8",
@@ -162,7 +162,7 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # stop moving
-    motor_pair.stop(motor_pair.PAIR_1`
+    motor_pair.stop(motor_pair.PAIR_1)`
 },
 {
 id: "move9",
@@ -171,8 +171,8 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # set movement speed to 50%
-    movement_speed = int(0.5 * 1100`
-},       
+    movement_speed = int(0.5 * 1100)`
+},
 {
 id: "move10",
 buttonText: 'set movement motors to C+D',
@@ -180,106 +180,137 @@ emoji: '🧿',
 color: '#FF4CCD',
 textPython: `
     # set movement motors to C+D
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D`
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
 }
 ]},  // Movement
 
-    3: { snippets: [
-    {
-    id: "light1",
-    buttonText: 'Turn On Smiley Face For 2 Seconds',
-    emoji: '🧿',
-    color: '#544AAC',
-    textPython: `
+3: { snippets: [
+{
+id: "light1",
+buttonText: 'Turn On Smiley Face For 2 Seconds',
+emoji: '🧿',
+color: '#544AAC',
+textPython: `
     # Turn On Smiley Face For 2 Seconds
     light_matrix.show_image(light_matrix.IMAGE_SMILE)
     sleep(2)`
-    },
-        {
-          id: "light2",
-          buttonText: 'Blinking Eyes',
-          emoji: '🧿',
-          color: '#544AAC',
-          textComment: '# Blinking Eyes on the light matrix',
-          textPython: `blinking_eyes()`
-        },
-        {
-          id: "light3",
-          buttonText: 'Turn On Angry Face For 2 Seconds',
-          emoji: '🧿',
-          color: '#544AAC',
-          textComment: '# Turn On Angry Face For 2 Seconds',
-          textPython: `light_matrix.show_image(light_matrix.IMAGE_ANGRY)\n    sleep(2)`
-        }
-      ]},  // light
+},
+{
+id: "light2",
+buttonText: 'Blinking Eyes',
+emoji: '🧿',
+color: '#544AAC',
+textPython: `
+    # Blinking Eyes on the light matrix
+    blinking_eyes()`
+},
+{
+id: "light3",
+buttonText: 'Turn On Angry Face For 2 Seconds',
+emoji: '🧿',
+color: '#544AAC',
+textPython: `
+    # Turn On Angry Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+    sleep(2)`
+}
+]},  // light
 
-      5: { snippets: [
-        {
-          id: "ctrl1",
-          buttonText: 'Wait for 1 second',
-          emoji: '🧿',
-          color: '#E0C83C',
-          textComment: '# Wait for 1 second',
-          textPython: `sleep(1)`
-        },
-        {
-          id: "ctrl2",
-          buttonText: 'Wait For Force Sensor Pressed',
-          emoji: '🧿',
-          color: '#E0C83C',
-          textComment: '# Wait For Force Sensor Pressed',
-          textPython: `while force_sensor.force(port.A) < 1: pass`
-        }
-      ]},  // Control
+5: { snippets: [
+{
+id: "ctrl1",
+buttonText: 'Wait for 1 second',
+emoji: '🧿',
+color: '#E0C83C',
+textPython: `
+    # Wait for 1 second
+    sleep(1)`
+},
+{
+id: "ctrl2",
+buttonText: 'Wait For Force Sensor Pressed',
+emoji: '🧿',
+color: '#E0C83C',
+textPython: `
+    # Wait For Force Sensor Pressed
+    while force_sensor.force(port.A) < 1: pass`
+}
+]},  // Control
 
-      6: { snippets: [
-        {
-          id: "sens1",
-          buttonText: 'Distance Check (example)',
-          emoji: '🧿',
-          color: '#34CCF1',
-          textComment: '# Example sensor check',
-          textPython: `if distance_sensor.get_distance() < 10:\n    print('close')`
-        }
-      ]},  // Sensor
+6: { snippets: [
+{
+id: "sens1",
+buttonText: 'Distance Check (example)',
+emoji: '🧿',
+color: '#34CCF1',
+textPython: `
+    # Example sensor check
+    if distance_sensor.get_distance() < 10:
+    print('close')`
+}
+]},  // Sensor
 
-      7: { snippets: [
-        {
-          id: "op1",
-          buttonText: 'Operator Example',
-          emoji: '🧿',
-          color: '#6AA84F',
-          textComment: '# Operator example',
-          textPython: `result = a + b\n    print(result)`
-        }
-      ]},  // Operators
+7: { snippets: [
+{
+id: "op1",
+buttonText: 'Operator Example',
+emoji: '🧿',
+color: '#6AA84F',
+textPython: `
+    # Operator example
+    result = a + b  `
+}
+]},  // Operators
 
-      8: { snippets: [
-        {
-          id: "fn1",
-          buttonText: 'Blinking Eyes (function)',
-          emoji: '🧿',
-          color: '#E31A1A',
-          textPython: 
-    `def blinking_eyes():
-        # Show a blinking eyes animation on the Light Matrix
-        for i in range(3):
+8: { snippets: [
+{
+id: "fn1",
+buttonText: 'Getting Started',
+emoji: '🧿',
+color: '#E31A1A',
+textPython:`# ChallengeName
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-            # Show a happy face on the Light Matrix
-            light_matrix.show_image(light_matrix.IMAGE_HAPPY)
-
-            # Wait for one second
-            sleep_ms(1000)
-
-            # Show a smile on the light matrix
-            light_matrix.show_image(light_matrix.IMAGE_SMILE)
+runloop.run(main())
+sys.exit()    
+`
+},
+{
+id: "fn2",
+buttonText: 'Distance Sensor',
+emoji: '🧿',
+color: '#E31A1A',
+textPython: `
+    # Move forward until object withiin 10cm
+    if distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1: pass
+   `
+},
+{
+id: "fn2",
+buttonText: 'Blinking Eyes (function)',
+emoji: '🧿',
+color: '#E31A1A',
+textPython: `
+def blinking_eyes():
+    # Show a blinking eyes animation on the Light Matrix
+    for i in range(3):
+        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+        sleep_ms(1000)
         
-            # Wait for 0.2 seconds
-            sleep_ms(200)
-        `,
-        }
-      ]}   // Functions
-    };
+        light_matrix.show_image(light_matrix.IMAGE_SMILE)
+        sleep_ms(200)
+
+    light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+    sleep_ms(2000)
+    `
+}
+]}   // Functions
+};
 
     function refreshSnippets(buttonId) {
       const column = document.getElementById('snippet-column');
@@ -308,7 +339,8 @@ textPython: `
         // if (snippet.textComment) parts.push(snippet.textComment);
         // if (snippet.textPython) parts.push(snippet.textPython);
         parts.push(snippet.textPython);
-        pre.textContent = '\n' + parts.join('\n') + '\n';
+        pre.textContent = parts.join('\n') + '\n';
+        // pre.textContent = '\n' + parts.join('\n') + '\n';
 
         snippetDiv.appendChild(pre);
 
