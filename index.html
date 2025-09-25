@@ -596,9 +596,7 @@ def blinking_eyes():
         const beforeLines = (text || '').split('\n').slice(0, 8);
         const afterLines = (textToCopy || '').split('\n').slice(0, 8);
         logDebug('[snippet] preview before: ' + JSON.stringify(beforeLines));
-        console.log('[snippet] preview before: ' + JSON.stringify(beforeLines));
         logDebug('[snippet] preview after:  ' + JSON.stringify(afterLines));
-        console.log('[snippet] preview after:  ' + JSON.stringify(afterLines));
         try {
           const panel = document.getElementById('snippet-debug');
           if (panel) {
@@ -658,30 +656,26 @@ def blinking_eyes():
       const aeId = ae && (ae.id || ae.name) ? (ae.id || ae.name) : (ae && ae.tagName ? ae.tagName : 'none');
       const lastEditableId = window.__lastEditable && (window.__lastEditable.id || window.__lastEditable.name || window.__lastEditable.tagName) ? (window.__lastEditable.id || window.__lastEditable.name || window.__lastEditable.tagName) : 'none';
       logDebug(`[snippet] lastEditable=${lastEditableId}, activeElement=${aeId}, lastColonLine=${lastColonLine}, caretLine=${caretLine}, shouldIndent=${shouldIndent}`);
-      consol.log(`[snippet] lastEditable=${lastEditableId}, activeElement=${aeId}, lastColonLine=${lastColonLine}, caretLine=${caretLine}, shouldIndent=${shouldIndent}`);
       if (shouldIndent) {
         let idOrName = ae && (ae.id || ae.name || ae.tagName) ? (ae.id || ae.name || ae.tagName) : 'activeElement';
         logDebug(`[snippet] Indenting clipboard for element: ${idOrName} (lastColonLine=${lastColonLine}, caretLine=${caretLine})`);
-        console.log(`[snippet] Indenting clipboard for element: ${idOrName} (lastColonLine=${lastColonLine}, caretLine=${caretLine})`);
       } else {
         if (lastColonLine === -1) {
           logDebug('[snippet] colon not found');
           console.log('[snippet] colon not found');
         } else {
           logDebug('[snippet] colon found but caret is not immediately after the colon-terminated line');
-          console.log('[snippet] colon found but caret is not immediately after the colon-terminated line');
         }
       }
     } catch (e) { 
       logDebug('snippet debug logging failed: ' + (e && e.message)); 
-      console.log('snippet debug logging failed: ' + (e && e.message)); 
     }
   }
 
   // Helper for logging snippet click and showing toast
   function logSnippetClick(preId) {
     try {
-      console.log(`[snippet] copySnippetWithLineInsert called for ${preId}`);
+      logDebug(`[snippet] copySnippetWithLineInsert called for ${preId}`);
       const panel = document.getElementById('snippet-debug');
       if (panel) {
         // Also print the panel's header text each time (fallback to 'Debug:')
@@ -836,7 +830,6 @@ def blinking_eyes():
           if (s.textComment) parts2.push(ensureMinIndentPerLine(s.textComment, 4));
           if (s.textPython) parts2.push(ensureMinIndentPerLine(s.textPython, 4));
           logDebug(`[computeIndentLogic] snippet parts: function=${!!s.textFunction}, comment=${!!s.textComment}, python=${!!s.textPython}\n` + parts2.join('\n'));
-          console.log(`[computeIndentLogic] snippet parts: function=${!!s.textFunction}, comment=${!!s.textComment}, python=${!!s.textPython}\n` + parts2.join('\n'));
           return parts2.join('\n');
         }
       }
