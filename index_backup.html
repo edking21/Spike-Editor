@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Spike</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2px; background-color: #ffffff; color: #000000; margin: 0; }
+    .left-column { position: fixed; top: 0; left: 0; width: 80px; height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #f5f5f5; border-right: 1px solid #ccc; box-sizing: border-box; }
+    .emoji-block { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 0; }
+    .emoji-container { display: flex; flex-direction: column; align-items: center; }
+    .emoji-container button { font-size: 32px; cursor: pointer; border: none; background: none; transition: transform 0.15s ease, filter 0.15s ease; }
+    .emoji-container button:hover { transform: scale(1.08); filter: brightness(110%); }
+    .emoji-label { margin-top: 6px; font-size: 12px; color: black; text-align: center; width: 70px; word-wrap: break-word; }
+
+    .snippet-column { margin-left: 80px; padding: 12px; }
+    .snippet { border: none; border-radius: 8px; padding: 6px; margin: 8px 0; background-color: transparent; width: 100%; box-sizing: border-box; }
+    .snippet button { cursor: pointer; padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12); color: #ffffff; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.12s ease, filter 0.12s ease; }
+    .snippet button:hover { transform: scale(1.04); filter: brightness(110%); }
+    .snippet .emoji { font-size: 1.3em; line-height: 1; }
+    .snippet .label { font-size: 1em; }
+  </style>
+</head>
+<body>
+  <!-- Left column with emoji buttons -->
+  <div class="left-column">
+    <div class="emoji-block">
+      <div class="emoji-container"><button onclick="refreshSnippets(1)">🔵</button><div class="emoji-label">Motors</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(2)">🔴</button><div class="emoji-label">Movement</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(3)">🟣</button><div class="emoji-label">Light</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(4)">🟡</button><div class="emoji-label">Events</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(5)">🟡</button><div class="emoji-label">Control</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(6)">🔵</button><div class="emoji-label">Sensors</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(7)">🟢</button><div class="emoji-label">Operators</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(8)">🔴</button><div class="emoji-label">Functions</div></div>
+    </div>
+  </div>
+
+  <div class="snippet-column" id="snippet-column">
+    <!-- Snippets will be dynamically inserted here -->
+  </div>
+
+  <!-- Visible debug panel so users can see diagnostic messages without opening devtools -->
+  <!-- Hidden by default; use enableSnippetDebug() to show and start appending messages -->
+  <div id="snippet-debug" style="display:none;position:fixed;right:8px;bottom:8px;width:min(720px,40vw);max-width:90vw;max-height:min(880px,60vh);overflow:auto;padding:8px;background:#111;color:#fff;border-radius:6px;font-size:12px;opacity:0.95;z-index:9999">Debug:</div>
+
+  <script>
+    // Toggle helpers for the debug panel (default: disabled)
+    window.SNIPPET_DEBUG_ENABLED = false;
+    window.enableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
+    window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
+    // Test editor toggle (hidden by default)
+    window.SNIPPET_TEST_EDITOR_ENABLED = false; // set to true to enable on load, false to disable
+    window.enableSnippetTestEditor = function() {
+      window.SNIPPET_TEST_EDITOR_ENABLED = false;
+      if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
+      const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'block';
+    };
+    window.disableSnippetTestEditor = function() { window.SNIPPET_TEST_EDITOR_ENABLED = true; const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'none'; };
+  </script>
+
+  <style>
+    /* toast style for immediate visible feedback */
+    snippet-toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; background: rgba(0,0,0,0.9); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 13px; z-index:10000; display:none; }
+  </style>
+  <div id="snippet-toast"></div>
+
+  <script>
+    // Track the last-focused editable element (textarea/input/contentEditable)
+    window.__lastEditable = null;
+    document.addEventListener('focusin', (ev) => {
+      try {
+        const t = ev.target;
+        if (!t) return;
+        const tag = (t.tagName || '').toLowerCase();
+        if (tag === 'textarea' || (tag === 'input' && /text|search|url|email|password/.test(t.type)) || t.isContentEditable) {
+          window.__lastEditable = t;
+        }
+      } catch (e) {}
+    });
+    // Cleaned-up snippetData: no duplicate keys, no stray concatenation plus signs
+    const snippetData = {
+1: { snippets: [
+{
+id: "m1",
+buttonText: 'Run shortest distance to absolute 0',
+emoji: '🧿',
+color: '#0000FF',
+textPython: `
+# Run shortest distance to absolute 0
+await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+}
+]},  // motors
+
+2: { snippets: [
+{
+id: "move1",
+buttonText: 'move forward for 10cm',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # move forward for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0)`
+},
+{
+id: "move2",
+buttonText: 'move backward for 10cm',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # move backward for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0)`
+},
+{
+id: "move3",
+buttonText: 'start moving',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0)`
+},
+{
+id: "move4",
+buttonText: 'turn in place right 90',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # turn in place right 90 (180 degrees rotation 100 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
+}, 
+{
+id: "move5",
+buttonText: 'turn in place left 90',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # turn in place left 90 (-180 degrees rotation 100 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100)`
+}, 
+{
+id: "move6",
+buttonText: 'pivot turn right 90 degrees',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # pivot turn right 90 degrees (360 degrees rotation 50 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50)`
+},
+{
+id: "move7",
+buttonText: 'pivot turn left 90 degrees',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # pivot turn left 90 degrees (360 degrees rotation 50 percent steering
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50)`
+},
+{
+id: "move8",
+buttonText: 'stop moving',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)`
+},
+{
+id: "move9",
+buttonText: 'set movement speed to 50%',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # set movement speed to 50%
+    movement_speed = int(0.5 * 1100)`
+},
+{
+id: "move10",
+buttonText: 'set movement motors to C+D',
+emoji: '🧿',
+color: '#FF4CCD',
+textPython: `
+    # set movement motors to C+D
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+}
+]},  // Movement
+
+3: { snippets: [
+{
+id: "light1",
+buttonText: 'Turn On Smiley Face For 2 Seconds',
+emoji: '🧿',
+color: '#544AAC',
+textPython: `
+    # Turn On Smiley Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_SMILE)
+    sleep(2)`
+},
+{
+id: "light2",
+buttonText: 'Blinking Eyes',
+emoji: '🧿',
+color: '#544AAC',
+textPython: `
+    # Blinking Eyes on the light matrix
+    blinking_eyes()`
+},
+{
+id: "light3",
+buttonText: 'Turn On Angry Face For 2 Seconds',
+emoji: '🧿',
+color: '#544AAC',
+textPython: `
+    # Turn On Angry Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+    sleep(2)`
+}
+]},  // light
+
+5: { snippets: [
+{
+id: "ctrl1",
+buttonText: 'Wait for 1 second',
+emoji: '🧿',
+color: '#E0C83C',
+textPython: `
+    # Wait for 1 second
+    sleep(1)`
+},
+{
+id: "ctrl2",
+buttonText: 'Wait For Force Sensor Pressed',
+emoji: '🧿',
+color: '#E0C83C',
+textPython: `
+    # Wait For Force Sensor Pressed
+    while force_sensor.force(port.A) < 1: pass`
+}
+]},  // Control
+
+6: { snippets: [
+{
+id: "sens1",
+buttonText: 'Distance Check (example)',
+emoji: '🧿',
+color: '#34CCF1',
+textPython: `
+    # Example sensor check
+    if distance_sensor.get_distance() < 10:
+    print('close')`
+}
+]},  // Sensor
+
+7: { snippets: [
+{
+id: "op1",
+buttonText: 'Operator Example',
+emoji: '🧿',
+color: '#6AA84F',
+textPython: `
+    # Operator example
+    result = a + b  `
+}
+]},  // Operators
+
+8: { snippets: [
+{
+id: "fn1",
+buttonText: 'Getting Started',
+emoji: '🧿',
+color: '#E31A1A',
+textPython:`# ChallengeName
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+runloop.run(main())
+sys.exit()    
+`
+},
+{
+id: "fn2",
+buttonText: 'Distance Sensor',
+emoji: '🧿',
+color: '#E31A1A',
+textPython: `
+    # Move forward until object within 10cm
+    if distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1: pass
+   `
+},
+{
+id: "fn2",
+buttonText: 'Blinking Eyes (function)',
+emoji: '🧿',
+color: '#E31A1A',
+textPython: `
+def blinking_eyes():
+    # Show a blinking eyes animation on the Light Matrix
+    for i in range(3):
+        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+        sleep_ms(1000)
+        
+        light_matrix.show_image(light_matrix.IMAGE_SMILE)
+        sleep_ms(200)
+
+    light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+    sleep_ms(2000)
+    `
+}
+]}   // Functions
+};
+
+    function refreshSnippets(buttonId) {
+      const column = document.getElementById('snippet-column');
+      column.innerHTML = '';
+
+      const data = snippetData[buttonId];
+      if (!data) return;
+
+      data.snippets.forEach((snippet, index) => {
+        const snippetDiv = document.createElement('div');
+        snippetDiv.className = 'snippet movement';
+
+        const preId = `snippet-${buttonId}-${index}`;
+        const pre = document.createElement('pre');
+        pre.id = preId;
+        pre.contentEditable = true;
+        pre.style.display = 'none';
+
+        // build the copy text: include function definition (if any), comment, then python body
+        // NOTE: do not add a default 4-space prefix here. We only add the extra
+        // indentation when the user pastes into a place where the previous line
+        // ends with a colon. Previously this unconditionally added 4 spaces in
+        // the snippet source which caused unwanted indentation in many cases.
+        const parts = [];
+        // if (snippet.textFunction) parts.push(snippet.textFunction);
+        // if (snippet.textComment) parts.push(snippet.textComment);
+        // if (snippet.textPython) parts.push(snippet.textPython);
+        parts.push(snippet.textPython);
+        pre.textContent = parts.join('\n') + '\n';
+        // pre.textContent = '\n' + parts.join('\n') + '\n';
+
+        snippetDiv.appendChild(pre);
+
+        const button = document.createElement('button');
+        // emoji slightly larger via CSS class
+        button.innerHTML = `<span class="emoji">${snippet.emoji}</span><span class="label">${snippet.buttonText}</span>`;
+        button.style.backgroundColor = snippet.color;
+        button.style.color = '#ffffff';
+        button.title = snippet.buttonText; // keep accessible label
+
+        button.addEventListener('click', () => copySnippetWithLineInsert(preId));
+
+        snippetDiv.appendChild(button);
+        column.appendChild(snippetDiv);
+      });
+    }
+
+    // --- Test editor creation (created on demand) ---
+    function createSnippetTestEditor() {
+      const container = document.createElement('div');
+      container.id = 'snippet-test-editor-container';
+      // keep existing margins but push the test editor down 10px so it doesn't
+      // sit under the fixed emoji column; also ensure it stacks above the
+      // fixed left column by using a positioned z-index.
+      container.style.margin = '12px';
+      container.style.marginTop = '22px'; // 12 + 10px downward shift
+  // move test editor right by additional 30px (12px base + 30px = 42px)
+  container.style.marginLeft = '80px';
+      container.style.position = 'relative';
+      container.style.zIndex = '10001';
+      const ta = document.createElement('textarea');
+      ta.id = 'snippet-test-editor';
+      ta.rows = 10; ta.cols = 60;
+  // Increase width by 25% relative to current 25% (25% * 1.25 = 31.25%)
+  ta.style.width = '50%';
+      ta.style.boxSizing = 'border-box';
+      // Remove placeholder and pre-fill the textarea
+      ta.value = `
+async def main():
+    x = 2
+    x = 1
+    if x == 1:
+        this line1
+        this line2
+        if x == 2:
+12345678901234567:
+123456789012345678901:
+`
+      container.appendChild(ta);
+      const btnFocus = document.createElement('button');
+      btnFocus.textContent = 'Focus test editor';
+      btnFocus.onclick = () => { ta.focus(); };
+      container.appendChild(document.createElement('br'));
+      container.appendChild(btnFocus);
+      const btnPlaceAfterColon = document.createElement('button');
+      btnPlaceAfterColon.textContent = 'Place caret after last colon line';
+      btnPlaceAfterColon.onclick = () => {
+        const text = ta.value;
+        const lines = text.split('\n');
+        let lastColon = -1;
+        for (let i = lines.length-1;i>=0;i--) if (lines[i].trim().endsWith(':')) { lastColon = i; break; }
+        // place caret at start of line after last colon (or end if none)
+        let pos = ta.value.length;
+        if (lastColon >= 0) {
+          let upTo = 0; for (let i=0;i<=lastColon;i++) upTo += lines[i].length + 1; // +1 for newline
+          pos = upTo; // beginning of line after the colon
+        }
+        ta.focus();
+        ta.setSelectionRange(pos, pos);
+      };
+      container.appendChild(btnPlaceAfterColon);
+      document.body.insertBefore(container, document.getElementById('snippet-column').nextSibling);
+    }
+
+    // Create the test editor only if enabled on initial load
+    if (window.SNIPPET_TEST_EDITOR_ENABLED) createSnippetTestEditor();
+
+  // Helper: prefix non-empty lines with the given prefix
+  function indentLines(input, prefix) {
+    return input.split('\n').map(line => line.length ? (prefix + line) : line).join('\n');
+  }
+
+  // Only add extraPrefix to lines that should receive it.
+  function addIndentWhereNeeded(input, prefix) {
+    return input.split('\n').map(line => {
+      if (line.length === 0) return line;
+      if (line.startsWith(prefix)) return line; // already prefixed
+      return prefix + line;
+    }).join('\n');
+  }
+
+  // Ensure each non-empty line has at least `minSpaces` leading spaces.
+  function ensureMinIndentPerLine(input, minSpaces) {
+    const prefix = ' '.repeat(minSpaces);
+    return input.split('\n').map(line => {
+      if (line.length === 0) return line;
+      const m = line.match(/^ */);
+      const curr = m ? m[0].length : 0;
+      if (curr >= minSpaces) return line; // already at or past target
+      return prefix.slice(0, minSpaces - curr) + line;
+    }).join('\n');
+  }
+
+  // Helper to get the last-focused editable element or document.activeElement
+  function getActiveEditableElement() {
+      return window.__lastEditable || document.activeElement;
+  }
+
+  // Determine caret line index (0-based) inside the currently active editable element
+  /**
+   * Returns the zero-based line index of the caret in the currently active editable element.
+   * Algorithm:
+   *   - For textarea/input, calculates the number of newline characters before the caret.
+   *   - For contentEditable, uses the selection and Range API to get text before the caret, counting newlines.
+   * Edge cases:
+   *   - Returns -1 if the element is not editable, selection is invalid, or caret is outside the editable.
+   *   - Handles nested elements in contentEditable by ensuring the selection is within the active element.
+   *   - If the text before the caret is empty, returns 0 (caret at start).
+   *   - Always returns a number; logs errors and returns -1 on unexpected input or DOM errors.
+   */
+  function getCaretLineIndexInActiveElement() {
+      let ae = getActiveEditableElement();
+      if (
+          !ae ||
+          (
+              !(ae.tagName && (
+                  ae.tagName.toLowerCase() === 'textarea' ||
+                  (ae.tagName.toLowerCase() === 'input' && /text|search|url|email|password/.test(ae.type)) ||
+                  ae.isContentEditable
+              ))
+          )
+      ) {
+          return -1;
+      }
+      if (!ae) return -1;
+      try {
+          const tag = (ae.tagName || '').toLowerCase();
+          let before = '';
+
+          if (tag === 'textarea' || (tag === 'input' && /text|search|url|email|password/.test(ae.type))) {
+              const pos = ae.selectionStart || 0;
+              before = ae.value.slice(0, pos);
+          } else if (ae.isContentEditable) {
+              const sel = window.getSelection();
+              if (!sel || sel.rangeCount === 0) return -1;
+              const range = sel.getRangeAt(0).cloneRange();
+              // Ensure selection is within ae
+              if (!ae.contains(range.startContainer)) return -1;
+              range.collapse(true);
+              const preRange = document.createRange();
+              preRange.selectNodeContents(ae);
+              preRange.setEnd(range.endContainer, range.endOffset);
+              before = preRange.toString();
+          } else {
+              return -1;
+          }
+
+          // If before is empty, return 0 (caret at start of document)
+          if (before.length === 0) return 0;
+
+          logDebug('[snippet] efk before: ' + JSON.stringify(before));
+
+          // Count the number of newlines before the caret to get the zero-based line index
+          const lines = before.split('\n');
+          //in lines find the length of the last line ending with a colon (if any)  
+          let lastColonIdx = -1;
+          for (let i = lines.length - 1; i >= 0; i--) {
+            if (lines[i].trim().endsWith(':')) {
+              lastColonIdx = i;
+              break;
+            }
+          }
+          // lastColonIdx is the zero-based index of the last line ending with a colon, or -1 if none found
+            let lastColonLineLength = lastColonIdx >= 0 ? lines[lastColonIdx].length : 0;
+            logDebug('[snippet] Length of lines[lastColonIdx]: ' + lastColonLineLength);
+          return lastColonLineLength; // return the last line index ending with a colon, or -1 if none ;
+
+        } catch (e) { console.error('getCaretLineIndexInActiveElement error', e); return -1; }
+  }
+  
+  // Find the last line index in the active editable that ends with a colon
+  function getLastColonLineIndexInActiveElement() {
+    const ae = getActiveEditableElement();
+    if (!ae) return -1;
+    try {
+      const tag = (ae.tagName || '').toLowerCase();
+      let allText = '';
+
+      if (tag === 'textarea' || (tag === 'input' && /text|search|url|email|password/.test(ae.type))) {
+        allText = ae.value || '';
+      } else if (ae.isContentEditable) {
+        allText = ae.innerText || '';
+      } else {
+        return -1;
+      }
+
+      const lines = allText.split('\n');
+      for (let i = lines.length - 1; i >= 0; i--) if (lines[i].trim().endsWith(':')) return i;
+      return -1;
+    } catch (e) { console.error('getLastColonLineIndexInActiveElement error', e); return -1; }
+  }
+
+  // Return the character index (0-based) of the start of the line before the caret
+  function getStartPositionOfLineBeforeCaret() {
+    const ae = getActiveEditableElement();
+    if (!ae) return -1;
+    try {
+      const tag = (ae.tagName || '').toLowerCase();
+      let before = null;
+
+      if (tag === 'textarea' || (tag === 'input' && /text|search|url|email|password/.test(ae.type))) {
+        const pos = ae.selectionStart || 0;
+        before = ae.value.slice(0, pos);
+      } else if (ae.isContentEditable) {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return -1;
+        const range = sel.getRangeAt(0).cloneRange();
+        range.collapse(true);
+        const preRange = document.createRange();
+        preRange.selectNodeContents(ae);
+        preRange.setEnd(range.endContainer, range.endOffset);
+        before = preRange.toString();
+      } else {
+        return -1;
+      }
+
+      const lines = (before || '').split('\n');
+      if (lines.length <= 1) return 0;
+      let start = 0;
+      for (let i = 0; i < lines.length - 1; i++) start += lines[i].length + 1;
+      return start;
+    } catch (e) {
+      console.error('getStartPositionOfLineBeforeCaret error', e);
+      return -1;
+    }
+  }
+
+  // Helper: check that all lines between start and end (inclusive) are blank
+  function areLinesBlankBetween(ae, startLine, endLine) {
+    try {
+      if (!ae) return false;
+      const tag = (ae.tagName || '').toLowerCase();
+      let allText = '';
+      if (tag === 'textarea' || (tag === 'input' && /text|search|url|email|password/.test(ae.type))) {
+        allText = ae.value || '';
+      } else if (ae.isContentEditable) {
+        allText = ae.innerText || '';
+      } else {
+        return false;
+      }
+      const lines = allText.split('\n');
+      for (let i = startLine; i <= endLine; i++) {
+        if (i < 0 || i >= lines.length) continue;
+        if (lines[i].trim() !== '') return false;
+      }
+      return true;
+    } catch (e) { return false; }
+  }
+
+  // Debug logging: show active element and computed values
+  function logDebug(msg) {
+    try { console.log(msg); } catch (e) {}
+    try {
+      // Respect the global toggle; avoid DOM work when debug is disabled
+      if (!window.SNIPPET_DEBUG_ENABLED) return;
+      const panel = document.getElementById('snippet-debug');
+      if (panel) {
+        const p = document.createElement('div');
+        p.textContent = msg;
+        panel.appendChild(p);
+        panel.scrollTop = panel.scrollHeight;
+      }
+    } catch (e) { /* ignore panel errors */ }
+  }
+
+  // Show a short preview of the before/after in the debug panel
+  function showIndentPreview(text, textToCopy, shouldIndent) {
+    try {
+      if (shouldIndent) {
+        const beforeLines = (text || '').split('\n').slice(0, 8);
+        const afterLines = (textToCopy || '').split('\n').slice(0, 8);
+        logDebug('[snippet] preview before: ' + JSON.stringify(beforeLines));
+        logDebug('[snippet] preview after:  ' + JSON.stringify(afterLines));
+        try {
+          const panel = document.getElementById('snippet-debug');
+          if (panel) {
+            const hdr = document.createElement('div'); hdr.textContent = 'clipboard preview (raw):'; panel.appendChild(hdr);
+            const preEl = document.createElement('pre'); preEl.style.whiteSpace = 'pre'; preEl.style.background = '#222'; preEl.style.padding = '6px'; preEl.style.borderRadius = '4px'; preEl.style.color = '#fff'; preEl.textContent = textToCopy; panel.appendChild(preEl);
+            panel.scrollTop = panel.scrollHeight;
+          }
+        } catch (e) {}
+      }
+    } catch (e) { /* ignore preview errors */ }
+  }
+
+  // Main function split for readability
+  function copySnippetWithLineInsert(preId) {
+    logSnippetClick(preId);
+
+    const el = document.getElementById(preId);
+    if (!el) {
+      console.warn(`copySnippetWithLineInsert: element with id ${preId} not found`);
+      alert('Snippet not available to copy. Try clicking the left-column emoji to reload snippets.');
+      return;
+    }
+
+    const text = el.textContent || '';
+    const caretLine = getCaretLineIndexInActiveElement();
+    const lastColonLine = getLastColonLineIndexInActiveElement();
+    const aeForCheck = window.__lastEditable || document.activeElement;
+    let shouldIndent = false;
+    if (lastColonLine >= 0 && caretLine >= 0) {
+      if (caretLine === lastColonLine + 1) shouldIndent = true;
+      else if (caretLine > lastColonLine + 1) {
+        if (areLinesBlankBetween(aeForCheck, lastColonLine + 1, caretLine - 1)) shouldIndent = true;
+      }
+    }
+
+    logIndentDebugInfo(aeForCheck, lastColonLine, caretLine, shouldIndent);
+
+    let textToCopy = computeTextToCopy(preId, text, caretLine, lastColonLine, aeForCheck, shouldIndent);
+
+    showIndentPreview(text, textToCopy, shouldIndent);
+
+    textToCopy = text; 
+
+    copyToClipboard(textToCopy);
+
+    if (1 == 2)
+    {
+    navigator.clipboard && navigator.clipboard.writeText
+      ? navigator.clipboard.writeText(textToCopy).then(() => {
+          const ae = getActiveEditableElement();
+          if (ae) {
+            const pos = ae.selectionStart || 0;
+            const before = ae.value.slice(0, pos);
+            const after = ae.value.slice(pos);
+            ae.value = before + textToCopy + after; // Insert text at caret position
+            ae.setSelectionRange(pos + textToCopy.length, pos + textToCopy.length); // Move caret after inserted text
+          }
+        }).catch((err) => {
+        console.error('clipboard.writeText failed', err, {
+        name: err && err.name, message: err && err.message,
+        textType: typeof textToCopy, textLen: textToCopy.length,
+        protocol: location.protocol, hidden: document.hidden
+        });
+        fallbackCopy(textToCopy);
+      })
+      : fallbackCopy(textToCopy);
+    }
+  }
+function copyToClipboard(text) {
+    text2 = "test this";
+    // Create a hidden textarea element
+    const textarea = document.createElement("textarea");
+    const efk = document.
+    textarea.value = text.replace(/^\n/, '');
+
+    textarea.textContent = text.replace(/^\n/, '');
+    
+    // Style the textarea to be invisible
+    textarea.style.position = "fixed"; // Prevent scrolling to the bottom
+    textarea.style.opacity = "0";
+    textarea.style.pointerEvents = "none";
+
+    // Append the textarea to the document
+    document.body.appendChild(textarea);
+
+    // Select the text inside the textarea
+    textarea.select();
+    textarea.setSelectionRange(0, textarea.value.length); // For mobile compatibility
+
+    try {
+        // Execute the copy command
+        document.execCommand("copy");
+        console.log("Text copied to clipboard:", text);
+    } catch (err) {
+        console.error("Failed to copy text:", err);
+    }
+
+    // Remove the textarea from the document
+    document.body.removeChild(textarea);
+}
+  // Helper function for debug logging
+  function logIndentDebugInfo(ae, lastColonLine, caretLine, shouldIndent) {
+    try {
+      const aeId = ae && (ae.id || ae.name) ? (ae.id || ae.name) : (ae && ae.tagName ? ae.tagName : 'none');
+      const lastEditableId = window.__lastEditable && (window.__lastEditable.id || window.__lastEditable.name || window.__lastEditable.tagName) ? (window.__lastEditable.id || window.__lastEditable.name || window.__lastEditable.tagName) : 'none';
+      logDebug(`[snippet] lastEditable=${lastEditableId}, activeElement=${aeId}, lastColonLine=${lastColonLine}, caretLine=${caretLine}, shouldIndent=${shouldIndent}`);
+      if (shouldIndent) {
+        let idOrName = ae && (ae.id || ae.name || ae.tagName) ? (ae.id || ae.name || ae.tagName) : 'activeElement';
+        logDebug(`[snippet] Indenting clipboard for element: ${idOrName} (lastColonLine=${lastColonLine}, caretLine=${caretLine})`);
+      } else {
+        if (lastColonLine === -1) {
+          logDebug('[snippet] colon not found');
+        } else {
+          logDebug('[snippet] colon found but caret is not immediately after the colon-terminated line');
+        }
+      }
+    } catch (e) { logDebug('snippet debug logging failed: ' + (e && e.message)); }
+  }
+
+  // Helper for logging snippet click and showing toast
+  function logSnippetClick(preId) {
+    try {
+      console.log(`[snippet] copySnippetWithLineInsert called for ${preId}`);
+      const panel = document.getElementById('snippet-debug');
+      if (panel) {
+        // Also print the panel's header text each time (fallback to 'Debug:')
+        const headerText = (panel.firstChild && panel.firstChild.textContent) ? panel.firstChild.textContent : 'Debug:';
+        const hdr = document.createElement('div');
+        hdr.textContent = headerText;
+        panel.appendChild(hdr);
+
+        const p = document.createElement('div');
+        p.textContent = `[snippet] copySnippetWithLineInsert called for ${preId}`;
+        panel.appendChild(p);
+        panel.scrollTop = panel.scrollHeight;
+      }
+      try {
+        const toast = document.getElementById('snippet-toast');
+        if (toast) {
+          toast.textContent = 'Snippet clicked';
+          toast.style.display = 'block';
+          toast.style.left = 'calc(50% + 60px)';
+          setTimeout(() => toast.style.display = 'none', 1200);
+        }
+      } catch (e) {}
+      // Visual feedback for the test editor: append a single space so the
+      // user can immediately see that the snippet button was clicked.
+      try {
+        const ta = document.getElementById('snippet-test-editor');
+        if (ta) {
+          // Append a space and place caret at the end so the change is visible
+          ta.value = ta.value + ' ';
+          const pos = ta.value.length;
+          try { ta.focus(); ta.setSelectionRange(pos, pos); } catch (e) { /* ignore */ }
+        }
+      } catch (e) { /* ignore visual feedback errors */ }
+    } catch (e) { /* ignore logging errors */ }
+  }
+
+  /**
+   * Computes the text to copy to the clipboard, applying indentation if needed based on caret and colon line positions.
+   * @param {string} preId - The ID of the <pre> element containing the snippet.
+   * @param {string} text - The raw snippet text.
+   * @param {number} caretLine - The current caret line index in the active editable element.
+   * @param {number} lastColonLine - The last line index ending with a colon in the active editable element.
+   * @param {HTMLElement} aeForCheck - The active editable element for context.
+   * @param {boolean} shouldIndent - Whether to apply indentation to the snippet.
+   * @returns {string} The formatted snippet text to copy.
+   */
+  function computeTextToCopy(preId, text, caretLine, lastColonLine, aeForCheck, shouldIndent) {
+
+    // Indent snippet lines by the caretLine value (number of spaces)
+    if (typeof caretLine === 'number' && caretLine > 0) {
+      return ensureMinIndentPerLine(text, caretLine);
+    }
+
+    
+    if (shouldIndent) {
+      return computeIndentLogic(preId, text);
+    } else if (lastColonLine !== -1) {
+      return computeColonLogic(preId, text, caretLine, lastColonLine, aeForCheck, shouldIndent);
+    } else {
+      return computeFallbackLogic(text);
+    }
+  }
+
+  /**
+   * Computes the snippet text to copy when a colon is detected in the active editable element,
+   * applying indentation logic based on caret and colon line positions.
+   * Edge cases: If indentation cannot be determined (e.g., missing lines, unexpected input, or errors),
+   * falls back to a default indentation of 4 spaces using ensureMinIndentPerLine.
+   *
+   * @param {string} preId - The ID of the <pre> element containing the snippet.
+   * @param {string} text - The raw snippet text.
+   * @param {number} caretLine - The current caret line index in the active editable element.
+   * @param {number} lastColonLine - The last line index ending with a colon in the active editable element.
+   * @param {HTMLElement} aeForCheck - The active editable element for context.
+   * @param {boolean} shouldIndent - Whether to apply indentation to the snippet.
+   * @returns {string} The formatted snippet text to copy, indented according to detected context.
+   *
+   * @description
+   * Returns the snippet text with indentation matching the previous line's leading spaces if a colon is detected.
+   * If indentation cannot be determined due to missing lines, unexpected input, or errors, falls back to a default indentation of 4 spaces using ensureMinIndentPerLine.
+   */
+  function computeColonLogic(preId, text, caretLine, lastColonLine, aeForCheck, shouldIndent) {
+    try {
+      const prevLineStart = getStartPositionOfLineBeforeCaret();
+      logDebug('[computeColonLogic] prevLineStart=' + prevLineStart + ', caretLine=' + caretLine + ', lastColonLine=' + lastColonLine);
+      if (shouldIndent && prevLineStart >= 0) {
+        const ae = aeForCheck;
+        const tag = (ae && ae.tagName || '').toLowerCase();
+        let allText = '';
+        if (tag === 'textarea' || (tag === 'input' && /text|search|url|email|password/.test(ae.type))) {
+          allText = ae.value || '';
+        } else if (ae && ae.isContentEditable) {
+          allText = ae.innerText || '';
+        }
+        if (allText != null) {
+          const rest = allText.slice(prevLineStart);
+          const nl = rest.indexOf('\n');
+          const line = nl === -1 ? rest : rest.slice(0, nl);
+          if (line != null) {
+            let target = null;
+            if (!line.trim().endsWith(':')) {
+              try {
+                const beforePrev = prevLineStart;
+                if (beforePrev <= 0) {
+                  target = 0;
+                } else {
+                  const sliceUpToPrev = allText.slice(0, Math.max(0, beforePrev - 1));
+                  const lastNl = sliceUpToPrev.lastIndexOf('\n');
+                  const twoLinesUpStart = lastNl === -1 ? 0 : lastNl + 1;
+                  const rest2 = allText.slice(twoLinesUpStart);
+                  const nl2 = rest2.indexOf('\n');
+                  const lineTwoUp = nl2 === -1 ? rest2 : rest2.slice(0, nl2);
+                  const m2 = lineTwoUp.match(/^ */);
+                  const leading2 = m2 ? m2[0].length : 0;
+                  target = leading2;
+                  logDebug('[computeColonLogic] two-lines-up leading spaces=' + leading2 + ', applying target=' + target);
+                  return ensureMinIndentPerLine(text, target);
+                }
+              } catch (e) { 
+                console.error('compute two-lines-up failed', e); 
+                return ensureMinIndentPerLine(text, 4);
+              }
+            } else {
+              const m = line.match(/^ */);
+              const leading = m ? m[0].length : 0;
+              target = leading;
+              logDebug('[computeColonLogic] previous-line leading spaces=' + leading + ', applying target=' + target);
+              return ensureMinIndentPerLine(text, target);
+            }
+            // Return with computed indentation
+          }
+        }
+      }
+    } catch (e) {
+      console.error('computeColonLogic failed', e);
+    }
+    // Always return a default indentation if no other return occurred
+    return ensureMinIndentPerLine(text, 4);
+  }
+  
+  /**
+   * Computes the snippet text to copy with indentation applied.
+   * If the snippet contains function, comment, or Python code, each part is indented with at least 4 spaces.
+   * Falls back to a default indentation of 4 or 8 spaces if an error occurs.
+   *
+   * @param {string} preId - The ID of the <pre> element containing the snippet.
+   * @param {string} text - The raw snippet text.
+   * @returns {string} The formatted snippet text to copy, indented appropriately.
+   */
+  function computeIndentLogic(preId, text) {
+    try {
+      const m = preId.match(/^snippet-(\d+)-(\d+)$/);
+      if (m) {
+        const b = parseInt(m[1], 10);
+        const i = parseInt(m[2], 10);
+        const bucket = snippetData[b];
+        if (bucket && Array.isArray(bucket.snippets) && bucket.snippets[i]) {
+          const s = bucket.snippets[i];
+          const parts2 = [];
+          if (s.textFunction) parts2.push(ensureMinIndentPerLine(s.textFunction, 0));
+          if (s.textComment) parts2.push(ensureMinIndentPerLine(s.textComment, 4));
+          if (s.textPython) parts2.push(ensureMinIndentPerLine(s.textPython, 4));
+          logDebug(`[computeIndentLogic] snippet parts: function=${!!s.textFunction}, comment=${!!s.textComment}, python=${!!s.textPython}\n` + parts2.join('\n'));
+          return parts2.join('\n');
+        }
+      }
+    } catch (e) {
+      console.error('rebuild snippet failed', e); 
+      return ensureMinIndentPerLine(text, 8);
+    }
+    return ensureMinIndentPerLine(text, 4);
+  }
+  /**
+   * Computes the snippet text to copy without special indentation logic.
+   * Each non-empty line is not ensured to have at least 4 leading spaces.
+   * This logic was changed to allow functions to start in column 0.
+   *
+   * @param {string} text - The raw snippet text.
+   * @returns {string} The formatted snippet text to copy with minimum indentation.
+   */
+  function computeFallbackLogic(text) {
+    return ensureMinIndentPerLine(text, 0);
+  }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'absolute';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try { document.execCommand('copy'); } catch (e) { console.error('fallback copy failed', e); }
+      document.body.removeChild(textarea);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => refreshSnippets(1));
+  </script>
+</body>
+</html>
