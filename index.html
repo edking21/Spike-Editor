@@ -51,7 +51,7 @@
     // Test editor toggle (hidden by default)
     window.SNIPPET_TEST_EDITOR_ENABLED = false; // set to true to enable on load, false to disable
     window.enableSnippetTestEditor = function() {
-      window.SNIPPET_TEST_EDITOR_ENABLED = true;
+      window.SNIPPET_TEST_EDITOR_ENABLED = false;
       if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
       const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'block';
     };
@@ -377,8 +377,18 @@ def blinking_eyes():
   // Increase width by 25% relative to current 25% (25% * 1.25 = 31.25%)
   ta.style.width = '50%';
       ta.style.boxSizing = 'border-box';
-      // Remove placeholder and pre-fill the textarea so the first line reads 'dev test:'
-      ta.value = 'dev test:' + '\n';
+      // Remove placeholder and pre-fill the textarea
+      ta.value = `
+async def main():
+    x = 2
+    x = 1
+    if x == 1:
+        this line1
+        this line2
+        if x == 2:
+12345678901234567:
+123456789012345678901:
+`
       container.appendChild(ta);
       const btnFocus = document.createElement('button');
       btnFocus.textContent = 'Focus test editor';
@@ -441,7 +451,7 @@ def blinking_eyes():
 
   // Determine caret line index (0-based) inside the currently active editable element
   /**
-   * Returns the zero-based line index of the caret position in the currently active editable element.
+   * Returns the zero-based line index of the colon in the last line ending with a colon.
    * Algorithm:
    *   - For textarea/input, calculates the number of newline characters before the caret.
    *   - For contentEditable, uses the selection and Range API to get text before the caret, counting newlines.
@@ -490,8 +500,27 @@ def blinking_eyes():
 
           // If before is empty, return 0 (caret at start of document)
           if (before.length === 0) return 0;
-          return before.split('\n').length - 1; // 0-based
-      } catch (e) { console.error('getCaretLineIndexInActiveElement error', e); return -1; }
+
+          logDebug('[snippet] efk before: ' + JSON.stringify(before));
+
+            // Find the position of the colon in the last line ending with a colon
+            const lines = before.split('\n');
+            let lastColonLineIdx = -1;
+            for (let i = lines.length - 1; i >= 0; i--) {
+            if (lines[i].trim().endsWith(':')) {
+              lastColonLineIdx = i;
+              break;
+            }
+            }
+            let colonPos = -1;
+            if (lastColonLineIdx !== -1) {
+            colonPos = lines[lastColonLineIdx].lastIndexOf(':') + 1;
+            }
+            logDebug('[snippet] efk colonPos ' + colonPos);
+                    
+          return colonPos;
+
+        } catch (e) { console.error('getCaretLineIndexInActiveElement error', e); return -1; }
   }
   
   // Find the last line index in the active editable that ends with a colon
@@ -715,6 +744,13 @@ def blinking_eyes():
    * @returns {string} The formatted snippet text to copy.
    */
   function computeTextToCopy(preId, text, caretLine, lastColonLine, aeForCheck, shouldIndent) {
+
+    // Indent snippet lines by the caretLine value (number of spaces)
+    if (typeof caretLine === 'number' && caretLine > 0) {
+      return ensureMinIndentPerLine(text, caretLine);
+    }
+
+    
     if (shouldIndent) {
       return computeIndentLogic(preId, text);
     } else if (lastColonLine !== -1) {
