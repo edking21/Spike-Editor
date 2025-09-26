@@ -47,20 +47,20 @@
     // Toggle helpers for the debug panel (default: disabled)
     window.SNIPPET_DEBUG_ENABLED = false;
     window.enableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
-    window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = true; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
+    window.disableSnippetDebug = function() { window.SNIPPET_DEBUG_ENABLED = false; const p = document.getElementById('snippet-debug'); if (p) p.style.display = 'block'; };
     // Test editor toggle (hidden by default)
     window.SNIPPET_TEST_EDITOR_ENABLED = false; // set to true to enable on load, false to disable
     window.enableSnippetTestEditor = function() {
-      window.SNIPPET_TEST_EDITOR_ENABLED = false;
+      window.SNIPPET_TEST_EDITOR_ENABLED = true;
       if (!document.getElementById('snippet-test-editor-container')) createSnippetTestEditor();
       const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'block';
     };
-    window.disableSnippetTestEditor = function() { window.SNIPPET_TEST_EDITOR_ENABLED = false; const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'none'; };
+    window.disableSnippetTestEditor = function() { window.SNIPPET_TEST_EDITOR_ENABLED = true; const c = document.getElementById('snippet-test-editor-container'); if (c) c.style.display = 'none'; };
   </script>
 
   <style>
     /* toast style for immediate visible feedback */
-    #snippet-toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; background: rgba(0,0,0,0.9); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 13px; z-index:10000; display:none; }
+    snippet-toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; background: rgba(0,0,0,0.9); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 13px; z-index:10000; display:none; }
   </style>
   <div id="snippet-toast"></div>
 
@@ -86,8 +86,8 @@ buttonText: 'Run shortest distance to absolute 0',
 emoji: '🧿',
 color: '#0000FF',
 textPython: `
-    # Run shortest distance to absolute 0
-    await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+# Run shortest distance to absolute 0
+await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
 }
 ]},  // motors
 
@@ -451,7 +451,7 @@ async def main():
 
   // Determine caret line index (0-based) inside the currently active editable element
   /**
-   * Returns the zero-based line index of the colon in the last line ending with a colon.
+   * Returns the zero-based line index of the caret in the currently active editable element.
    * Algorithm:
    *   - For textarea/input, calculates the number of newline characters before the caret.
    *   - For contentEditable, uses the selection and Range API to get text before the caret, counting newlines.
@@ -503,22 +503,20 @@ async def main():
 
           logDebug('[snippet] efk before: ' + JSON.stringify(before));
 
-            // Find the position of the colon in the last line ending with a colon
-            const lines = before.split('\n');
-            let lastColonLineIdx = -1;
-            for (let i = lines.length - 1; i >= 0; i--) {
+          // Count the number of newlines before the caret to get the zero-based line index
+          const lines = before.split('\n');
+          //in lines find the length of the last line ending with a colon (if any)  
+          let lastColonIdx = -1;
+          for (let i = lines.length - 1; i >= 0; i--) {
             if (lines[i].trim().endsWith(':')) {
-              lastColonLineIdx = i;
+              lastColonIdx = i;
               break;
             }
-            }
-            let colonPos = -1;
-            if (lastColonLineIdx !== -1) {
-            colonPos = lines[lastColonLineIdx].lastIndexOf(':') + 1;
-            }
-            logDebug('[snippet] efk colonPos ' + colonPos);
-                    
-          return colonPos;
+          }
+          // lastColonIdx is the zero-based index of the last line ending with a colon, or -1 if none found
+            let lastColonLineLength = lastColonIdx >= 0 ? lines[lastColonIdx].length : 0;
+            logDebug('[snippet] Length of lines[lastColonIdx]: ' + lastColonLineLength);
+          return lastColonLineLength; // return the last line index ending with a colon, or -1 if none ;
 
         } catch (e) { console.error('getCaretLineIndexInActiveElement error', e); return -1; }
   }
@@ -717,7 +715,12 @@ async def main():
       }
       try {
         const toast = document.getElementById('snippet-toast');
-        if (toast) { toast.textContent = 'Snippet clicked'; toast.style.display = 'block'; setTimeout(()=> toast.style.display='none', 1200); }
+        if (toast) {
+          toast.textContent = 'Snippet clicked';
+          toast.style.display = 'block';
+          toast.style.left = 'calc(50% + 60px)';
+          setTimeout(() => toast.style.display = 'none', 1200);
+        }
       } catch (e) {}
       // Visual feedback for the test editor: append a single space so the
       // user can immediately see that the snippet button was clicked.
