@@ -12,6 +12,13 @@
             "webRoot": "c:\\Users\\eddyk\\Documents\\Spike-Editor-restore"
         },
         {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open ta.html",
+            "file": "c:\\Users\\eddyk\\Documents\\Spike-Editor-restore\\ta.html",
+            "webRoot": "c:\\Users\\eddyk\\Documents\\Spike-Editor-restore"
+        },
+        {
             "type": "node",
             "request": "launch",
             "name": "Run testit.py",

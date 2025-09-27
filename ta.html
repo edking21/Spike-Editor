@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Paste with caret-relative indentation</title>
+  <style>
+    textarea { width: 90%; height: 200px; font-family: monospace; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <p>Place the caret somewhere in a line, then paste multiline text. Subsequent pasted lines will be indented to the caret column.</p>
+  <textarea id="t"></textarea>
+
+  <script>
+  (function(){
+    const ta = document.getElementById('t');
+
+    ta.addEventListener('paste', function (ev) {
+      // get plain text from clipboard
+      const clipboardText = (ev.clipboardData || window.clipboardData).getData('text');
+      if (!clipboardText) return; // nothing to do
+
+      ev.preventDefault(); // we'll insert our processed text
+
+      const value = ta.value;
+      const selStart = ta.selectionStart;
+      const selEnd = ta.selectionEnd;
+
+      // find start index of the current line where the caret is (or selection start)
+      const lineStart = value.lastIndexOf('\n', Math.max(0, selStart - 1)) + 1;
+      const caretColumn = selStart - lineStart; // number of characters from line start to caret
+
+      // build the padding string (spaces). If you prefer tabs, change this.
+      const pad = ' '.repeat(caretColumn);
+
+      // Normalize newlines in clipboard (handles CRLF)
+      const pastedLines = clipboardText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+
+      // If the user is replacing a selection, the first pasted line should be inserted at selStart,
+      // so we do not prefix the first line. Only subsequent lines get the pad prefixed.
+      for (let i = 1; i < pastedLines.length; i++) {
+        pastedLines[i] = pad + pastedLines[i];
+      }
+
+      const toInsert = pastedLines.join('\n');
+
+      // Replace selection with our processed text
+      const newValue = value.slice(0, selStart) + toInsert + value.slice(selEnd);
+      ta.value = newValue;
+
+      // compute new caret position: place caret just after the inserted content
+      const newCaretPos = selStart + toInsert.length;
+      ta.setSelectionRange(newCaretPos, newCaretPos);
+      // optional: trigger input event if other code listens for it
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  })();
+  </script>
+</body>
+</html>
