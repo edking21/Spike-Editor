@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "SPIKE Caret Broadcaster",
+  "version": "0.1.0",
+  "description": "Broadcast the caret column from spike.legoeducation.com/prime/project to other tabs on Ctrl+Alt+R.",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": [
+    "https://spike.legoeducation.com/*"
+  ],
+  "background": {
+    "service_worker": "service-worker.js"
+  }
+}
