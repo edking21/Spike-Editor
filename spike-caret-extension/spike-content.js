@@ -24,7 +24,6 @@
       const view = window.view || window.cmView;
       const sel = view?.state?.selection?.main;
       if (sel && typeof sel.head === 'number') {
-        // Count column by scanning the current line
         const doc = view.state.doc;
         const line = doc.lineAt(sel.head);
         return sel.head - line.from; // 0-based column
@@ -52,12 +51,39 @@
     }
   }, true);
 
-  // Send caret on Ctrl+Alt+R (existing behavior)
+  // Send caret on Ctrl+Alt+R (deliver to opener tab when available)
   window.addEventListener('keydown', (ev) => {
     if (ev.ctrlKey && ev.altKey && (ev.key === 'r' || ev.key === 'R')) {
       const column = getCaretColumnFromCommonEditors();
-      window.postMessage({ type: 'spike-caret', column }, '*');
-      console.log('[SPIKE caret broadcaster] sent', column);
+      let delivered = false;
+      try {
+        if (window.opener && typeof window.opener.postMessage === 'function') {
+          window.opener.postMessage({ type: 'spike-caret', column }, '*');
+          console.log('[SPIKE caret broadcaster] sent to opener:', column);
+          delivered = true;
+        }
+      } catch (e) {
+        console.warn('[SPIKE caret broadcaster] opener postMessage failed:', e);
+      }
+
+      // Fallbacks: same-origin BroadcastChannel or local postMessage for debugging
+      if (!delivered) {
+        try {
+          if (typeof BroadcastChannel !== 'undefined') {
+            const bc = new BroadcastChannel('spike-caret');
+            bc.postMessage({ type: 'caret', column });
+            bc.close();
+            console.log('[SPIKE caret broadcaster] broadcast via BroadcastChannel:', column);
+            delivered = true;
+          }
+        } catch (_) {}
+      }
+
+      if (!delivered) {
+        // Last resort: log and send to self for visibility
+        window.postMessage({ type: 'spike-caret', column }, '*');
+        console.log('[SPIKE caret broadcaster] posted to self (for debug):', column);
+      }
     }
   }, true);
 })();
