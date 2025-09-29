@@ -46,6 +46,9 @@
     </div>
 
     <div style="margin: 8px 0; padding: 6px; border: 1px solid #ddd; max-width: 900px;">
+        <div id="github-release">
+            <strong>Loading GitHub release info...</strong>
+        </div>
         <strong>Clipboard align:</strong>
         <label style="margin-left:8px;"><input type="radio" name="clipmode" value="raw" checked> Raw (no indent)
         </label>
@@ -68,6 +71,45 @@
     <textarea id="t"></textarea>
 
     <script>
+        // GitHub release fetcher
+        async function fetchGitHubRelease() {
+            try {
+                const response = await fetch('https://api.github.com/repos/eddyk28/Spike-Editor/releases/latest');
+                
+                if (!response.ok) {
+                    let errorMessage = `HTTP ${response.status}`;
+                    if (response.status === 404) {
+                        errorMessage = 'Repository not found or no releases available';
+                    } else if (response.status === 403) {
+                        errorMessage = 'API rate limit exceeded';
+                    }
+                    throw new Error(errorMessage);
+                }
+                
+                const data = await response.json();
+                
+                const releaseElement = document.getElementById('github-release');
+                const publishedDate = new Date(data.published_at).toLocaleDateString();
+                
+                releaseElement.innerHTML = `
+                    <strong>Latest Release:</strong> 
+                    <a href="${data.html_url}" target="_blank" style="color: #0366d6; text-decoration: none;">
+                        ${data.tag_name} - ${data.name}
+                    </a> 
+                    <span style="color: #666; font-size: 0.9em;">(${publishedDate})</span>
+                `;
+            } catch (error) {
+                console.error('Failed to fetch GitHub release:', error);
+                const releaseElement = document.getElementById('github-release');
+                
+                if (error.message.includes('Repository not found')) {
+                    releaseElement.innerHTML = '<strong>GitHub Release:</strong> <span style="color: #666;">Repository not found or private</span>';
+                } else {
+                    releaseElement.innerHTML = '<strong>GitHub Release:</strong> <span style="color: #666;">Unable to load release info</span>';
+                }
+            }
+        }
+
         // Track the last-focused editable element (textarea/input/contentEditable)
         window.__lastEditable = null;
         document.addEventListener('focusin', (ev) => {
@@ -623,7 +665,10 @@ def blinking_eyes():
             window.processAndInsertText = processAndInsertText;
         })();
 
-        document.addEventListener('DOMContentLoaded', () => refreshSnippets(1));
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshSnippets(1);
+            fetchGitHubRelease(); // Fetch release info on page load
+        });
 
         // SPIKE editor caret column support
         // BroadcastChannel 'spike-caret-column' is used to receive caret column updates from other tabs or windows
