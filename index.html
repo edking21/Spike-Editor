@@ -207,7 +207,7 @@
             }
         }
 
-        // GENERATE SPIKE INJECTION CODE
+        // GENERATE SPIKE INJECTION CODE WITH ALTERNATIVE KEY COMBINATIONS
         function generateSpikeInjectionCode() {
             const injectionCode = `javascript:(function(){
     console.log('🚀 Spike Editor Caret Listener Injected');
@@ -217,11 +217,29 @@
         document.removeEventListener('keydown', window.spikeCaretListener);
     }
     
-    // Create new listener
+    // Create new listener with multiple key combinations
     window.spikeCaretListener = function(e) {
+        let keyMatched = false;
+        let keyCombo = '';
+        
+        // Try multiple key combinations for Lightspeed compatibility
         if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'r') {
+            keyMatched = true;
+            keyCombo = 'Ctrl+Alt+R';
+        } else if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'r') {
+            keyMatched = true;
+            keyCombo = 'Ctrl+Shift+R';
+        } else if (e.altKey && e.shiftKey && e.key.toLowerCase() === 'r') {
+            keyMatched = true;
+            keyCombo = 'Alt+Shift+R';
+        } else if (e.ctrlKey && e.key === 'F9') {
+            keyMatched = true;
+            keyCombo = 'Ctrl+F9';
+        }
+        
+        if (keyMatched) {
             e.preventDefault();
-            console.log('📍 Ctrl+Alt+R pressed in SPIKE editor');
+            console.log('📍 ' + keyCombo + ' pressed in SPIKE editor');
             
             // Try to get caret position (simplified)
             const activeElement = document.activeElement;
@@ -261,13 +279,13 @@
                 console.log('❌ BroadcastChannel failed:', e);
             }
             
-            alert('Caret position sent: ' + caretColumn);
+            alert('Caret position sent: ' + caretColumn + ' (using ' + keyCombo + ')');
         }
     };
     
     document.addEventListener('keydown', window.spikeCaretListener);
-    console.log('✅ Listener attached - Press Ctrl+Alt+R to send caret position');
-    alert('SPIKE Caret Listener Active!\\n\\nPress Ctrl+Alt+R in the code editor to send caret position.');
+    console.log('✅ Listener attached - Try: Ctrl+Alt+R, Ctrl+Shift+R, Alt+Shift+R, or Ctrl+F9');
+    alert('SPIKE Caret Listener Active!\\n\\nTry these key combinations in the code editor:\\n• Ctrl+Alt+R\\n• Ctrl+Shift+R\\n• Alt+Shift+R\\n• Ctrl+F9');
 })();`;
 
             // Create a text area with the code for easy copying
@@ -284,7 +302,7 @@
             document.body.appendChild(textarea);
             textarea.select();
 
-            debugLog('💾 SPIKE Injection Code Generated', 'Copy the code from the text area and paste it in SPIKE editor address bar');
+            debugLog('💾 SPIKE Injection Code Generated', 'Copy code and paste in SPIKE address bar');
             
             // Auto-remove after 30 seconds
             setTimeout(() => {
@@ -292,6 +310,81 @@
                     document.body.removeChild(textarea);
                 }
             }, 30000);
+        }
+
+        // MANUAL COPY DIALOG FOR LIGHTSPEED CHROMEBOOK
+        function showManualCopyDialog(preparedText, rawText) {
+            // Create overlay for manual copy
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); z-index: 10000; display: flex;
+                align-items: center; justify-content: center;
+            `;
+            
+            const dialog = document.createElement('div');
+            dialog.style.cssText = `
+                background: white; padding: 20px; border-radius: 8px; max-width: 80%;
+                max-height: 80%; overflow: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            `;
+            
+            dialog.innerHTML = `
+                <h3>🔒 Clipboard API Blocked - Manual Copy Required</h3>
+                <p><strong>Lightspeed has blocked automatic clipboard access.</strong></p>
+                <p>1. The text below is already selected</p>
+                <p>2. Copy it with <strong>Ctrl+C</strong></p>
+                <p>3. Switch to SPIKE editor and paste with <strong>Ctrl+V</strong></p>
+                <textarea id="manual-copy-text" readonly style="
+                    width: 100%; height: 200px; font-family: monospace; 
+                    font-size: 14px; margin: 10px 0; border: 2px solid #007bff;
+                ">${preparedText}</textarea>
+                <div style="margin-top: 10px;">
+                    <button id="close-manual-copy" style="background: #28a745; color: white; padding: 8px 16px; border: none; border-radius: 4px; margin-right: 8px;">Close & Insert to Page</button>
+                    <button id="select-all-text" style="background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Re-select Text</button>
+                </div>
+            `;
+            
+            overlay.appendChild(dialog);
+            document.body.appendChild(overlay);
+            
+            // Auto-select the text
+            const textarea = document.getElementById('manual-copy-text');
+            textarea.focus();
+            textarea.select();
+            
+            // Button handlers
+            document.getElementById('close-manual-copy').onclick = () => {
+                document.body.removeChild(overlay);
+                // Still do the in-page insert
+                processAndInsertText(rawText);
+            };
+            
+            document.getElementById('select-all-text').onclick = () => {
+                textarea.focus();
+                textarea.select();
+            };
+            
+            // Close on overlay click
+            overlay.onclick = (e) => {
+                if (e.target === overlay) {
+                    document.body.removeChild(overlay);
+                    processAndInsertText(rawText);
+                }
+            };
+            
+            // Close on Escape key
+            const escHandler = (e) => {
+                if (e.key === 'Escape') {
+                    document.removeEventListener('keydown', escHandler);
+                    if (document.body.contains(overlay)) {
+                        document.body.removeChild(overlay);
+                        processAndInsertText(rawText);
+                    }
+                }
+            };
+            document.addEventListener('keydown', escHandler);
+            
+            debugLog('📋 Manual copy dialog shown', 'Text ready for Ctrl+C');
         }
 
         // GitHub release fetcher
@@ -772,8 +865,7 @@ def blinking_eyes():
             return (text || '');
         }
 
-        // Main function split for readability
-        // Main function split for readability
+        // UPDATED MAIN FUNCTION WITH LIGHTSPEED FALLBACK
         async function copySnippetWithLineInsert(preId) {
             const el = document.getElementById(preId);
             if (!el) {
@@ -790,8 +882,16 @@ def blinking_eyes():
 
             // Build clipboard according to selected align mode
             const prepared = buildClipboardFromMode(raw);
+            
+            // TRY CLIPBOARD API FIRST, FALLBACK TO MANUAL SELECTION
             const copied = await copyPlainText(prepared);
-            if (!copied) console.warn('Clipboard copy may have failed.');
+            
+            if (!copied) {
+                // LIGHTSPEED CHROMEBOOK FALLBACK - Show text for manual copying
+                debugLog('❌ Clipboard API blocked - showing manual copy option', 'User must copy manually');
+                showManualCopyDialog(prepared, raw);
+                return;
+            }
 
             // In-page insert: still insert raw so first line is at caret and others align
             processAndInsertText(raw);
@@ -802,6 +902,7 @@ def blinking_eyes():
 
             alert('Clipboard ready. Move to your target editor and paste.' + focusHint);
         }
+
         function refreshSnippets(buttonId) {
             const column = document.getElementById('snippet-column');
             column.innerHTML = '';
@@ -829,8 +930,6 @@ def blinking_eyes():
                 button.style.backgroundColor = snippet.color;
                 button.style.color = '#ffffff';
                 button.title = snippet.buttonText; // keep accessible label
-
-                console.log('removed the message to please insert caret first');
 
                 // Click inserts into textarea and prepares clipboard with proper indentation for external paste
                 button.addEventListener('click', () => copySnippetWithLineInsert(preId));
