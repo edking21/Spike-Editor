@@ -46,20 +46,14 @@
     </div>
 
     <div style="margin: 8px 0; padding: 6px; border: 1px solid #ddd; max-width: 900px;">
-        <div id="github-release">
-            <strong>Loading GitHub release info...</strong>
-        </div>
         <strong>Clipboard align:</strong>
         <label style="margin-left:8px;"><input type="radio" name="clipmode" value="raw" checked> Raw (no indent)
         </label>
         <label style="margin-left:8px;"><input type="radio" name="clipmode" value="caret"> Page caret</label>
-        <label style="margin-left:8px;"><input type="radio" name="clipmode" value="spike"> Spike caret (from other
-            tab)</label>
+        <label style="margin-left:8px;"><input type="radio" name="clipmode" value="spike"> Spike caret (from other tab)</label>
         <label style="margin-left:8px;"><input type="radio" name="clipmode" value="column"> Column
             <input id="clip-column" type="number" min="0" value="0" style="width:4em; margin-left:4px;">
         </label>
-        <button id="open-spike" style="margin-left:12px;">Open SPIKE Editor</button>
-        <span id="spike-caret-indicator" style="margin-left:12px; color:#0a7; font-family:monospace;"></span>
         <span style="margin-left:12px; color:#666;">This only affects the clipboard. In-page insert still aligns
             subsequent lines to the caret in the test area.</span>
     </div>
@@ -71,44 +65,6 @@
     <textarea id="t"></textarea>
 
     <script>
-        // GitHub release fetcher
-        async function fetchGitHubRelease() {
-            try {
-                const response = await fetch('https://api.github.com/repos/edking21/Spike-Editor/releases/latest');
-
-                if (!response.ok) {
-                    let errorMessage = `HTTP ${response.status}`;
-                    if (response.status === 404) {
-                        errorMessage = 'Repository not found or no releases available';
-                    } else if (response.status === 403) {
-                        errorMessage = 'API rate limit exceeded';
-                    }
-                    throw new Error(errorMessage);
-                }
-
-                const data = await response.json();
-
-                const releaseElement = document.getElementById('github-release');
-                const publishedDate = new Date(data.published_at).toLocaleDateString();
-
-                releaseElement.innerHTML = `
-                    <a href="${data.html_url}" target="_blank" style="color: #0366d6; text-decoration: none;">
-                        ${data.tag_name} - ${data.name}
-                    </a> 
-                    <span style="color: #666; font-size: 0.9em;">(${publishedDate})</span>
-                `;
-            } catch (error) {
-                console.error('Failed to fetch GitHub release:', error);
-                const releaseElement = document.getElementById('github-release');
-
-                if (error.message.includes('Repository not found')) {
-                    releaseElement.innerHTML = '<strong>GitHub Release:</strong> <span style="color: #666;">Repository not found or private</span>';
-                } else {
-                    releaseElement.innerHTML = '<strong>GitHub Release:</strong> <span style="color: #666;">Unable to load release info</span>';
-                }
-            }
-        }
-
         // Track the last-focused editable element (textarea/input/contentEditable)
         window.__lastEditable = null;
         document.addEventListener('focusin', (ev) => {
@@ -369,25 +325,6 @@ def blinking_eyes():
             }   // Functions
         };
 
-        // Central setter for SPIKE caret column so we don't lose it
-        function setSpikeCaretCol(col, source) {
-            const n = Math.max(0, (col | 0));
-            window.__spikeCaretCol = n;
-            // Update UI indicator and auto-select Spike mode so caretSpaces is used
-            try {
-                const ind = document.getElementById('spike-caret-indicator');
-                if (ind) ind.textContent = `Spike caret: ${n}`;
-                const radios = document.querySelectorAll('input[name="clipmode"]');
-                radios.forEach(r => { if (r.value === 'spike') r.checked = true; });
-            } catch (_) { }
-            try {
-                const ts = new Date().toLocaleTimeString();
-                console.log(`[SPIKE caret] Set to ${n} from ${source} at ${ts}`);
-            } catch (_) {
-                console.log('[SPIKE caret] Set to', n, 'from', source);
-            }
-        }
-
         // Get the caret column (0-based) from the last-focused editable control (textarea/input/contentEditable)
         function getCaretColumnFromActiveEditable() {
             const el = window.__lastEditable || document.getElementById('t');
@@ -441,54 +378,14 @@ def blinking_eyes():
             return out.join('\n').replace(/\n/g, '\r\n');
         }
 
-        // Ensure this tab is focused before attempting clipboard operations (required by browsers)
-        async function ensureThisTabFocused(timeoutMs = 300) {
-            if (document.hasFocus && document.hasFocus()) return true;
-            try { window.focus(); } catch (_) { }
-            // Wait briefly for a focus event or timeout
-            return await new Promise((resolve) => {
-                let settled = false;
-                const done = (val) => { if (!settled) { settled = true; resolve(val); } };
-                const onFocus = () => { window.removeEventListener('focus', onFocus); done(true); };
-                window.addEventListener('focus', onFocus, { once: true });
-                setTimeout(() => {
-                    window.removeEventListener('focus', onFocus);
-                    done(document.hasFocus ? document.hasFocus() : true);
-                }, timeoutMs);
-            });
-        }
-
-        // Keep a handle to the SPIKE window if opened, so we can focus it later
-        function getSpikeWindow() {
-            const w = window.__spikeWin;
-            return w && !w.closed ? w : null;
-        }
-        function tryFocusSpikeWindow() {
-            let w = getSpikeWindow();
-            if (!w) {
-                // Try to attach to an existing named window if user opened SPIKE manually
-                try {
-                    w = window.open('', 'spike-editor-tab');
-                    if (w) window.__spikeWin = w;
-                } catch (_) { /* noop */ }
-            }
-            if (!w) return false;
-            try { w.focus(); return true; } catch (_) { return false; }
-        }
-
         // Copy plain text to clipboard with fallback
         async function copyPlainText(text) {
             try {
-                // The async Clipboard API generally requires the calling document to be focused
-                await ensureThisTabFocused(300);
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     await navigator.clipboard.writeText(text);
                     return true;
                 }
-            } catch (err) {
-                console.log('[Clipboard] navigator.clipboard.writeText error:', err);
-                // fall through to legacy fallback below
-            }
+            } catch (_) { /* fall through */ }
             try {
                 const tmp = document.createElement('textarea');
                 tmp.value = text;
@@ -531,13 +428,8 @@ def blinking_eyes():
                 return buildClipboardTextAllLinesCaretShift(text, caretCol);
             }
             if (mode === 'spike') {
-                const spikeCol = (typeof window.__spikeCaretCol === 'number') ? window.__spikeCaretCol : null;
-                if (spikeCol === null) {
-                    console.warn('[SPIKE caret] Spike mode selected but no caret received yet; defaulting to 0.');
-                } else {
-                    console.log('[SPIKE caret] Using caretSpaces =', spikeCol);
-                }
-                return buildClipboardTextAllLinesCaretShift(text, spikeCol ?? 0);
+                const spikeCol = typeof window.__spikeCaretCol === 'number' ? window.__spikeCaretCol : 0;
+                return buildClipboardTextAllLinesCaretShift(text, spikeCol);
             }
             if (mode === 'column') {
                 return buildClipboardTextAllLinesCaretShift(text, column || 0);
@@ -547,7 +439,7 @@ def blinking_eyes():
 
         // Main function split for readability
         // Main function split for readability
-        async function copySnippetWithLineInsert(preId) {
+        function copySnippetWithLineInsert(preId) {
             const el = document.getElementById(preId);
             if (!el) {
                 console.warn(`copySnippetWithLineInsert: element with id ${preId} not found`);
@@ -557,23 +449,14 @@ def blinking_eyes():
 
             const raw = el.textContent || '';
 
-            // Debug: show current mode and spike caret prior to building clipboard
-            const modeSnapshot = getClipboardAlignMode();
-            console.log('[Clipboard] mode =', modeSnapshot, ' __spikeCaretCol =', window.__spikeCaretCol);
-
             // Build clipboard according to selected align mode
             const prepared = buildClipboardFromMode(raw);
-            const copied = await copyPlainText(prepared);
-            if (!copied) console.warn('Clipboard copy may have failed.');
+            copyPlainText(prepared).catch(() => console.warn('Clipboard copy may have failed.'));
 
             // In-page insert: still insert raw so first line is at caret and others align
             processAndInsertText(raw);
 
-            // After copying, bring the SPIKE window to the front for quick paste
-            const spikeFocused = tryFocusSpikeWindow();
-            const focusHint = spikeFocused ? '' : '\n\nTip: Couldn\'t bring SPIKE to front—Alt+Tab to it and paste.';
-
-            alert('Clipboard ready. Move to your target editor and paste.' + focusHint);
+            alert('Clipboard ready. Move to your target editor and paste.');
         }
         function refreshSnippets(buttonId) {
             const column = document.getElementById('snippet-column');
@@ -664,93 +547,34 @@ def blinking_eyes():
             window.processAndInsertText = processAndInsertText;
         })();
 
-        document.addEventListener('DOMContentLoaded', () => {
-            refreshSnippets(1);
-            fetchGitHubRelease(); // Fetch release info on page load
-        });
+        document.addEventListener('DOMContentLoaded', () => refreshSnippets(1));
 
         // SPIKE editor caret column support
-        // BroadcastChannel 'spike-caret-column' is used to receive caret column updates from other tabs or windows
-        // specifically for SPIKE editor integration. This channel is dedicated to transmitting only the caret column
-        // as a number, whereas the 'spike-caret' channel may transmit more complex messages (objects with type and column).
         (function () {
             const bc = new BroadcastChannel('spike-caret-column');
             bc.onmessage = (ev) => {
                 if (typeof ev.data === 'number') {
-                    setSpikeCaretCol(ev.data, 'BroadcastChannel: spike-caret-column');
+                    window.__spikeCaretColumn = ev.data;
+                    console.log('SPIKE caret column updated:', ev.data);
                 }
             };
         })();
 
         // Shared channel to receive caret column from the SPIKE editor tab (same-origin only)
         const spikeChannel = (typeof BroadcastChannel !== 'undefined') ? new BroadcastChannel('spike-caret') : null;
-        window.__spikeCaretCol = null; // initialize once
+        window.__spikeCaretCol = null;
         if (spikeChannel) {
             spikeChannel.onmessage = (ev) => {
                 try {
                     const data = ev.data;
                     if (data && data.type === 'caret' && typeof data.column === 'number') {
-                        setSpikeCaretCol(data.column, 'BroadcastChannel: spike-caret');
+                        window.__spikeCaretCol = Math.max(0, data.column | 0);
+                        console.log('Received SPIKE caret column:', window.__spikeCaretCol);
                     }
-                } catch (err) {
-                    console.log('[SPIKE caret] BroadcastChannel onmessage error:', err);
-                    alert('Error processing message from SPIKE editor. See console for details.');
-                    // continue without interrupting fallback mechanisms
-                }
+                } catch (e) { /* ignore */ }
             };
         }
 
-        // Cross-tab caret receiver via postMessage from SPIKE tab
-        // Do NOT reset __spikeCaretCol here; we preserve last-known value
-        // THIS IS WHERE WE LOG THE INCOMING MESSAGES FROM SPIKE CTRL ALT R
-        window.addEventListener('message', (ev) => {
-            try {
-                // Only trust known SPIKE origins
-                const ALLOWED_SPIKE_ORIGINS = new Set([
-                    'https://spike.legoeducation.com'
-                ]);
-                if (!ALLOWED_SPIKE_ORIGINS.has(ev.origin)) {
-                    // Uncomment for troubleshooting:
-                    console.debug('[SPIKE caret] Ignoring message from origin:', ev.origin, 'data =', ev.data);
-                    return;
-                }
-
-                // Accept either a structured object { type:'spike-caret', column:number }
-                // or a plain number (column) for simple integrations.
-                const d = ev.data;
-                let col = null;
-                if (d && typeof d === 'object') {
-                    if (d.type === 'spike-caret' && typeof d.column === 'number' && isFinite(d.column)) {
-                        col = d.column;
-                    }
-                } else if (typeof d === 'number' && isFinite(d)) {
-                    col = d;
-                }
-
-                if (col !== null) {
-                    console.log('[SPIKE caret] postMessage from', ev.origin, 'column =', col);
-                    setSpikeCaretCol(col, `postMessage: ${ev.origin}`);
-                } else {
-                    // Uncomment for troubleshooting unexpected payloads:
-                    console.debug('[SPIKE caret] Unrecognized message payload from', ev.origin, d);
-                }
-            } catch (err) {
-                console.log('[SPIKE caret] postMessage handler error:', err);
-                // Avoid alert spam; keep UX smooth.
-            }
-        });
-
-        // Helper to open SPIKE page with opener preserved (no noopener)
-        document.getElementById('open-spike').addEventListener('click', () => {
-            const url = 'https://spike.legoeducation.com/prime/project';
-            // Open without noopener so window.opener is available for postMessage
-            const w = window.open(url, 'spike-editor-tab');
-            // Save handle for later focusing
-            window.__spikeWin = w || window.__spikeWin;
-            if (!w) {
-                alert('Popup blocked. Please allow pop-ups for this site, then try again.');
-            }
-        });
     </script>
 </body>
 
