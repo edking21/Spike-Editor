@@ -5,6 +5,37 @@
     <meta charset="utf-8">
     <title>Paste with caret-relative indentation</title>
     <style>
+        .migration-notice {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .migration-notice h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .migration-notice p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .migration-notice a {
+            color: #FFD700;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .migration-notice a:hover {
+            text-decoration: underline;
+        }
+
         textarea {
             width: 90%;
             height: 200px;
@@ -15,6 +46,20 @@
 </head>
 
 <body>
+    <!-- Migration Notice -->
+    <div class="migration-notice">
+        <h2>📢 Important Notice</h2>
+        <p>This tool has moved to a new, improved location!</p>
+        <p>
+            <a href="https://sites.google.com/view/snippet-shelf/spike" target="_blank">
+                → Visit the New Spike Editor at Google Sites ←
+            </a>
+        </p>
+        <p style="font-size: 14px; opacity: 0.9;">
+            Please bookmark the new location. This GitHub Pages version will be discontinued soon.
+        </p>
+    </div>
+
     <!-- Left column with emoji buttons -->
     <div class="left-column">
         <div class="emoji-block">
