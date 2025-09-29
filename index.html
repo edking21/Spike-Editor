@@ -64,6 +64,23 @@
             subsequent lines to the caret in the test area.</span>
     </div>
 
+    <!-- TESTING BUTTONS FOR LIGHTSPEED CHROMEBOOK DEBUGGING -->
+    <div style="margin: 8px 0; padding: 6px; border: 2px solid #ff6b35; background: #fff3cd; max-width: 900px;">
+        <strong>🔧 Lightspeed Debugging Tools:</strong><br>
+        <button id="test-keys" style="margin: 4px; background: #28a745; color: white;">Test Key Detection</button>
+        <button id="send-test-caret" style="margin: 4px; background: #ff6b35; color: white;">Send Test Caret (Column 4)</button>
+        <button id="manual-caret-input" style="margin: 4px; background: #007bff; color: white;">Manual Caret Input</button>
+        <button id="test-restrictions" style="margin: 4px; background: #6f42c1; color: white;">Test Lightspeed Restrictions</button>
+        <button id="inject-spike-listener" style="margin: 4px; background: #dc3545; color: white;">Generate SPIKE Injection Code</button>
+    </div>
+
+    <!-- DEBUG CONSOLE FOR LIGHTSPEED CHROMEBOOK -->
+    <div id="debug-console" style="margin: 8px 0; padding: 10px; border: 2px solid #333; background: #f8f8f8; max-width: 900px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto;">
+        <strong>Debug Console (Lightspeed Compatible):</strong>
+        <div id="debug-output" style="margin-top: 5px; white-space: pre-wrap;"></div>
+        <button onclick="clearDebugConsole()" style="margin-top: 5px; font-size: 11px;">Clear Debug</button>
+    </div>
+
     <div class="snippet-column" id="snippet-column">
         <!-- Snippets will be dynamically inserted here -->
     </div>
@@ -71,6 +88,212 @@
     <textarea id="t"></textarea>
 
     <script>
+        // DEBUG FUNCTIONS FOR LIGHTSPEED CHROMEBOOK
+        function debugLog(message, data = '') {
+            const timestamp = new Date().toLocaleTimeString();
+            const debugOutput = document.getElementById('debug-output');
+            if (debugOutput) {
+                const logLine = `[${timestamp}] ${message} ${data ? JSON.stringify(data) : ''}\n`;
+                debugOutput.textContent += logLine;
+                debugOutput.scrollTop = debugOutput.scrollHeight;
+            }
+            // Also log to console if available
+            try {
+                console.log(`[DEBUG] ${message}`, data);
+            } catch (e) {}
+        }
+
+        function clearDebugConsole() {
+            const debugOutput = document.getElementById('debug-output');
+            if (debugOutput) {
+                debugOutput.textContent = '';
+            }
+        }
+
+        // KEY DETECTION TEST FOR LIGHTSPEED CHROMEBOOK
+        let keyTestingActive = false;
+        function startKeyTesting() {
+            keyTestingActive = true;
+            debugLog('KEY TESTING STARTED', 'Press any key combinations...');
+            
+            const keyHandler = (ev) => {
+                if (!keyTestingActive) return;
+                
+                const keys = [];
+                if (ev.ctrlKey) keys.push('Ctrl');
+                if (ev.altKey) keys.push('Alt');
+                if (ev.shiftKey) keys.push('Shift');
+                if (ev.metaKey) keys.push('Meta');
+                keys.push(ev.key);
+                
+                debugLog('Key detected', {
+                    combination: keys.join('+'),
+                    code: ev.code,
+                    which: ev.which,
+                    keyCode: ev.keyCode,
+                    prevented: ev.defaultPrevented
+                });
+                
+                // Test specific combinations
+                if (ev.ctrlKey && ev.altKey && ev.key.toLowerCase() === 'r') {
+                    debugLog('🎯 CTRL+ALT+R detected!', 'This combination works on this page');
+                    ev.preventDefault();
+                }
+                if (ev.ctrlKey && ev.shiftKey && ev.key.toLowerCase() === 'r') {
+                    debugLog('🎯 CTRL+SHIFT+R detected!', 'Alternative combination works');
+                    ev.preventDefault();
+                }
+            };
+            
+            document.addEventListener('keydown', keyHandler);
+            
+            // Auto-stop after 30 seconds
+            setTimeout(() => {
+                keyTestingActive = false;
+                document.removeEventListener('keydown', keyHandler);
+                debugLog('KEY TESTING STOPPED', 'Test completed');
+            }, 30000);
+        }
+
+        // TEST LIGHTSPEED RESTRICTIONS
+        function testLightspeedRestrictions() {
+            debugLog('🔍 Testing Lightspeed restrictions', 'Starting diagnostic tests...');
+            
+            // Test clipboard access
+            navigator.clipboard.writeText('test').then(() => {
+                debugLog('✅ Clipboard access', 'ALLOWED');
+            }).catch(e => {
+                debugLog('❌ Clipboard access', 'BLOCKED: ' + e.message);
+            });
+            
+            // Test BroadcastChannel
+            try {
+                const bc = new BroadcastChannel('test-channel');
+                debugLog('✅ BroadcastChannel', 'ALLOWED');
+                bc.close();
+            } catch (e) {
+                debugLog('❌ BroadcastChannel', 'BLOCKED: ' + e.message);
+            }
+            
+            // Test postMessage
+            try {
+                window.postMessage('test-message', '*');
+                debugLog('✅ postMessage', 'ALLOWED');
+            } catch (e) {
+                debugLog('❌ postMessage', 'BLOCKED: ' + e.message);
+            }
+            
+            // Test popup
+            try {
+                const testUrl = 'about:blank';
+                const w = window.open(testUrl, 'test-popup');
+                if (w) {
+                    debugLog('✅ window.open', 'ALLOWED');
+                    w.close();
+                } else {
+                    debugLog('⚠️ window.open', 'BLOCKED (popup blocker)');
+                }
+            } catch (e) {
+                debugLog('❌ window.open', 'BLOCKED: ' + e.message);
+            }
+            
+            // Test localStorage
+            try {
+                localStorage.setItem('test', 'value');
+                localStorage.removeItem('test');
+                debugLog('✅ localStorage', 'ALLOWED');
+            } catch (e) {
+                debugLog('❌ localStorage', 'BLOCKED: ' + e.message);
+            }
+        }
+
+        // GENERATE SPIKE INJECTION CODE
+        function generateSpikeInjectionCode() {
+            const injectionCode = `javascript:(function(){
+    console.log('🚀 Spike Editor Caret Listener Injected');
+    
+    // Remove any existing listeners
+    if (window.spikeCaretListener) {
+        document.removeEventListener('keydown', window.spikeCaretListener);
+    }
+    
+    // Create new listener
+    window.spikeCaretListener = function(e) {
+        if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'r') {
+            e.preventDefault();
+            console.log('📍 Ctrl+Alt+R pressed in SPIKE editor');
+            
+            // Try to get caret position (simplified)
+            const activeElement = document.activeElement;
+            let caretColumn = 0;
+            
+            // Basic caret detection
+            if (activeElement && activeElement.selectionStart !== undefined) {
+                const text = activeElement.value || '';
+                const start = activeElement.selectionStart;
+                const lineStart = text.lastIndexOf('\\n', start - 1) + 1;
+                caretColumn = start - lineStart;
+            }
+            
+            console.log('📍 Detected caret column:', caretColumn);
+            
+            // Try multiple communication methods
+            try {
+                // Method 1: PostMessage to opener
+                if (window.opener) {
+                    window.opener.postMessage({
+                        type: 'spike-caret', 
+                        column: caretColumn
+                    }, '*');
+                    console.log('✅ Sent via postMessage to opener');
+                }
+            } catch (e) {
+                console.log('❌ postMessage to opener failed:', e);
+            }
+            
+            try {
+                // Method 2: BroadcastChannel
+                const bc = new BroadcastChannel('spike-caret-column');
+                bc.postMessage(caretColumn);
+                bc.close();
+                console.log('✅ Sent via BroadcastChannel');
+            } catch (e) {
+                console.log('❌ BroadcastChannel failed:', e);
+            }
+            
+            alert('Caret position sent: ' + caretColumn);
+        }
+    };
+    
+    document.addEventListener('keydown', window.spikeCaretListener);
+    console.log('✅ Listener attached - Press Ctrl+Alt+R to send caret position');
+    alert('SPIKE Caret Listener Active!\\n\\nPress Ctrl+Alt+R in the code editor to send caret position.');
+})();`;
+
+            // Create a text area with the code for easy copying
+            const textarea = document.createElement('textarea');
+            textarea.value = injectionCode;
+            textarea.style.position = 'fixed';
+            textarea.style.top = '50px';
+            textarea.style.left = '50px';
+            textarea.style.width = '80%';
+            textarea.style.height = '300px';
+            textarea.style.zIndex = '9999';
+            textarea.style.background = '#fff';
+            textarea.style.border = '2px solid #333';
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            debugLog('💾 SPIKE Injection Code Generated', 'Copy the code from the text area and paste it in SPIKE editor address bar');
+            
+            // Auto-remove after 30 seconds
+            setTimeout(() => {
+                if (document.body.contains(textarea)) {
+                    document.body.removeChild(textarea);
+                }
+            }, 30000);
+        }
+
         // GitHub release fetcher
         async function fetchGitHubRelease() {
             try {
@@ -373,6 +596,10 @@ def blinking_eyes():
         function setSpikeCaretCol(col, source) {
             const n = Math.max(0, (col | 0));
             window.__spikeCaretCol = n;
+            
+            // Debug output
+            debugLog('🎯 Setting SPIKE caret column', { column: n, source: source });
+            
             // Update UI indicator and auto-select Spike mode so caretSpaces is used
             try {
                 const ind = document.getElementById('spike-caret-indicator');
@@ -559,7 +786,7 @@ def blinking_eyes():
 
             // Debug: show current mode and spike caret prior to building clipboard
             const modeSnapshot = getClipboardAlignMode();
-            console.log('[Clipboard] mode =', modeSnapshot, ' __spikeCaretCol =', window.__spikeCaretCol);
+            debugLog('📋 Clipboard copy initiated', { mode: modeSnapshot, spikeCaretCol: window.__spikeCaretCol });
 
             // Build clipboard according to selected align mode
             const prepared = buildClipboardFromMode(raw);
@@ -665,8 +892,33 @@ def blinking_eyes():
         })();
 
         document.addEventListener('DOMContentLoaded', () => {
+            debugLog('🚀 Spike Editor loaded and ready');
+            debugLog('👂 Listening for messages from', 'https://spike.legoeducation.com');
             refreshSnippets(1);
             fetchGitHubRelease(); // Fetch release info on page load
+
+            // SET UP TESTING BUTTONS
+            document.getElementById('test-keys').addEventListener('click', startKeyTesting);
+            
+            document.getElementById('send-test-caret').addEventListener('click', () => {
+                const testColumn = 4;
+                debugLog('📤 Manually sending test caret', { column: testColumn });
+                setSpikeCaretCol(testColumn, 'Manual test button');
+            });
+            
+            document.getElementById('manual-caret-input').addEventListener('click', () => {
+                const column = prompt('Enter caret column number:', '0');
+                if (column !== null) {
+                    const col = parseInt(column, 10);
+                    if (!isNaN(col)) {
+                        setSpikeCaretCol(col, 'Manual input');
+                        debugLog('✏️ Manual caret set', { column: col });
+                    }
+                }
+            });
+            
+            document.getElementById('test-restrictions').addEventListener('click', testLightspeedRestrictions);
+            document.getElementById('inject-spike-listener').addEventListener('click', generateSpikeInjectionCode);
         });
 
         // SPIKE editor caret column support
@@ -701,19 +953,27 @@ def blinking_eyes():
         }
 
         // Cross-tab caret receiver via postMessage from SPIKE tab
-        // Do NOT reset __spikeCaretCol here; we preserve last-known value
-        // THIS IS WHERE WE LOG THE INCOMING MESSAGES FROM SPIKE CTRL ALT R
+        // ENHANCED WITH DEBUG LOGGING FOR LIGHTSPEED CHROMEBOOK
         window.addEventListener('message', (ev) => {
             try {
+                // Debug: Log ALL incoming messages first
+                debugLog('📨 Received postMessage', {
+                    origin: ev.origin,
+                    data: ev.data,
+                    type: typeof ev.data
+                });
+
                 // Only trust known SPIKE origins
                 const ALLOWED_SPIKE_ORIGINS = new Set([
                     'https://spike.legoeducation.com'
                 ]);
+                
                 if (!ALLOWED_SPIKE_ORIGINS.has(ev.origin)) {
-                    // Uncomment for troubleshooting:
-                    console.debug('[SPIKE caret] Ignoring message from origin:', ev.origin, 'data =', ev.data);
+                    debugLog('🚫 Ignoring message from untrusted origin', ev.origin);
                     return;
                 }
+
+                debugLog('✅ Processing message from SPIKE origin', ev.origin);
 
                 // Accept either a structured object { type:'spike-caret', column:number }
                 // or a plain number (column) for simple integrations.
@@ -722,21 +982,21 @@ def blinking_eyes():
                 if (d && typeof d === 'object') {
                     if (d.type === 'spike-caret' && typeof d.column === 'number' && isFinite(d.column)) {
                         col = d.column;
+                        debugLog('📍 Received structured caret message', { column: col });
                     }
                 } else if (typeof d === 'number' && isFinite(d)) {
                     col = d;
+                    debugLog('📍 Received numeric caret value', col);
                 }
 
                 if (col !== null) {
-                    console.log('[SPIKE caret] postMessage from', ev.origin, 'column =', col);
+                    debugLog('🎯 SPIKE caret update SUCCESS', { column: col, origin: ev.origin });
                     setSpikeCaretCol(col, `postMessage: ${ev.origin}`);
                 } else {
-                    // Uncomment for troubleshooting unexpected payloads:
-                    console.debug('[SPIKE caret] Unrecognized message payload from', ev.origin, d);
+                    debugLog('❓ Unrecognized message payload from SPIKE', d);
                 }
             } catch (err) {
-                console.log('[SPIKE caret] postMessage handler error:', err);
-                // Avoid alert spam; keep UX smooth.
+                debugLog('💥 postMessage handler ERROR', err.message);
             }
         });
 
@@ -749,6 +1009,21 @@ def blinking_eyes():
             window.__spikeWin = w || window.__spikeWin;
             if (!w) {
                 alert('Popup blocked. Please allow pop-ups for this site, then try again.');
+            } else {
+                debugLog('🔗 Opened SPIKE editor', 'Window handle saved for communication');
+                
+                // Test communication after a delay
+                setTimeout(() => {
+                    try {
+                        w.postMessage({
+                            type: 'test-from-snippet-shelf',
+                            message: 'Hello from Spike Editor'
+                        }, 'https://spike.legoeducation.com');
+                        debugLog('📤 Sent test message to SPIKE tab', 'Testing cross-tab communication');
+                    } catch (e) {
+                        debugLog('❌ Failed to send test message to SPIKE tab', e.message);
+                    }
+                }, 3000);
             }
         });
     </script>
