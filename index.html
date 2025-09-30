@@ -5,18 +5,19 @@
   <title>Spike</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 2px; background-color: #ffffff; color: #000000; margin: 0; }
-    .left-column { position: fixed; top: 0; left: 0; width: 80px; height: 600px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; background-color: #f5f5f5; border-right: 1px solid #ccc; box-sizing: border-box; }
-    .emoji-block { display: flex; flex-direction: column; justify-content: space-around; align-items: center; height: 100%; margin-top: 20px; }
-    .emoji-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; }
+    .left-column { position: fixed; top: 0; left: 0; width: 80px; height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; background-color: #f5f5f5; border-right: 1px solid #ccc; box-sizing: border-box; }
+    .emoji-block { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 12px 0; }
+    .emoji-container { display: flex; flex-direction: column; align-items: center; }
     .emoji-container button { font-size: 32px; cursor: pointer; border: none; background: none; transition: transform 0.15s ease, filter 0.15s ease; }
     .emoji-container button:hover { transform: scale(1.08); filter: brightness(110%); }
-    .emoji-label { margin-top: 5px; font-size: 12px; color: black; text-align: center; width: 60px; word-wrap: break-word; }
+    .emoji-label { margin-top: 6px; font-size: 12px; color: black; text-align: center; width: 70px; word-wrap: break-word; }
 
-    .snippet-column { margin-left: 100px; padding: 10px; }
-    .snippet { border: none; border-radius: 8px; padding: 6px; margin: 8px 0; background-color: #f9f9f9; width: 100%; box-sizing: border-box; }
-    .snippet button { cursor: pointer; padding: 6px 10px; font-size: 20px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.15); color: #ffffff; display: inline-flex; align-items: center; justify-content: center; transition: transform 0.12s ease, filter 0.12s ease; }
-    .snippet button:hover { transform: scale(1.05); filter: brightness(110%); }
-    .snippet .emoji { font-size: 1.3em; }
+    .snippet-column { margin-left: 80px; padding: 12px; }
+    .snippet { border: none; border-radius: 8px; padding: 6px; margin: 8px 0; background-color: transparent; width: 100%; box-sizing: border-box; }
+    .snippet button { cursor: pointer; padding: 8px 12px; font-size: 14px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12); color: #ffffff; display: inline-flex; align-items: center; gap: 8px; transition: transform 0.12s ease, filter 0.12s ease; }
+    .snippet button:hover { transform: scale(1.04); filter: brightness(110%); }
+    .snippet .emoji { font-size: 1.3em; line-height: 1; }
+    .snippet .label { font-size: 1em; }
   </style>
 </head>
 <body>
@@ -29,7 +30,7 @@
       <div class="emoji-container"><button onclick="refreshSnippets(5)">🟡</button><div class="emoji-label">Control</div></div>
       <div class="emoji-container"><button onclick="refreshSnippets(6)">🔵</button><div class="emoji-label">Sensors</div></div>
       <div class="emoji-container"><button onclick="refreshSnippets(7)">🟢</button><div class="emoji-label">Operators</div></div>
-      <div class="emoji-container"><button onclick="refreshSnippets(8)">🔴</button><div class="emoji-label">My Block</div></div>
+      <div class="emoji-container"><button onclick="refreshSnippets(8)">🔴</button><div class="emoji-label">Functions</div></div>
     </div>
   </div>
 
@@ -38,60 +39,199 @@
   </div>
 
   <script>
+    // Cleaned-up snippetData: no duplicate keys, no stray concatenation plus signs
     const snippetData = {
-      1: { snippets: [ // Motors
-        { id: "snippet1", buttonText: 'Run shortest distance to absolute 0', color: '#0000FF', emoji: '🧿', 
-         textComment: '# Run shortest distance to absolute 0',
-         textPython: "await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)" }
-      ] }, // Motor
-      2: { snippets: [ // Movement
-        { id: "snippet1", buttonText: 'Forward 20cm 25% velocity', color: '#FF4CCD', emoji: '🧿',
-         textComment: '# Forward 20cm 25% velocity',
-         textPython: "await motor_pair.move_for_degrees(motor_pair.PAIR_1, 20*21, 0, velocity=int(.25*1100))" },
+      1: { snippets: [
+        {
+          id: "m1",
+          buttonText: 'Run shortest distance to absolute 0',
+          emoji: '🧿',
+          color: '#0000FF',
+          textComment: '# Run shortest distance to absolute 0',
+          textPython: `await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+        }
+      ]},  // motors
+
+      2: { snippets: [
+        {
+          id: "move1",
+          buttonText: 'move forward for 10cm',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# move forward for 10cm',
+          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0, velocity=movement_speed)`
+        },
+        {
+          id: "move2",
+          buttonText: 'move backward for 10cm',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# move backward for 10cm',
+          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0, velocity=movement_speed)`
+        },
+        {
+          id: "move3",
+          buttonText: 'start moving',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# start moving',
+          textPython: `motor_pair.start(motor_pair.PAIR_1)`
+        },
+        {
+          id: "move4",
+          buttonText: 'turn in place right 90',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# turn in place right 90 (180 degrees rotation 100 percent steering)',
+          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
+        }, 
+        {
+          id: "move5",
+          buttonText: 'turn in place left 90',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# turn in place left 90 (-180 degrees rotation 100 percent steering)',
+          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100)`
+        }, 
+        {
+          id: "move6",
+          buttonText: 'pivot turn right 90 degrees',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# pivot turn right 90 degrees (360 degrees rotation 50 percent steering)',
+          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50)`
+        },
+        {
+          id: "move7",
+          buttonText: 'pivot turn left 90 degrees',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# pivot turn left 90 degrees (360 degrees rotation 50 percent steering)',
+          textPython: `await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50)`
+        },
+        {
+          id: "move8",
+          buttonText: 'stop moving',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# stop moving',
+          textPython: `motor_pair.stop(motor_pair.PAIR_1)`
+        },
+        {
+          id: "move9",
+          buttonText: 'set movement speed to 50%',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# set movement speed to 50%',
+          textPython: `movement_speed = int(0.5 * 1100)`
+        },       
+        {
+          id: "move10",
+          buttonText: 'set movement motors to C+D',
+          emoji: '🧿',
+          color: '#FF4CCD',
+          textComment: '# set movement motors to C+D',
+          textPython: `motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+        }
+      ]},  // Movement
+
+      3: { snippets: [
+        {
+          id: "light1",
+          buttonText: 'Turn On Smiley Face For 2 Seconds',
+          emoji: '🧿',
+          color: '#544AAC',
+          textComment: '# Turn On Smiley Face For 2 Seconds',
+          textPython: `light_matrix.show_image(light_matrix.IMAGE_SMILE)\n    sleep(2)`
+        },
+        {
+          id: "light2",
+          buttonText: 'Blinking Eyes',
+          emoji: '🧿',
+          color: '#544AAC',
+          textComment: '# Blinking Eyes on the light matarix',
+          textPython: `blinking_eyes()`
+        },
+        {
+          id: "light3",
+          buttonText: 'Turn On Angry Face For 2 Seconds',
+          emoji: '🧿',
+          color: '#544AAC',
+          textComment: '# Turn On Angry Face For 2 Seconds',
+          textPython: `light_matrix.show_image(light_matrix.IMAGE_ANGRY)\n    sleep(2)`
+        }
+      ]},  // light
+
+      5: { snippets: [
+        {
+          id: "ctrl1",
+          buttonText: 'Wait for 1 second',
+          emoji: '🧿',
+          color: '#E0C83C',
+          textComment: '# Wait for 1 second',
+          textPython: `sleep(1)`
+        },
+        {
+          id: "ctrl2",
+          buttonText: 'Wait For Force Sensor Pressed',
+          emoji: '🧿',
+          color: '#E0C83C',
+          textComment: '# Wait For Force Sensor Pressed',
+          textPython: `while force_sensor.force(port.A) < 1: pass`
+        }
+      ]},  // Control
+
+      6: { snippets: [
+        {
+          id: "sens1",
+          buttonText: 'Distance Check (example)',
+          emoji: '🧿',
+          color: '#34CCF1',
+          textComment: '# Example sensor check',
+          textPython: `if distance_sensor.get_distance() < 10:\n    print('close')`
+        }
+      ]},  // Sensor
+
+      7: { snippets: [
+        {
+          id: "op1",
+          buttonText: 'Operator Example',
+          emoji: '🧿',
+          color: '#6AA84F',
+          textComment: '# Operator example',
+          textPython: `result = a + b\n    print(result)`
+        }
+      ]},  // Operators
+
+      8: { snippets: [
+        {
+          id: "fn1",
+          buttonText: 'Blinking Eyes (function)',
+          emoji: '🧿',
+          color: '#E31A1A',
+          textComment: `\n\n`,
+          textPython: ` `,
+          textFunction: 
+    `def blinking_eyes():
+    \"\"\"
+    Show a blinking eyes animation on the Light Matrix
+    \"\"\"
+    for i in range(3):
+    
+        # Show a happy face on the Light Matrix
+        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
         
-        { id: "snippet2", buttonText: 'Backward 20cm 25% velocity', color: '#FF4CCD', emoji: '🧿',
-         textComment: '# Backward 20cm 25% velocity',
-         textPython: "await motor_pair.move_for_degrees(motor_pair.PAIR_1, -20*21, 0, velocity=int(.25*1100))" },
+        # Wait for one second
+        sleep_ms(1000)
         
-        { id: "snippet3", buttonText: 'Tank Turn Right 90 degrees', color: '#FF4CCD', color: '#FF4CCD' , emoji: '🧿',
-         textComment: '# Tank Turn Right 90 degrees', textPython: "await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)"},
+        # Show a smile on the light matrix
+        light_matrix.show_image(light_matrix.IMAGE_SMILE)
         
-        { id: "snippet4", buttonText: 'Tank Turn Left 90 degrees', color: '#FF4CCD', color: '#FF4CCD' , emoji: '🧿',
-         textComment: '# Tank Turn Left 90 degrees', textPython: "await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100)"},
-        
-        { id: "snippet5", buttonText: 'Pivot Turn Right 90 degrees', color: '#FF4CCD', color: '#FF4CCD' , emoji: '🧿',
-         textComment: '# Pivot Turn Right 90 degrees', textPython: "await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50)"},
-        
-        { id: "snippet6", buttonText: 'Pivot Turn Left 90 degrees', color: '#FF4CCD', color: '#FF4CCD' , emoji: '🧿',
-         textComment: '# Pivot Turn Left 90 degrees', textPython: "await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50)"},
-       
-        { id: "snippet7", buttonText: 'Stop Moving', color: '#FF4CCD', emoji: '🧿', 
-         textComment: '# Stop moving', textPython: "motor_pair.stop(motor_pair.PAIR_1)" }
-      ] }, // Movement
-      3: { snippets: [ 
-        { id: "snippet1", buttonText: 'Turn On Smiley Face', color: '#544AAC', emoji: '🧿', 
-         textComment: '# Turn On Smiley Face',
-         textPython: "light_matrix.show_image(light_matrix.IMAGE_SMILE)" },
-        { id: "snippet2", buttonText: 'Turn On Smiley Face For 2 Seconds', color: '#544AAC', emoji: '🧿', 
-         textComment: '# Turn On Smiley Face For 2 Seconds',
-         textPython: "light_matrix.show_image(light_matrix.IMAGE_SMILE)"  + '\n' + "sleep(2)"},
-        { id: "snippet3", buttonText: 'Turn On Angry Face', color: '#544AAC', emoji: '🧿', 
-         textComment: '# Turn On Angry Face',
-         textPython: "light_matrix.show_image(light_matrix.IMAGE_ANGRY)" },
-        { id: "snippet4", buttonText: 'Turn On Angry Face For 2 Seconds', color: '#544AAC', emoji: '🧿', 
-         textComment: '# Turn On Angry Face For 2 Seconds',
-         textPython: "light_matrix.show_image(light_matrix.IMAGE_ANGRY)"  + '\n' + "sleep(2)"}
-      ] }, // Light
-      4: { snippets: [ // control
-        { id: "snippet1", buttonText: 'Wait for 1 seconds', color: '#E7AF35', emoji: '🧿', 
-         textComment: '# Wait for 1 second',
-         textPython: "sleep(1)" }
-      ] }, // Control
-      5: { snippets: [ // events
-        { id: "snippet1", buttonText: 'Wait For Force Sensor Pressed', color: '#E0C83C', emoji: '🧿', 
-         textComment: '# Wait For Force Sensor Pressed',
-         textPython: "while force_sensor.force(port.A) < 1: pass"}
-      ] }  // Envent
+        # Wait for 0.2 seconds
+        sleep_ms(200)
+        `,
+        }
+      ]}   // Functions
     };
 
     function refreshSnippets(buttonId) {
@@ -110,14 +250,23 @@
         pre.id = preId;
         pre.contentEditable = true;
         pre.style.display = 'none';
-        pre.textContent = '\n' + snippet.textComment + '\n' + snippet.textPython + '\n';
+
+        // build the copy text: include function definition (if any), comment, then python body
+        const parts = [];
+        if (snippet.textFunction) parts.push(snippet.textFunction);
+        if (snippet.textComment) parts.push ("    " + snippet.textComment);
+        if (snippet.textPython) parts.push  ("    " + snippet.textPython);
+        pre.textContent = '\n' + parts.join('\n') + '\n';
 
         snippetDiv.appendChild(pre);
 
         const button = document.createElement('button');
-        button.innerHTML = `<span class="emoji">${snippet.emoji}</span> ${snippet.buttonText}`;
+        // emoji slightly larger via CSS class
+        button.innerHTML = `<span class="emoji">${snippet.emoji}</span><span class="label">${snippet.buttonText}</span>`;
         button.style.backgroundColor = snippet.color;
         button.style.color = '#ffffff';
+        button.title = snippet.buttonText; // keep accessible label
+
         button.addEventListener('click', () => copySnippetWithLineInsert(preId));
 
         snippetDiv.appendChild(button);
@@ -129,17 +278,19 @@
       const el = document.getElementById(preId);
       if (!el) {
         console.warn(`copySnippetWithLineInsert: element with id ${preId} not found`);
-        alert('Snippet not available to copy. Try clicking the emoji in the left column to reload snippets.');
+        alert('Snippet not available to copy. Try clicking the left-column emoji to reload snippets.');
         return;
       }
 
       const text = el.textContent || '';
-      const indentedText = text.replace(/^/gm, '    ');
+
+      // do not add additional indentation here; keep text as authored
+      const textToCopy = text;
 
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(indentedText).catch(err => { fallbackCopy(indentedText); });
+        navigator.clipboard.writeText(textToCopy).catch(() => fallbackCopy(textToCopy));
       } else {
-        fallbackCopy(indentedText);
+        fallbackCopy(textToCopy);
       }
     }
 
