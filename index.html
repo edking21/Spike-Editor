@@ -483,18 +483,18 @@ def blinking_eyes():
         // Fetch GitHub release info
         async function fetchGitHubRelease() {
             try {
-                const response = await fetch('https://api.github.com/repos/eddyk/Spike Editor/releases/latest');
+                const response = await fetch('https://api.github.com/repos/edking21/Spike-Editor/releases/latest');
                 if (response.ok) {
                     const release = await response.json();
                     const releaseInfo = document.getElementById('release-info');
-                    releaseInfo.textContent = `© 2024 Spike Editor - Release ${release.tag_name}`;
+                    releaseInfo.textContent = `© 2025 Spike Editor - Release ${release.name}`;
                 } else {
                     throw new Error('Failed to fetch release');
                 }
             } catch (error) {
                 console.warn('Could not fetch GitHub release:', error);
                 const releaseInfo = document.getElementById('release-info');
-                releaseInfo.textContent = '© 2024 Spike Editor - Release v1.0.0';
+                releaseInfo.textContent = '© 2025 Spike Editor - Release v1.0.0';
             }
         }
 
