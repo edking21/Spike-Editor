@@ -1051,7 +1051,7 @@ def blinking_eyes():
             };
         }
 
-        // Cross-tab caret receiver via postMessage from SPIKE tab
+         // Cross-tab caret receiver via postMessage from SPIKE tab
         // ENHANCED WITH DEBUG LOGGING FOR LIGHTSPEED CHROMEBOOK
         window.addEventListener('message', (ev) => {
             try {
@@ -1062,23 +1062,37 @@ def blinking_eyes():
                     type: typeof ev.data
                 });
 
-                // Only trust known SPIKE origins
-                const ALLOWED_SPIKE_ORIGINS = new Set([
-                    'https://spike.legoeducation.com'
+                // Accept messages from Google Sites (for testing) AND SPIKE
+                const ALLOWED_ORIGINS = new Set([
+                    'https://spike.legoeducation.com',
+                    'https://sites.google.com'  // Add Google Sites for testing
                 ]);
                 
-                if (!ALLOWED_SPIKE_ORIGINS.has(ev.origin)) {
+                if (!ALLOWED_ORIGINS.has(ev.origin)) {
                     debugLog('🚫 Ignoring message from untrusted origin', ev.origin);
                     return;
                 }
 
-                debugLog('✅ Processing message from SPIKE origin', ev.origin);
+                debugLog('✅ Processing message from trusted origin', ev.origin);
 
                 // Accept either a structured object { type:'spike-caret', column:number }
                 // or a plain number (column) for simple integrations.
                 const d = ev.data;
                 let col = null;
-                if (d && typeof d === 'object') {
+                
+                // Handle test messages from Google Sites injector
+                if (d && typeof d === 'object' && d.type === 'test-key-pressed') {
+                    debugLog('🎹 KEY TEST MESSAGE', { 
+                        key: d.key, 
+                        column: d.column,
+                        source: 'Google Sites Injector'
+                    });
+                    if (typeof d.column === 'number') {
+                        col = d.column;
+                    }
+                }
+                // Handle standard SPIKE caret messages
+                else if (d && typeof d === 'object') {
                     if (d.type === 'spike-caret' && typeof d.column === 'number' && isFinite(d.column)) {
                         col = d.column;
                         debugLog('📍 Received structured caret message', { column: col });
@@ -1092,7 +1106,7 @@ def blinking_eyes():
                     debugLog('🎯 SPIKE caret update SUCCESS', { column: col, origin: ev.origin });
                     setSpikeCaretCol(col, `postMessage: ${ev.origin}`);
                 } else {
-                    debugLog('❓ Unrecognized message payload from SPIKE', d);
+                    debugLog('❓ Unrecognized message payload', { data: d, origin: ev.origin });
                 }
             } catch (err) {
                 debugLog('💥 postMessage handler ERROR', err.message);
