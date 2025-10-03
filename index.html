@@ -319,12 +319,25 @@
                     },
                     {
                         id: "ctrl2",
-                        buttonText: 'Wait For Force Sensor Pressed',
+                        buttonText: 'Wait until distance sensor detects object within 10cm',
                         emoji: '🧿',
                         color: '#E0C83C',
                         textPython: `
-    # Wait For Force Sensor Pressed
-    while force_sensor.force(port.A) < 1: pass`
+    # Wait until distance sensor detects object within 10cm (continue checking if read error -1)
+    while distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1:
+        pass
+    `
+                    },
+                    {
+                        id: "ctrl3",
+                        buttonText: 'Wait until color sensor sees red',
+                        emoji: '🧿',
+                        color: '#E0C83C',
+                        textPython: `
+    # Wait until color sensor sees red
+    while color_sensor.color(port.A) != color.RED:
+        pass
+    `
                     }
                 ]
             },  // Control
@@ -335,7 +348,7 @@
                         id: "sens1",
                         buttonText: 'Distance Check (example)',
                         emoji: '🧿',
-                        color: '#34CCF1',
+                        color: '#91D4F8',
                         textPython: `
     # Example sensor check
     if distance_sensor.get_distance() < 10:
@@ -374,9 +387,8 @@ async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 runloop.run(main())
-sys.exit()    
-`
-                    },
+sys.exit()` 
+                },
                     {
                         id: "fn2",
                         buttonText: 'Distance Sensor',
