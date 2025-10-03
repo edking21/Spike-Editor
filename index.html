@@ -33,7 +33,7 @@
             flex-direction: column;
             align-items: center;
             gap: 6px;
-            padding: 1px 0, 0 0;
+            padding-top: 12px;
             height: 100%;
             overflow-y: auto;
             width: 100%;
@@ -117,34 +117,57 @@
             color: #666;
             border-top: 1px solid #eee;
         }
+
+        .emoji-container .color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.15s ease;
+            font-size: 0; /* Remove any text content */
+        }
+
+        .emoji-container .color-circle:hover {
+            transform: scale(1.08);
+            filter: brightness(110%);
+        }
+
+        .emoji-container .blue-circle { background-color: #0066FF !important; }
+        .emoji-container .light-blue-circle { background-color: #87CEEB !important; }
+        .emoji-container .red-circle { background-color: #CC0000 !important; }
+        .emoji-container .pink-circle { background-color: #FF69B4 !important; }
+        .emoji-container .purple-circle { background-color: #8A2BE2 !important; }
+        .emoji-container .yellow-circle { background-color: #FFD700 !important; }
+        .emoji-container .green-circle { background-color: #32CD32 !important; }
     </style>
 </head>
 
 <body>
     <div class="left-column">
         <div class="emoji-block">
-            <div class="emoji-container"><button onclick="refreshSnippets(1)">🔵</button>
+            <div class="emoji-container"><button class="color-circle blue-circle" onclick="refreshSnippets(1)"></button>
                 <div class="emoji-label">Motors</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(2)">🔴</button>
+            <div class="emoji-container"><button class="color-circle pink-circle" onclick="refreshSnippets(2)"></button>
                 <div class="emoji-label">Movement</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(3)">🟣</button>
+            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(3)"></button>
                 <div class="emoji-label">Light</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(4)">🟡</button>
+            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(4)"></button>
                 <div class="emoji-label">Events</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(5)">🟡</button>
+            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(5)"></button>
                 <div class="emoji-label">Control</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(6)">🔵</button>
+            <div class="emoji-container"><button class="color-circle light-blue-circle" onclick="refreshSnippets(6)"></button>
                 <div class="emoji-label">Sensors</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(7)">🟢</button>
+            <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(7)"></button>
                 <div class="emoji-label">Operators</div>
             </div>
-            <div class="emoji-container"><button onclick="refreshSnippets(8)">🔴</button>
+            <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(8)"></button>
                 <div class="emoji-label">Functions</div>
             </div>
         </div>
@@ -163,13 +186,13 @@
     <script>
        // Cleaned-up snippetData: no duplicate keys, no stray concatenation plus signs
         const snippetData = {
-            1: {
+            1: {  // Motors
                 snippets: [
                     {
                         id: "m1",
                         buttonText: 'Run shortest distance to absolute 0',
                         emoji: '🧿',
-                        color: '#0000FF',
+                        color: '#0066FF',
                         textPython: `
     # Run shortest distance to absolute 0
     await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
@@ -177,13 +200,13 @@
                 ]
             },  // motors
 
-            2: {
+            2: {  // Movement
                 snippets: [
                     {
                         id: "move1",
                         buttonText: 'move forward for 10cm',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # move forward for 10cm
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0)`
@@ -192,7 +215,7 @@
                         id: "move2",
                         buttonText: 'move backward for 10cm',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # move backward for 10cm
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*21, 0)`
@@ -201,7 +224,7 @@
                         id: "move3",
                         buttonText: 'start moving',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # start moving
     motor_pair.move(motor_pair.PAIR_1, 0)`
@@ -210,7 +233,7 @@
                         id: "move4",
                         buttonText: 'turn in place right 90',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # turn in place right 90 (180 degrees rotation 100 percent steering
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
@@ -219,7 +242,7 @@
                         id: "move5",
                         buttonText: 'turn in place left 90',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # turn in place left 90 (-180 degrees rotation 100 percent steering
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, -180, 100)`
@@ -228,7 +251,7 @@
                         id: "move6",
                         buttonText: 'pivot turn right 90 degrees',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # pivot turn right 90 degrees (360 degrees rotation 50 percent steering
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, 360, 50)`
@@ -237,7 +260,7 @@
                         id: "move7",
                         buttonText: 'pivot turn left 90 degrees',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # pivot turn left 90 degrees (360 degrees rotation 50 percent steering
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, -360, 50)`
@@ -246,7 +269,7 @@
                         id: "move8",
                         buttonText: 'stop moving',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # stop moving
     motor_pair.stop(motor_pair.PAIR_1)`
@@ -255,7 +278,7 @@
                         id: "move9",
                         buttonText: 'set movement speed to 50%',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # set movement speed to 50%
     movement_speed = int(0.5 * 1100)`
@@ -264,7 +287,7 @@
                         id: "move10",
                         buttonText: 'set movement motors to C+D',
                         emoji: '🧿',
-                        color: '#FF4CCD',
+                        color: '#FF69B4',
                         textPython: `
     # set movement motors to C+D
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
@@ -272,13 +295,13 @@
                 ]
             },  // Movement
 
-            3: {
+            3: {  // Light
                 snippets: [
                     {
                         id: "light1",
                         buttonText: 'Turn On Smiley Face For 2 Seconds',
                         emoji: '🧿',
-                        color: '#544AAC',
+                        color: '#8A2BE2',
                         textPython: `
     # Turn On Smiley Face For 2 Seconds
     light_matrix.show_image(light_matrix.IMAGE_SMILE)
@@ -288,7 +311,7 @@
                         id: "light2",
                         buttonText: 'Blinking Eyes',
                         emoji: '🧿',
-                        color: '#544AAC',
+                        color: '#8A2BE2',
                         textPython: `
     # Blinking Eyes on the light matrix
     blinking_eyes()`
@@ -297,7 +320,7 @@
                         id: "light3",
                         buttonText: 'Turn On Angry Face For 2 Seconds',
                         emoji: '🧿',
-                        color: '#544AAC',
+                        color: '#8A2BE2',
                         textPython: `
     # Turn On Angry Face For 2 Seconds
     light_matrix.show_image(light_matrix.IMAGE_ANGRY)
@@ -306,13 +329,27 @@
                 ]
             },  // light
 
-            5: {
+            4: {  // Events
+                snippets: [
+                    {
+                        id: "ev1",
+                        buttonText: 'Wait for 1 second',
+                        emoji: '🧿',
+                        color: '#FFD700',
+                        textPython: `
+    # Wait for 1 second
+    sleep(1)`
+                    }
+                ]
+            },  // Control
+           
+            5: {  // Control
                 snippets: [
                     {
                         id: "ctrl1",
                         buttonText: 'Wait for 1 second',
                         emoji: '🧿',
-                        color: '#E0C83C',
+                        color: '#FFD700',
                         textPython: `
     # Wait for 1 second
     sleep(1)`
@@ -321,7 +358,7 @@
                         id: "ctrl2",
                         buttonText: 'Wait until distance sensor detects object within 10cm',
                         emoji: '🧿',
-                        color: '#E0C83C',
+                        color: '#FFD700',
                         textPython: `
     # Wait until distance sensor detects object within 10cm (continue checking if read error -1)
     while distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1:
@@ -332,7 +369,7 @@
                         id: "ctrl3",
                         buttonText: 'Wait until color sensor sees red',
                         emoji: '🧿',
-                        color: '#E0C83C',
+                        color: '#FFD700',
                         textPython: `
     # Wait until color sensor sees red
     while color_sensor.color(port.A) != color.RED:
@@ -342,13 +379,13 @@
                 ]
             },  // Control
 
-            6: {
+            6: {  // Sensors
                 snippets: [
                     {
                         id: "sens1",
                         buttonText: 'Distance Check (example)',
                         emoji: '🧿',
-                        color: '#91D4F8',
+                        color: '#87CEEB',
                         textPython: `
     # Example sensor check
     if distance_sensor.get_distance() < 10:
@@ -357,13 +394,13 @@
                 ]
             },  // Sensor
 
-            7: {
+            7: {  // Operators  
                 snippets: [
                     {
                         id: "op1",
                         buttonText: 'Operator Example',
                         emoji: '🧿',
-                        color: '#6AA84F',
+                        color: '#32CD32',
                         textPython: `
     # Operator example
     result = a + b  `
@@ -371,13 +408,13 @@
                 ]
             },  // Operators
 
-            8: {
+            8: {  // Functions
                 snippets: [
                     {
                         id: "fn1",
                         buttonText: 'Getting Started',
                         emoji: '🧿',
-                        color: '#E31A1A',
+                        color: '#CC0000',
                         textPython: `# ChallengeName
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
@@ -393,7 +430,7 @@ sys.exit()`
                         id: "fn2",
                         buttonText: 'Distance Sensor',
                         emoji: '🧿',
-                        color: '#E31A1A',
+                        color: '#CC0000',
                         textPython: `
     # Move forward until object within 10cm
     if distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1: pass
@@ -403,7 +440,7 @@ sys.exit()`
                         id: "fn2",
                         buttonText: 'Blinking Eyes (function)',
                         emoji: '🧿',
-                        color: '#E31A1A',
+                        color: '#CC0000',
                         textPython: `
 def blinking_eyes():
     # Show a blinking eyes animation on the Light Matrix
@@ -452,7 +489,7 @@ def blinking_eyes():
                 // emoji slightly larger via CSS class
                 button.innerHTML = `<span class="emoji">${snippet.emoji}</span><span class="label">${snippet.buttonText}</span>`;
                 button.style.backgroundColor = snippet.color;
-                button.style.color = '#ffffff';
+                button.style.color = (buttonId === 4 || buttonId === 5 || buttonId === 6) ? '#000000' : '#ffffff';
                 button.title = snippet.buttonText; // keep accessible label
 
                 button.addEventListener('click', () => copySnippetWithLineInsert(preId));
