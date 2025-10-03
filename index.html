@@ -139,6 +139,7 @@
         .emoji-container .pink-circle { background-color: #FF69B4 !important; }
         .emoji-container .purple-circle { background-color: #8A2BE2 !important; }
         .emoji-container .yellow-circle { background-color: #FFD700 !important; }
+        .emoji-container .dark-yellow-circle { background-color: #DAA520 !important; }
         .emoji-container .green-circle { background-color: #32CD32 !important; }
     </style>
 </head>
@@ -158,7 +159,7 @@
             <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(4)"></button>
                 <div class="emoji-label">Events</div>
             </div>
-            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(5)"></button>
+            <div class="emoji-container"><button class="color-circle dark-yellow-circle" onclick="refreshSnippets(5)"></button>
                 <div class="emoji-label">Control</div>
             </div>
             <div class="emoji-container"><button class="color-circle light-blue-circle" onclick="refreshSnippets(6)"></button>
@@ -349,7 +350,7 @@
                         id: "ctrl1",
                         buttonText: 'Wait for 1 second',
                         emoji: '🧿',
-                        color: '#FFD700',
+                        color: '#DAA520',
                         textPython: `
     # Wait for 1 second
     sleep(1)`
@@ -358,7 +359,7 @@
                         id: "ctrl2",
                         buttonText: 'Wait until distance sensor detects object within 10cm',
                         emoji: '🧿',
-                        color: '#FFD700',
+                        color: '#DAA520',
                         textPython: `
     # Wait until distance sensor detects object within 10cm (continue checking if read error -1)
     while distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1:
@@ -369,7 +370,7 @@
                         id: "ctrl3",
                         buttonText: 'Wait until color sensor sees red',
                         emoji: '🧿',
-                        color: '#FFD700',
+                        color: '#DAA520',
                         textPython: `
     # Wait until color sensor sees red
     while color_sensor.color(port.A) != color.RED:
