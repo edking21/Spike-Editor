@@ -1,34 +1,20 @@
-{{
-
-    "version": "2.0.0",    "version": "2.0.0",
-
-    "tasks": [    "tasks": [
-
-        {        {
-
-            "label": "📚 Publish Spike Editor",            "label": "📚 Publish Spike Editor",
-
-            "type": "shell",            "type": "shell",
-
-            "command": "powershell",            "group": "build",
-
-            "args": ["-Command", "if (!(Test-Path 'docs')) { mkdir docs }; Copy-Item 'index.html' 'docs/index.html' -Force; git add .; git commit -m 'Publish-Spike-Editor'; git push origin main; Write-Host '✅ Published!' -ForegroundColor Green"],            "presentation": {
-
-            "group": "build"                "echo": true,
-
-        }                "reveal": "always",
-
-    ]                "focus": false,
-
-}                "panel": "new"
-            },
-            "windows": {
-                "command": "powershell",
-                "args": [
-                    "-ExecutionPolicy", "Bypass",
-                    "-Command",
-                    "Write-Host '🚀 Publishing Spike Editor to GitHub Pages...' -ForegroundColor Green; if (!(Test-Path 'docs')) { New-Item -ItemType Directory -Path 'docs' | Out-Null; Write-Host '📁 Created docs directory' -ForegroundColor Yellow }; Copy-Item 'index.html' 'docs\index.html' -Force; Write-Host '📋 Copied index.html to docs/' -ForegroundColor Cyan; git add .; $status = git status --porcelain; if ($status) { git commit -m 'Publish-Updated-Spike-Editor'; git push origin main; Write-Host '✅ Published to GitHub!' -ForegroundColor Green; Write-Host '🌐 Your site will be available at:' -ForegroundColor Magenta; Write-Host 'https://edking21.github.io/Spike-Editor/' -ForegroundColor Blue; Write-Host '📋 Copy this URL to embed in Google Sites' -ForegroundColor Yellow; Start-Process 'https://sites.google.com' } else { Write-Host '⚠️  No changes to publish' -ForegroundColor Yellow }"
-                ]
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "📚 Publish Spike Editor",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "if (!(Test-Path 'docs')) { mkdir docs }; Copy-Item 'index.html' 'docs/index.html' -Force; git add .; git commit -m 'Publish-Spike-Editor'; git push origin main; Write-Host '✅ Published!' -ForegroundColor Green"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
             }
         }
     ]
