@@ -426,8 +426,11 @@ def blinking_eyes():
                         emoji: '🧿',
                         color: '#CC0000',
                         textPython: `
+    # create robot object from LineFollow class    
     robot = LineFollow(target_light=60, speed=180, kp=6.8)
-    await robot.follow_line(iterations=30)  # Run for 30 iterations then stop
+
+    # Follow line for 30 iterations then stop
+    await robot.follow_line(iterations=30)
 
 
 

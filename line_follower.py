@@ -96,7 +96,8 @@ class LineFollow:
             motor.run(port.C, -int(left_speed)) # pyright: ignore[reportUndefinedVariable]
             motor.run(port.D, int(right_speed)) # pyright: ignore[reportUndefinedVariable]
             
-            self.debug_print(iteration, self.target_light, self.speed, self.kp,  light_intensity, steering_correction, left_speed, right_speed)
+            self.debug_print(iteration, self.target_light, self.speed, self.kp,  light_intensity, 
+                             steering_correction, left_speed, right_speed)
             sleep_ms(100) # pyright: ignore[reportUndefinedVariable]
             
             iteration += 1
