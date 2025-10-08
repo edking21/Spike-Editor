@@ -33,21 +33,23 @@ class LineFollow:
         self.target_light = target_light
         self.speed = speed
         self.kp = kp
+        self.is_running = False
+        self.iteration = 0
     
     async def follow_line(self, iterations=None):
-        """Execute line following behavior using proportional control algorithm.
+        """Start or check the line following background loop.
         
-        This method implements the main control loop for line following. It continuously
-        reads light sensor values, calculates steering corrections using proportional
-        control, and adjusts motor speeds to keep the color sensor centered on the edge between 
-        light and dark.
+        This method starts a persistent background control loop for line following if one
+        is not already running. If the loop is already active, the method returns immediately
+        without taking any action. The background loop continuously reads light sensor values,
+        calculates steering corrections, and adjusts motor speeds.
         
         The control algorithm works by:
         1. Reading light reflection from the color sensor
         2. Calculating error as (target_light - current_light)
         3. Applying proportional gain (kp) to generate steering correction
         4. Adjusting left/right motor speeds based on correction
-        5. Repeating until stopped or iteration limit reached
+        5. Repeating continuously in the background
         
         Motor behavior:
         - Left motor (port C): Runs in reverse direction (-speed)
@@ -55,37 +57,47 @@ class LineFollow:
         - Steering correction added or subtracted from left, added or subtracted from right
         
         Args:
-            iterations (str): Number of iterations to run the line following loop. If None, runs indefinitely.
-                Defaults to None.
+            iterations (int, optional): Maximum number of control loop iterations
+                to execute. If None (default), runs indefinitely in the background.
+        
+        Returns:
+            None: Returns immediately if loop is already running, otherwise starts the loop.
         
         Raises:
             Usually no errors, but the robot might have problems if the motors or sensors stop working properly.
         
-        Raises:
-            No explicit exceptions raised, but hardware communication errors
-            from motor or sensor operations may propagate.
-        
         Note:
-            - Color sensor must be set to relection mode before calling this method.
-            - If no iterations runs indefinitely until manually stopped. 
+            - Color sensor must be set to reflection mode before calling this method.
+            - Loop runs continuously in the background until stop_motors() is called
             - Each iteration includes one sensor reading and motor speed adjustment.
             - Method includes 100ms delay between iterations for stable control
             - Debug information is printed each iteration showing sensor readings and calculated motor speeds
-            - Motors are automatically stopped when method completes
+            - Motors continue running after method returns
         
         Example:
-            # Run indefinitely
-
+            # Start the background line following loop
             await line_follower.follow_line()
             
-            # Run for 50 iterations then stop
+            # Try to start again - will return immediately since already running
+            await line_follower.follow_line()
             
-            await line_follower.follow_line(iterations=50)
+            # Stop the loop when needed
+            await line_follower.stop_motors()
         """
-        iteration = 0
-
-
-        while True:
+        # Check if already running - if so, return immediately
+        if self.is_running:
+            return
+        
+        # Mark as running and start the background loop
+        self.is_running = True
+        self.iteration = 0
+        
+        # Start the continuous background loop
+        await self._background_line_follow_loop(iterations)
+    
+    async def _background_line_follow_loop(self, iterations=None):
+        """Internal background loop for line following."""
+        while self.is_running:
             # Perform line following iteration
             light_intensity = color_sensor.reflection(port.F) # pyright: ignore[reportUndefinedVariable]
             steering_correction = self.kp * (self.target_light - light_intensity)
@@ -96,18 +108,18 @@ class LineFollow:
             motor.run(port.C, -int(left_speed)) # pyright: ignore[reportUndefinedVariable]
             motor.run(port.D, int(right_speed)) # pyright: ignore[reportUndefinedVariable]
             
-            self.debug_print(iteration, self.target_light, self.speed, self.kp,  light_intensity, 
+            self.debug_print(self.iteration, self.target_light, self.speed, self.kp, light_intensity, 
                              steering_correction, left_speed, right_speed)
             sleep_ms(100) # pyright: ignore[reportUndefinedVariable]
             
-            iteration += 1
+            self.iteration += 1
             
             # Break if we've reached the specified number of iterations
-            if iterations is not None and iteration >= iterations:
+            if iterations is not None and self.iteration >= iterations:
                 break
         
-        # Stop motors when done
-        await self.stop_motors()
+        # Mark as stopped when loop ends
+        self.is_running = False
 
 
     def debug_print(self, iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed):
@@ -117,6 +129,7 @@ class LineFollow:
         
 
     async def stop_motors(self):
-        """Stop both motors"""
+        """Stop both motors and the line following loop"""
+        self.is_running = False
         motor.stop(port.C) # pyright: ignore[reportUndefinedVariable]
         motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]

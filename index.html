@@ -495,6 +495,8 @@ class LineFollow:
         self.target_light = target_light
         self.speed = speed
         self.kp = kp
+        self.is_running = False
+        self.iteration = 0
     
     async def follow_line(self, iterations=None):
         """Execute line following behavior using proportional control algorithm.
@@ -543,10 +545,20 @@ class LineFollow:
 
             await line_follower.follow_line(iterations=50)
         """
-        iteration = 0
-
-
-        while True:
+        # Check if already running - if so, return immediately
+        if self.is_running:
+            return
+        
+        # Mark as running and start the background loop
+        self.is_running = True
+        self.iteration = 0
+        
+        # Start the continuous background loop
+        await self._background_line_follow_loop(iterations)
+    
+    async def _background_line_follow_loop(self, iterations=None):
+        """Internal background loop for line following."""
+        while self.is_running:
             # Perform line following iteration
             light_intensity = color_sensor.reflection(port.F) # pyright: ignore[reportUndefinedVariable]
             steering_correction = self.kp * (self.target_light - light_intensity)
@@ -557,17 +569,18 @@ class LineFollow:
             motor.run(port.C, -int(left_speed)) # pyright: ignore[reportUndefinedVariable]
             motor.run(port.D, int(right_speed)) # pyright: ignore[reportUndefinedVariable]
             
-            self.debug_print(iteration, self.target_light, self.speed, self.kp,  light_intensity, steering_correction, left_speed, right_speed)
+            self.debug_print(self.iteration, self.target_light, self.speed, self.kp, light_intensity, 
+                             steering_correction, left_speed, right_speed)
             sleep_ms(100) # pyright: ignore[reportUndefinedVariable]
             
-            iteration += 1
+            self.iteration += 1
             
             # Break if we've reached the specified number of iterations
-            if iterations is not None and iteration >= iterations:
+            if iterations is not None and self.iteration >= iterations:
                 break
         
-        # Stop motors when done
-        await self.stop_motors()
+        # Mark as stopped when loop ends
+        self.is_running = False
 
 
     def debug_print(self, iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed):
