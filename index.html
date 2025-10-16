@@ -327,12 +327,14 @@
                 snippets: [
                     {
                         id: "ev1",
-                        buttonText: 'Wait for 1 second',
+                        buttonText: 'When',
                         emoji: '🧿',
                         color: '#FFD700',
                         textPython: `
-    # Wait for 1 second
-    sleep(1)`
+    # When
+    while <your condition here>:
+        # your code here
+    `
                     }
                 ]
             },  // Control
@@ -341,7 +343,7 @@
                 snippets: [
                     {
                         id: "ctrl1",
-                        buttonText: 'Wait for 1 second',
+                        buttonText: 'Wait for 1 seconds',
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
@@ -350,56 +352,106 @@
                     },
                     {
                         id: "ctrl2",
-                        buttonText: 'Wait until is near',
+                        buttonText: 'Repeat 10 times',
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    # wait for near an obstacle
-    await runloop.until(is_near)`
+    # Under construction - Repeat 10 times`
                     },
                     {
-                        id: "ctrl4",
+                        id: "ctrl3",
                         buttonText: 'Forever',
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
     # Forever
-    while True:
-    `
+    while True:`
                     },
                     {
-                        id: "ctrl5",
-                        buttonText: 'Repeat until near',
+                        id: "ctrl4",
+                        buttonText: 'If condition then',
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    # Repeat until near
-    while not is_near():
-        # your code here
+    # If condition then
+    if <your condition here>:
+        # <your code here>
+    `
+                    },
+                    {
+                        id: "ctrl1",
+                        buttonText: 'Forever loop',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    while True:`
+                    },
+                    {
+                        id: "ctrl2",
+                        buttonText: 'Wait until condition',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # wait until condition 
+    await runloop.until #<your condition here>
+    `
+                    },
+                    {
+                        id: "ctrl3",
+                        buttonText: 'Repeat until condition (function)',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # Repeat until condition (function)
+    while not # <your condition function here>
+        # <your code here>
     `
                     }                ]
             },  // Control
 
             6: {  // Sensors
                 snippets: [
-                        {
+                    {
                         id: "fn2",
-                        buttonText: 'wait until force sensor is pressed',
+                        buttonText: 'is pressed (condition)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython: 
-    `
-    # wait until force sensor is pressed
-    await runloop.until(is_pressed)
-    `
+                        textPython:`(is_pressed):`
                     },
-                        {
+                    {
                         id: "fn2",
-                        buttonText: 'is color red',
+                        buttonText: 'is color red (condition)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython: 
-    `color_sensor.color(port.A) != color.RED:`
+                        textPython:`(is_color_red)` 
+                    },
+                    {
+                        id: "fn3",
+                        buttonText: 'is near (condition)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`(is_near)` 
+                    },
+                    {
+                        id: "fn4",
+                        buttonText: 'is pressed (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`is_pressed():`
+                    },
+                    {
+                        id: "fn5",
+                        buttonText: 'is color red (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`is_color_red():` 
+                    },
+                    {
+                        id: "fn6",
+                        buttonText: 'is near (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`is_near():` 
                     },
                 ]
             },  // Sensor
@@ -430,32 +482,34 @@ import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light_matrix, port, sound
 from time import sleep, sleep_ms
+
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-runloop.run(main())
-sys.exit()` 
-                    },
-                    {
-                        id: "fn1",
-                        buttonText: 'Wait until is near',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: 
-`
+
+
+
+
+
+
+
+
+
+
+
+
+def is_pressed():
+    return force_sensor.pressed(port.A)
+
 def is_near():
     dist = distance_sensor.distance(port.B)
     return dist != -1 and dist < 100
-    `
-                    },                    {
-                        id: "fn2",
-                        buttonText: 'Wait until is pressed',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: 
-`
-def is_pressed():
-    return force_sensor.pressed(port.A)`
+
+def is_color_red():
+    return color_sensor.color(port.A) == color.RED
+
+runloop.run(main())
+sys.exit()` 
                     },
                     {
                         id: "fn3",
@@ -611,7 +665,7 @@ class LineFollow:
                     },
                     {
                         id: "fn5",
-                        buttonText: 'PID Line Follower (function)',
+                        buttonText: 'PID Line Follower (Function)',
                         emoji: '🧿',
                         color: '#CC0000',
                         textPython: `
