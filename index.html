@@ -208,6 +208,16 @@
                         textPython: `
     # move forward for 10cm
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0)`
+                    },                    {
+                        id: "move2",
+                        buttonText: 'turn right 90 degrees',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # turn right 90 degrees
+    degrees = 180 # number of degrees of wheel turn
+    steering = 100 # positive values turn right, negative values turn left
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering)`
                     },
                     {
                         id: "move3",
@@ -301,6 +311,14 @@
     # Turn On Angry Face For 2 Seconds
     light_matrix.show_image(light_matrix.IMAGE_ANGRY)
     sleep(2)`
+                    },                    
+                    {
+                        id: "light4",
+                        buttonText: 'Light Matrix Write (debug)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+    light_matrix.write('<step number here>')`
                     }
                 ]
             },  // light
@@ -332,21 +350,12 @@
                     },
                     {
                         id: "ctrl2",
-                        buttonText: 'Repeat until <test sensor here>',
+                        buttonText: 'Wait until is near',
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    # Repeat until 
-    while <add sensor boolean here> `
-                    },
-                    {
-                        id: "ctrl3",
-                        buttonText: 'Wait until <test sensor here>',
-                        emoji: '🧿',
-                        color: '#DAA520',
-                        textPython: `
-    # Wait until 
-    while <add sensor boolean here> `
+    # wait for near an obstacle
+    await runloop.until(is_near)`
                     },
                     {
                         id: "ctrl4",
@@ -358,18 +367,31 @@
     while True:
     `
                     },
-                ]
+                    {
+                        id: "ctrl5",
+                        buttonText: 'Repeat until near',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # Repeat until near
+    while not is_near():
+        # your code here
+    `
+                    }                ]
             },  // Control
 
             6: {  // Sensors
                 snippets: [
                         {
                         id: "fn2",
-                        buttonText: 'is closer than 10cm',
+                        buttonText: 'wait until force sensor is pressed',
                         emoji: '🧿',
                         color: '#87CEEB',
                         textPython: 
-    `distance_sensor.distance(port.B) > 100 or distance_sensor.distance(port.B) == -1:`
+    `
+    # wait until force sensor is pressed
+    await runloop.until(is_pressed)
+    `
                     },
                         {
                         id: "fn2",
@@ -415,23 +437,25 @@ runloop.run(main())
 sys.exit()` 
                     },
                     {
-                        id: "fn2",
-                        buttonText: 'Blinking Eyes (function)',
+                        id: "fn1",
+                        buttonText: 'Wait until is near',
                         emoji: '🧿',
                         color: '#CC0000',
-                        textPython: `
-def blinking_eyes():
-    # Show a blinking eyes animation on the Light Matrix
-    for i in range(3):
-        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
-        sleep_ms(1000)
-        
-        light_matrix.show_image(light_matrix.IMAGE_SMILE)
-        sleep_ms(200)
-
-    light_matrix.show_image(light_matrix.IMAGE_HAPPY)
-    sleep_ms(2000)
+                        textPython: 
+`
+def is_near():
+    dist = distance_sensor.distance(port.B)
+    return dist != -1 and dist < 100
     `
+                    },                    {
+                        id: "fn2",
+                        buttonText: 'Wait until is pressed',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: 
+`
+def is_pressed():
+    return force_sensor.pressed(port.A)`
                     },
                     {
                         id: "fn3",
@@ -608,7 +632,7 @@ class LineFollow:
                         id: "he1",
                         buttonText: 'Print Distance',
                         emoji: '🧿',
-                        color: '#CC0000',
+                        color: '#8A2BE2',
                         textPython: `
         print ("distance {:6.2f}".format(distance_sensor.distance(port.B)))
 ` 
@@ -617,7 +641,7 @@ class LineFollow:
                         id: "he2",
                         buttonText: 'Print Color Sensor',
                         emoji: '🧿',
-                        color: '#CC0000',
+                        color: '#8A2BE2',
                         textPython: `
 print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
  ` 
