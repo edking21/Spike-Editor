@@ -74,12 +74,14 @@ async def main():
 
     # Move back and forth in a loop step 6
 
+    # Repeat until (function)
     while not is_near(): 
 
         # move forward for 10in
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 5*53, 0)
         sleep(0.5)
 
+        # If condition then
         if is_near():
             break #check again before moving back
 
