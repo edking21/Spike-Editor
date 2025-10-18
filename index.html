@@ -214,13 +214,11 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # turn right 90 degrees
-    degrees = 180 # number of degrees of wheel turn
-    steering = 100 # positive values turn right, negative values turn left
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering)`
+    # turn in place right 90 (180 degrees rotation 100 percent steering)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
                     },
                     {
-                        id: "move3",
+                        id: "move4",
                         buttonText: 'start moving',
                         emoji: '🧿',
                         color: '#FF69B4',
@@ -229,7 +227,7 @@
     motor_pair.move(motor_pair.PAIR_1, 0)`
                     },
                     {
-                        id: "move4",
+                        id: "move5",
                         buttonText: 'move right 30 for 10 rotations',
                         emoji: '🧿',
                         color: '#FF69B4',
@@ -258,7 +256,8 @@
                         color: '#FF69B4',
                         textPython: `
     # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)`
+    motor_pair.stop(motor_pair.PAIR_1)
+    sleep_ms(10) # sleep 10 milliseconds`
                     },
                     {
                         id: "move9",
@@ -430,7 +429,7 @@
                         buttonText: 'is near (condition)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`(is_near)` 
+                        textPython:`(lambda: is_near()) ` 
                     },
                     {
                         id: "fn4",
@@ -507,9 +506,10 @@ async def main():
 def is_pressed():
     return force_sensor.pressed(port.A)
 
-def is_near():
-    dist = distance_sensor.distance(port.B)
-    return dist != -1 and dist < 100
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
+    return distance != -1 and distance < distance_threshold
 
 def is_color_red():
     return color_sensor.color(port.A) == color.RED
@@ -518,7 +518,105 @@ runloop.run(main())
 sys.exit()` 
                     },
                     {
+                        id: "fn2",
+                        buttonText: 'is_near Unit Test',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+# Is Near Unit Test
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    while True:
+
+        motor_pair.move(motor_pair.PAIR_1, 0)
+
+        # wait until condition
+        await runloop.until (lambda: is_near())
+
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10) # sleep 10 milliseconds to ensure stop command is processed
+
+
+def is_pressed():
+    return force_sensor.pressed(port.A)
+
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
+    return distance != -1 and distance < distance_threshold
+
+def is_color_red():
+    return color_sensor.color(port.A) == color.RED
+
+runloop.run(main())
+sys.exit()
+    `
+                    },
+                    {
                         id: "fn3",
+                        buttonText: 'is_pressed Unit Test',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+ # is_pressed Unit Test
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)
+
+    while not is_near():
+
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*53, 0)
+
+        if is_near(): break
+
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*53, 0)
+
+    await runloop.until (is_pressed), sleep(4)
+
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0)
+
+    # wait until condition
+    await runloop.until (is_color_blue)
+
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
+
+    # Wait for 2 second
+    sleep(2)
+
+    # move forward for 2cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 2*21, 0)
+
+def is_pressed():
+    return force_sensor.pressed(port.A)
+
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    return distance != -1 and distance < distance_threshold
+
+def is_color_blue():
+    return color_sensor.color(port.F) == color.BLUE
+
+runloop.run(main())
+sys.exit()
+   `
+                    },
+                    {
+                        id: "fn4",
                         buttonText: 'Bang Bang Line Follower',
                         emoji: '🧿',
                         color: '#CC0000',
@@ -539,7 +637,7 @@ sys.exit()`
     `
                     },
                     {
-                        id: "fn3",
+                        id: "fn5",
                         buttonText: 'Line Follow (Class)',
                         emoji: '🧿',
                         color: '#CC0000',
@@ -670,7 +768,7 @@ class LineFollow:
         motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]        `
                     },
                     {
-                        id: "fn5",
+                        id: "fn6",
                         buttonText: 'PID Line Follower (Function)',
                         emoji: '🧿',
                         color: '#CC0000',
