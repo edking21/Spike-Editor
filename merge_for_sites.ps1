@@ -24,8 +24,8 @@ try {
     # Add proper indentation to utils.js content
     $indentedUtils = ($utilsContent -split "`n" | ForEach-Object { "        $_" }) -join "`n"
     
-    # Create the replacement content
-    $utilsReplacement = "// Utility functions (from utils.js)`n$indentedUtils"
+    # Create the replacement content with proper script tags
+    $utilsReplacement = "<script>`n        // Utility functions (from utils.js)`n$indentedUtils`n    </script>"
     
     # Pattern to match the utils.js script tag
     $pattern = '<script src="\.\/utils\.js"><\/script>'
@@ -87,3 +87,9 @@ try {
 }
 
 Write-Host "`nProcess completed successfully! Both files are ready for Google Sites deployment." -ForegroundColor Green
+
+# Keep window open when script is double-clicked
+if ($Host.Name -eq "ConsoleHost") {
+    Write-Host "`nPress any key to exit..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+}
