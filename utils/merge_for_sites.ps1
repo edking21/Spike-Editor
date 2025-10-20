@@ -814,5 +814,77 @@ print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
             fetchGitHubRelease();
         });
     </script>
+    <script>
+        // Utility functions (from utils.js)
+        
+        function refreshSnippets(category) {
+            const snippetColumn = document.getElementById('snippet-column');
+            snippetColumn.innerHTML = '';  // Clear existing snippets
+            
+            const snippets = snippetData[category].snippets;
+            snippets.forEach(snippet => {
+                const snippetElement = document.createElement('div');
+                snippetElement.className = 'snippet';
+                snippetElement.innerHTML = `
+                    <button onclick="copyToClipboard('${snippet.id}')">
+                        <span class="emoji">${snippet.emoji}</span>
+                        <span class="label">${snippet.buttonText}</span>
+                    </button>
+                `;
+                snippetColumn.appendChild(snippetElement);
+            });
+        }
+
+        function copyToClipboard(snippetId) {
+            const snippet = findSnippetById(snippetId);
+            if (!snippet) return;
+            
+            const textToCopy = snippet.textPython.trim();
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    showToast('Snippet copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Error copying text: ', err);
+                });
+        }
+
+        function findSnippetById(snippetId) {
+            for (const category in snippetData) {
+                const snippet = snippetData[category].snippets.find(s => s.id === snippetId);
+                if (snippet) {
+                    return snippet;
+                }
+            }
+            return null;
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+            }, 2000);
+            
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 2500);
+        }
+
+        async function fetchGitHubRelease() {
+            const response = await fetch('https://api.github.com/repos/yourusername/yourrepo/releases/latest');
+            const data = await response.json();
+            
+            const releaseInfo = document.getElementById('release-info');
+            releaseInfo.innerHTML = `
+                Latest Release: ${data.name} - ${data.published_at}
+                <br>
+                <a href="${data.html_url}" target="_blank">View Release Notes</a>
+            `;
+        }
+    </script>
 </body>
 </html>
