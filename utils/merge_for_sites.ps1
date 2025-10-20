@@ -1,106 +1,890 @@
-param(
-    [string]$IndexFile = "index.html",
-    [string]$TrainingCampFile = "Training Camp.html",
-    [string]$UtilsJsFile = "utils.js",
-    [string]$IndexOutputFile = "index_for_copy_to_sites.html",
-    [string]$TrainingCampOutputFile = "training_camp_for_copy_to_sites.html"
-)
-
-Write-Host "Merging HTML files with $UtilsJsFile for Google Sites deployment..." -ForegroundColor Green
-
-# Change to the parent directory (project root) to access source files
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$projectRoot = Split-Path -Parent $scriptDir
-Set-Location $projectRoot
-
-Write-Host "Working from project root: $projectRoot" -ForegroundColor Cyan
-Write-Host "Looking for files:" -ForegroundColor Yellow
-Write-Host "  - $IndexFile" -ForegroundColor Gray
-Write-Host "  - $TrainingCampFile" -ForegroundColor Gray
-Write-Host "  - $UtilsJsFile" -ForegroundColor Gray
-
-# Check if required files exist
-$filesToCheck = @($IndexFile, $TrainingCampFile, $UtilsJsFile)
-foreach ($file in $filesToCheck) {
-    if (-not (Test-Path $file)) {
-        Write-Error "Error: $file not found!"
-        exit 1
-    }
-}
-
-try {
-    # Read the utils.js file once
-    $utilsContent = Get-Content $UtilsJsFile -Raw -Encoding UTF8
-    
-    # Add proper indentation to utils.js content
-    $indentedUtils = ($utilsContent -split "`n" | ForEach-Object { "        $_" }) -join "`n"
-    
-    # Create the replacement content with proper script tags
-    $utilsReplacement = "<script>`n        // Utility functions (from utils.js)`n$indentedUtils`n    </script>"
-    
-    # Pattern to match the utils.js script tag
-    $pattern = '<script src="\.\/utils\.js"><\/script>'
-    
-    # Process index.html
-    Write-Host "Processing $IndexFile..." -ForegroundColor Cyan
-    $indexContent = Get-Content $IndexFile -Raw -Encoding UTF8
-    $mergedIndexContent = $indexContent -replace $pattern, $utilsReplacement
-    $mergedIndexContent | Set-Content $IndexOutputFile -Encoding UTF8
-    Write-Host "Created $IndexOutputFile" -ForegroundColor Green
-    
-    # Process Training Camp.html
-    Write-Host "Processing $TrainingCampFile..." -ForegroundColor Cyan
-    $trainingCampContent = Get-Content $TrainingCampFile -Raw -Encoding UTF8
-    $mergedTrainingCampContent = $trainingCampContent -replace $pattern, $utilsReplacement
-    $mergedTrainingCampContent | Set-Content $TrainingCampOutputFile -Encoding UTF8
-    Write-Host "Created $TrainingCampOutputFile" -ForegroundColor Green
-    
-    # Display file information
-    Write-Host "`nFile Information:" -ForegroundColor Yellow
-    Write-Host "$IndexOutputFile size: $((Get-Item $IndexOutputFile).Length) bytes" -ForegroundColor Cyan
-    Write-Host "$TrainingCampOutputFile size: $((Get-Item $TrainingCampOutputFile).Length) bytes" -ForegroundColor Cyan
-    Write-Host "`nBoth files are ready for copy-paste to Google Sites." -ForegroundColor Yellow
-    
-    # Ask if user wants to open the files
-    $response = Read-Host "`nOpen both files in notepad? (y/n)"
-    if ($response -eq 'y' -or $response -eq 'Y') {
-        Start-Process notepad $IndexOutputFile
-        Start-Process notepad $TrainingCampOutputFile
-    }
-    
-    # Ask which file to copy to clipboard
-    Write-Host "`nWhich file would you like to copy to clipboard?"
-    Write-Host "1. $IndexOutputFile (Main/Index)"
-    Write-Host "2. $TrainingCampOutputFile (Training Camp)"
-    Write-Host "3. Neither"
-    $clipboardChoice = Read-Host "Enter choice (1/2/3)"
-    
-    switch ($clipboardChoice) {
-        '1' {
-            Get-Content $IndexOutputFile -Raw | Set-Clipboard
-            Write-Host "$IndexOutputFile content copied to clipboard!" -ForegroundColor Green
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Spike</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2px;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
         }
-        '2' {
-            Get-Content $TrainingCampOutputFile -Raw | Set-Clipboard
-            Write-Host "$TrainingCampOutputFile content copied to clipboard!" -ForegroundColor Green
+
+        .left-column {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-right: 1px solid #ccc;
+            box-sizing: border-box;
         }
-        '3' {
-            Write-Host "No files copied to clipboard." -ForegroundColor Yellow
+
+        .emoji-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding-top: 12px;
+            height: 100%;
+            overflow-y: auto;
+            width: 100%;
         }
-        default {
-            Write-Host "Invalid choice. No files copied to clipboard." -ForegroundColor Yellow
+
+        .emoji-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-    }
+
+        .emoji-container button {
+            font-size: 32px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .emoji-container button:hover {
+            transform: scale(1.08);
+            filter: brightness(110%);
+        }
+
+        .emoji-label {
+            margin-top: 1px;
+            font-size: 12px;
+            color: black;
+            text-align: center;
+            width: 70px;
+            word-wrap: break-word;
+        }
+
+        .snippet-column {
+            margin-left: 80px;
+            padding: 0px 12px 12px 12px;
+        }
+
+        .snippet {
+            border: none;
+            border-radius: 8px;
+            padding: 6px;
+            margin: 8px 0;
+            background-color: transparent;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .snippet button {
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.12s ease, filter 0.12s ease;
+        }
+
+        .snippet button:hover {
+            transform: scale(1.04);
+            filter: brightness(110%);
+        }
+
+        .snippet .emoji {
+            font-size: 1.3em;
+            line-height: 1;
+        }
+
+        .snippet .label {
+            font-size: 1em;
+        }
+
+        .release-info {
+            text-align: center;
+            margin-top: 400px;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        .emoji-container .color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.15s ease;
+            font-size: 0; /* Remove any text content */
+        }
+
+        .emoji-container .color-circle:hover {
+            transform: scale(1.08);
+            filter: brightness(110%);
+        }
+
+        .emoji-container .blue-circle { background-color: #0066FF !important; }
+        .emoji-container .light-blue-circle { background-color: #87CEEB !important; }
+        .emoji-container .red-circle { background-color: #CC0000 !important; }
+        .emoji-container .pink-circle { background-color: #FF69B4 !important; }
+        .emoji-container .purple-circle { background-color: #8A2BE2 !important; }
+        .emoji-container .yellow-circle { background-color: #FFD700 !important; }
+        .emoji-container .dark-yellow-circle { background-color: #DAA520 !important; }
+        .emoji-container .green-circle { background-color: #32CD32 !important; }
+    </style>
+</head>
+<body>
+    <div class="left-column">
+        <div class="emoji-block">
+            <div class="emoji-container"><button class="color-circle blue-circle" onclick="refreshSnippets(1)"></button>
+                <div class="emoji-label">Motors</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle pink-circle" onclick="refreshSnippets(2)"></button>
+                <div class="emoji-label">Movement</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(3)"></button>
+                <div class="emoji-label">Light</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(4)"></button>
+                <div class="emoji-label">Events</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle dark-yellow-circle" onclick="refreshSnippets(5)"></button>
+                <div class="emoji-label">Control</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle light-blue-circle" onclick="refreshSnippets(6)"></button>
+                <div class="emoji-label">Sensors</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(7)"></button>
+                <div class="emoji-label">Operators</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(8)"></button>
+                <div class="emoji-label">Functions</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(9)"></button>
+                <div class="emoji-label">Helpers</div>
+            </div>
+        </div>
+    </div>
+    <div class="snippet-column" id="snippet-column">
+        <!-- Snippets will be dynamically inserted here -->
+    </div>
+    <div class="snippet-column">
+        <div class="release-info" id="release-info">
+            © 2024 Spike Editor - Loading release info...
+        </div>
+    </div>
+    <script>
+        // Snippet data
+        const snippetData = {
+            1: {  // Motors
+                snippets: [
+                    {
+                        id: "m1",
+                        buttonText: 'Run shortest distance to absolute 0',
+                        emoji: '🧿',
+                        color: '#0066FF',
+                        textPython: `
+    # Run shortest distance to absolute 0
+    await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+                    }
+                ]
+            },  // motors
+
+            2: {  // Movement
+                snippets: [
+                    {
+                        id: "move1",
+                        buttonText: 'move forward for 20cm',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # move forward for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0)`
+                    },                    {
+                        id: "move2",
+                        buttonText: 'turn right 90 degrees',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # turn in place right 90 (180 degrees rotation 100 percent steering)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
+                    },
+                    {
+                        id: "move4",
+                        buttonText: 'start moving',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0)`
+                    },
+                    {
+                        id: "move5",
+                        buttonText: 'move right 30 for 10 rotations',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # move right 30 for 10 rotations 
+    degrees = 360 * 10 # 10 rotations
+    steering = 30 # positive values turn right, negative values turn left
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering )`
+                    },
+                    {
+                        id: "move6",
+                        buttonText: 'start moving right 30',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # start moving right 30 
+    steering = 30 # positive values turn right, negative values turn left
+    speed = 220 # 20% of max speed (1100)
+    motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
+    sleep(2)`
+                    },
+                    {
+                        id: "move8",
+                        buttonText: 'stop moving',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
+    sleep_ms(10) # sleep 10 milliseconds`
+                    },
+                    {
+                        id: "move9",
+                        buttonText: 'set movement speed to 50%',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # set movement speed to 50%
+    movement_speed = int(0.5 * 1100)`
+                    },
+                    {
+                        id: "move10",
+                        buttonText: 'set movement motors to C+D',
+                        emoji: '🧿',
+                        color: '#FF69B4',
+                        textPython: `
+    # set movement motors to C+D
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+                    }
+                ]
+            },  // Movement
+
+            3: {  // Light
+                snippets: [
+                    {
+                        id: "light1",
+                        buttonText: 'Turn On Smiley Face For 2 Seconds',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+    # Turn On Smiley Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_SMILE)
+    sleep(2)`
+                    },
+                    {
+                        id: "light2",
+                        buttonText: 'Blinking Eyes',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+    # Blinking Eyes on the light matrix
+    blinking_eyes()`
+                    },
+                    {
+                        id: "light3",
+                        buttonText: 'Turn On Angry Face For 2 Seconds',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+    # Turn On Angry Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+    sleep(2)`
+                    },                    
+                    {
+                        id: "light4",
+                        buttonText: 'Light Matrix Write (debug)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+    light_matrix.write('<step number here>')`
+                    }
+                ]
+            },  // light
+
+            4: {  // Events
+                snippets: [
+                    {
+                        id: "ev1",
+                        buttonText: 'When',
+                        emoji: '🧿',
+                        color: '#FFD700',
+                        textPython: `
+    # When
+    while <your condition here>:
+        # your code here
+    `
+                    }
+                ]
+            },  // Control
+           
+            5: {  // Control
+                snippets: [
+                    {
+                        id: "ctrl1",
+                        buttonText: 'Wait for 1 seconds',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # Wait for 1 second
+    sleep(1)`
+                    },
+                    {
+                        id: "ctrl2",
+                        buttonText: 'Repeat 10 times',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # Under construction - Repeat 10 times`
+                    },
+                    {
+                        id: "ctrl3",
+                        buttonText: 'Forever',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # Forever
+    while True:`
+                    },
+                    {
+                        id: "ctrl4",
+                        buttonText: 'If condition then',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # If condition then
+    if <your function here>:
+        # <your code here>
+    `
+                    },
+                    {
+                        id: "ctrl1",
+                        buttonText: 'Forever loop',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    while True:`
+                    },
+                    {
+                        id: "ctrl2",
+                        buttonText: 'Wait until condition',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # wait until condition 
+    await runloop.until # <your condition here>
+    `
+                    },
+                    {
+                        id: "ctrl3",
+                        buttonText: 'Repeat until (function)',
+                        emoji: '🧿',
+                        color: '#DAA520',
+                        textPython: `
+    # Repeat until (function)
+    while not # <your function here>
+        # <your code here>
+    `
+                    }                ]
+            },  // Control
+
+            6: {  // Sensors
+                snippets: [
+                    {
+                        id: "fn2",
+                        buttonText: 'is pressed (condition)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`(is_pressed)`
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'is color red (condition)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`(is_color_red)` 
+                    },
+                    {
+                        id: "fn3",
+                        buttonText: 'is near (condition)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`(lambda: is_near()) `
+                    },
+                    {
+                        id: "fn4",
+                        buttonText: 'is pressed (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`is_pressed():
+        # <Your code here>                        
+                        `
+                    },
+                    {
+                        id: "fn5",
+                        buttonText: 'is color red (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`is_color_red():
+        # <Your code here>                        
+                        ` 
+                    },
+                    {
+                        id: "fn6",
+                        buttonText: 'is near (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`is_near():
+        # <Your code here>                        
+                        ` 
+                    },
+                ]
+            },  // Sensor
+
+            7: {  // Operators  
+                snippets: [
+                    {
+                        id: "op1",
+                        buttonText: 'Operator Example',
+                        emoji: '🧿',
+                        color: '#32CD32',
+                        textPython: `
+    # Operator example
+    result = a + b  `
+                    }
+                ]
+            },  // Operators
+
+            8: {  // Functions
+                snippets: [
+                    {
+                        id: "fn1",
+                        buttonText: 'Getting Started',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `# <challenge name here>
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+
+
+
+
+
+
+
+
+
+
+
+
+def is_pressed():
+    return force_sensor.pressed(port.A)
+
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
+    return distance != -1 and distance < distance_threshold
+
+def is_color_red():
+    return color_sensor.color(port.A) == color.RED
+
+runloop.run(main())
+sys.exit()` 
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'is_near Unit Test',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+# Is Near Unit Test
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    while True:
+
+        motor_pair.move(motor_pair.PAIR_1, 0)
+
+        # wait until condition
+        await runloop.until (lambda: is_near())
+
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10) # sleep 10 milliseconds to ensure stop command is processed
+
+
+def is_pressed():
+    return force_sensor.pressed(port.A)
+
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
+    return distance != -1 and distance < distance_threshold
+
+def is_color_red():
+    return color_sensor.color(port.A) == color.RED
+
+runloop.run(main())
+sys.exit()
+    `
+                    },
+                    {
+                        id: "fn3",
+                        buttonText: 'is_pressed Unit Test',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+ # is_pressed Unit Test
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light_matrix, port, sound
+from time import sleep, sleep_ms
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)
+
+    while not is_near():
+
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*53, 0)
+
+        if is_near(): break
+
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*53, 0)
+
+    await runloop.until (is_pressed), sleep(4)
+
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0)
+
+    # wait until condition
+    await runloop.until (is_color_blue)
+
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
+
+    # Wait for 2 second
+    sleep(2)
+
+    # move forward for 2cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 2*21, 0)
+
+def is_pressed():
+    return force_sensor.pressed(port.A)
+
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    return distance != -1 and distance < distance_threshold
+
+def is_color_blue():
+    return color_sensor.color(port.F) == color.BLUE
+
+runloop.run(main())
+sys.exit()
+   `
+                    },
+                    {
+                        id: "fn4",
+                        buttonText: 'Bang Bang Line Follower',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+    # set movement speed to 30%
+    speed = int(0.3 * 1100)
+
+    # set sleep seconds to 40 milliseconds 
+    sleep_milliseconds = 40
+
+    for i in range (300):
+        if color_sensor.color(port.F) == color.BLUE and color_sensor.color(port.F) != -1:
+            motor_pair.move(motor_pair.PAIR_1, 50, velocity=speed)
+            sleep_ms(sleep_milliseconds)
+        else:
+            motor_pair.move(motor_pair.PAIR_1, -50, velocity=speed)
+            sleep_ms(sleep_milliseconds)
+    `
+                    },
+                    {
+                        id: "fn5",
+                        buttonText: 'Line Follow (Class)',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+    # create robot object from LineFollow class    
+    robot = LineFollow(target_light=70, speed=140, kp=6.5)
+
+
+
+
+
+
+class LineFollow:
+    """A robot that can follow a line.
     
-} catch {
-    Write-Error "Error occurred during merge process: $($_.Exception.Message)"
-    exit 1
-}
+    This robot uses a light sensor to see the edge between the dark and light and automatically steers
+    the wheels to stay over the edge by adjusting the motor speeds.
+   
+    Attributes:
+        target_light (int): The desired light intensity the robot tries to stay on.
+            Defaults to 60.
+        speed (int): How fast the robot moves.
+            Defaults to 180.
+        kp (float): Proportional gain for steering correction.
+            Defaults to 6.8.
 
-Write-Host "`nProcess completed successfully! Both files are ready for Google Sites deployment." -ForegroundColor Green
+    Args:
+        target_light (int): The desired light intensity the robot tries to stay on.
+            Defaults to 60.
+        speed (int): How fast the robot moves.
+            Defaults to 180.
+        kp (float): Proportional gain for steering correction.
+            Defaults to 6.8.
+           
+    Example:
+        Basic usage example:
 
-# Keep window open when script is double-clicked
-if ($Host.Name -eq "ConsoleHost") {
-    Write-Host "`nPress any key to exit..." -ForegroundColor Gray
-    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-}
+            line_follower = LineFollow(target_light=60, speed=180, kp=6.8)
+            
+            # Parent code controls the loop
+            for i in range(100):
+                await line_follower.follow_line()
+
+    Note:
+        - Target_light is computed from half the difference between the value returned from the sensor when positioning over the light then over the dark. 
+        - Higher speeds are mostly for competition runs. 
+        - kp is the gain in a PID controller, higher gains makes the robot react more strongly to deviations from the target light level.
+        """
+
+    def __init__(self, target_light=70, speed=140, kp=6.5):
+        self.target_light = target_light
+        self.speed = speed
+        self.kp = kp
+        self.iteration = 0
+    
+    async def follow_line(self):
+        """Execute one iteration of line following behavior.
+        
+        This method performs a single iteration of the line following control loop.
+        It reads the light sensor value, calculates steering correction using proportional
+        control, and adjusts motor speeds accordingly. The parent code is responsible
+        for calling this method repeatedly in a loop.
+        
+        The control algorithm works by:
+        1. Reading light reflection from the color sensor
+        2. Calculating error as (target_light - current_light)
+        3. Applying proportional gain (kp) to generate steering correction
+        4. Adjusting left/right motor speeds based on correction
+        
+        Motor behavior:
+        - Left motor (port C): Runs in reverse direction (-speed)
+        - Right motor (port D): Runs in forward direction (+speed)
+        - Steering correction added or subtracted from left, added or subtracted from right
+        
+        Returns:
+            None: Executes one control iteration and returns.
+        
+        Raises:
+            Usually no errors, but the robot might have problems if the motors or sensors stop working properly.
+        
+        Note:
+            - Color sensor must be set to reflection mode before calling this method.
+            - Parent code should call this method repeatedly in a loop for continuous line following
+            - Each call performs one sensor reading and motor speed adjustment
+            - Debug information is printed each iteration showing sensor readings and calculated motor speeds
+        
+        Example:
+            # Parent code controls the loop
+            line_follower = LineFollow(60, 180, 6.8)
+            
+            # Run for specific number of iterations
+            for i in range(100):
+                await line_follower.follow_line()
+                await sleep_ms(100)  # Add delay between iterations
+            
+            # Or run indefinitely
+            while True:
+                await line_follower.follow_line()
+                await sleep_ms(100)
+        """
+        # Turn On Butterfly For 2 Seconds
+        #light_matrix.show_image(light_matrix.IMAGE_BUTTERFLY) # pyright: ignore[reportUndefinedVariable]
+        #sleep(2)        # pyright: ignore[reportUndefinedVariable] # Perform one line following iteration
+        
+        light_intensity = color_sensor.reflection(port.F) # pyright: ignore[reportUndefinedVariable]
+        steering_correction = self.kp * (self.target_light - light_intensity)
+        
+        left_speed = self.speed + steering_correction
+        right_speed = self.speed - steering_correction
+        
+        motor.run(port.C, -int(left_speed)) # pyright: ignore[reportUndefinedVariable]
+        motor.run(port.D, int(right_speed)) # pyright: ignore[reportUndefinedVariable]
+        
+        self.debug_print(self.iteration, self.target_light, self.speed, self.kp, light_intensity, 
+                         steering_correction, left_speed, right_speed)
+        
+        self.iteration += 1
+
+    def debug_print(self, iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed):
+        """Debug printing utility"""
+        print("Iteration: {:3d} | Target_Light: {:3d} | Speed: {:3d} | KP: {:6.2f} | Steering_Correction: {:6.2f} | Left_Speed: {:6.2f} | Right_Speed: {:6.2f}".format(
+            iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed))
+        
+
+    async def stop_motors(self):
+        """Stop both motors"""
+        motor.stop(port.C) # pyright: ignore[reportUndefinedVariable]
+        motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]        `
+                    },
+                    {
+                        id: "fn6",
+                        buttonText: 'PID Line Follower (Function)',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+    for i in range(300):
+        if distance_sensor.distance(port.B) < 50 and distance_sensor.distance(port.B) != -1:
+            motor_pair.stop(motor_pair.PAIR_1)
+            sleep(2)
+        await robot.follow_line()
+        sleep_ms(100)
+   `
+                    }                    
+                ]
+            },   // Functions
+            
+            9: {  // Helpers
+                snippets: [
+                    {
+                        id: "he1",
+                        buttonText: 'Print Distance',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+        print ("distance {:6.2f}".format(distance_sensor.distance(port.B)))
+` 
+                    },
+                    {
+                        id: "he2",
+                        buttonText: 'Print Color Sensor',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
+ ` 
+                    }
+                ]
+            }   // Functions
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshSnippets(1);
+            fetchGitHubRelease();
+        });
+    </script>
+    <script>
+        // Utility functions (from utils.js)
+        
+        function refreshSnippets(category) {
+            const snippetColumn = document.getElementById('snippet-column');
+            snippetColumn.innerHTML = '';  // Clear existing snippets
+            
+            const snippets = snippetData[category].snippets;
+            snippets.forEach(snippet => {
+                const snippetElement = document.createElement('div');
+                snippetElement.className = 'snippet';
+                snippetElement.innerHTML = `
+                    <button onclick="copyToClipboard('${snippet.id}')">
+                        <span class="emoji">${snippet.emoji}</span>
+                        <span class="label">${snippet.buttonText}</span>
+                    </button>
+                `;
+                snippetColumn.appendChild(snippetElement);
+            });
+        }
+
+        function copyToClipboard(snippetId) {
+            const snippet = findSnippetById(snippetId);
+            if (!snippet) return;
+            
+            const textToCopy = snippet.textPython.trim();
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    showToast('Snippet copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Error copying text: ', err);
+                });
+        }
+
+        function findSnippetById(snippetId) {
+            for (const category in snippetData) {
+                const snippet = snippetData[category].snippets.find(s => s.id === snippetId);
+                if (snippet) {
+                    return snippet;
+                }
+            }
+            return null;
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+            }, 2000);
+            
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 2500);
+        }
+
+        async function fetchGitHubRelease() {
+            const response = await fetch('https://api.github.com/repos/yourusername/yourrepo/releases/latest');
+            const data = await response.json();
+            
+            const releaseInfo = document.getElementById('release-info');
+            releaseInfo.innerHTML = `
+                Latest Release: ${data.name} - ${data.published_at}
+                <br>
+                <a href="${data.html_url}" target="_blank">View Release Notes</a>
+            `;
+        }
+    </script>
+</body>
+</html>
