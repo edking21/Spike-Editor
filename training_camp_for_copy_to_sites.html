@@ -145,7 +145,7 @@
 <body>
     <div class="left-column">
         <div class="emoji-block">
-            <div class="emoji-container"><button class="color-circle blue-circle" onclick="refreshSnippets(1)"></button>
+            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(1)"></button>
                 <div class="emoji-label">Demos</div>
             </div>
         </div>
@@ -163,148 +163,10 @@
             1: {  // Demos
                 snippets: [
                     {
-                        id: "fn1",
-                        buttonText: 'Getting Started',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `# <challenge name here>
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
-from time import sleep, sleep_ms
-
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-
-
-
-
-
-
-
-
-
-
-
-
-def is_pressed():
-    return force_sensor.pressed(port.A)
-
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
-    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
-    return distance != -1 and distance < distance_threshold
-
-def is_color_red():
-    return color_sensor.color(port.A) == color.RED
-
-runloop.run(main())
-sys.exit()` 
-                    },
-                    {
-                        id: "fn2",
-                        buttonText: 'is_near Unit Test',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `
-# Is Near Unit Test
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
-from time import sleep, sleep_ms
-
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-    while True:
-
-        motor_pair.move(motor_pair.PAIR_1, 0)
-
-        # wait until condition
-        await runloop.until (lambda: is_near())
-
-        # stop moving
-        motor_pair.stop(motor_pair.PAIR_1)
-        sleep_ms(10) # sleep 10 milliseconds to ensure stop command is processed
-
-
-def is_pressed():
-    return force_sensor.pressed(port.A)
-
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
-    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
-    return distance != -1 and distance < distance_threshold
-
-def is_color_red():
-    return color_sensor.color(port.A) == color.RED
-
-runloop.run(main())
-sys.exit()
-    `
-                    },
-                    {
-                        id: "fn3",
-                        buttonText: 'is_pressed Unit Test',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `
- # is_pressed Unit Test
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
-from time import sleep, sleep_ms
-
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)
-
-    while not is_near():
-
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*53, 0)
-
-        if is_near(): break
-
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*53, 0)
-
-    await runloop.until (is_pressed), sleep(4)
-
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0)
-
-    # wait until condition
-    await runloop.until (is_color_blue)
-
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
-
-    # Wait for 2 second
-    sleep(2)
-
-    # move forward for 2cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 2*21, 0)
-
-def is_pressed():
-    return force_sensor.pressed(port.A)
-
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
-    return distance != -1 and distance < distance_threshold
-
-def is_color_blue():
-    return color_sensor.color(port.F) == color.BLUE
-
-runloop.run(main())
-sys.exit()
-   `
-                    },
-                    {
                         id: "fn4",
                         buttonText: 'Bang Bang Line Follower',
                         emoji: '🧿',
-                        color: '#CC0000',
+                        color: '#8A2BE2',
                         textPython: `
     # set movement speed to 30%
     speed = int(0.3 * 1100)
@@ -325,7 +187,7 @@ sys.exit()
                         id: "fn5",
                         buttonText: 'Line Follow (Class)',
                         emoji: '🧿',
-                        color: '#CC0000',
+                        color: '#8A2BE2',
                         textPython: `
     # create robot object from LineFollow class    
     robot = LineFollow(target_light=70, speed=140, kp=6.5)
@@ -456,7 +318,7 @@ class LineFollow:
                         id: "fn6",
                         buttonText: 'PID Line Follower (Function)',
                         emoji: '🧿',
-                        color: '#CC0000',
+                        color: '#8A2BE2',
                         textPython: `
     for i in range(300):
         if distance_sensor.distance(port.B) < 50 and distance_sensor.distance(port.B) != -1:
