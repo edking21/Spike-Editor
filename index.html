@@ -453,6 +453,24 @@
                         textPython:`is_near():
             # <Your code here>`                 
                     },
+                    {
+                        id: "fn6",
+                        buttonText: 'relative position reset',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`
+    # Reset relative position to 0
+    motor.reset_relative_position(port.A, 0)
+    `                 
+                    },
+                    {
+                        id: "fn6",
+                        buttonText: 'relative position (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`(motor.relative_position(port.A) > 1000):
+        # <Your code here>`                 
+                    },
                 ]
             },  // Sensor
 
