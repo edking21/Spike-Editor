@@ -393,8 +393,7 @@
                         color: '#DAA520',
                         textPython: `
     # wait until condition 
-    await runloop.until # <your condition here>
-    `
+    await runloop.until # <your sensor condition here>`
                     },
                     {
                         id: "ctrl3",
@@ -403,9 +402,7 @@
                         color: '#DAA520',
                         textPython: `
     # Repeat until (function)
-    while not # <your function here>
-        # <your code here>
-    `
+    while not # <your sensor function here> `
                     }                ]
             },  // Control
 
@@ -430,7 +427,7 @@
                         buttonText: 'is near (condition)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`(lambda: is_near()) `
+                        textPython:`(is_near) `
                     },
                     {
                         id: "fn4",
@@ -438,8 +435,7 @@
                         emoji: '🧿',
                         color: '#87CEEB',
                         textPython:`is_pressed():
-        # <Your code here>                        
-                        `
+        # <Your code here>`                      
                     },
                     {
                         id: "fn5",
@@ -447,8 +443,7 @@
                         emoji: '🧿',
                         color: '#87CEEB',
                         textPython:`is_color_red():
-        # <Your code here>                        
-                        ` 
+        # <Your code here>`
                     },
                     {
                         id: "fn6",
@@ -456,8 +451,7 @@
                         emoji: '🧿',
                         color: '#87CEEB',
                         textPython:`is_near():
-        # <Your code here>                        
-                        ` 
+        # <Your code here>`                 
                     },
                 ]
             },  // Sensor
