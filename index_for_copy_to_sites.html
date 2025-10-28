@@ -167,10 +167,10 @@
                 <div class="emoji-label">Operators</div>
             </div>
             <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(8)"></button>
-                <div class="emoji-label">Functions</div>
+                <div class="emoji-label">Hints</div>
             </div>
             <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(9)"></button>
-                <div class="emoji-label">Helpers</div>
+                <div class="emoji-label">Debug Help</div>
             </div>
         </div>
     </div>
@@ -208,7 +208,7 @@
                         color: '#FF69B4',
                         textPython: `
     # move forward for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*21, 0)`
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
                     },                    {
                         id: "move2",
                         buttonText: 'turn right 90 degrees',
@@ -453,6 +453,24 @@
                         textPython:`is_near():
             # <Your code here>`                 
                     },
+                    {
+                        id: "fn6",
+                        buttonText: 'relative position reset',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`
+    # Reset relative position to 0
+    motor.reset_relative_position(port.A, 0)
+    `                 
+                    },
+                    {
+                        id: "fn6",
+                        buttonText: 'relative position (function)',
+                        emoji: '🧿',
+                        color: '#87CEEB',
+                        textPython:`(motor.relative_position(port.A) > 1000):
+        # <Your code here>`                 
+                    },
                 ]
             },  // Sensor
 
@@ -470,7 +488,7 @@
                 ]
             },  // Operators
 
-            8: {  // Functions
+            8: {  // Hints
                 snippets: [
                     {
                         id: "fn1",
@@ -482,6 +500,10 @@ import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light_matrix, port, sound
 from time import sleep, sleep_ms
+
+#constants
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
 
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
@@ -514,11 +536,10 @@ sys.exit()`
                     },
                     {
                         id: "fn2",
-                        buttonText: 'is_near Unit Test',
+                        buttonText: 'is_near Unit Test 1',
                         emoji: '🧿',
                         color: '#CC0000',
-                        textPython: `
-# Is Near Unit Test
+                        textPython: `# Is Near Unit Test 1
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light_matrix, port, sound
@@ -527,12 +548,16 @@ from time import sleep, sleep_ms
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
+
     while True:
 
+        # stop moving
         motor_pair.move(motor_pair.PAIR_1, 0)
 
-        # wait until condition
-        await runloop.until (lambda: is_near())
+        # wait until condition (all lines are valid)
+        await runloop.until (is_near)                              
+        await runloop.until (lambda: is_near())                   
+        await runloop.until (lambda: is_near(200))                
 
         # stop moving
         motor_pair.stop(motor_pair.PAIR_1)
@@ -556,64 +581,58 @@ sys.exit()
                     },
                     {
                         id: "fn3",
-                        buttonText: 'is_pressed Unit Test',
+                        buttonText: 'is_near Unit Test 2',
                         emoji: '🧿',
                         color: '#CC0000',
-                        textPython: `
- # is_pressed Unit Test
+                        textPython: `# Is Near Unit Test 2
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light_matrix, port, sound
 from time import sleep, sleep_ms
 
+#constants
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)
 
     while not is_near():
 
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10*53, 0)
+        # move forward for 10cm
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_INCH, 0)
 
+        # check for near when moving forward
         if is_near(): break
 
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10*53, 0)
+        # move backward for 10cm
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * DEGREES_PER_INCH, 0)
 
-    await runloop.until (is_pressed), sleep(4)
-
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0)
-
-    # wait until condition
-    await runloop.until (is_color_blue)
-
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
-
-    # Wait for 2 second
+    # Turn On Smiley Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_SMILE)
     sleep(2)
 
-    # move forward for 2cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 2*21, 0)
 
 def is_pressed():
     return force_sensor.pressed(port.A)
 
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
     distance = distance_sensor.distance(port.B)
+    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
     return distance != -1 and distance < distance_threshold
 
-def is_color_blue():
-    return color_sensor.color(port.F) == color.BLUE
+def is_color_red():
+    return color_sensor.color(port.A) == color.RED
 
 runloop.run(main())
 sys.exit()
-   `
+    `
                     },
                 ]
-            },   // Functions
+            },   // Hints
             
-            9: {  // Helpers
+            9: {  // Debug Help
                 snippets: [
                     {
                         id: "he1",
@@ -634,7 +653,7 @@ print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
  ` 
                     }
                 ]
-            }   // Functions
+            }   // Debug Help
         };
 
         document.addEventListener('DOMContentLoaded', () => {
