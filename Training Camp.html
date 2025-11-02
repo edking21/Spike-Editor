@@ -163,7 +163,7 @@
             1: {  // Demos
                 snippets: [
                     {
-                        id: "fn4",
+                        id: "fn1",
                         buttonText: 'Line Follower Bang Bang',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -184,7 +184,7 @@
     `
                     },
                     {
-                        id: "fn5",
+                        id: "fn2",
                         buttonText: 'Line Follow (Class)',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -315,7 +315,7 @@ class LineFollow:
         motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]        `
                     },
                     {
-                        id: "fn6",
+                        id: "fn3",
                         buttonText: 'Line Follower Proportional',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -329,7 +329,7 @@ class LineFollow:
    `
                     },                    
                     {
-                        id: "fn6",
+                        id: "fn4",
                         buttonText: 'Line Counter (Class)',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -413,7 +413,50 @@ class ColorCounter:
         # Remember this color for next time
         self.last_color_seen = current_color
    `
-                    }                    
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'Line Counter is_Color Blue',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+
+# Variables to count how many times we see each color
+red_count = 0
+yellow_count = 0
+blue_count = 0
+
+# Color codes - these numbers represent different colors to the robot
+blue = 3
+yellow = 7
+red = 9
+
+# Remember the last color we saw so we don't count the same color twice in a row
+last_color = None
+
+# This is like a stop sign for our program - when it's True, everything stops
+should_stop = False
+
+# This function watches for blue colors
+# The "async" means it can work at the same time as other functions
+async def check_blue():
+    # Use "global" to access variables from outside this function
+    global blue_count, last_color, should_stop
+
+    while not should_stop:
+        # Ask the color sensor what color it sees right now
+        current_color = color_sensor.color(port.F)
+
+        if current_color == blue and last_color != blue:
+            light.color(light.POWER, current_color)
+            last_color = blue
+            blue_count += 1
+
+        await runloop.sleep_ms(100)
+
+    `
+                    },
+
                 ]
             },   // Functions
             

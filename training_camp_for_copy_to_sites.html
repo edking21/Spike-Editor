@@ -163,7 +163,7 @@
             1: {  // Demos
                 snippets: [
                     {
-                        id: "fn4",
+                        id: "fn1",
                         buttonText: 'Line Follower Bang Bang',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -184,7 +184,7 @@
     `
                     },
                     {
-                        id: "fn5",
+                        id: "fn2",
                         buttonText: 'Line Follow (Class)',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -315,7 +315,7 @@ class LineFollow:
         motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]        `
                     },
                     {
-                        id: "fn6",
+                        id: "fn3",
                         buttonText: 'Line Follower Proportional',
                         emoji: '🧿',
                         color: '#8A2BE2',
@@ -327,7 +327,136 @@ class LineFollow:
         await robot.follow_line()
         sleep_ms(100)
    `
-                    }                    
+                    },                    
+                    {
+                        id: "fn4",
+                        buttonText: 'Line Counter (Class)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+# This class keeps track of how many colored lines we've seen
+class ColorCounter:
+    """
+    A class to count different colored lines detected by a color sensor.
+    
+    This class maintains counts for red, yellow, and blue lines and prevents
+    double-counting by tracking the last color seen.
+    
+    Example usage:
+        # Create a new counter
+        counter = ColorCounter()
+        
+        # Look for red lines using sensor on port A
+        counter.look_for_color(9, 'red', port.A)  # 9 is RED_COLOR
+        
+        # Check how many red lines we've found
+        print(f"Found {counter.red_count} red lines")
+        
+        # Get all counts
+        total_lines = counter.red_count + counter.yellow_count + counter.blue_count
+    """
+    
+    def __init__(self):
+        """
+        Initialize a new ColorCounter with all counts set to zero.
+        
+        Example:
+            counter = ColorCounter()
+            # counter.red_count is now 0
+            # counter.yellow_count is now 0  
+            # counter.blue_count is now 0
+        """
+        # Start with zero counts for each color
+        self.red_count = 0
+        self.yellow_count = 0
+        self.blue_count = 0
+        self.last_color_seen = None  # Remember what color we just saw
+
+    def look_for_color(self, target_color, color_name, sensor_port):
+        """
+        Check if we see a specific color and count it.
+        
+        Args:
+            target_color (int): The color number to look for (e.g., 9 for red)
+            color_name (str): Name of the color ('red', 'yellow', or 'blue')
+            sensor_port: The port where the color sensor is connected
+            
+        Example:
+            # Look for red lines using the color sensor on port A
+            counter.look_for_color(RED_COLOR, 'red', port.A)
+            
+            # After calling this, if a red line was detected:
+            # counter.red_count will be incremented by 1
+            # The hub's power button will show the current color
+            # Counts will be printed to console
+        """
+        # What color is the sensor seeing right now?
+        current_color = color_sensor.color(sensor_port)
+        
+        # Show the current color on the hub's power button
+        light.color(light.POWER, current_color)
+        
+        # Only count if we see the target color AND it's different from last time
+        # (This prevents counting the same line multiple times)
+        if current_color == target_color and self.last_color_seen != target_color:
+            # Add 1 to the count for this color
+            if color_name == 'red':
+                self.red_count += 1
+            elif color_name == 'yellow':
+                self.yellow_count += 1
+            elif color_name == 'blue':
+                self.blue_count += 1
+
+            # Show our current counts
+            print(f"Red lines: {self.red_count}, Yellow lines: {self.yellow_count}, Blue lines: {self.blue_count}")
+        
+        # Remember this color for next time
+        self.last_color_seen = current_color
+   `
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'Line Counter is_Color Blue',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+
+# Variables to count how many times we see each color
+red_count = 0
+yellow_count = 0
+blue_count = 0
+
+# Color codes - these numbers represent different colors to the robot
+blue = 3
+yellow = 7
+red = 9
+
+# Remember the last color we saw so we don't count the same color twice in a row
+last_color = None
+
+# This is like a stop sign for our program - when it's True, everything stops
+should_stop = False
+
+# This function watches for blue colors
+# The "async" means it can work at the same time as other functions
+async def check_blue():
+    # Use "global" to access variables from outside this function
+    global blue_count, last_color, should_stop
+
+    while not should_stop:
+        # Ask the color sensor what color it sees right now
+        current_color = color_sensor.color(port.F)
+
+        if current_color == blue and last_color != blue:
+            light.color(light.POWER, current_color)
+            last_color = blue
+            blue_count += 1
+
+        await runloop.sleep_ms(100)
+
+    `
+                    },
+
                 ]
             },   // Functions
             

@@ -215,8 +215,10 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # turn in place right 90 (180 degrees rotation 100 percent steering)
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
+    # turn right 90 degrees
+    degrees = 180 # number of degrees of wheel turn
+    steering = 100 # positive values turn right, negative values turn left
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering)  `
                     },
                     {
                         id: "move4",
@@ -498,12 +500,13 @@
                         textPython: `# <challenge name here>
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
+from hub import light, light_matrix, port, sound
 from time import sleep, sleep_ms
 
 #constants
 DEGREES_PER_CM = 21
 DEGREES_PER_INCH = 53
+CM_PER_INCH = 2.54
 
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
@@ -523,16 +526,43 @@ async def main():
 def is_pressed():
     return force_sensor.pressed(port.A)
 
+
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
     distance = distance_sensor.distance(port.B)
     print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
     return distance != -1 and distance < distance_threshold
 
+
 def is_color_red():
     return color_sensor.color(port.A) == color.RED
 
+
 runloop.run(main())
 sys.exit()` 
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'is_pressed',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+    `
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'is_near',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+    `
+                    },
+                    {
+                        id: "fn2",
+                        buttonText: 'is_color_red',
+                        emoji: '🧿',
+                        color: '#CC0000',
+                        textPython: `
+    `
                     },
                     {
                         id: "fn2",
