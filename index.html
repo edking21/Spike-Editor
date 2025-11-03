@@ -371,14 +371,11 @@
                     },
                     {
                         id: "ctrl4",
-                        buttonText: 'If condition then',
+                        buttonText: 'If',
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    # If condition then
-    if <your function here>:
-        # <your code here>
-    `
+    if # <your condition or function here>:`
                     },
                     {
                         id: "ctrl1",
@@ -429,31 +426,28 @@
                         buttonText: 'is near (condition)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`(is_near) `
+                        textPython:`(is_near)`
                     },
                     {
                         id: "fn4",
                         buttonText: 'is pressed (function)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`is_pressed():
-            # <Your code here>`                      
+                        textPython:`is_pressed():`
                     },
                     {
                         id: "fn5",
                         buttonText: 'is color red (function)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`is_color_red():
-            # <Your code here>`
+                        textPython:`is_color_red():`
                     },
                     {
                         id: "fn6",
                         buttonText: 'is near (function)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`is_near():
-            # <Your code here>`                 
+                        textPython:`is_near():`
                     },
                     {
                         id: "fn6",
@@ -508,33 +502,32 @@ DEGREES_PER_CM = 21
 DEGREES_PER_INCH = 53
 MM_PER_INCH = 25.4
 
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-
-
-
-
-
-
-
-
-
-
-
 
 def is_pressed():
     return force_sensor.pressed(port.A)
 
 
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+def is_near(distance_threshold=100):
     distance = distance_sensor.distance(port.B)
-    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
-    return distance != -1 and distance < distance_threshold
+    
+    # Check if sensor is working (returns -1 when no reading)
+    if distance == -1:
+        print("Warning: Distance sensor not detecting anything")
+        return False
+    
+    print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+    return distance < distance_threshold
 
 
 def is_color_red():
     return color_sensor.color(port.A) == color.RED
+
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+
+
 
 
 runloop.run(main())
@@ -581,7 +574,7 @@ async def main():
 
     while True:
 
-        # stop moving
+        # start moving
         motor_pair.move(motor_pair.PAIR_1, 0)
 
         # wait until condition (all lines are valid)
