@@ -87,7 +87,6 @@
             font-size: 14px;
             border-radius: 6px;
             border: 1px solid rgba(0, 0, 0, 0.12);
-            color: #ffffff;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -107,6 +106,17 @@
         .snippet .label {
             font-size: 1em;
         }
+
+        /* Color-specific text styling for snippets */
+        .snippet button.motors-color { background-color: #0066FF; color: #ffffff; }
+        .snippet button.movement-color { background-color: #FF69B4; color: #000000; }
+        .snippet button.light-color { background-color: #8A2BE2; color: #ffffff; }
+        .snippet button.events-color { background-color: #FFD700; color: #000000; }
+        .snippet button.control-color { background-color: #DAA520; color: #ffffff; }
+        .snippet button.sensors-color { background-color: #87CEEB; color: #000000; }
+        .snippet button.operators-color { background-color: #32CD32; color: #000000; }
+        .snippet button.hints-color { background-color: #CC0000; color: #ffffff; }
+        .snippet button.debug-color { background-color: #8A2BE2; color: #ffffff; }
 
         .release-info {
             text-align: center;
@@ -186,6 +196,7 @@
         // Snippet data
         const snippetData = {
             1: {  // Motors
+                colorClass: 'motors-color',
                 snippets: [
                     {
                         id: "m1",
@@ -200,6 +211,7 @@
             },  // motors
 
             2: {  // Movement
+                colorClass: 'movement-color',
                 snippets: [
                     {
                         id: "move1",
@@ -284,6 +296,7 @@
             },  // Movement
 
             3: {  // Light
+                colorClass: 'light-color',
                 snippets: [
                     {
                         id: "light1",
@@ -326,6 +339,7 @@
             },  // light
 
             4: {  // Events
+                colorClass: 'events-color',
                 snippets: [
                     {
                         id: "ev1",
@@ -342,6 +356,7 @@
             },  // Control
            
             5: {  // Control
+                colorClass: 'control-color',
                 snippets: [
                     {
                         id: "ctrl1",
@@ -406,6 +421,7 @@
             },  // Control
 
             6: {  // Sensors
+                colorClass: 'sensors-color',
                 snippets: [
                     {
                         id: "fn2",
@@ -471,6 +487,7 @@
             },  // Sensor
 
             7: {  // Operators  
+                colorClass: 'operators-color',
                 snippets: [
                     {
                         id: "op1",
@@ -485,6 +502,7 @@
             },  // Operators
 
             8: {  // Hints
+                colorClass: 'hints-color',
                 snippets: [
                     {
                         id: "fn1",
@@ -656,6 +674,7 @@ sys.exit()
             },   // Hints
             
             9: {  // Debug Help
+                colorClass: 'debug-color',
                 snippets: [
                     {
                         id: "he1",
