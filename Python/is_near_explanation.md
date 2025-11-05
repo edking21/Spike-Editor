@@ -53,7 +53,7 @@ Think of it like this:
 ### 1. **Wait Until** - Stop and Wait for Something to Happen
 
 ```python
-# GOOD: Wait until something gets close
+# Wait until something gets close
 await runloop.until(is_near)  # NO parentheses - give the recipe!
 
 # This means: "Keep checking is_near() over and over until it returns True"
