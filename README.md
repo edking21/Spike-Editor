@@ -3,46 +3,162 @@
 A small static HTML-based snippet browser and helper for composing Python snippets for LEGO Spike projects.
 
 ## Features
-- Left emoji column for snippet categories (Motors, Movement, Light, Events, Control, Sensors, Operators, Functions).
-- Dynamically generated snippet buttons — clicking copies a snippet to the clipboard using `copySnippetWithLineInsert(preId)`.
-- Smart indentation: attempts to detect whether to indent the clipboard contents based on the caret position and previous colon-terminated lines.
-- Optional on-page test editor (created on demand) for trying paste behavior and caret placement helpers.
-- Optional on-page debug panel for diagnostic logs and clipboard previews.
 
-## Quick start
-1. Open `index.html` in a modern browser (or serve the folder and open via `http://localhost:8000/Spike-Editor/index.html`).
+### Core Functionality
+- **Category Navigation**: Left emoji column for snippet categories (Motors, Movement, Light, Events, Control, Sensors, Operators, Functions)
+- **Smart Snippet Management**: Dynamically generated snippet buttons with intelligent clipboard copying via `copySnippetWithLineInsert(preId)`
+- **Intelligent Indentation**: Automatic indentation detection based on caret position and preceding colon-terminated lines
+- **Cross-browser Clipboard Support**: Primary Clipboard API with automatic fallback to `document.execCommand('copy')`
 
-PowerShell (from the repository root) — serves the current folder:
+### Development Tools
+- **On-demand Test Editor**: In-page editor for testing paste behavior and caret placement
+- **Debug Panel**: Diagnostic logging and clipboard content preview
+- **Runtime Toggles**: Enable/disable features during development without code changes
 
+## Quick Start
+
+### Local Development
+1. Open `index.html` in a modern browser, or serve the folder locally:
+
+**PowerShell** (from repository root):
 ```powershell
 python -m http.server 8000
-# then open http://localhost:8000/Spike-Editor/index.html
+# Navigate to: http://localhost:8000/Spike-Editor/index.html
 ```
 
-## How to use
-- Click an emoji in the left column to load that category's snippets.
-- Click a snippet button to copy its text to the clipboard. The main handler is `copySnippetWithLineInsert(preId)`.
-- The script will call `navigator.clipboard.writeText(...)` and falls back to a hidden textarea `document.execCommand('copy')` if the Clipboard API fails.
+**Node.js** (alternative):
+```bash
+npx http-server -p 8000
+# Navigate to: http://localhost:8000/Spike-Editor/index.html
+```
 
-## Developer toggles (runtime)
-- Debug panel (hidden by default):
-	- `enableSnippetDebug()` — show debug panel and start appending messages
-	- `disableSnippetDebug()` — hide debug panel
-- Test editor:
-	- `enableSnippetTestEditor()` — create (if needed) and show the on-page test editor
-	- `disableSnippetTestEditor()` — hide the test editor
+### Basic Usage
+1. Click an emoji in the left column to load snippet categories
+2. Click snippet buttons to copy code to clipboard
+3. Paste into your LEGO Spike Python environment
 
-## Notes & troubleshooting
-- Clipboard API requires a secure context (HTTPS or `localhost`) and user gesture in some browsers. If `navigator.clipboard.writeText` fails, the fallback copy is used automatically.
-- If the debug panel or test editor doesn't appear, check the console for errors and run the enable functions in the DevTools console.
-- To remove the test editor container manually: `document.getElementById('snippet-test-editor-container')?.remove()`.
+## Developer Tools
 
-## Extending snippets
-- Snippets are defined in `index.html` under the `snippetData` object. Each bucket (1..8) contains `snippets` with fields like `id`, `buttonText`, `emoji`, `color`, `textComment`, `textPython`, and optional `textFunction`.
-- Edit or add snippet objects in `snippetData` to change buttons and clipboard contents.
+### Debug Panel
+```javascript
+enableSnippetDebug()    // Show debug panel and start logging
+disableSnippetDebug()   // Hide debug panel
+```
+
+### Test Editor
+```javascript
+enableSnippetTestEditor()    // Create and show on-page test editor
+disableSnippetTestEditor()   // Hide test editor
+```
+
+### Manual Cleanup
+```javascript
+// Remove test editor if needed
+document.getElementById('snippet-test-editor-container')?.remove()
+```
+
+## Project Structure
+
+```
+Spike Editor/
+├── index.html          # Main application file
+├── README.md          # This documentation
+└── assets/            # Static assets (if any)
+```
+
+## Customizing Snippets
+
+Snippets are defined in `index.html` within the `snippetData` object:
+
+```javascript
+snippetData = {
+    1: {  // Category number (1-8)
+        snippets: [
+            {
+                id: "unique-id",
+                buttonText: "Display Text",
+                emoji: "🔧",
+                color: "#ff6b6b",
+                textComment: "// Description",
+                textPython: "actual_python_code()",
+                textFunction: "optional_function_wrapper()"  // Optional
+            }
+        ]
+    }
+}
+```
+
+### Adding New Categories
+1. Add a new numbered key to `snippetData`
+2. Include corresponding emoji in the left navigation
+3. Update category handling logic if needed
+
+### Snippet Properties
+- `id`: Unique identifier for the snippet
+- `buttonText`: Text displayed on the button
+- `emoji`: Icon for visual identification
+- `color`: Button color theme
+- `textComment`: Descriptive comment
+- `textPython`: Actual Python code to copy
+- `textFunction`: Optional function wrapper
+
+## Browser Compatibility
+
+### Clipboard API Requirements
+- **Secure Context**: HTTPS or `localhost` required
+- **User Gesture**: Clipboard access needs user interaction
+- **Fallback Support**: Automatic fallback for older browsers
+
+### Supported Browsers
+- Chrome 66+
+- Firefox 63+
+- Safari 13.1+
+- Edge 79+
+
+## Troubleshooting
+
+### Common Issues
+
+**Clipboard not working:**
+- Ensure you're using HTTPS or localhost
+- Check browser permissions for clipboard access
+- Verify user interaction triggered the copy action
+
+**Debug panel not showing:**
+- Check browser console for errors
+- Run `enableSnippetDebug()` in DevTools console
+- Ensure JavaScript is enabled
+
+**Snippets not loading:**
+- Verify `snippetData` object syntax
+- Check for JavaScript console errors
+- Ensure proper HTML structure
+
+### Development Tips
+- Use browser DevTools for debugging
+- Test clipboard functionality across different browsers
+- Validate snippet JSON structure before deployment
 
 ## Contributing
-- This is a small static project; PRs for improved UX, accessibility, or snippet content are welcome.
+
+### Guidelines
+- PRs welcome for UX improvements, accessibility, or snippet content
+- Follow existing code style and structure
+- Test changes across supported browsers
+- Update documentation for new features
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch
+3. Test changes locally
+4. Submit PR with clear description
 
 ## License
-- No license file included. Add one if you intend to publish with a specific license.
+
+No license file currently included. Consider adding an appropriate license for public distribution.
+
+## Project Status
+
+**Current Version**: Static HTML implementation
+**Maintenance**: Active development for educational use
+**Dependencies**: None (vanilla HTML/CSS/JavaScript)
