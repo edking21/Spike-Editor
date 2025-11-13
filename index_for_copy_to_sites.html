@@ -215,7 +215,7 @@
                 snippets: [
                     {
                         id: "move1",
-                        buttonText: 'move forward for 20cm',
+                        buttonText: 'move forward for 10cm',
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
@@ -517,26 +517,46 @@ import color, color_sensor, distance_sensor
 from hub import light, light_matrix, port, sound
 from time import sleep, sleep_ms
 
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
+DEGREES_PER_CM = 21        
+DEGREES_PER_INCH = 53       
+MM_PER_INCH = 25.4         
 
 ########################################################################
 # 🛑 is_color_red - Function to check if the color sensor sees red
 ########################################################################
 def is_color_red():
+    """
+    Examples:
+            Using with wait until:      await runloop.until(is_red)
+            Using with repeat until:    await while not (is_red())
+    """
     return color_sensor.color(port.F) == color.RED
 
 ########################################################################
 # 🎯 is_pressed - Function to check if pressed
 ########################################################################
 def is_pressed():
+    """
+    Examples:
+            Using with wait until:      await runloop.until(is_pressed)
+            Using with repeat until:    while not (is_pressed())
+    """
     return force_sensor.pressed(port.A)
 
 ########################################################################
 # ☀️ is_near - Function or condition to check if something is close
 ########################################################################
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    """
+    Examples:
+        Using with wait until condition:
+            await runloop.until(is_near)
+        Using with repeat until function:    
+            while not (is_near())
+        Using with lambda wait until: 
+            await runloop.until(lambda: is_near())      # Default threshold
+            await runloop.until(lambda: is_near(300))   # 300mm threshold
+    """
     distance = distance_sensor.distance(port.B)
 
     if distance == -1:
@@ -544,7 +564,7 @@ def is_near(distance_threshold=100): # 100mm (4 inches) minimum
         return False
 
     print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-
+    
     return distance < distance_threshold
 
 ########################################################################
@@ -564,6 +584,7 @@ async def main():
 
 runloop.run(main())
 sys.exit()
+
 ` 
                     },
                     {

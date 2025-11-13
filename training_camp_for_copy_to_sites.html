@@ -167,21 +167,25 @@
                         buttonText: 'Line Follower Bang Bang',
                         emoji: '🧿',
                         color: '#8A2BE2',
-                        textPython: `
-    # set movement speed to 30%
-    speed = int(0.3 * 1100)
+                        textPython: `async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    # set steering to 50% of maximum
+    steering = 50
+
+    # set movement speed to 20%
+    speed = int(0.2 * 1100)
 
     # set sleep seconds to 40 milliseconds 
     sleep_milliseconds = 40
 
-    for i in range (300):
+    for i in range (200):
         if color_sensor.color(port.F) == color.BLUE and color_sensor.color(port.F) != -1:
-            motor_pair.move(motor_pair.PAIR_1, 50, velocity=speed)
+            motor_pair.move(motor_pair.PAIR_1, -steering, velocity=speed)
             sleep_ms(sleep_milliseconds)
         else:
-            motor_pair.move(motor_pair.PAIR_1, -50, velocity=speed)
-            sleep_ms(sleep_milliseconds)
-    `
+            motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
+            sleep_ms(sleep_milliseconds)`
                     },
                     {
                         id: "fn2",
