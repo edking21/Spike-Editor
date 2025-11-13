@@ -164,10 +164,14 @@
                 snippets: [
                     {
                         id: "fn1",
-                        buttonText: 'Line Follower Bang Bang',
+                        buttonText: 'Line Follower Bang Bang (main)',
                         emoji: '🧿',
                         color: '#8A2BE2',
-                        textPython: `async def main():
+                        textPython: `
+########################################################################
+# 🤖 Main - Line Follower Bang Bang (Main)
+########################################################################
+async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
     # set steering to 50% of maximum
@@ -189,31 +193,34 @@
                     },
                     {
                         id: "fn2",
-                        buttonText: 'Line Follow (Class)',
+                        buttonText: 'Line Follower Proportional (Class)',
                         emoji: '🧿',
                         color: '#8A2BE2',
                         textPython: `
-    # create robot object from LineFollow class    
-    robot = LineFollow(target_light=70, speed=140, kp=6.5)
+########################################################################
+# 🤖 LineFollower - Proportional (Class)
+########################################################################
+class LineFollower:
+    """    
+    This robot class works like a self-driving car - it uses a light sensor to "see" the 
+    line, then automatically adjusts wheel speed to "follow" the line.
 
 
+    Example:
+            
+            # Create a robot object from the LineFollower class.
 
+            robot = LineFollower(target_light=60, speed=180, kp=6.8)
+            
+            
+            # Repeat until returning to the start point.
 
+            while not (motor.relative_position(port.D) > 1000):
 
-
-class LineFollow:
-    """A robot that can follow a line.
     
-    This robot uses a light sensor to see the edge between the dark and light and automatically steers
-    the wheels to stay over the edge by adjusting the motor speeds.
-   
-    Attributes:
-        target_light (int): The desired light intensity the robot tries to stay on.
-            Defaults to 60.
-        speed (int): How fast the robot moves.
-            Defaults to 180.
-        kp (float): Proportional gain for steering correction.
-            Defaults to 6.8.
+                # Follow a line using proportional corrections.
+
+                await robot.follow_line()
 
     Args:
         target_light (int): The desired light intensity the robot tries to stay on.
@@ -223,22 +230,14 @@ class LineFollow:
         kp (float): Proportional gain for steering correction.
             Defaults to 6.8.
            
-    Example:
-        Basic usage example:
-
-            line_follower = LineFollow(target_light=60, speed=180, kp=6.8)
-            
-            # Parent code controls the loop
-            for i in range(100):
-                await line_follower.follow_line()
 
     Note:
         - Target_light is computed from half the difference between the value returned from the sensor when positioning over the light then over the dark. 
         - Higher speeds are mostly for competition runs. 
-        - kp is the gain in a PID controller, higher gains makes the robot react more strongly to deviations from the target light level.
+        - kp is the gain in a PID controller, higher gains cause larger steering corrections when the robot deviates from the target light level.
         """
 
-    def __init__(self, target_light=70, speed=140, kp=6.5):
+    def __init__(self, target_light: int = 70, speed: int = 140, kp: float = 6.5) -> None:
         self.target_light = target_light
         self.speed = speed
         self.kp = kp
@@ -277,7 +276,7 @@ class LineFollow:
         
         Example:
             # Parent code controls the loop
-            line_follower = LineFollow(60, 180, 6.8)
+            line_follower = LineFollower(60, 180, 6.8)
             
             # Run for specific number of iterations
             for i in range(100):
@@ -316,21 +315,55 @@ class LineFollow:
     async def stop_motors(self):
         """Stop both motors"""
         motor.stop(port.C) # pyright: ignore[reportUndefinedVariable]
-        motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]        `
-                    },
+        motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]`        
+            }       ,
                     {
                         id: "fn3",
-                        buttonText: 'Line Follower Proportional',
+                        buttonText: 'Line Follower Proportional (Main)',
                         emoji: '🧿',
                         color: '#8A2BE2',
                         textPython: `
-    for i in range(300):
-        if distance_sensor.distance(port.B) < 50 and distance_sensor.distance(port.B) != -1:
-            motor_pair.stop(motor_pair.PAIR_1)
-            sleep(2)
+########################################################################
+# 🤖 Main - Line Follower Proportional
+########################################################################
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+    motor.reset_relative_position(port.D, 0)
+
+    # Create a robot object from the LineFollower class.
+    robot = LineFollower(target_light=70, speed=140, kp=6.5)
+
+    # Repeat until returning to the start point.
+
+        # Follow a line using proportional corrections.`
+                    },
+                    {
+                        id: "fn3",
+                        buttonText: 'Line Follower Proportional (Hint)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+########################################################################
+# 🤖 Main - Line Follower Proportional (Hint)
+########################################################################
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    # Reset relative position to 0
+    motor.reset_relative_position(port.B, 0)
+
+    robot = LineFollower(target_light=60, speed=180, kp=6.8)
+
+    # Repeat until (function)
+    while not (motor.relative_position(port.B) > 1000):
+
         await robot.follow_line()
-        sleep_ms(100)
-   `
+
+        if (is_near()):
+
+            # stop moving
+            motor_pair.stop(motor_pair.PAIR_1)
+            sleep_ms(10) # sleep 10 milliseconds`
                     },                    
                     {
                         id: "fn4",
