@@ -348,9 +348,7 @@
                         color: '#FFD700',
                         textPython: `
     # When
-    while <your condition here>:
-        # your code here
-    `
+    while #<your condition or function here>`
                     }
                 ]
             },  // Control
@@ -390,7 +388,7 @@
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    if # <your condition or function here>:`
+    if # <your condition or function here>`
                     },
                     {
                         id: "ctrl1",
@@ -496,7 +494,9 @@
                         color: '#32CD32',
                         textPython: `
     # Operator example
-    result = a + b  `
+    a = 3
+    b = 5
+    result = a + b`
                     }
                 ]
             },  // Operators
@@ -510,7 +510,6 @@
                         emoji: '🧿',
                         color: '#CC0000',
                         textPython: `# <challenge name here>
-
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light, light_matrix, port, sound
@@ -567,19 +566,22 @@ def is_near(distance_threshold=100): # 100mm (4 inches) minimum
     return distance < distance_threshold
 
 ########################################################################
-# 🤖 Main - The main program that runs our robot
+# 🤖 Main - Start and Stop is_near test using Wait until condition
 ########################################################################
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
     while True:
 
+        # start moving
         motor_pair.move(motor_pair.PAIR_1, 0)
 
-        if is_near():
+        # wait until condition
+        await runloop.until (is_near)
 
-            motor_pair.stop(motor_pair.PAIR_1)
-            sleep_ms(10) # Wait 10 milliseconds before checking again
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10) # Wait 10 milliseconds before checking again
 
 runloop.run(main())
 sys.exit()
@@ -702,7 +704,7 @@ sys.exit()
                         emoji: '🧿',
                         color: '#8A2BE2',
                         textPython: `
-print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
+        print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
  ` 
                     }
                 ]
