@@ -1,5 +1,6 @@
 param(
     [string]$IndexFile = "index.html",
+    [string]$TrainingCampFile_1 = "Training Camp.html_1",
     [string]$TrainingCampFile = "Training Camp.html",
     [string]$UtilsFile = "utils.js",
     [string]$IndexOutputFile = "index_for_copy_to_sites.html",
