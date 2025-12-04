@@ -202,8 +202,9 @@ async def main():
 ########################################################################
 class LineFollower:
     """    
-    This robot class works like a self-driving car - it uses a light sensor to "see" the 
-    line, then automatically adjusts wheel speed to "follow" the line.
+    This robot class teaches your robot how to follow a line by using a light sensor 
+    to see the difference between dark and light surfaces, then automatically steering 
+    the wheels to stay on the line - just like a self-driving car!
 
 
     Example:
@@ -223,18 +224,23 @@ class LineFollower:
                 await robot.follow_line()
 
     Args:
-        target_light (int): The desired light intensity the robot tries to stay on.
+        target_light (int): The "center line" value - the light level robot tries to stay on.
+            Think of this as the target the robot aims for.
             Defaults to 60.
-        speed (int): How fast the robot moves.
+        speed (int): How fast the robot moves forward while following the line.
             Defaults to 180.
-        kp (float): Proportional gain for steering correction.
+        kp (float): The "rubber band strength" - how hard the robot steers back to center.
+            Like Force = Mass × Acceleration: bigger kp = stronger force = sharper turns.
             Defaults to 6.8.
            
 
     Note:
-        - Target_light is computed from half the difference between the value returned from the sensor when positioning over the light then over the dark. 
-        - Higher speeds are mostly for competition runs. 
-        - kp is the gain in a PID controller, higher gains cause larger steering corrections when the robot deviates from the target light level.
+        - Target_light: Find this by measuring light over the edge between dark and light areas
+        - Higher speeds work for competition, but start with slower speeds for learning  
+        - kp is like a rubber band connecting your robot to the center line:
+          • Small kp = weak rubber band = gentle corrections
+          • Large kp = strong rubber band = sharp corrections
+          • Too large kp = robot oscillates (wobbles back and forth)
         """
 
     def __init__(self, target_light: int = 70, speed: int = 140, kp: float = 6.5) -> None:

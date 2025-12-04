@@ -552,8 +552,8 @@ def is_near(distance_threshold=100): # 100mm (4 inches) minimum
         Using with repeat until function:    
             while not (is_near())
         Using with lambda wait until: 
-            await runloop.until(lambda: is_near())      # Default threshold
-            await runloop.until(lambda: is_near(300))   # 300mm threshold
+            await runloop.until(lambda: is_near())                      # Default threshold
+            await runloop.until(lambda: is_near (int(6 * MM_PER_INCH))) # 6 inch threshold
     """
     distance = distance_sensor.distance(port.B)
 
