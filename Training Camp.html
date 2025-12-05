@@ -373,115 +373,51 @@ async def main():
                     },                    
                     {
                         id: "fn4",
-                        buttonText: 'Line Counter (Class)',
+                        buttonText: 'Line Counter (Main)',
                         emoji: '🧿',
                         color: '#8A2BE2',
-                        textPython: `
-# This class keeps track of how many colored lines we've seen
-class ColorCounter:
-    """
-    A class to count different colored lines detected by a color sensor.
-    
-    This class maintains counts for red, yellow, and blue lines and prevents
-    double-counting by tracking the last color seen.
-    
-    Example usage:
-        # Create a new counter
-        counter = ColorCounter()
-        
-        # Look for red lines using sensor on port A
-        counter.look_for_color(9, 'red', port.A)  # 9 is RED_COLOR
-        
-        # Check how many red lines we've found
-        print(f"Found {counter.red_count} red lines")
-        
-        # Get all counts
-        total_lines = counter.red_count + counter.yellow_count + counter.blue_count
-    """
-    
-    def __init__(self):
-        """
-        Initialize a new ColorCounter with all counts set to zero.
-        
-        Example:
-            counter = ColorCounter()
-            # counter.red_count is now 0
-            # counter.yellow_count is now 0  
-            # counter.blue_count is now 0
-        """
-        # Start with zero counts for each color
-        self.red_count = 0
-        self.yellow_count = 0
-        self.blue_count = 0
-        self.last_color_seen = None  # Remember what color we just saw
+                        textPython: `# Training Camp Line Counter
+import runloop, sys, motor_pair, runloop 
+import color, color_sensor, distance_sensor 
+from hub import light, light_matrix, port, sound 
+from time import sleep, sleep_ms
+from runloop import run 
 
-    def look_for_color(self, target_color, color_name, sensor_port):
-        """
-        Check if we see a specific color and count it.
-        
-        Args:
-            target_color (int): The color number to look for (e.g., 9 for red)
-            color_name (str): Name of the color ('red', 'yellow', or 'blue')
-            sensor_port: The port where the color sensor is connected
-            
-        Example:
-            # Look for red lines using the color sensor on port A
-            counter.look_for_color(RED_COLOR, 'red', port.A)
-            
-            # After calling this, if a red line was detected:
-            # counter.red_count will be incremented by 1
-            # The hub's power button will show the current color
-            # Counts will be printed to console
-        """
-        # What color is the sensor seeing right now?
-        current_color = color_sensor.color(sensor_port)
-        
-        # Show the current color on the hub's power button
-        light.color(light.POWER, current_color)
-        
-        # Only count if we see the target color AND it's different from last time
-        # (This prevents counting the same line multiple times)
-        if current_color == target_color and self.last_color_seen != target_color:
-            # Add 1 to the count for this color
-            if color_name == 'red':
-                self.red_count += 1
-            elif color_name == 'yellow':
-                self.yellow_count += 1
-            elif color_name == 'blue':
-                self.blue_count += 1
+########################################################################
+# 🛑 Constants - Connect two motors together so they work as a team
+########################################################################
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-            # Show our current counts
-            print(f"Red lines: {self.red_count}, Yellow lines: {self.yellow_count}, Blue lines: {self.blue_count}")
-        
-        # Remember this color for next time
-        self.last_color_seen = current_color
-   `
-                    },
-                    {
-                        id: "fn2",
-                        buttonText: 'Line Counter is_Color Blue',
-                        emoji: '🧿',
-                        color: '#8A2BE2',
-                        textPython: `
-
-# Variables to count how many times we see each color
-red_count = 0
-yellow_count = 0
-blue_count = 0
-
-# Color codes - these numbers represent different colors to the robot
+########################################################################
+# 🛑 Constants - Color code numbers represent different colors to the robot
+########################################################################
 blue = 3
 yellow = 7
 red = 9
 
-# Remember the last color we saw so we don't count the same color twice in a row
+########################################################################
+# 🛑 Variables - count how many times we see each color
+########################################################################
+red_count = 0
+yellow_count = 0
+blue_count = 0
+
+########################################################################
+# 🛑 Variable Remember the last color seen 
+#             so we don't count the same color twice in a row
+########################################################################
 last_color = None
 
-# This is like a stop sign for our program - when it's True, everything stops
+########################################################################
+# 🛑 Variable This is like a stop sign for our program 
+#              when it's True, everything stops
+########################################################################
 should_stop = False
 
-# This function watches for blue colors
-# The "async" means it can work at the same time as other functions
+########################################################################
+# 🤖 Function Watches for blue colors
+#             The "async" means it can work at the same time as other functions
+########################################################################
 async def check_blue():
     # Use "global" to access variables from outside this function
     global blue_count, last_color, should_stop
@@ -497,7 +433,63 @@ async def check_blue():
 
         await runloop.sleep_ms(100)
 
-    `
+########################################################################
+# 🤖 Function Watches for yellow colors (works just like check_blue)
+########################################################################
+async def check_yellow():
+    # *** challenge 2 ***: replace pass with the code from check_blue then change to yellow
+    pass
+
+########################################################################
+# 🤖 Function Watches for red colors (works just like the others)
+########################################################################
+async def check_red():
+    # *** challenge 3 ***: replace pass with the code from check_blue then change to red
+    pass
+
+########################################################################
+# 🤖 Function Watches for someone waving their hand near the robot
+########################################################################
+async def check_hand_wave():
+    global blue_count, yellow_count, should_stop
+
+    while not should_stop:
+        # Check how far away the nearest object is (in millimeters)
+        distance = distance_sensor.distance(port.B)
+
+        # If something is close (less than 14cm or 140mm away) and the sensor is working
+        if distance != -1 and distance < 140:
+            motor_pair.stop(motor_pair.PAIR_1)
+            # Tell all other functions to stop
+            should_stop = True
+            # Show our final results - how many of each color we counted
+            # *** challenge 4 *** replace print to use the hub to display the counts
+            print("Blue count:{:2d}".format (blue_count))
+            print("Yellow count:{:2d}".format (yellow_count))
+            print("Red count:{:2d}".format (red_count))
+            # Exit this loop
+            break
+
+        # Wait a bit before checking distance again
+        await runloop.sleep_ms(100)
+
+########################################################################
+# 🤖 Main Count blue, yellow and red line along a square
+########################################################################
+async def main():
+    
+    # Start the motors moving forward at normal speed
+    motor_pair.move(motor_pair.PAIR_1, 0)
+
+    # *** challenge 1 *** move the robot along a 60cm square while checking colors
+
+    # Run all our checking functions at the same time
+    # It's like having multiple people doing different jobs simultaneously
+    run(check_blue(), check_yellow(), check_red(), check_hand_wave())
+
+runloop.run(main())
+sys.exit()
+   `
                     },
 
                 ]
