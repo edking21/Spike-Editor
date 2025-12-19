@@ -1,11 +1,16 @@
-# Line Counter Python
+# Line Counter
 import runloop, time, sys, motor_pair, motor, force_sensor, runloop # pyright: ignore[reportMissingImports]
 import color, color_sensor, distance_sensor # pyright: ignore[reportMissingImports]
 from hub import light, light_matrix, port, sound # pyright: ignore[reportMissingImports]
 from time import sleep, sleep_ms
 from runloop import run # pyright: ignore[reportMissingImports]
 
-# Variables to count how many times we see each color
+# Conversion constants
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
+
+# how many times we see each color
 red_count = 0
 yellow_count = 0
 blue_count = 0
@@ -36,7 +41,7 @@ def is_near(distance_threshold=100): # 100mm (4 inches) minimum
 #####################################################################
 # 🛑 Watch for blue colors continuously
 #####################################################################
-async def check_blue():
+async def when_blue():
     global blue_count, last_color, should_stop
 
     while not should_stop:
@@ -52,7 +57,7 @@ async def check_blue():
 #####################################################################
 # 🛑 Watch for yellow colors continuously
 #####################################################################
-async def check_yellow():
+async def when_yellow():
     global yellow_count, last_color, should_stop
 
     while not should_stop:
@@ -68,7 +73,7 @@ async def check_yellow():
 #####################################################################
 # 🛑 Watch for red colors continuously
 #####################################################################
-async def check_red():
+async def when_red():
     global red_count, last_color, should_stop
 
     while not should_stop:
@@ -84,7 +89,7 @@ async def check_red():
 #####################################################################
 # 🛑 Watch for someone waving their hand near the distance sensor continuously
 #####################################################################
-async def check_hand_wave():
+async def when_hand_wave():
     global blue_count, yellow_count, red_count, should_stop
 
     while not should_stop:
@@ -126,10 +131,10 @@ async def main():
     
     # Run all functions concurrently as events
     run(
-        check_hand_wave(),
-        check_blue(),
-        check_yellow(),
-        check_red(),
+        when_hand_wave(),
+        when_blue(),
+        when_yellow(),
+        when_red(),
         robot_movement()
     )
 
