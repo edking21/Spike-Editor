@@ -1,4 +1,4 @@
-# Line Counter Python-1
+# Line Counter Python
 import runloop, time, sys, motor_pair, motor, force_sensor, runloop # pyright: ignore[reportMissingImports]
 import color, color_sensor, distance_sensor # pyright: ignore[reportMissingImports]
 from hub import light, light_matrix, port, sound # pyright: ignore[reportMissingImports]
@@ -24,75 +24,114 @@ last_color = None
 # This is like a stop sign for our program - when it's True, everything stops
 should_stop = False
 
-# This function watches for blue colors
-# The "async" means it can work at the same time as other functions
+########################################################################
+# ☀️ is_near - Function or condition to check if something is close
+########################################################################
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    distance = distance_sensor.distance(port.B)
+    if distance == -1:
+        return False
+    return distance < distance_threshold
+
+#####################################################################
+# 🛑 Watch for blue colors continuously
+#####################################################################
 async def check_blue():
-    # Use "global" to access variables from outside this function
     global blue_count, last_color, should_stop
 
     while not should_stop:
-        # Ask the color sensor what color it sees right now
+        # count the number of times crossing over the blue
         current_color = color_sensor.color(port.F)
-
         if current_color == blue and last_color != blue:
             light.color(light.POWER, current_color)
             last_color = blue
             blue_count += 1
 
-        await runloop.sleep_ms(100)
+        await runloop.sleep_ms(50)
 
-# This function watches for yellow colors (works just like check_blue)
+#####################################################################
+# 🛑 Watch for yellow colors continuously
+#####################################################################
 async def check_yellow():
     global yellow_count, last_color, should_stop
+
     while not should_stop:
+        # count the number of times crossing over the yellow
         current_color = color_sensor.color(port.F)
         if current_color == yellow and last_color != yellow:
             light.color(light.POWER, current_color)
             last_color = yellow
             yellow_count += 1
 
-        await runloop.sleep_ms(100)
+        await runloop.sleep_ms(50)
 
-# This function watches for red colors (works just like the others)
+#####################################################################
+# 🛑 Watch for red colors continuously
+#####################################################################
 async def check_red():
     global red_count, last_color, should_stop
+
     while not should_stop:
+        # count the number of times crossing over the red
         current_color = color_sensor.color(port.F)
         if current_color == red and last_color != red:
             light.color(light.POWER, current_color)
             last_color = red
             red_count += 1
 
-        await runloop.sleep_ms(100)
+        await runloop.sleep_ms(50)
 
-# This function watches for someone waving their hand near the robot
+#####################################################################
+# 🛑 Watch for someone waving their hand near the distance sensor continuously
+#####################################################################
 async def check_hand_wave():
-    global blue_count, yellow_count, should_stop
+    global blue_count, yellow_count, red_count, should_stop
 
     while not should_stop:
-        # Check how far away the nearest object is (in millimeters)
-        distance = distance_sensor.distance(port.B)
 
-        # If something is close (less than 50mm away) and the sensor is working
-        if distance != -1 and distance < 50:
+        # if sensor is working and hand wave closer than 100mm (4in)
+        if is_near():
             motor_pair.stop(motor_pair.PAIR_1)
+
             # Tell all other functions to stop
             should_stop = True
-            # Show our final results - how many of each color we counted
-            print("Blue count:{:2d}  Yellow count:{:2d}  Red count:{:2d}".format(blue_count, yellow_count, red_count))
-            # Exit this loop
+
+            print("Blue count:{:2d} Yellow count:{:2d} Red count:{:2d}".format(blue_count, yellow_count, red_count))
             break
 
         # Wait a bit before checking distance again
-        await runloop.sleep_ms(100)
+        await runloop.sleep_ms(50)
 
+#####################################################################
+# 🤖 Movement control function
+#####################################################################
+async def robot_movement():
+    global should_stop
+
+    while not should_stop:
+        
+        # turn left 90 degrees
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, -100)
+
+        if should_stop:
+            break
+
+        # move forward 4in
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 4 * 53, 0)
+
+########################################################################
+# 🤖 Main - Run all functions concurrently
+########################################################################
 async def main():
-    # Start the motors moving forward at normal speed
-    motor_pair.move(motor_pair.PAIR_1, 0)
-
-    # Run all our checking functions at the same time
-    # It's like having multiple people doing different jobs simultaneously
-    run(check_blue(), check_yellow(), check_red(), check_hand_wave())
+    
+    # Run all functions concurrently as events
+    run(
+        check_hand_wave(),
+        check_blue(),
+        check_yellow(),
+        check_red(),
+        robot_movement()
+    )
 
 runloop.run(main())
 sys.exit()

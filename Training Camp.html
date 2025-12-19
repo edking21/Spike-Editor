@@ -341,47 +341,104 @@ async def main():
 
     # Repeat until returning to the start point.
 
-        # Follow a line using proportional corrections.`
+        # Follow a line using proportional corrections.
+        # Hint the robot class has a follow_line method
+        # robot calls the follow_line method with 
+        # await robot.follow_line()
+
+        # if a hand is near stop and wait for 2 seconds
+        `
                     },
                     {
                         id: "fn3",
                         buttonText: 'Line Follower Proportional (Hint)',
                         emoji: '🧿',
                         color: '#8A2BE2',
-                        textPython: `
+                        textPython: `# Line Follower
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light, light_matrix, port, sound
+from time import sleep, sleep_ms
+
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
+
 ########################################################################
-# 🤖 Main - Line Follower Proportional (Hint)
+# ☀️ is_near - Function or condition to check if something is close
+########################################################################
+def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+
+    distance = distance_sensor.distance(port.F)
+
+    if distance == -1:
+        print("Warning: Distance sensor not detecting anything")
+        return False
+
+    print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+
+    return distance < distance_threshold
+
+########################################################################
+# 🤖 LineFollower - Proportional (Class)
+########################################################################
+class LineFollower:
+
+    def __init__(self, target_light: int = 70, speed: int = 140, kp: float = 6.5) -> None:
+        self.target_light = target_light
+        self.speed = speed
+        self.kp = kp
+        self.iteration = 0
+
+    async def follow_line(self):
+
+        light_intensity = color_sensor.reflection(port.B) 
+        steering_correction = self.kp * (self.target_light - light_intensity)
+
+        left_speed = self.speed + steering_correction
+        right_speed = self.speed - steering_correction
+
+        motor.run(port.C, -int(left_speed)) 
+        motor.run(port.D, int(right_speed)) 
+
+        self.iteration += 1
+
+########################################################################
+# 🤖 Main - Follow a line using proportional corrections. 
 ########################################################################
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+    motor.reset_relative_position(port.D, 0)
 
-    # Reset relative position to 0
-    motor.reset_relative_position(port.B, 0)
+    # Create a robot object from the LineFollower class.
+    robot = LineFollower(target_light=70, speed=140, kp=6.5)
 
-    robot = LineFollower(target_light=60, speed=180, kp=6.8)
+    # Repeat until returning to the start point.
 
-    # Repeat until (function)
-    while not (motor.relative_position(port.B) > 1000):
+        # Call the follow_line method from the robot object
+        # await robot.follow_line()
 
-        await robot.follow_line()
+        # if a hand is near stop and wait for 2 seconds
 
-        if (is_near()):
-
-            # stop moving
-            motor_pair.stop(motor_pair.PAIR_1)
-            sleep_ms(10) # sleep 10 milliseconds`
+runloop.run(main())
+sys.exit()
+`
                     },                    
                     {
                         id: "fn4",
-                        buttonText: 'Line Counter (Main)',
+                        buttonText: 'Line Counter',
                         emoji: '🧿',
                         color: '#8A2BE2',
-                        textPython: `# Training Camp Line Counter
+                        textPython: `# Line Counter
 import runloop, sys, motor_pair, runloop 
 import color, color_sensor, distance_sensor 
 from hub import light, light_matrix, port, sound 
 from time import sleep, sleep_ms
 from runloop import run 
+
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
 
 ########################################################################
 # 🛑 Constants - Connect two motors together so they work as a team
