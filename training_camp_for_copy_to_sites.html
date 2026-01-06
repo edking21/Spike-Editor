@@ -201,127 +201,27 @@ async def main():
 # 🤖 LineFollower - Proportional (Class)
 ########################################################################
 class LineFollower:
-    """    
-    This robot class teaches your robot how to follow a line by using a light sensor 
-    to see the difference between dark and light surfaces, then automatically steering 
-    the wheels to stay on the line - just like a self-driving car!
 
-
-    Example:
-            
-            # Create a robot object from the LineFollower class.
-
-            robot = LineFollower(target_light=60, speed=180, kp=6.8)
-            
-            
-            # Repeat until returning to the start point.
-
-            while not (motor.relative_position(port.D) > 1000):
-
-    
-                # Follow a line using proportional corrections.
-
-                await robot.follow_line()
-
-    Args:
-        target_light (int): The "center line" value - the light level robot tries to stay on.
-            Think of this as the target the robot aims for.
-            Defaults to 60.
-        speed (int): How fast the robot moves forward while following the line.
-            Defaults to 180.
-        kp (float): The "rubber band strength" - how hard the robot steers back to center.
-            Like Force = Mass × Acceleration: bigger kp = stronger force = sharper turns.
-            Defaults to 6.8.
-           
-
-    Note:
-        - Target_light: Find this by measuring light over the edge between dark and light areas
-        - Higher speeds work for competition, but start with slower speeds for learning  
-        - kp is like a rubber band connecting your robot to the center line:
-          • Small kp = weak rubber band = gentle corrections
-          • Large kp = strong rubber band = sharp corrections
-          • Too large kp = robot oscillates (wobbles back and forth)
-        """
-
-    def __init__(self, target_light: int = 70, speed: int = 140, kp: float = 6.5) -> None:
+    def __init__(self, target_light: int = 79, speed: int = 200, kp: float = 7) -> None:
         self.target_light = target_light
         self.speed = speed
         self.kp = kp
         self.iteration = 0
-    
+
     async def follow_line(self):
-        """Execute one iteration of line following behavior.
-        
-        This method performs a single iteration of the line following control loop.
-        It reads the light sensor value, calculates steering correction using proportional
-        control, and adjusts motor speeds accordingly. The parent code is responsible
-        for calling this method repeatedly in a loop.
-        
-        The control algorithm works by:
-        1. Reading light reflection from the color sensor
-        2. Calculating error as (target_light - current_light)
-        3. Applying proportional gain (kp) to generate steering correction
-        4. Adjusting left/right motor speeds based on correction
-        
-        Motor behavior:
-        - Left motor (port C): Runs in reverse direction (-speed)
-        - Right motor (port D): Runs in forward direction (+speed)
-        - Steering correction added or subtracted from left, added or subtracted from right
-        
-        Returns:
-            None: Executes one control iteration and returns.
-        
-        Raises:
-            Usually no errors, but the robot might have problems if the motors or sensors stop working properly.
-        
-        Note:
-            - Color sensor must be set to reflection mode before calling this method.
-            - Parent code should call this method repeatedly in a loop for continuous line following
-            - Each call performs one sensor reading and motor speed adjustment
-            - Debug information is printed each iteration showing sensor readings and calculated motor speeds
-        
-        Example:
-            # Parent code controls the loop
-            line_follower = LineFollower(60, 180, 6.8)
-            
-            # Run for specific number of iterations
-            for i in range(100):
-                await line_follower.follow_line()
-                await sleep_ms(100)  # Add delay between iterations
-            
-            # Or run indefinitely
-            while True:
-                await line_follower.follow_line()
-                await sleep_ms(100)
-        """
-        # Turn On Butterfly For 2 Seconds
-        #light_matrix.show_image(light_matrix.IMAGE_BUTTERFLY) # pyright: ignore[reportUndefinedVariable]
-        #sleep(2)        # pyright: ignore[reportUndefinedVariable] # Perform one line following iteration
-        
-        light_intensity = color_sensor.reflection(port.F) # pyright: ignore[reportUndefinedVariable]
+
+        light_intensity = color_sensor.reflection(port.B)
         steering_correction = self.kp * (self.target_light - light_intensity)
-        
+
         left_speed = self.speed + steering_correction
         right_speed = self.speed - steering_correction
-        
-        motor.run(port.C, -int(left_speed)) # pyright: ignore[reportUndefinedVariable]
-        motor.run(port.D, int(right_speed)) # pyright: ignore[reportUndefinedVariable]
-        
-        self.debug_print(self.iteration, self.target_light, self.speed, self.kp, light_intensity, 
-                         steering_correction, left_speed, right_speed)
-        
+
+        motor.run(port.C, -int(left_speed))
+        motor.run(port.D, int(right_speed))
+
         self.iteration += 1
 
-    def debug_print(self, iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed):
-        """Debug printing utility"""
-        print("Iteration: {:3d} | Target_Light: {:3d} | Speed: {:3d} | KP: {:6.2f} | Steering_Correction: {:6.2f} | Left_Speed: {:6.2f} | Right_Speed: {:6.2f}".format(
-            iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed))
-        
-
-    async def stop_motors(self):
-        """Stop both motors"""
-        motor.stop(port.C) # pyright: ignore[reportUndefinedVariable]
-        motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]`        
+                        `        
             }       ,
                     {
                         id: "fn3",
@@ -426,16 +326,15 @@ sys.exit()
                     },                    
                     {
                         id: "fn4",
-                        buttonText: 'Line Counter',
+                        buttonText: 'Line Counter and Line Follower',
                         emoji: '🧿',
                         color: '#8A2BE2',
-                        textPython: `
-# Line Counter
-import runloop, time, sys, motor_pair, motor, force_sensor, runloop # pyright: ignore[reportMissingImports]
-import color, color_sensor, distance_sensor # pyright: ignore[reportMissingImports]
-from hub import light, light_matrix, port, sound # pyright: ignore[reportMissingImports]
+                        textPython: `# Line Counter and Line Follower
+import runloop, time, sys, motor_pair, motor, force_sensor, runloop 
+import color, color_sensor, distance_sensor 
+from hub import light, light_matrix, port, sound 
 from time import sleep, sleep_ms
-from runloop import run # pyright: ignore[reportMissingImports]
+from runloop import run 
 
 # Conversion constants
 DEGREES_PER_CM = 21
@@ -452,10 +351,14 @@ blue = 3
 yellow = 7
 red = 9
 
+# Ports on the robot hub
+distance_port = port.B
+color_port = port.A
+
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-# Remember the last color we saw so we don't count the same color twice in a row
+# Remember the last color seen so we don't count the same color twice in a row
 last_color = None
 
 # This is like a stop sign for our program - when it's True, everything stops
@@ -465,7 +368,7 @@ should_stop = False
 # ☀️ is_near - Function or condition to check if something is close
 ########################################################################
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
+    distance = distance_sensor.distance(distance_port)
     if distance == -1:
         return False
     return distance < distance_threshold
@@ -478,7 +381,7 @@ async def when_blue():
 
     while not should_stop:
         # count the number of times crossing over the blue
-        current_color = color_sensor.color(port.F)
+        current_color = color_sensor.color(color_port)
         if current_color == blue and last_color != blue:
             light.color(light.POWER, current_color)
             last_color = blue
@@ -494,7 +397,7 @@ async def when_yellow():
 
     while not should_stop:
         # count the number of times crossing over the yellow
-        current_color = color_sensor.color(port.F)
+        current_color = color_sensor.color(color_port)
         if current_color == yellow and last_color != yellow:
             light.color(light.POWER, current_color)
             last_color = yellow
@@ -510,7 +413,7 @@ async def when_red():
 
     while not should_stop:
         # count the number of times crossing over the red
-        current_color = color_sensor.color(port.F)
+        current_color = color_sensor.color(color_port)
         if current_color == red and last_color != red:
             light.color(light.POWER, current_color)
             last_color = red
@@ -557,9 +460,42 @@ async def robot_movement():
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 4 * 53, 0)
 
 ########################################################################
+# 🤖 LineFollower - Proportional (Class)
+########################################################################
+class LineFollower:
+
+    def __init__(self, target_light: int = 79, speed: int = 120, kp: float = 7) -> None:
+        self.target_light = target_light
+        self.speed = speed
+        self.kp = kp
+        self.iteration = 0
+
+    async def follow_line(self):
+
+        light_intensity = color_sensor.reflection(color_port)
+        steering_correction = self.kp * (self.target_light - light_intensity)
+
+        light_intensity = color_sensor.reflection(color_port)
+        steering_correction = self.kp * (self.target_light - light_intensity)
+
+        left_speed = self.speed + steering_correction
+        right_speed = self.speed - steering_correction
+
+        motor.run(port.C, -int(left_speed))
+        motor.run(port.D, int(right_speed))
+
+        self.iteration += 1
+
+########################################################################
 # 🤖 Main - Run all functions concurrently
 ########################################################################
 async def main():
+
+    # create a robot object from the LineFollower class
+    robot = LineFollower();
+
+    # from the robot object, call the follow line method
+    await robot.follow_line()
 
     # Run all functions concurrently as events
     run(
@@ -567,6 +503,7 @@ async def main():
         when_blue(),
         when_yellow(),
         when_red(),
+        # robot.follow_line()
         robot_movement()
     )
 

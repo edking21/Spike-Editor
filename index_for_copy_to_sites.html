@@ -219,18 +219,16 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # move forward for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
+        # move forward for 10cm
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
                     },                    {
                         id: "move2",
                         buttonText: 'turn right 90 degrees',
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # turn right 90 degrees
-    degrees = 180 # number of degrees of wheel turn
-    steering = 100 # positive values turn right, negative values turn left
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering)  `
+        # turn right 90 degrees
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)  `
                     },
                     {
                         id: "move4",
@@ -238,8 +236,8 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0)`
+        # start moving
+        motor_pair.move(motor_pair.PAIR_1, 0)`
                     },
                     {
                         id: "move5",
@@ -247,10 +245,9 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # move right 30 for 10 rotations 
-    degrees = 360 * 10 # 10 rotations
-    steering = 30 # positive values turn right, negative values turn left
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering )`
+        # move right 30 for 10 rotations 
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30 )
+        sleep_ms(40)`
                     },
                     {
                         id: "move6",
@@ -258,11 +255,9 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # start moving right 30 
-    steering = 30 # positive values turn right, negative values turn left
-    speed = 220 # 20% of max speed (1100)
-    motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
-    sleep_ms(40)`
+        # start moving right 30 
+        motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
+        sleep_ms(40)`
                     },
                     {
                         id: "move8",
@@ -270,9 +265,9 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
-    sleep_ms(10) # sleep 10 milliseconds`
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10) `
                     },
                     {
                         id: "move9",
@@ -280,8 +275,8 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # set movement speed to 50%
-    movement_speed = int(0.5 * 1100)`
+        # set movement speed to 50% of 1100
+        movement_speed = int(0.5 * 1100)`
                     },
                     {
                         id: "move10",
@@ -289,8 +284,8 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # set movement motors to C+D
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+        # set movement motors to C+D
+        motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                     }
                 ]
             },  // Movement
@@ -509,7 +504,7 @@
                         buttonText: 'Getting Started',
                         emoji: '🧿',
                         color: '#CC0000',
-                        textPython: `# <challenge name here>
+                        textPython: `# Getting Started
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light, light_matrix, port, sound

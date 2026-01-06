@@ -14,6 +14,7 @@ MM_PER_INCH = 25.4
 red_count = 0
 yellow_count = 0
 blue_count = 0
+distance_port = port.B
 
 # Color codes - these numbers represent different colors to the robot
 blue = 3
@@ -33,7 +34,7 @@ should_stop = False
 # ☀️ is_near - Function or condition to check if something is close
 ########################################################################
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
+    distance = distance_sensor.distance(distance_port)
     if distance == -1:
         return False
     return distance < distance_threshold
