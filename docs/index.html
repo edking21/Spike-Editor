@@ -215,22 +215,20 @@
                 snippets: [
                     {
                         id: "move1",
-                        buttonText: 'move forward for 20cm',
+                        buttonText: 'move forward for 10cm',
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # move forward for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
+        # move forward for 10cm
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
                     },                    {
                         id: "move2",
                         buttonText: 'turn right 90 degrees',
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # turn right 90 degrees
-    degrees = 180 # number of degrees of wheel turn
-    steering = 100 # positive values turn right, negative values turn left
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering)  `
+        # turn right 90 degrees
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)  `
                     },
                     {
                         id: "move4",
@@ -238,8 +236,8 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0)`
+        # start moving
+        motor_pair.move(motor_pair.PAIR_1, 0)`
                     },
                     {
                         id: "move5",
@@ -247,10 +245,9 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # move right 30 for 10 rotations 
-    degrees = 360 * 10 # 10 rotations
-    steering = 30 # positive values turn right, negative values turn left
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, degrees, steering )`
+        # move right 30 for 10 rotations 
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30 )
+        sleep_ms(40)`
                     },
                     {
                         id: "move6",
@@ -258,11 +255,9 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # start moving right 30 
-    steering = 30 # positive values turn right, negative values turn left
-    speed = 220 # 20% of max speed (1100)
-    motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
-    sleep_ms(40)`
+        # start moving right 30 
+        motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
+        sleep_ms(40)`
                     },
                     {
                         id: "move8",
@@ -270,9 +265,9 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
-    sleep_ms(10) # sleep 10 milliseconds`
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10) `
                     },
                     {
                         id: "move9",
@@ -280,8 +275,8 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # set movement speed to 50%
-    movement_speed = int(0.5 * 1100)`
+        # set movement speed to 50% of 1100
+        movement_speed = int(0.5 * 1100)`
                     },
                     {
                         id: "move10",
@@ -289,8 +284,8 @@
                         emoji: '🧿',
                         color: '#FF69B4',
                         textPython: `
-    # set movement motors to C+D
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+        # set movement motors to C+D
+        motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                     }
                 ]
             },  // Movement
@@ -348,9 +343,7 @@
                         color: '#FFD700',
                         textPython: `
     # When
-    while <your condition here>:
-        # your code here
-    `
+    while #<your condition or function here>`
                     }
                 ]
             },  // Control
@@ -390,7 +383,7 @@
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    if # <your condition or function here>:`
+    if # <your condition or function here>`
                     },
                     {
                         id: "ctrl1",
@@ -463,7 +456,8 @@
                         buttonText: 'is near (function)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`is_near():`
+                        textPython:`is_near():
+        # your code here`
                     },
                     {
                         id: "fn6",
@@ -472,8 +466,7 @@
                         color: '#87CEEB',
                         textPython:`
     # Reset relative position to 0
-    motor.reset_relative_position(port.A, 0)
-    `                 
+    motor.reset_relative_position(port.A, 0)`                 
                     },
                     {
                         id: "fn6",
@@ -496,7 +489,9 @@
                         color: '#32CD32',
                         textPython: `
     # Operator example
-    result = a + b  `
+    a = 3
+    b = 5
+    result = a + b`
                     }
                 ]
             },  // Operators
@@ -509,74 +504,88 @@
                         buttonText: 'Getting Started',
                         emoji: '🧿',
                         color: '#CC0000',
-                        textPython: `# <challenge name here>
+                        textPython: `# Getting Started
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light, light_matrix, port, sound
 from time import sleep, sleep_ms
 
-#constants
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
+# Conversion constants
+DEGREES_PER_CM = 21        
+DEGREES_PER_INCH = 53       
+MM_PER_INCH = 25.4         
 
-
+########################################################################
+# 🛑 is_color_red - Function to check if the color sensor sees red
+########################################################################
 def is_color_red():
+    """
+    Examples:
+            Using with wait until:      await runloop.until(is_red)
+            Using with repeat until:    await while not (is_red())
+    """
     return color_sensor.color(port.F) == color.RED
 
-
+########################################################################
+# 🎯 is_pressed - Function to check if pressed
+########################################################################
 def is_pressed():
+    """
+    Examples:
+            Using with wait until:      await runloop.until(is_pressed)
+            Using with repeat until:    while not (is_pressed())
+    """
     return force_sensor.pressed(port.A)
 
-
+########################################################################
+# ☀️ is_near - Function or condition to check if something is close
+########################################################################
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
+    """
+    Examples:
+        Using with wait until condition:
+            await runloop.until(is_near)
+        Using with repeat until function:    
+            while not (is_near())
+        Using with lambda wait until: 
+            await runloop.until(lambda: is_near())                      # Default threshold
+            await runloop.until(lambda: is_near (int(6 * MM_PER_INCH))) # 6 inch threshold
+    """
     distance = distance_sensor.distance(port.B)
-    
-    # Check if sensor is working (returns -1 when no reading)
+
     if distance == -1:
         print("Warning: Distance sensor not detecting anything")
         return False
-    
+
     print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+    
     return distance < distance_threshold
 
-
+########################################################################
+# 🤖 Main - Start and Stop is_near test using Wait until condition
+########################################################################
 async def main():
     motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
+    while True:
 
+        # start moving
+        motor_pair.move(motor_pair.PAIR_1, 0)
 
+        # wait until condition
+        await runloop.until (is_near)
 
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10) # Wait 10 milliseconds before checking again
 
 runloop.run(main())
-sys.exit()` 
+sys.exit()
+
+` 
                     },
                     {
                         id: "fn2",
-                        buttonText: 'is_color_red',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `
-    `
-                    },
-                    {
-                        id: "fn3",
-                        buttonText: 'is_pressed',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `
-    `
-                    },
-                    {
-                        id: "fn4",
-                        buttonText: 'is_near',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `
-    `
-                    },
-                    {
-                        id: "fn5",
                         buttonText: 'is_near Unit Test 1',
                         emoji: '🧿',
                         color: '#CC0000',
@@ -621,7 +630,7 @@ sys.exit()
     `
                     },
                     {
-                        id: "fn6",
+                        id: "fn2",
                         buttonText: 'is_near Unit Test 2',
                         emoji: '🧿',
                         color: '#CC0000',
@@ -691,7 +700,7 @@ sys.exit()
                         emoji: '🧿',
                         color: '#8A2BE2',
                         textPython: `
-print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
+        print ("color_sensor.color {:3d}".format(color_sensor.color(port.F)))
  ` 
                     }
                 ]
