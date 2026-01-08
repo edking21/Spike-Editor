@@ -146,7 +146,7 @@
     <div class="left-column">
         <div class="emoji-block">
             <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(1)"></button>
-                <div class="emoji-label">Demos</div>
+                <div class="emoji-label">Class</div>
             </div>
         </div>
     </div>
@@ -194,107 +194,81 @@ class LineFollower:
         `        
                     },
                     {
-                        id: "fn3",
-                        buttonText: 'Line Follower Proportional (Main)',
+                        id: "fn4",
+                        buttonText: 'Line Counter (Color Functions)',
                         emoji: '☀️',
                         color: '#32CD32',
                         textPython: `
-########################################################################
-# 🤖 Main - Line Follower Proportional
-########################################################################
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-    motor.reset_relative_position(port.D, 0)
+#####################################################################
+# 🛑 Watch for blue colors continuously
+#####################################################################
+async def when_blue():
+    global blue_count, last_color, should_stop
 
-    # Create a robot object from the LineFollower class.
-    robot = LineFollower(target_light=70, speed=140, kp=6.5)
+    while not should_stop:
+        # count the number of times crossing over the blue
+        current_color = color_sensor.color(color_port)
+        if current_color == blue and last_color != blue:
+            light.color(light.POWER, current_color)
+            last_color = blue
+            blue_count += 1
 
-    # Repeat until returning to the start point.
+        await runloop.sleep_ms(50)
 
-        # Follow a line using proportional corrections.
-        # Hint the robot class has a follow_line method
-        # robot calls the follow_line method with 
-        # await robot.follow_line()
+#####################################################################
+# 🛑 Watch for yellow colors continuously
+#####################################################################
+async def when_yellow():
+    global yellow_count, last_color, should_stop
 
-        # if a hand is near stop and wait for 2 seconds
-        `
+    while not should_stop:
+        # count the number of times crossing over the yellow
+        current_color = color_sensor.color(color_port)
+        if current_color == yellow and last_color != yellow:
+            light.color(light.POWER, current_color)
+            last_color = yellow
+            yellow_count += 1
+
+        await runloop.sleep_ms(50)
+
+#####################################################################
+# 🛑 Watch for red colors continuously
+#####################################################################
+async def when_red():
+    global red_count, last_color, should_stop
+
+    while not should_stop:
+        # count the number of times crossing over the red
+        current_color = color_sensor.color(color_port)
+        if current_color == red and last_color != red:
+            light.color(light.POWER, current_color)
+            last_color = red
+            red_count += 1
+
+        await runloop.sleep_ms(50)
+
+#####################################################################
+# 🛑 Watch for someone waving their hand near the distance sensor continuously
+#####################################################################
+async def when_hand_wave():
+    global blue_count, yellow_count, red_count, should_stop
+
+    while not should_stop:
+
+        # if sensor is working and hand wave closer than 100mm (4in)
+        if is_near():
+            motor_pair.stop(motor_pair.PAIR_1)
+
+            # Tell all other functions to stop
+            should_stop = True
+
+            print("Blue count:{:2d} Yellow count:{:2d} Red count:{:2d}".format(blue_count, yellow_count, red_count))
+            break
+
+        # Wait a bit before checking distance again
+        await runloop.sleep_ms(50)
+   `
                     },
-                    {
-                        id: "fn3",
-                        buttonText: 'Line Follower Proportional (Hint)',
-                        emoji: '☀️',
-                        color: '#32CD32',
-                        textPython: `# Line Follower Proportional (Hint)
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light, light_matrix, port, sound
-from time import sleep, sleep_ms
-
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
-
-########################################################################
-# ☀️ is_near - Function or condition to check if something is close
-########################################################################
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-
-    distance = distance_sensor.distance(port.F)
-
-    if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
-        return False
-
-    print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-
-    return distance < distance_threshold
-
-########################################################################
-# 🤖 LineFollower - Proportional (Class)
-########################################################################
-class LineFollower:
-
-    def __init__(self, target_light: int = 70, speed: int = 140, kp: float = 6.5) -> None:
-        self.target_light = target_light
-        self.speed = speed
-        self.kp = kp
-        self.iteration = 0
-
-    async def follow_line(self):
-
-        light_intensity = color_sensor.reflection(port.B) 
-        steering_correction = self.kp * (self.target_light - light_intensity)
-
-        left_speed = self.speed + steering_correction
-        right_speed = self.speed - steering_correction
-
-        motor.run(port.C, -int(left_speed)) 
-        motor.run(port.D, int(right_speed)) 
-
-        self.iteration += 1
-
-########################################################################
-# 🤖 Main - Follow a line using proportional corrections. 
-########################################################################
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-    motor.reset_relative_position(port.D, 0)
-
-    # Create a robot object from the LineFollower class.
-    robot = LineFollower(target_light=70, speed=140, kp=6.5)
-
-    # Repeat until returning to start point.
-    # Hint: use relative_position (function) to check distance
-
-        # Call the follow_line method from the robot object
-        # await robot.follow_line()
-
-        # if a hand is near stop and wait for 2 seconds
-
-runloop.run(main())
-sys.exit()
-`
-                    },                    
                     {
                         id: "fn4",
                         buttonText: 'Line Counter and Line Follower',

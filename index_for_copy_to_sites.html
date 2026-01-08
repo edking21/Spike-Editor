@@ -383,7 +383,7 @@
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    if # <your condition or function here>`
+        if # <your condition or function here>`
                     },
                     {
                         id: "ctrl1",
@@ -457,7 +457,7 @@
                         emoji: '🧿',
                         color: '#87CEEB',
                         textPython:`is_near():
-        # your code here`
+            # your code here`
                     },
                     {
                         id: "fn6",
@@ -473,8 +473,7 @@
                         buttonText: 'relative position (function)',
                         emoji: '🧿',
                         color: '#87CEEB',
-                        textPython:`
-    while not (motor.relative_position(port.A) > 1000):
+                        textPython:`(motor.relative_position(port.D) > 1000):
         # <Your code here>`                 
                     },
                 ]
@@ -506,15 +505,39 @@
                         emoji: '🧿',
                         color: '#CC0000',
                         textPython: `# Getting Started
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light, light_matrix, port, sound
+import runloop, time, sys, motor_pair, motor, force_sensor, runloop 
+import color, color_sensor, distance_sensor 
+from hub import light, light_matrix, port, sound 
 from time import sleep, sleep_ms
+from runloop import run 
 
 # Conversion constants
-DEGREES_PER_CM = 21        
-DEGREES_PER_INCH = 53       
-MM_PER_INCH = 25.4         
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
+
+# how many times we see each color
+red_count = 0
+yellow_count = 0
+blue_count = 0
+
+# Color codes - these numbers represent different colors to the robot
+blue = 3
+yellow = 7
+red = 9
+
+# Ports on the robot hub
+distance_port = port.B
+color_port = port.A
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+# Remember the last color seen so we don't count the same color twice in a row
+last_color = None
+
+# This is like a stop sign for our program - when it's True, everything stops
+should_stop = False
 
 ########################################################################
 # 🛑 is_color_red - Function to check if the color sensor sees red
@@ -544,13 +567,12 @@ def is_pressed():
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
     """
     Examples:
-        Using with wait until condition:
+        with if
+            if is_near():
+        with wait until condition:
             await runloop.until(is_near)
-        Using with repeat until function:    
+        with repeat until function:    
             while not (is_near())
-        Using with lambda wait until: 
-            await runloop.until(lambda: is_near())                      # Default threshold
-            await runloop.until(lambda: is_near (int(6 * MM_PER_INCH))) # 6 inch threshold
     """
     distance = distance_sensor.distance(port.B)
 
@@ -584,101 +606,6 @@ runloop.run(main())
 sys.exit()
 
 ` 
-                    },
-                    {
-                        id: "fn2",
-                        buttonText: 'is_near Unit Test 1',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `# Is Near Unit Test 1
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
-from time import sleep, sleep_ms
-
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-
-    while True:
-
-        # start moving
-        motor_pair.move(motor_pair.PAIR_1, 0)
-
-        # wait until condition (all lines are valid)
-        await runloop.until (is_near)                              
-        await runloop.until (lambda: is_near())                   
-        await runloop.until (lambda: is_near(200))                
-
-        # stop moving
-        motor_pair.stop(motor_pair.PAIR_1)
-        sleep_ms(10) # sleep 10 milliseconds to ensure stop command is processed
-
-
-def is_pressed():
-    return force_sensor.pressed(port.A)
-
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
-    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
-    return distance != -1 and distance < distance_threshold
-
-def is_color_red():
-    return color_sensor.color(port.A) == color.RED
-
-runloop.run(main())
-sys.exit()
-    `
-                    },
-                    {
-                        id: "fn2",
-                        buttonText: 'is_near Unit Test 2',
-                        emoji: '🧿',
-                        color: '#CC0000',
-                        textPython: `# Is Near Unit Test 2
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
-from time import sleep, sleep_ms
-
-#constants
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-
-async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-
-    while not is_near():
-
-        # move forward for 10cm
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_INCH, 0)
-
-        # check for near when moving forward
-        if is_near(): break
-
-        # move backward for 10cm
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * DEGREES_PER_INCH, 0)
-
-    # Turn On Smiley Face For 2 Seconds
-    light_matrix.show_image(light_matrix.IMAGE_SMILE)
-    sleep(2)
-
-
-def is_pressed():
-    return force_sensor.pressed(port.A)
-
-def is_near(distance_threshold=100): # 100mm (4 inches) minimum
-    distance = distance_sensor.distance(port.B)
-    print ("Distance {:6.2f}".format(distance_sensor.distance(port.B)))
-    return distance != -1 and distance < distance_threshold
-
-def is_color_red():
-    return color_sensor.color(port.A) == color.RED
-
-runloop.run(main())
-sys.exit()
-    `
                     },
                 ]
             },   // Hints
