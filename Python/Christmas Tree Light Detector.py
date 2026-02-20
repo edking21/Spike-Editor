@@ -5,16 +5,6 @@ from hub import light, light_matrix, port, sound
 from time import sleep, sleep_ms
 from runloop import run
 
-# Conversion constants
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
-
-# how many times we see each color
-red_count = 0
-yellow_count = 0
-blue_count = 0
-
 # Color codes - these numbers represent different colors to the robot
 blue = 3
 yellow = 7
@@ -27,20 +17,15 @@ color_port = port.B
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-# Remember the last color seen so we don't count the same color twice in a row
-last_color = None
-
-# This is like a stop sign for our program - when it's True, everything stops
-should_stop = False
-
 ########################################################################
 # 🛑 is_color_red - Function to check if the color sensor sees red
 ########################################################################
 def is_color_red():
     """
-    Examples:
-            Using with wait until:    await runloop.until(is_red)
-            Using with repeat until:    await while not (is_red())
+    Check if the color sensor sees red.
+    
+    Returns:
+        True if the color is red, False otherwise
     """
     return color_sensor.color(port.F) == color.RED
 
@@ -49,9 +34,10 @@ def is_color_red():
 ########################################################################
 def is_pressed():
     """
-    Examples:
-            Using with wait until:    await runloop.until(is_pressed)
-            Using with repeat until:    while not (is_pressed())
+    Check if the force sensor is being pressed.
+    
+    Returns:
+        True if the sensor is pressed, False otherwise
     """
     return force_sensor.pressed(port.A)
 
@@ -60,13 +46,13 @@ def is_pressed():
 ########################################################################
 def is_near(distance_threshold=100): # 100mm (4 inches) minimum
     """
-    Examples:
-        with if
-            if is_near():
-        with wait until condition:
-            await runloop.until(is_near)
-        with repeat until function:
-            while not (is_near())
+    Check if an object is close to the distance sensor.
+    
+    How far away is close?
+        Default: 100mm (4 inches) or less
+    
+    Returns:
+        True if something is close, False otherwise
     """
     distance = distance_sensor.distance(port.B)
 
@@ -107,10 +93,14 @@ BUFFER_SIZE = 10# Number of recent readings to analyze
 ########################################################################
 def analyze_light_state(readings):
     """
-    Analyze recent color readings to determine if Christmas light is on/off
-
-    State 1 (OFF): Consistently reads black (0)
-    State 2 (ON): Random mix of no color (-1), black (0), or white (10)
+    Look at the recent color readings and figure out if the Christmas light is on or off.
+    
+    How it works:
+        - Light OFF: Mostly black readings (darkness)
+        - Light ON: Mix of white, black, and no color (flashing light pattern)
+    
+    Returns:
+        "on" if light is on, "off" if light is off, "unknown" if not sure yet
     """
     if len(readings) < BUFFER_SIZE:
         return "unknown"
@@ -134,7 +124,14 @@ def analyze_light_state(readings):
 # 💡 Set hub power button LED based on light state
 ########################################################################
 def set_hub_led(state):
-    """Set power button LED: Green for ON, Red for OFF"""
+    """
+    Change the color of the power button LED to show the light state.
+    
+    Colors:
+        - Green: Light is ON
+        - Red: Light is OFF
+        - Yellow: Unknown state (not sure yet)
+    """
     if state == "on":
         light.color(light.POWER, green)
     elif state == "off":
@@ -146,6 +143,15 @@ def set_hub_led(state):
 # 🔄 Main monitoring loop
 ########################################################################
 async def monitor_christmas_light():
+    """
+    Keep reading the color sensor and figure out if the Christmas light is on or off.
+    
+    This function runs forever and:
+        1. Reads the color sensor over and over
+        2. Keeps track of the last 10 readings
+        3. Checks if the light state changed
+        4. Updates the power button LED to show the state
+    """
     global light_state, reading_buffer
 
     print("🎄 Christmas Light Detector Started")
@@ -182,6 +188,16 @@ async def monitor_christmas_light():
         await runloop.sleep_ms(100)# Check every 100ms
 
 async def rotate_right_medium_motor():
+    """
+    Make the right motor dance when the Christmas light is on.
+    
+    The motor:
+        - Rotates 180 degrees clockwise
+        - Turns off the distance sensor pixels
+        - Rotates another 180 degrees clockwise
+        - Blinks the distance sensor pixels
+        - Only runs when the light is ON
+    """
     velocity = int(0.75*1100)
     global light_state
     while True:
@@ -202,6 +218,14 @@ async def rotate_right_medium_motor():
             await runloop.sleep_ms(100)  # Check again in 100ms
 
 async def rotate_left_medium_motor():
+    """
+    Make the left motor dance when the Christmas light is on.
+    
+    The motor:
+        - Rotates 180 degrees clockwise
+        - Then rotates 180 degrees counter-clockwise
+        - Only runs when the light is ON
+    """
     velocity = int(0.75*1100)
     global light_state
     while True:
@@ -213,9 +237,18 @@ async def rotate_left_medium_motor():
             await runloop.sleep_ms(100)  # Check again in 100ms
 
 ########################################################################
-# 🤖 Main - Start and Stop is_near test using Wait until condition
+# 🤖 Main - Start the Christmas Tree Light Detector
 ########################################################################
 async def main():
+    """
+    Start the program! This runs three things at the same time:
+    
+        1. monitor_christmas_light() - Watches the color sensor and figures out if light is on/off
+        2. rotate_left_medium_motor() - Dances the left motor when light is detected
+        3. rotate_right_medium_motor() - Dances the right motor when light is detected
+    
+    All three functions run together using run() function.
+    """
        
     runloop.run(monitor_christmas_light(), rotate_left_medium_motor(), rotate_right_medium_motor())
 
