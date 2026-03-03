@@ -9,7 +9,80 @@ param(
     [string]$ClassLibraryOutputFile = "class_library_for_copy_to_sites.html"
 )
 
+$ProjectRoot = Split-Path -Path $PSScriptRoot -Parent
+
+function Resolve-PathWithBase {
+    param(
+        [string]$PathValue,
+        [string]$BasePath
+    )
+
+    if ([System.IO.Path]::IsPathRooted($PathValue)) {
+        return $PathValue
+    }
+
+    return Join-Path $BasePath $PathValue
+}
+
+$IndexFile = Resolve-PathWithBase -PathValue $IndexFile -BasePath $ProjectRoot
+$TrainingCampFile = Resolve-PathWithBase -PathValue $TrainingCampFile -BasePath $ProjectRoot
+$ClassLibraryFile = Resolve-PathWithBase -PathValue $ClassLibraryFile -BasePath $ProjectRoot
+$UtilsFile = Resolve-PathWithBase -PathValue $UtilsFile -BasePath $PSScriptRoot
+$IndexOutputFile = Resolve-PathWithBase -PathValue $IndexOutputFile -BasePath $PSScriptRoot
+$TrainingCampOutputFile = Resolve-PathWithBase -PathValue $TrainingCampOutputFile -BasePath $PSScriptRoot
+$ClassLibraryOutputFile = Resolve-PathWithBase -PathValue $ClassLibraryOutputFile -BasePath $PSScriptRoot
+
 Write-Host "Merging HTML files with $UtilsFile for Google Sites deployment..." -ForegroundColor Green
+
+function Get-PreferredInputFile {
+    param(
+        [string]$SourceFile,
+        [string]$OutputFile
+    )
+
+    if ((Test-Path $OutputFile) -and ((Get-Item $OutputFile).LastWriteTime -gt (Get-Item $SourceFile).LastWriteTime)) {
+        Write-Host "Using newer output as input: $OutputFile" -ForegroundColor DarkYellow
+        return $OutputFile
+    }
+
+    return $SourceFile
+}
+
+function Merge-PageWithUtils {
+    param(
+        [string]$InputFile,
+        [string]$OutputFile,
+        [string]$UtilsReplacement
+    )
+
+    $content = Get-Content $InputFile -Raw -Encoding UTF8
+
+    # Replace external utils.js include when present.
+    $patternScriptSrc = '<script src="\.\/(?:utils\/)?utils\.js"><\/script>'
+    $updated = $content -replace $patternScriptSrc, $UtilsReplacement
+
+    # If file already has inlined utils block, refresh that block instead.
+    if ($updated -eq $content) {
+        $patternInlineUtils = '(?s)<script>\s*// Utility functions \(from utils\.js\).*?<\/script>'
+        $updated = $content -replace $patternInlineUtils, $UtilsReplacement
+    }
+
+    $updated | Set-Content $OutputFile -Encoding UTF8
+}
+
+function Ensure-OutputDirectories {
+    param(
+        [string[]]$OutputFiles
+    )
+
+    foreach ($outputFile in $OutputFiles) {
+        $parentDir = Split-Path -Path $outputFile -Parent
+        if (-not [string]::IsNullOrWhiteSpace($parentDir) -and -not (Test-Path $parentDir)) {
+            New-Item -Path $parentDir -ItemType Directory -Force | Out-Null
+            Write-Host "Created missing output directory: $parentDir" -ForegroundColor DarkYellow
+        }
+    }
+}
 
 # Check if required files exist
 $filesToCheck = @($IndexFile, $TrainingCampFile, $ClassLibraryFile, $UtilsFile)
@@ -19,6 +92,9 @@ foreach ($file in $filesToCheck) {
         exit 1
     }
 }
+
+# Ensure output directories exist before writing merged files
+Ensure-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
 
 try {
     # Read the utils.js file once
@@ -30,28 +106,22 @@ try {
     # Create the replacement content with proper script tags
     $utilsReplacement = "<script>`n        // Utility functions (from utils.js)`n$indentedUtils`n    </script>"
     
-    # Pattern to match the utils.js script tag
-    $pattern = '<script src="\.\/utils\.js"><\/script>'
-    
     # Process index.html
     Write-Host "Processing $IndexFile..." -ForegroundColor Cyan
-    $indexContent = Get-Content $IndexFile -Raw -Encoding UTF8
-    $mergedIndexContent = $indexContent -replace $pattern, $utilsReplacement
-    $mergedIndexContent | Set-Content $IndexOutputFile -Encoding UTF8
+    $indexInputFile = Get-PreferredInputFile -SourceFile $IndexFile -OutputFile $IndexOutputFile
+    Merge-PageWithUtils -InputFile $indexInputFile -OutputFile $IndexOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $IndexOutputFile" -ForegroundColor Green
     
     # Process Training Camp.html
     Write-Host "Processing $TrainingCampFile..." -ForegroundColor Cyan
-    $trainingCampContent = Get-Content $TrainingCampFile -Raw -Encoding UTF8
-    $mergedTrainingCampContent = $trainingCampContent -replace $pattern, $utilsReplacement
-    $mergedTrainingCampContent | Set-Content $TrainingCampOutputFile -Encoding UTF8
+    $trainingCampInputFile = Get-PreferredInputFile -SourceFile $TrainingCampFile -OutputFile $TrainingCampOutputFile
+    Merge-PageWithUtils -InputFile $trainingCampInputFile -OutputFile $TrainingCampOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $TrainingCampOutputFile" -ForegroundColor Green
     
     # Process Class Library.html
     Write-Host "Processing $ClassLibraryFile..." -ForegroundColor Cyan
-    $classLibraryContent = Get-Content $ClassLibraryFile -Raw -Encoding UTF8
-    $mergedClassLibraryContent = $classLibraryContent -replace $pattern, $utilsReplacement
-    $mergedClassLibraryContent | Set-Content $ClassLibraryOutputFile -Encoding UTF8
+    $classLibraryInputFile = Get-PreferredInputFile -SourceFile $ClassLibraryFile -OutputFile $ClassLibraryOutputFile
+    Merge-PageWithUtils -InputFile $classLibraryInputFile -OutputFile $ClassLibraryOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $ClassLibraryOutputFile" -ForegroundColor Green
     
     # Display file information

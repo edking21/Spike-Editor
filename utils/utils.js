@@ -97,13 +97,14 @@ async function fetchGitHubRelease() {
         if (response.ok) {
             const release = await response.json();
             const releaseInfo = document.getElementById('release-info');
-            releaseInfo.textContent = `© 2025 Spike Editor - Release ${release.name}`;
+            const releaseLabel = (release.name && release.name.trim()) ? release.name : release.tag_name;
+            releaseInfo.textContent = `© Spike Editor - Release ${releaseLabel}`;
         } else {
             throw new Error('Failed to fetch release');
         }
     } catch (error) {
         console.warn('Could not fetch GitHub release:', error);
         const releaseInfo = document.getElementById('release-info');
-        releaseInfo.textContent = '© 2025 Spike Editor - Release v1.0.0';
+        releaseInfo.textContent = '© Spike Editor - Release v1.0.0';
     }
 }

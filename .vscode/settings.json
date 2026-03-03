@@ -1,5 +1,6 @@
 {
   "workbench.statusBar.visible": true,
   "window.zoomLevel": 2,
-  "files.autoSave": "afterDelay"
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 500
 }

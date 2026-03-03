@@ -13,7 +13,7 @@
             "command": "powershell",
             "args": [
                 "-Command",
-                "if (!(Test-Path 'docs')) { mkdir docs }; Copy-Item 'index.html' 'docs/index.html' -Force; git add .; git commit -m 'Publish-Spike-Editor'; git push origin main; Write-Host '✅ Published!' -ForegroundColor Green"
+                "if (!(Test-Path 'docs')) { mkdir docs }; if (!(Test-Path 'docs/utils')) { mkdir 'docs/utils' -Force | Out-Null }; Copy-Item 'index.html' 'docs/index.html' -Force; Copy-Item 'utils/utils.js' 'docs/utils/utils.js' -Force; git add .; git commit -m 'Publish-Spike-Editor'; git push origin main; Write-Host '✅ Published!' -ForegroundColor Green"
             ],
             "group": "build",
             "presentation": {
