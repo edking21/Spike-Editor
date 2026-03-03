@@ -1,5 +1,4 @@
-{"statusBar.visible": true}{
-    "tasks.showQuickPick": true,
-    "task.quickOpen.showAll": true,
-    "workbench.action.tasks.showTasks": true
+{
+  "workbench.statusBar.visible": true,
+  "window.zoomLevel": 2
 }
