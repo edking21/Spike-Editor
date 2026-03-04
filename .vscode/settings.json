@@ -2,5 +2,8 @@
   "workbench.statusBar.visible": true,
   "window.zoomLevel": 2,
   "files.autoSave": "afterDelay",
-  "files.autoSaveDelay": 500
+  "files.autoSaveDelay": 500,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false
 }
