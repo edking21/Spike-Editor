@@ -1,6 +1,5 @@
 param(
     [string]$IndexFile = "index.html",
-    [string]$TrainingCampFile_1 = "Training Camp.html_1",
     [string]$TrainingCampFile = "Training Camp.html",
     [string]$ClassLibraryFile = "Class Library.html",
     [string]$UtilsFile = "utils.js",
@@ -48,7 +47,7 @@ function Get-PreferredInputFile {
     return $SourceFile
 }
 
-function Merge-PageWithUtils {
+function Update-PageWithUtils {
     param(
         [string]$InputFile,
         [string]$OutputFile,
@@ -70,7 +69,7 @@ function Merge-PageWithUtils {
     $updated | Set-Content $OutputFile -Encoding UTF8
 }
 
-function Ensure-OutputDirectories {
+function New-OutputDirectories {
     param(
         [string[]]$OutputFiles
     )
@@ -94,7 +93,7 @@ foreach ($file in $filesToCheck) {
 }
 
 # Ensure output directories exist before writing merged files
-Ensure-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
+New-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
 
 try {
     # Read the utils.js file once
@@ -109,19 +108,19 @@ try {
     # Process index.html
     Write-Host "Processing $IndexFile..." -ForegroundColor Cyan
     $indexInputFile = Get-PreferredInputFile -SourceFile $IndexFile -OutputFile $IndexOutputFile
-    Merge-PageWithUtils -InputFile $indexInputFile -OutputFile $IndexOutputFile -UtilsReplacement $utilsReplacement
+    Update-PageWithUtils -InputFile $indexInputFile -OutputFile $IndexOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $IndexOutputFile" -ForegroundColor Green
     
     # Process Training Camp.html
     Write-Host "Processing $TrainingCampFile..." -ForegroundColor Cyan
     $trainingCampInputFile = Get-PreferredInputFile -SourceFile $TrainingCampFile -OutputFile $TrainingCampOutputFile
-    Merge-PageWithUtils -InputFile $trainingCampInputFile -OutputFile $TrainingCampOutputFile -UtilsReplacement $utilsReplacement
+    Update-PageWithUtils -InputFile $trainingCampInputFile -OutputFile $TrainingCampOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $TrainingCampOutputFile" -ForegroundColor Green
     
     # Process Class Library.html
     Write-Host "Processing $ClassLibraryFile..." -ForegroundColor Cyan
     $classLibraryInputFile = Get-PreferredInputFile -SourceFile $ClassLibraryFile -OutputFile $ClassLibraryOutputFile
-    Merge-PageWithUtils -InputFile $classLibraryInputFile -OutputFile $ClassLibraryOutputFile -UtilsReplacement $utilsReplacement
+    Update-PageWithUtils -InputFile $classLibraryInputFile -OutputFile $ClassLibraryOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $ClassLibraryOutputFile" -ForegroundColor Green
     
     # Display file information
