@@ -47,6 +47,12 @@ Sync-ByNewest -RootPath "Class Library.html" -DocsPath "docs/Class Library.html"
 Sync-ByNewest -RootPath "Videos.html" -DocsPath "docs/Videos.html"
 Sync-ByNewest -RootPath "utils/utils.js" -DocsPath "docs/utils/utils.js"
 
+# Publish lowercase alias to support links that use class library.html
+if (!(Test-Path "docs/class-library")) {
+    New-Item -Path "docs/class-library" -ItemType Directory -Force | Out-Null
+}
+Copy-Item "Class Library.html" "docs/class-library/index.html" -Force
+
 git add .
 git commit -m "Publish-Spike-Editor" 2>$null
 if ($LASTEXITCODE -ne 0) {
