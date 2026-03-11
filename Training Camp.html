@@ -20,13 +20,29 @@
             height: 48px;
             display: flex;
             align-items: center;
-            gap: 22px;
             padding: 0 20px;
             background-color: #ffffff;
             border-bottom: 1px solid #e0e0e0;
             box-sizing: border-box;
             z-index: 1000;
             font-family: Arial, sans-serif;
+            justify-content: space-between;
+            gap: 0;
+        }
+
+        .menu-brand {
+            font-size: 22px;
+            font-weight: 700;
+            color: #202124;
+            white-space: nowrap;
+        }
+
+        .menu-links {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            height: 48px;
         }
 
         .top-menu a {
@@ -193,10 +209,13 @@
 </head>
 <body>
     <div class="top-menu">
-        <a href="/Spike-Editor/index.html">Home</a>
-        <a class="active" href="/Spike-Editor/Training%20Camp.html">Training Camp</a>
-        <a href="/Spike-Editor/Class%20Library.html">Class Library</a>
-        <a href="/Spike-Editor/Videos.html">Videos</a>
+        <div class="menu-brand">Spike Editor</div>
+        <div class="menu-links">
+            <a href="/Spike-Editor/index.html">Home</a>
+            <a class="active" href="/Spike-Editor/Training%20Camp.html">Training Camp</a>
+            <a href="/Spike-Editor/Class%20Library.html">Class Library</a>
+            <a href="/Spike-Editor/Videos.html">Videos</a>
+        </div>
     </div>
     <div class="left-column">
         <div class="emoji-block">
