@@ -399,8 +399,8 @@
                         emoji: '🧿',
                         color: '#DAA520',
                         textPython: `
-    # wait until condition 
-    await runloop.until # <your sensor condition here>`
+        # wait until condition 
+        await runloop.until # <your sensor condition here>`
                     },
                     {
                         id: "ctrl3",
@@ -570,9 +570,9 @@ def is_pressed():
 def is_near(distance_threshold=100): # 100mm (4 inches) threshold
     """
     Examples:
-        Using with if:                   if is_near():
+        Using with if:                  if is_near():
         Using with wait until           await runloop.until(is_near)
-        Using with repeat until         await runloop.until(lambda: is_near(200))
+        Using with wait until           await runloop.until(lambda: is_near(200))
         Using with repeat until:        while is_near():
         Using with repeat until:        while is_near(200):  # 200mm (8 inches) threshold
     """
