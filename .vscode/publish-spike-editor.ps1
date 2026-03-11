@@ -1,0 +1,24 @@
+$ErrorActionPreference = "Stop"
+
+if (!(Test-Path "docs")) {
+    New-Item -Path "docs" -ItemType Directory | Out-Null
+}
+
+if (!(Test-Path "docs/utils")) {
+    New-Item -Path "docs/utils" -ItemType Directory -Force | Out-Null
+}
+
+Copy-Item "index.html" "docs/index.html" -Force
+Copy-Item "Training Camp.html" "docs/Training Camp.html" -Force
+Copy-Item "Class Library.html" "docs/Class Library.html" -Force
+Copy-Item "Videos.html" "docs/Videos.html" -Force
+Copy-Item "utils/utils.js" "docs/utils/utils.js" -Force
+
+git add .
+git commit -m "Publish-Spike-Editor" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "INFO: No new changes to commit." -ForegroundColor Yellow
+}
+
+git push origin main
+Write-Host "SUCCESS: Published all 4 tabs!" -ForegroundColor Green
