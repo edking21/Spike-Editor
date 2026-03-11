@@ -1,7 +1,8 @@
 [
-    {
-        "key": "ctrl+alt+p",
-        "command": "workbench.action.tasks.build",
-        "when": "workspaceFolderCount > 0"
-    }
+{
+"key": "ctrl+alt+p",
+"command": "workbench.action.tasks.runTask",
+"args": "📚 Publish Spike Editor",
+"when": "workspaceFolderCount > 0"
+}
 ]
