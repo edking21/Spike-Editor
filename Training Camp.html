@@ -44,6 +44,20 @@
             margin-right: 0;
         }
 
+        .menu-toggle {
+            display: none;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 24px;
+            line-height: 48px;
+            height: 48px;
+            width: 32px;
+            cursor: pointer;
+            padding: 0;
+            margin-right: 10px;
+        }
+
         .menu-brand {
             font-size: 16px;
             font-weight: 400;
@@ -58,6 +72,14 @@
             align-items: center;
             gap: 22px;
             height: 48px;
+        }
+
+        .mobile-sidebar {
+            display: none;
+        }
+
+        .mobile-overlay {
+            display: none;
         }
 
         .top-menu a {
@@ -221,10 +243,81 @@
         .emoji-container .yellow-circle { background-color: #FFD700 !important; }
         .emoji-container .dark-yellow-circle { background-color: #DAA520 !important; }
         .emoji-container .green-circle { background-color: #32CD32 !important; }
+
+        @media (max-width: 500px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .menu-links {
+                display: none;
+            }
+
+            .menu-search {
+                margin-left: auto;
+            }
+
+            .mobile-sidebar {
+                display: block;
+                position: fixed;
+                top: 48px;
+                left: 0;
+                width: 230px;
+                height: calc(100vh - 48px);
+                background-color: #1a73e8;
+                transform: translateX(-100%);
+                transition: transform 0.2s ease;
+                z-index: 1200;
+                padding-top: 8px;
+            }
+
+            .mobile-sidebar a {
+                display: block;
+                color: #ffffff;
+                text-decoration: none;
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            .mobile-sidebar a.active {
+                background-color: rgba(255, 255, 255, 0.18);
+            }
+
+            .mobile-overlay {
+                display: block;
+                position: fixed;
+                top: 48px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.35);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s ease;
+                z-index: 1100;
+            }
+
+            body.mobile-menu-open .mobile-sidebar {
+                transform: translateX(0);
+            }
+
+            body.mobile-menu-open .mobile-overlay {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="mobile-sidebar">
+        <a href="/Spike-Editor/index.html" onclick="closeMobileMenu()">Home</a>
+        <a class="active" href="/Spike-Editor/Training%20Camp.html" onclick="closeMobileMenu()">Training Camp</a>
+        <a href="/Spike-Editor/Class%20Library.html" onclick="closeMobileMenu()">Class Library</a>
+        <a href="/Spike-Editor/Videos.html" onclick="closeMobileMenu()">Videos</a>
+    </div>
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
     <div class="top-menu">
+        <button class="menu-toggle" type="button" aria-label="Open menu" title="Open menu" onclick="toggleMobileMenu()">☰</button>
         <div class="menu-brand">Spike Editor</div>
         <div class="menu-links">
             <a href="/Spike-Editor/index.html">Home</a>
@@ -250,6 +343,20 @@
         </div>
     </div>
     <script>
+        function toggleMobileMenu() {
+            document.body.classList.toggle('mobile-menu-open');
+        }
+
+        function closeMobileMenu() {
+            document.body.classList.remove('mobile-menu-open');
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+
         function searchCurrentPage() {
             const query = prompt('Search this page:');
             if (!query) return;
