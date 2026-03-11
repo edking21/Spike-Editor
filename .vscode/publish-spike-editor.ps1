@@ -8,11 +8,44 @@ if (!(Test-Path "docs/utils")) {
     New-Item -Path "docs/utils" -ItemType Directory -Force | Out-Null
 }
 
-Copy-Item "index.html" "docs/index.html" -Force
-Copy-Item "Training Camp.html" "docs/Training Camp.html" -Force
-Copy-Item "Class Library.html" "docs/Class Library.html" -Force
-Copy-Item "Videos.html" "docs/Videos.html" -Force
-Copy-Item "utils/utils.js" "docs/utils/utils.js" -Force
+function Sync-ByNewest {
+    param(
+        [string]$RootPath,
+        [string]$DocsPath
+    )
+
+    $rootExists = Test-Path $RootPath
+    $docsExists = Test-Path $DocsPath
+
+    if (-not $rootExists -and -not $docsExists) {
+        throw "Missing both files: '$RootPath' and '$DocsPath'"
+    }
+
+    if ($rootExists -and -not $docsExists) {
+        Copy-Item $RootPath $DocsPath -Force
+        return
+    }
+
+    if ($docsExists -and -not $rootExists) {
+        Copy-Item $DocsPath $RootPath -Force
+        return
+    }
+
+    $rootTime = (Get-Item $RootPath).LastWriteTimeUtc
+    $docsTime = (Get-Item $DocsPath).LastWriteTimeUtc
+
+    if ($docsTime -gt $rootTime) {
+        Copy-Item $DocsPath $RootPath -Force
+    } else {
+        Copy-Item $RootPath $DocsPath -Force
+    }
+}
+
+Sync-ByNewest -RootPath "index.html" -DocsPath "docs/index.html"
+Sync-ByNewest -RootPath "Training Camp.html" -DocsPath "docs/Training Camp.html"
+Sync-ByNewest -RootPath "Class Library.html" -DocsPath "docs/Class Library.html"
+Sync-ByNewest -RootPath "Videos.html" -DocsPath "docs/Videos.html"
+Sync-ByNewest -RootPath "utils/utils.js" -DocsPath "docs/utils/utils.js"
 
 git add .
 git commit -m "Publish-Spike-Editor" 2>$null
