@@ -26,8 +26,21 @@
             box-sizing: border-box;
             z-index: 1000;
             font-family: Arial, sans-serif;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 0;
+        }
+
+        .menu-search {
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 18px;
+            line-height: 48px;
+            height: 48px;
+            width: 28px;
+            cursor: pointer;
+            padding: 0;
+            margin-right: 14px;
         }
 
         .menu-brand {
@@ -39,7 +52,7 @@
         }
 
         .menu-links {
-            margin-left: auto;
+            margin-left: 30px;
             display: flex;
             align-items: center;
             gap: 22px;
@@ -211,6 +224,7 @@
 </head>
 <body>
     <div class="top-menu">
+        <button class="menu-search" type="button" aria-label="Search this page" title="Search this page" onclick="searchCurrentPage()">&#128269;</button>
         <div class="menu-brand">Spike Editor</div>
         <div class="menu-links">
             <a href="/Spike-Editor/index.html">Home</a>
@@ -235,6 +249,16 @@
         </div>
     </div>
     <script>
+        function searchCurrentPage() {
+            const query = prompt('Search this page:');
+            if (!query) return;
+
+            const found = window.find(query, false, false, true, false, false, false);
+            if (!found) {
+                alert(`No matches found for "${query}".`);
+            }
+        }
+
         const snippetData = {
             1: {  // Main
                 snippets: [
