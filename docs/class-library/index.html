@@ -6,18 +6,45 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 2px;
+            padding: 46px 2px 2px 2px;
             background-color: #ffffff;
             color: #000000;
             margin: 0;
         }
 
-        .left-column {
+        .top-menu {
             position: fixed;
             top: 0;
             left: 0;
+            right: 0;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 12px;
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ccc;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .top-menu a {
+            color: #000000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .top-menu a.active {
+            text-decoration: underline;
+        }
+
+        .left-column {
+            position: fixed;
+            top: 44px;
+            left: 0;
             width: 80px;
-            height: 100vh;
+            height: calc(100vh - 44px);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -143,6 +170,12 @@
     </style>
 </head>
 <body>
+    <div class="top-menu">
+        <a href="index.html">Home</a>
+        <a href="Training%20Camp.html">Training Camp</a>
+        <a class="active" href="Class%20Library.html">Class Library</a>
+        <a href="Videos.html">Videos</a>
+    </div>
     <div class="left-column">
         <div class="emoji-block">
             <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(1)"></button>
