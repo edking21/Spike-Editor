@@ -66,6 +66,20 @@ function Update-PageWithUtils {
         $updated = $content -replace $patternInlineUtils, $UtilsReplacement
     }
 
+    # Remove mobile/sidebar/top-menu/menu-links/menu-search markup for Google Sites output.
+    # Matches elements where class contains mobile-sidebar, mobile-overlay, top-menu, menu-links, or menu-search,
+    # including additional class names and arbitrary attribute ordering.
+    $patternMobileSidebar = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-sidebar\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
+    $patternMobileOverlay = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-overlay\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
+    $patternTopMenu = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\btop-menu\b[^"'']*["''])[^>]*>.*?(?=\s*<div\s+class=["'']left-column["'']|\s*<h1\b)'
+    $patternMenuLinks = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-links\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
+    $patternMenuSearchButton = '(?is)<button\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-search\b[^"'']*["''])[^>]*>.*?<\/button>\s*'
+    $updated = $updated -replace $patternMobileSidebar, ''
+    $updated = $updated -replace $patternMobileOverlay, ''
+    $updated = $updated -replace $patternTopMenu, ''
+    $updated = $updated -replace $patternMenuLinks, ''
+    $updated = $updated -replace $patternMenuSearchButton, ''
+
     $updated | Set-Content $OutputFile -Encoding UTF8
 }
 
