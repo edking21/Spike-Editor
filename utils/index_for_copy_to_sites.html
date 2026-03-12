@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            $12px 2px 2px 2px;
+            padding: 2px 2px 2px 2px;
             background-color: #ffffff;
             color: #000000;
             margin: 0;
@@ -115,10 +115,12 @@
             color: #ffffff;
         }
 
-        $10;
+        .left-column {
+            position: fixed;
+            top: 0;
             left: 0;
             width: 80px;
-            height: calc(100vh - 48px);
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -317,6 +319,7 @@
     </style>
 </head>
 <body>
+    
     <div class="left-column">
         <div class="emoji-block">
             <div class="emoji-container"><button class="color-circle blue-circle" onclick="refreshSnippets(1)"></button>
@@ -945,18 +948,4 @@ sys.exit()
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

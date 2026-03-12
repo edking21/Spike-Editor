@@ -40,6 +40,12 @@ function Get-PreferredInputFile {
     )
 
     if ((Test-Path $OutputFile) -and ((Get-Item $OutputFile).LastWriteTime -gt (Get-Item $SourceFile).LastWriteTime)) {
+        $outputPreview = Get-Content $OutputFile -Raw -Encoding UTF8
+        if ($outputPreview -match '\$12px\s+2px\s+2px\s+2px;|\$10;') {
+            Write-Host "Detected invalid CSS in generated output. Reverting to source input: $SourceFile" -ForegroundColor Yellow
+            return $SourceFile
+        }
+
         Write-Host "Using newer output as input: $OutputFile" -ForegroundColor DarkYellow
         return $OutputFile
     }
@@ -69,6 +75,7 @@ function Update-PageWithUtils {
     # Remove mobile/sidebar/top-menu/menu-links/menu-search markup for Google Sites output.
     # Matches elements where class contains mobile-sidebar, mobile-overlay, top-menu, menu-links, or menu-search,
     # including additional class names and arbitrary attribute ordering.
+
     $patternMobileSidebar = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-sidebar\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
     $patternMobileOverlay = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-overlay\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
     $patternTopMenu = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\btop-menu\b[^"'']*["''])[^>]*>.*?(?=\s*<div\s+class=["'']left-column["'']|\s*<h1\b)'
@@ -79,6 +86,14 @@ function Update-PageWithUtils {
     $updated = $updated -replace $patternTopMenu, ''
     $updated = $updated -replace $patternMenuLinks, ''
     $updated = $updated -replace $patternMenuSearchButton, ''
+
+    # Home-only vertical normalization for Google Sites copy.
+    # This keeps GitHub source untouched and aligns Home start position.
+    if ([System.IO.Path]::GetFileName($OutputFile) -ieq 'index_for_copy_to_sites.html') {
+        $updated = $updated -replace '(?im)(padding:\s*)50px\s+2px\s+2px\s+2px\s*;', '${1}2px 2px 2px 2px;'
+        $updated = $updated -replace '(?is)(\.left-column\s*\{[^}]*?\btop:\s*)48px(\s*;)', '${1}0${2}'
+        $updated = $updated -replace '(?is)(\.left-column\s*\{[^}]*?\bheight:\s*)calc\(100vh\s*-\s*48px\)(\s*;)', '${1}100vh${2}'
+    }
 
     $updated | Set-Content $OutputFile -Encoding UTF8
 }
