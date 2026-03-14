@@ -74,6 +74,60 @@
             height: 48px;
         }
 
+        .menu-dropdown {
+            position: relative;
+            height: 48px;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-dropdown-toggle {
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+            height: 48px;
+            line-height: 48px;
+            padding: 0;
+            cursor: pointer;
+            border-bottom: 2px solid #ffffff; /* active state */
+            box-sizing: border-box;
+        }
+
+        .menu-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            min-width: 300px;
+            background: #ffffff;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+            z-index: 1300;
+            padding: 6px 0;
+        }
+
+        .menu-dropdown.open .menu-dropdown-menu {
+            display: block;
+        }
+
+        .menu-dropdown-menu a {
+            color: #222 !important;
+            display: block;
+            height: auto;
+            line-height: 1.4;
+            padding: 10px 12px;
+            border-bottom: none;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .menu-dropdown-menu a:hover {
+            background: #f5f7fb;
+        }
+
         .mobile-sidebar {
             display: none;
         }
@@ -243,6 +297,8 @@
         .emoji-container .yellow-circle { background-color: #FFD700 !important; }
         .emoji-container .dark-yellow-circle { background-color: #DAA520 !important; }
         .emoji-container .green-circle { background-color: #32CD32 !important; }
+        .emoji-container .orange-circle { background-color: #FF8C00 !important; }
+        .emoji-container .dark-orange-circle { background-color: #FF6600 !important; }
 
         @media (max-width: 500px) {
             .menu-toggle {
@@ -321,17 +377,31 @@
         <div class="menu-brand">Spike Editor</div>
         <div class="menu-links">
             <a href="/Spike-Editor/index.html">Home</a>
-            <a class="active" href="/Spike-Editor/Training%20Camp.html">Training Camp</a>
+
+            <div class="menu-dropdown" id="training-camp-dropdown">
+                <button
+                    class="menu-dropdown-toggle"
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    onclick="toggleTrainingCampDropdown(event)">
+                    Training Camp ▾
+                </button>
+                <div class="menu-dropdown-menu">
+                    <a href="#" onclick="selectTrainingCamp('camp1', event)">Traiing Camp #1 Driving Arroung</a>
+                    <a href="#" onclick="selectTrainingCamp('camp2', event)">Training Camp #2 Playing with Objects</a>
+                    <a href="#" onclick="selectTrainingCamp('camp3', event)">Training Camp #3 Reacting to Lines</a>
+                </div>
+            </div>
+
             <a href="/Spike-Editor/Class%20Library.html">Class Library</a>
             <a href="/Spike-Editor/Videos.html">Videos</a>
         </div>
         <button class="menu-search" type="button" aria-label="Search this page" title="Search this page" onclick="searchCurrentPage()">&#128269;</button>
     </div>
     <div class="left-column">
-        <div class="emoji-block">
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(1)"></button>
-                <div class="emoji-label">Main</div>
-            </div>
+        <div class="emoji-block" id="emoji-block">
+            <!-- Dynamic emoji buttons go here -->
         </div>
     </div>
     <div class="snippet-column" id="snippet-column">
@@ -351,6 +421,63 @@
             document.body.classList.remove('mobile-menu-open');
         }
 
+        const trainingCampEmojiButtons = {
+            default: [
+                { id: 1, label: 'Main', bubbleLabel: 'Purple Main bubble', className: 'purple-circle' }
+            ],
+            camp1: [
+                { id: 1, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
+                { id: 2, label: 'Events', bubbleLabel: 'Orange Events bubble', className: 'orange-circle' },
+                { id: 3, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-orange-circle' },
+                { id: 4, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'blue-circle' },
+                { id: 5, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' }
+            ],
+            camp2: [
+                { id: 1, label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
+                { id: 2, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
+                { id: 3, label: 'Events', bubbleLabel: 'Orange Events bubble', className: 'orange-circle' },
+                { id: 4, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-orange-circle' },
+                { id: 5, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'blue-circle' },
+                { id: 6, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' }
+            ],
+            camp3: [
+                { id: 1, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
+                { id: 2, label: 'Light', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
+                { id: 3, label: 'Events', bubbleLabel: 'Orange Events bubble', className: 'orange-circle' },
+                { id: 4, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-orange-circle' },
+                { id: 5, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'blue-circle' },
+                { id: 6, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
+                { id: 7, label: 'Variables', bubbleLabel: 'Orange Variables bubble', className: 'orange-circle' },
+                { id: 8, label: 'More Motors', bubbleLabel: 'Blue More Motors bubble', className: 'blue-circle' },
+                { id: 9, label: 'More Movement', bubbleLabel: 'Pink Move Movement bubble', className: 'pink-circle' }
+            ]
+        };
+
+        function renderEmojiButtons(buttons) {
+            const emojiBlock = document.getElementById('emoji-block');
+            if (!emojiBlock) return;
+
+            emojiBlock.innerHTML = buttons.map(button => `
+                <div class="emoji-container">
+                    <button
+                        type="button"
+                        class="color-circle ${button.className}"
+                        title="${button.bubbleLabel}"
+                        aria-label="${button.bubbleLabel}"
+                        onclick="refreshSnippets(${button.id})">
+                </button>
+                <div class="emoji-label">${button.label}</div>
+            </div>
+        `).join('');
+        }
+
+        function selectTrainingCamp(campKey, event) {
+            event.preventDefault();
+            renderEmojiButtons(trainingCampEmojiButtons[campKey] || trainingCampEmojiButtons.default);
+            refreshSnippets(1);
+            closeTrainingCampDropdown();
+        }
+
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 closeMobileMenu();
@@ -367,8 +494,34 @@
             }
         }
 
+        function toggleTrainingCampDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('training-camp-dropdown');
+            if (!dropdown) return;
+            const expanded = dropdown.classList.toggle('open');
+            const btn = dropdown.querySelector('.menu-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        }
+
+        function closeTrainingCampDropdown() {
+            const dropdown = document.getElementById('training-camp-dropdown');
+            if (!dropdown) return;
+            dropdown.classList.remove('open');
+            const btn = dropdown.querySelector('.menu-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+
+        document.addEventListener('click', closeTrainingCampDropdown);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMobileMenu();
+                closeTrainingCampDropdown();
+            }
+        });
+
         const snippetData = {
-            1: {  // Main
+            1: {  // Movement
                 snippets: [
                     {
                         id: "fn1",
@@ -408,13 +561,13 @@ async def main():
 runloop.run(main())
 sys.exit()
             `
-                    },
-                    {
-                        id: "fn3",
-                        buttonText: 'Line Follower Proportional (Main)',
-                        emoji: '🧿',
-                        color: '#8A2BE2',
-                        textPython: `
+                },
+                {
+                    id: "fn3",
+                    buttonText: 'Line Follower Proportional (Main)',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
 ########################################################################
 # 🤖 Main - Line Follower Proportional (Main)
 ########################################################################
@@ -435,13 +588,13 @@ async def main():
 
         # if a hand is near stop wait for 2 seconds then continue
         `
-                    },
-                    {
-                        id: "fn4",
-                        buttonText: 'Robot Movement',
-                        emoji: '🧿',
-                        color: '#8A2BE2',
-                        textPython: `
+                },
+                {
+                    id: "fn4",
+                    buttonText: 'Robot Movement',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
 #####################################################################
 # 🤖 Robot Movement
 #####################################################################
@@ -459,13 +612,13 @@ async def robot_movement():
         # move forward 4in
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 4 * 53, 0)
 `
-                    },
-                    {
-                        id: "fn6",
-                        buttonText: 'Line Counter (Main)',
-                        emoji: '🧿',
-                        color: '#8A2BE2',
-                        textPython: `   
+                },
+                {
+                    id: "fn6",
+                    buttonText: 'Line Counter (Main)',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `   
 ########################################################################
 # 🤖 Main - Line Counter Main
 ########################################################################
@@ -481,18 +634,23 @@ async def main():
     )
 
    `
-                    },
+                },
 
-                ]
-            },   // Functions
-            
-        };
+            ]
+        },
+        2: { snippets: [] },  // Events
+        3: { snippets: [] },  // Control
+        4: { snippets: [] },  // Sensors
+        5: { snippets: [] }   // Operators
+    };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            refreshSnippets(1);
-            fetchGitHubRelease();
-        });
-    </script>
-    <script src="./utils/utils.js"></script>
+    document.addEventListener('DOMContentLoaded', () => {
+        renderEmojiButtons(trainingCampEmojiButtons.default);
+        refreshSnippets(1);
+        fetchGitHubRelease();
+    });
+</script>
+<!-- ...existing code... -->
+<script src="./utils/utils.js"></script>
 </body>
 </html>
