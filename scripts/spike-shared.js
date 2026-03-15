@@ -63,27 +63,54 @@
             const host = document.getElementById(containerId);
             if (!host) return;
 
-            let movementLabelInserted = false;
-            let eventsLabelInserted = false;
-            let controlLabelInserted = false;
+            const inserted = new Set();
+
+            const normalize = (value) =>
+                String(value || '')
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, ' ')
+                    .trim();
+
+            // Supports current ids and future snippetData labels.
+            const sectionRules = [
+                { key: 'motors',      label: 'Motors',      match: ['motors', 'motor'] },
+                { key: 'movement',    label: 'Movement',    match: ['move', 'movement'] },
+                { key: 'events',      label: 'Events',      match: ['event', 'events'] },
+                { key: 'control',     label: 'Control',     match: ['control'] },
+                { key: 'light',       label: 'Light',       match: ['light'] },
+                { key: 'sound',       label: 'Sound',       match: ['sound', 'audio', 'beep', 'tone'] },
+                { key: 'sensors',     label: 'Sensors',     match: ['sensor', 'sensors'] },
+                { key: 'operators',   label: 'Operators',   match: ['operator', 'operators'] },
+                { key: 'variables',   label: 'Variables',   match: ['variable', 'variables'] },
+                { key: 'myblocks',    label: 'My Blocks',   match: ['my blocks', 'myblocks', 'my block'] },
+                { key: 'moremotors',  label: 'More Motors', match: ['more motors', 'moremotors'] }
+            ];
+
+            function resolveSection(snippet) {
+                const explicit = normalize(snippet?.section || snippet?.sectionLabel || snippet?.groupLabel);
+                const id = normalize(snippet?.id);
+                const text = normalize(snippet?.buttonText);
+
+                // Prefer explicit section when snippetData is updated later.
+                if (explicit) {
+                    const explicitRule = sectionRules.find(rule => normalize(rule.label) === explicit || rule.key === explicit.replace(/\s+/g, ''));
+                    if (explicitRule) return explicitRule;
+                }
+
+                return sectionRules.find(rule =>
+                    rule.match.some(token =>
+                        id.startsWith(token) || text.startsWith(token) || text.includes(` ${token}`)
+                    )
+                );
+            }
 
             host.innerHTML = (snippets || []).map(snippet => {
-                const id = String(snippet?.id || '').toLowerCase();
+                const section = resolveSection(snippet);
                 let labelHtml = '';
 
-                if (!movementLabelInserted && id.startsWith('move')) {
-                    movementLabelInserted = true;
-                    labelHtml = `<div class="snippet-group-label">Movement</div>`;
-                }
-
-                if (!eventsLabelInserted && id.startsWith('event')) {
-                    eventsLabelInserted = true;
-                    labelHtml += `<div class="snippet-group-label">Events</div>`;
-                }
-
-                if (!eventsLabelInserted && id.startsWith('control')) {
-                    eventsLabelInserted = true;
-                    labelHtml += `<div class="snippet-group-label">Control</div>`;
+                if (section && !inserted.has(section.key)) {
+                    inserted.add(section.key);
+                    labelHtml = `<div class="snippet-group-label">${escapeHtml(section.label)}</div>`;
                 }
 
                 return `
