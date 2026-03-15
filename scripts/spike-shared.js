@@ -63,14 +63,33 @@
             const host = document.getElementById(containerId);
             if (!host) return;
 
-            host.innerHTML = (snippets || []).map(snippet => `
-                <div class="snippet">
-                    <button type="button" style="background-color: ${escapeHtml(snippet.color || '#666')};">
-                        <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
-                        <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
-                    </button>
-                </div>
-            `).join('');
+            let movementLabelInserted = false;
+            let eventsLabelInserted = false;
+
+            host.innerHTML = (snippets || []).map(snippet => {
+                const id = String(snippet?.id || '').toLowerCase();
+                let labelHtml = '';
+
+                if (!movementLabelInserted && id.startsWith('move')) {
+                    movementLabelInserted = true;
+                    labelHtml = `<div class="snippet-group-label">Movement;</div>`;
+                }
+
+                if (!eventsLabelInserted && id.startsWith('event')) {
+                    eventsLabelInserted = true;
+                    labelHtml += `<div class="snippet-group-label">Events</div>`;
+                }
+
+                return `
+                    ${labelHtml}
+                    <div class="snippet">
+                        <button type="button" style="background-color: ${escapeHtml(snippet.color || '#666')};">
+                            <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
+                            <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
         }
     };
 
