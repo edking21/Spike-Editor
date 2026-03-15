@@ -139,7 +139,6 @@
         }
     };
 
-    // Single source of truth shared by index.html and Training Camp.html
     const snippetData = {
         1: {   // motors
             colorClass: 'motors-color',
@@ -169,6 +168,15 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
                 },
                 {
                     id: 'move2',
+                    buttonText: 'start moving',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# start moving
+motor_pair.move(motor_pair.PAIR_1, 0)`
+                },
+                {
+                    id: 'move3',
                     buttonText: 'move right 30 for 10 rotations',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -178,16 +186,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
 sleep_ms(40)`
                 },
                 {
-                    id: 'move3',
-                    buttonText: 'start moving',
-                    emoji: '🧿',
-                    color: '#FF69B4',
-                    textPython: `
-# start moving
-motor_pair.move(motor_pair.PAIR_1, 0)`
-                },
-                {
-                    id: 'move5',
+                    id: 'move4',
                     buttonText: 'start moving right 30',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -197,7 +196,7 @@ motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
 sleep_ms(40)`
                 },
                 {
-                    id: 'move6',
+                    id: 'move5',
                     buttonText: 'stop moving',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -207,13 +206,13 @@ motor_pair.stop(motor_pair.PAIR_1)
 sleep_ms(10)`
                 },
                 {
-                    id: 'move7',
-                    buttonText: 'set movement speed to 50%',
+                    id: 'move6',
+                    buttonText: 'set movement speed to 20%',
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# set movement speed to 50% of 1100
-movement_speed = int(0.5 * 1100)`
+# set movement speed to 20% of 1100
+movement_speed = int(0.2 * 1100)`
                 },
                 {
                     id: 'move8',
