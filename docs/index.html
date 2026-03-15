@@ -433,13 +433,19 @@
 
         function refreshSnippets(groupId) {
             const group = snippetData[groupId];
-            renderSnippetsWithColor(group?.snippets || []);
+            renderers.renderSnippetButtons({
+                containerId: 'snippet-column',
+                snippets: group?.snippets || []
+            });
         }
 
         function renderAllSnippetGroups() {
-            const order = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            const order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             const combined = order.flatMap(id => snippetData[id]?.snippets || []);
-            renderSnippetsWithColor(combined);
+            renderers.renderSnippetButtons({
+                containerId: 'snippet-column',
+                snippets: combined
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
