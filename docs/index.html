@@ -220,6 +220,7 @@
         .snippet button.operators-color { background-color: #32CD32; color: #000000; }
         .snippet button.hints-color { background-color: #CC0000; color: #ffffff; }
         .snippet button.debug-color { background-color: #8A2BE2; color: #ffffff; }
+        .snippet button.sound-color { background-color: #a564e1; color: #ffffff; }
 
         .release-info {
             text-align: center;
@@ -250,6 +251,7 @@
         .emoji-container .red-circle { background-color: #CC0000 !important; }
         .emoji-container .pink-circle { background-color: #FF69B4 !important; }
         .emoji-container .purple-circle { background-color: #8A2BE2 !important; }
+        .emoji-container .light-purple-circle { background-color: #a564e1 !important; }
         .emoji-container .yellow-circle { background-color: #FFD700 !important; }
         .emoji-container .dark-yellow-circle { background-color: #DAA520 !important; }
         .emoji-container .green-circle { background-color: #32CD32 !important; }
@@ -348,22 +350,25 @@
             <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(3)"></button>
                 <div class="emoji-label">Light</div>
             </div>
-            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(4)"></button>
+            <div class="emoji-container"><button class="color-circle light-purple-circle" onclick="refreshSnippets(4)"></button>
+                <div class="emoji-label">Sound</div>
+            </div>
+            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(5)"></button>
                 <div class="emoji-label">Events</div>
             </div>
-            <div class="emoji-container"><button class="color-circle dark-yellow-circle" onclick="refreshSnippets(5)"></button>
+            <div class="emoji-container"><button class="color-circle dark-yellow-circle" onclick="refreshSnippets(6)"></button>
                 <div class="emoji-label">Control</div>
             </div>
-            <div class="emoji-container"><button class="color-circle light-blue-circle" onclick="refreshSnippets(6)"></button>
+            <div class="emoji-container"><button class="color-circle light-blue-circle" onclick="refreshSnippets(7)"></button>
                 <div class="emoji-label">Sensors</div>
             </div>
-            <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(7)"></button>
+            <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(8)"></button>
                 <div class="emoji-label">Operators</div>
             </div>
-            <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(8)"></button>
+            <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(9)"></button>
                 <div class="emoji-label">Hints</div>
             </div>
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(9)"></button>
+            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(10)"></button>
                 <div class="emoji-label">Debug Help</div>
             </div>
         </div>
@@ -379,17 +384,62 @@
     <script src="./utils/utils.js"></script>
     <script src="./scripts/spike-shared.js"></script>
     <script>
-        const { ui, renderers, snippetData } = window.SpikeShared;
+        const { ui, renderers, snippetData, escapeHtml } = window.SpikeShared;
 
         function toggleMobileMenu() { ui.toggleMobileMenu(); }
         function closeMobileMenu() { ui.closeMobileMenu(); }
         function searchCurrentPage() { ui.searchCurrentPage(); }
 
-        function searchCurrentPage() { ui.searchCurrentPage(); }
-        // keep page-specific logic here, use shared snippetData/renderers
+        function isWhiteTextSnippet(snippet) {
+            const id = String(snippet?.id || '').toLowerCase();
+            const label = String(snippet?.buttonText || '').toLowerCase();
+
+            return (
+                id.startsWith('motor') ||      // motors
+                id.startsWith('move') ||       // movement
+                id.startsWith('light') ||      // light
+                id.startsWith('sound') ||      // sound (#a564e1 light-purple)
+                id.startsWith('ctrl') ||       // control
+                id.startsWith('op') ||         // operators
+                label.includes('movement') ||
+                label.includes('operator') ||
+                label.includes('control') ||
+                id === 'fn1' ||                // getting started
+                label.includes('getting started')
+            );
+        }
+
+        function renderSnippetsWithColor(snippets) {
+            const host = document.getElementById('snippet-column');
+            if (!host) return;
+
+            host.innerHTML = (snippets || []).map(snippet => {
+                const textColor = isWhiteTextSnippet(snippet) ? '#ffffff' : '#000000';
+                return `
+                    <div class="snippet">
+                        <button type="button"
+                            style="background-color: ${escapeHtml(snippet.color || '#666')}; color: ${textColor};">
+                            <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
+                            <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function refreshSnippets(groupId) {
+            const group = snippetData[groupId];
+            renderSnippetsWithColor(group?.snippets || []);
+        }
+
+        function renderAllSnippetGroups() {
+            const order = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            const combined = order.flatMap(id => snippetData[id]?.snippets || []);
+            renderSnippetsWithColor(combined);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            refreshSnippets(1);
-            fetchGitHubRelease();
+            renderAllSnippetGroups();
         });
     </script>
 </body>
