@@ -76,20 +76,21 @@
 
     // Single source of truth shared by index.html and Training Camp.html
     const snippetData = {
-        1: {colorClass: 'motors-color',
+        1:  {   //motors
+            colorClass: 'motors-color',
             snippets: [
                 {
-                    id: 'm1',
+                    id: 'motors1',
                     buttonText: 'Run shortest distance to absolute 0',
                     emoji: '🧿',
                     color: '#0066FF',
-                    textPython: `
+                    textPython: ` 
 # Run shortest distance to absolute 0
 await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
                 }
             ]
         },
-        2: {
+        2: {    //movement
             colorClass: 'movement-color',
             snippets: [
                 {
@@ -169,7 +170,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                 }
             ]
         },
-        3: {
+        3: {    //light matrix
             colorClass: 'light-color',
             snippets: [
                 {
@@ -211,11 +212,11 @@ light_matrix.write('<step number here>')`
                 }
             ]
         },
-        4: {
+        4: {    //events
             colorClass: 'events-color',
             snippets: [
                 {
-                    id: 'ev1',
+                    id: 'event1',
                     buttonText: 'When',
                     emoji: '🧿',
                     color: '#FFD700',
@@ -224,7 +225,7 @@ light_matrix.write('<step number here>')`
 while #<your condition or function here>`
                 },
                 {
-                    id: 'ev2',
+                    id: 'event2',
                     buttonText: 'When not',
                     emoji: '🧿',
                     color: '#FFD700',
@@ -234,11 +235,11 @@ while not (#<your condition or function here>)`
                 }
             ]
         },
-        5: {
+        5: {    //control
             colorClass: 'control-color',
             snippets: [
                 {
-                    id: 'ctrl1',
+                    id: 'control1',
                     buttonText: 'Wait for 1 seconds',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -247,7 +248,7 @@ while not (#<your condition or function here>)`
 sleep(1)`
                 },
                 {
-                    id: 'ctrl2',
+                    id: 'control2',
                     buttonText: 'Repeat 10 times',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -255,7 +256,7 @@ sleep(1)`
 # Under construction - Repeat 10 times`
                 },
                 {
-                    id: 'ctrl3',
+                    id: 'control33',
                     buttonText: 'Forever',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -264,7 +265,7 @@ sleep(1)`
 while True:`
                 },
                 {
-                    id: 'ctrl4',
+                    id: 'control4',
                     buttonText: 'If',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -272,7 +273,7 @@ while True:`
 if # <your condition or function here>`
                 },
                 {
-                    id: 'ctrl5',
+                    id: 'control5',
                     buttonText: 'Forever loop',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -280,7 +281,7 @@ if # <your condition or function here>`
 while True:`
                 },
                 {
-                    id: 'ctrl6',
+                    id: 'control6',
                     buttonText: 'Wait until condition',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -289,7 +290,7 @@ while True:`
 await runloop.until # <your sensor condition here>`
                 },
                 {
-                    id: 'ctrl7',
+                    id: 'control57',
                     buttonText: 'Repeat until (function)',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -299,7 +300,7 @@ while # <your sensor function here>`
                 }
             ]
         },
-        6: {
+        6: {    //sensors
             colorClass: 'sensors-color',
             snippets: [
                 {
@@ -366,7 +367,7 @@ motor.reset_relative_position(port.A, 0)`
                 }
             ]
         },
-        7: {
+        7: {    //operators
             colorClass: 'operators-color',
             snippets: [
                 {
@@ -382,7 +383,7 @@ result = a + b`
                 }
             ]
         },
-        8: {
+        8: {    //hints
             colorClass: 'hints-color',
             snippets: [
                 {
