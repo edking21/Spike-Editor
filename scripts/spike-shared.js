@@ -65,6 +65,7 @@
 
             let movementLabelInserted = false;
             let eventsLabelInserted = false;
+            let controlLabelInserted = false;
 
             host.innerHTML = (snippets || []).map(snippet => {
                 const id = String(snippet?.id || '').toLowerCase();
@@ -72,12 +73,17 @@
 
                 if (!movementLabelInserted && id.startsWith('move')) {
                     movementLabelInserted = true;
-                    labelHtml = `<div class="snippet-group-label">Movement;</div>`;
+                    labelHtml = `<div class="snippet-group-label">Movement</div>`;
                 }
 
                 if (!eventsLabelInserted && id.startsWith('event')) {
                     eventsLabelInserted = true;
                     labelHtml += `<div class="snippet-group-label">Events</div>`;
+                }
+
+                if (!eventsLabelInserted && id.startsWith('control')) {
+                    eventsLabelInserted = true;
+                    labelHtml += `<div class="snippet-group-label">Control</div>`;
                 }
 
                 return `
