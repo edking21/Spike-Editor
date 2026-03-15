@@ -95,33 +95,15 @@ await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PA
             snippets: [
                 {
                     id: 'move1',
-                    buttonText: 'move forward for 10cm',
+                    buttonText: 'move forward for 10 rotations',
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
 # move forward for 10cm
-await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
+await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
                 },
                 {
                     id: 'move2',
-                    buttonText: 'turn right 90 degrees',
-                    emoji: '🧿',
-                    color: '#FF69B4',
-                    textPython: `
-# turn right 90 degrees
-await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
-                },
-                {
-                    id: 'move4',
-                    buttonText: 'start moving',
-                    emoji: '🧿',
-                    color: '#FF69B4',
-                    textPython: `
-# start moving
-motor_pair.move(motor_pair.PAIR_1, 0)`
-                },
-                {
-                    id: 'move5',
                     buttonText: 'move right 30 for 10 rotations',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -131,7 +113,26 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
 sleep_ms(40)`
                 },
                 {
-                    id: 'move6',
+                    id: 'move3',
+                    buttonText: 'start moving',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# start moving
+motor_pair.move(motor_pair.PAIR_1, 0)`
+                },
+                {
+                    id: 'move4',
+                    buttonText: 'move right 30 for 10 rotations',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# move right 30 for 10 rotations
+await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
+sleep_ms(40)`
+                },
+                {
+                    id: 'move5',
                     buttonText: 'start moving right 30',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -141,7 +142,7 @@ motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
 sleep_ms(40)`
                 },
                 {
-                    id: 'move8',
+                    id: 'move6',
                     buttonText: 'stop moving',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -151,7 +152,7 @@ motor_pair.stop(motor_pair.PAIR_1)
 sleep_ms(10)`
                 },
                 {
-                    id: 'move9',
+                    id: 'move7',
                     buttonText: 'set movement speed to 50%',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -160,7 +161,7 @@ sleep_ms(10)`
 movement_speed = int(0.5 * 1100)`
                 },
                 {
-                    id: 'move10',
+                    id: 'move8',
                     buttonText: 'set movement motors to C+D',
                     emoji: '🧿',
                     color: '#FF69B4',
