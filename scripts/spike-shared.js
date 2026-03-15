@@ -147,15 +147,24 @@
             snippets: [
                 {
                     id: 'motors1',
-                    buttonText: 'Run shortest distance to absolute 0',
-                    emoji: '🧿',
+                    buttonText: 'Run CLOCKWISE for 1 rotation',     
+                    emoji: '🧿' ,
                     color: '#0066FF',
                     textPython: ` 
-# Run shortest distance to absolute 0
-await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
-                }
+# Run CLOCKWISE for 1 rotation
+await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
+                },
+                {
+                    id: 'motors1',
+                    buttonText: 'Go shortest path to position 0',     
+                    emoji: '🧿' ,
+                    color: '#0066FF',
+                    textPython: ` 
+# Go shortest path to position 0
+await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_PATH)`
+                },
             ]
-        },
+        },   
         2: {   // movement
             colorClass: 'movement-color',
             snippets: [
@@ -224,7 +233,7 @@ movement_speed = int(0.2 * 1100)`
                     textPython: `
 # set movement motors to C+D
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
-                }
+                },
             ]
         },
         3: {   // light 
