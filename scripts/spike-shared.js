@@ -91,12 +91,25 @@
                 const id = normalize(snippet?.id);
                 const text = normalize(snippet?.buttonText);
 
-                // Prefer explicit section when snippetData is updated later.
+                // 1) Explicit section always wins
                 if (explicit) {
-                    const explicitRule = sectionRules.find(rule => normalize(rule.label) === explicit || rule.key === explicit.replace(/\s+/g, ''));
+                    const explicitRule = sectionRules.find(
+                        rule => normalize(rule.label) === explicit || rule.key === explicit.replace(/\s+/g, '')
+                    );
                     if (explicitRule) return explicitRule;
                 }
 
+                // 2) ID prefix wins (prevents "motors" keyword in movement text from mislabeling)
+                if (id.startsWith('move')) return sectionRules.find(r => r.key === 'movement');
+                if (id.startsWith('motor')) return sectionRules.find(r => r.key === 'motors');
+                if (id.startsWith('event')) return sectionRules.find(r => r.key === 'events');
+                if (id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
+                if (id.startsWith('light')) return sectionRules.find(r => r.key === 'light');
+                if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
+                if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
+                if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
+
+                // 3) Fallback keyword match
                 return sectionRules.find(rule =>
                     rule.match.some(token =>
                         id.startsWith(token) || text.startsWith(token) || text.includes(` ${token}`)
@@ -172,16 +185,6 @@ sleep_ms(40)`
                     textPython: `
 # start moving
 motor_pair.move(motor_pair.PAIR_1, 0)`
-                },
-                {
-                    id: 'move4',
-                    buttonText: 'move right 30 for 10 rotations',
-                    emoji: '🧿',
-                    color: '#FF69B4',
-                    textPython: `
-# move right 30 for 10 rotations
-await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
-sleep_ms(40)`
                 },
                 {
                     id: 'move5',
