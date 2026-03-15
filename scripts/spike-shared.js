@@ -226,20 +226,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                 }
             ]
         },
-        3: {   // sound
-            colorClass: 'sound-color',
-            snippets: [
-                {
-                    id: 'sound1',
-                    buttonText: 'play beep for 60 for 0.2 seconds',
-                    emoji: '🧿',
-                    color: '#8A2BE2',
-                    textPython: `
-# play sound for 0.2 seconds`
-                }
-            ]
-        },
-        4: {   // light matrix 
+        3: {   // light matrix 
             colorClass: 'light-color',
             snippets: [
                 {
@@ -278,6 +265,19 @@ sleep(2)`
                     color: '#8A2BE2',
                     textPython: `
 light_matrix.write('<step number here>')`
+                }
+            ]
+        },
+        4: {   // sound
+            colorClass: 'sound-color',
+            snippets: [
+                {
+                    id: 'sound1',
+                    buttonText: 'play beep for 60 for 0.2 seconds',
+                    emoji: '🧿',
+                    color: '#7a16d7',
+                    textPython: `
+# play sound for 0.2 seconds`
                 }
             ]
         },
