@@ -376,7 +376,6 @@
             © 2026 Spike Editor - Loading release info...
         </div>
     </div>
-    <script src="./utils/utils.js"></script>
     <script src="./scripts/spike-shared.js"></script>
     <script>
         const { ui, renderers, snippetData } = window.SpikeShared;
@@ -385,7 +384,6 @@
         function closeMobileMenu() { ui.closeMobileMenu(); }
         function searchCurrentPage() { ui.searchCurrentPage(); }
 
-        function searchCurrentPage() { ui.searchCurrentPage(); }
         // keep page-specific logic here, use shared snippetData/renderers
         document.addEventListener('DOMContentLoaded', () => {
             refreshSnippets(1);
