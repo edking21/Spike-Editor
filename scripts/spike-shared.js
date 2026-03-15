@@ -75,10 +75,10 @@
             const sectionRules = [
                 { key: 'motors',      label: 'Motors',      match: ['motors', 'motor'] },
                 { key: 'movement',    label: 'Movement',    match: ['move', 'movement'] },
-                { key: 'events',      label: 'Events',      match: ['event', 'events'] },
-                { key: 'control',     label: 'Control',     match: ['control'] },
                 { key: 'light',       label: 'Light',       match: ['light'] },
                 { key: 'sound',       label: 'Sound',       match: ['sound', 'audio', 'beep', 'tone'] },
+                { key: 'events',      label: 'Events',      match: ['event', 'events'] },
+                { key: 'control',     label: 'Control',     match: ['control'] },
                 { key: 'sensors',     label: 'Sensors',     match: ['sensor', 'sensors'] },
                 { key: 'operators',   label: 'Operators',   match: ['operator', 'operators'] },
                 { key: 'variables',   label: 'Variables',   match: ['variable', 'variables'] },
@@ -100,12 +100,12 @@
                 }
 
                 // 2) ID prefix wins (prevents "motors" keyword in movement text from mislabeling)
-                if (id.startsWith('move')) return sectionRules.find(r => r.key === 'movement');
                 if (id.startsWith('motor')) return sectionRules.find(r => r.key === 'motors');
-                if (id.startsWith('event')) return sectionRules.find(r => r.key === 'events');
-                if (id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
+                if (id.startsWith('move')) return sectionRules.find(r => r.key === 'movement');
                 if (id.startsWith('light')) return sectionRules.find(r => r.key === 'light');
                 if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
+                if (id.startsWith('event')) return sectionRules.find(r => r.key === 'events');
+                if (id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
 
@@ -141,7 +141,7 @@
 
     // Single source of truth shared by index.html and Training Camp.html
     const snippetData = {
-        1:  {   //motors
+        1: {   // motors
             colorClass: 'motors-color',
             snippets: [
                 {
@@ -155,7 +155,7 @@ await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PA
                 }
             ]
         },
-        2: {    //movement
+        2: {   // movement
             colorClass: 'movement-color',
             snippets: [
                 {
@@ -226,7 +226,20 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                 }
             ]
         },
-        3: {    //light matrix
+        3: {   // sound
+            colorClass: 'sound-color',
+            snippets: [
+                {
+                    id: 'sound1',
+                    buttonText: 'play beep for 60 for 0.2 seconds',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
+# play sound for 0.2 seconds`
+                }
+            ]
+        },
+        4: {   // light matrix 
             colorClass: 'light-color',
             snippets: [
                 {
@@ -268,7 +281,7 @@ light_matrix.write('<step number here>')`
                 }
             ]
         },
-        4: {    //events
+        5: {   // events 
             colorClass: 'events-color',
             snippets: [
                 {
@@ -291,7 +304,7 @@ while not (#<your condition or function here>)`
                 }
             ]
         },
-        5: {    //control
+        6: {   // control 
             colorClass: 'control-color',
             snippets: [
                 {
@@ -356,7 +369,7 @@ while # <your sensor function here>`
                 }
             ]
         },
-        6: {    //sensors
+        7: {   // sensors 
             colorClass: 'sensors-color',
             snippets: [
                 {
@@ -423,7 +436,7 @@ motor.reset_relative_position(port.A, 0)`
                 }
             ]
         },
-        7: {    //operators
+        8: {   // operators 
             colorClass: 'operators-color',
             snippets: [
                 {
@@ -439,7 +452,7 @@ result = a + b`
                 }
             ]
         },
-        8: {    //hints
+        9: {   // hints 
             colorClass: 'hints-color',
             snippets: [
                 {

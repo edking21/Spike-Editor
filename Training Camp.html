@@ -424,29 +424,29 @@
         function closeTrainingCampDropdown()       { ui.closeDropdown('training-camp-dropdown'); }
 
         const CAMP1_COMBINED_ID = 2001;
+        const CAMP2_COMBINED_ID = 1001;
 
         const trainingCampEmojiButtons = {
             camp1: [
-                { id: CAMP1_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp1 snippets',           className: 'pink-circle' },
-                { id: 4,                 label: 'Events',   bubbleLabel: 'Yellow Events bubble',      className: 'yellow-circle' },
-                { id: 5,                 label: 'Control',  bubbleLabel: 'Dark Orange Control bubble', className: 'dark-yellow-circle' }
+                { id: CAMP1_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' },
+                { id: 4, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
+                { id: 5, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-yellow-circle' }
             ],
             camp2: [
-                { id: 1, label: 'Motors',    bubbleLabel: 'Blue Motors bubble',         className: 'blue-circle' },
-                { id: 2, label: 'Movement',  bubbleLabel: 'Pink Movement bubble',        className: 'pink-circle' },
-                { id: 3, label: 'Light',     bubbleLabel: 'Purple Light bubble',         className: 'purple-circle' },
-                { id: 4, label: 'Events',    bubbleLabel: 'Yellow Events bubble',        className: 'yellow-circle' },
-                { id: 5, label: 'Control',   bubbleLabel: 'Dark Yellow Control bubble',  className: 'dark-yellow-circle' }
+                { id: CAMP2_COMBINED_ID, label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
+                { id: 2, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
+                { id: 3, label: 'Sound', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
+                { id: 4, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
+                { id: 5, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' }
             ],
             camp3: [
-                { id: 1, label: 'Motors',     bubbleLabel: 'Blue Motors bubble',          className: 'blue-circle' },
-                { id: 2, label: 'Movement',   bubbleLabel: 'Pink Movement bubble',         className: 'pink-circle' },
-                { id: 3, label: 'Light',      bubbleLabel: 'Purple Light bubble',          className: 'purple-circle' },
-                { id: 4, label: 'Events',     bubbleLabel: 'Yellow Events bubble',         className: 'yellow-circle' },
-                { id: 5, label: 'Control',    bubbleLabel: 'Dark Yellow Control bubble',   className: 'dark-yellow-circle' },
-                { id: 6, label: 'Sensors',    bubbleLabel: 'Blue Sensors bubble',          className: 'blue-circle' },
-                { id: 7, label: 'Operators',  bubbleLabel: 'Green Operators bubble',       className: 'green-circle' },
-                { id: 8, label: 'Hints',      bubbleLabel: 'Red Hints bubble',             className: 'red-circle' }
+                { id: 2, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
+                { id: 3, label: 'Light', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
+                { id: 4, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
+                { id: 5, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' },
+                { id: 6, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'blue-circle' },
+                { id: 7, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
+                { id: 8, label: 'Hints', bubbleLabel: 'Red Hints bubble', className: 'red-circle' }
             ]
         };
 
@@ -480,12 +480,25 @@
 
             if (campKey === 'camp1') {
                 const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const events   = (snippetData[4]?.snippets || []).slice(0, 2);
-                const control  = (snippetData[5]?.snippets || []).slice(0, 2);
+                const events = (snippetData[4]?.snippets || []).slice(0, 2);
+                const control = (snippetData[5]?.snippets || []).slice(0, 2);
 
                 currentSnippetData[CAMP1_COMBINED_ID] = {
                     colorClass: 'movement-color',
                     snippets: [...movement, ...events, ...control]
+                };
+            }
+
+            if (campKey === 'camp2') {
+                const motors = (snippetData[1]?.snippets || []).slice(0, 2);
+                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
+                const sound = (snippetData[3]?.snippets || []).slice(0, 2);
+                const events = (snippetData[4]?.snippets || []).slice(0, 2);
+                const control = (snippetData[5]?.snippets || []).slice(0, 2);
+
+                currentSnippetData[CAMP2_COMBINED_ID] = {
+                    colorClass: 'motors-color',
+                    snippets: [...motors, ...movement, ...sound, ...events, ...control]
                 };
             }
         }
