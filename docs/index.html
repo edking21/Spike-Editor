@@ -398,7 +398,7 @@
                 id.startsWith('motor') ||      // motors
                 id.startsWith('move') ||       // movement
                 id.startsWith('light') ||      // light
-                id.startsWith('sound') ||      // sound (#a564e1 light-purple)
+                id.startsWith('sound') ||      // sound
                 id.startsWith('ctrl') ||       // control
                 id.startsWith('op') ||         // operators
                 label.includes('movement') ||
@@ -414,11 +414,15 @@
             if (!host) return;
 
             host.innerHTML = (snippets || []).map(snippet => {
-                const textColor = isWhiteTextSnippet(snippet) ? '#ffffff' : '#000000';
+                // Use explicit textColor from snippetData first, then isWhiteTextSnippet
+                const textColor = snippet.textColor
+                    ? snippet.textColor
+                    : isWhiteTextSnippet(snippet) ? '#ffffff' : '#000000';
+
                 return `
                     <div class="snippet">
                         <button type="button"
-                            style="background-color: ${escapeHtml(snippet.color || '#666')}; color: ${textColor};">
+                            style="background-color: ${escapeHtml(snippet.color || '#666')}; color: ${escapeHtml(textColor)};">
                             <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
                             <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
                         </button>

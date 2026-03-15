@@ -126,10 +126,12 @@
                     labelHtml = `<div class="snippet-group-label">${escapeHtml(section.label)}</div>`;
                 }
 
+                const textColor = snippet.textColor || '#ffffff';
+
                 return `
                     ${labelHtml}
                     <div class="snippet">
-                        <button type="button" style="background-color: ${escapeHtml(snippet.color || '#666')};">
+                        <button type="button" style="background-color: ${escapeHtml(snippet.color || '#666')}; color: ${escapeHtml(textColor)};">
                             <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
                             <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
                         </button>
