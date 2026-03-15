@@ -1,0 +1,470 @@
+(function (global) {
+    'use strict';
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    const ui = {
+        toggleMobileMenu() {
+            document.body.classList.toggle('mobile-menu-open');
+        },
+        closeMobileMenu() {
+            document.body.classList.remove('mobile-menu-open');
+        },
+        searchCurrentPage() {
+            const query = prompt('Search this page:');
+            if (!query) return;
+            const found = window.find(query, false, false, true, false, false, false);
+            if (!found) alert(`No matches found for "${query}".`);
+        },
+        toggleDropdown(dropdownId, event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+            const expanded = dropdown.classList.toggle('open');
+            const btn = dropdown.querySelector('.menu-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        },
+        closeDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+            dropdown.classList.remove('open');
+            const btn = dropdown.querySelector('.menu-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+    };
+
+    const renderers = {
+        renderEmojiButtons({ containerId, buttons, onClickFnName }) {
+            const host = document.getElementById(containerId);
+            if (!host) return;
+
+            host.innerHTML = (buttons || []).map(button => `
+                <div class="emoji-container">
+                    <button
+                        type="button"
+                        class="color-circle ${escapeHtml(button.className)}"
+                        title="${escapeHtml(button.bubbleLabel)}"
+                        aria-label="${escapeHtml(button.bubbleLabel)}"
+                        onclick="${escapeHtml(onClickFnName)}(${Number(button.id)})">
+                    </button>
+                    <div class="emoji-label">${escapeHtml(button.label)}</div>
+                </div>
+            `).join('');
+        },
+
+        renderSnippetButtons({ containerId, snippets }) {
+            const host = document.getElementById(containerId);
+            if (!host) return;
+
+            host.innerHTML = (snippets || []).map(snippet => `
+                <div class="snippet">
+                    <button type="button" style="background-color: ${escapeHtml(snippet.color || '#666')};">
+                        <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
+                        <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+    };
+
+    // Single source of truth shared by index.html and Training Camp.html
+    const snippetData = {
+        1: {colorClass: 'motors-color',
+            snippets: [
+                {
+                    id: 'm1',
+                    buttonText: 'Run shortest distance to absolute 0',
+                    emoji: '🧿',
+                    color: '#0066FF',
+                    textPython: `
+# Run shortest distance to absolute 0
+await motor.run_to_absolute_position(port.E, 0, 200, direction=motor.SHORTEST_PATH)`
+                }
+            ]
+        },
+        2: {
+            colorClass: 'movement-color',
+            snippets: [
+                {
+                    id: 'move1',
+                    buttonText: 'move forward for 10cm',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# move forward for 10cm
+await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0)`
+                },
+                {
+                    id: 'move2',
+                    buttonText: 'turn right 90 degrees',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# turn right 90 degrees
+await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)`
+                },
+                {
+                    id: 'move4',
+                    buttonText: 'start moving',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# start moving
+motor_pair.move(motor_pair.PAIR_1, 0)`
+                },
+                {
+                    id: 'move5',
+                    buttonText: 'move right 30 for 10 rotations',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# move right 30 for 10 rotations
+await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
+sleep_ms(40)`
+                },
+                {
+                    id: 'move6',
+                    buttonText: 'start moving right 30',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# start moving right 30
+motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
+sleep_ms(40)`
+                },
+                {
+                    id: 'move8',
+                    buttonText: 'stop moving',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# stop moving
+motor_pair.stop(motor_pair.PAIR_1)
+sleep_ms(10)`
+                },
+                {
+                    id: 'move9',
+                    buttonText: 'set movement speed to 50%',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# set movement speed to 50% of 1100
+movement_speed = int(0.5 * 1100)`
+                },
+                {
+                    id: 'move10',
+                    buttonText: 'set movement motors to C+D',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# set movement motors to C+D
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+                }
+            ]
+        },
+        3: {
+            colorClass: 'light-color',
+            snippets: [
+                {
+                    id: 'light1',
+                    buttonText: 'Turn On Smiley Face For 2 Seconds',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
+# Turn On Smiley Face For 2 Seconds
+light_matrix.show_image(light_matrix.IMAGE_SMILE)
+sleep(2)`
+                },
+                {
+                    id: 'light2',
+                    buttonText: 'Blinking Eyes',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
+# Blinking Eyes on the light matrix
+blinking_eyes()`
+                },
+                {
+                    id: 'light3',
+                    buttonText: 'Turn On Angry Face For 2 Seconds',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
+# Turn On Angry Face For 2 Seconds
+light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+sleep(2)`
+                },
+                {
+                    id: 'light4',
+                    buttonText: 'Light Matrix Write (debug)',
+                    emoji: '🧿',
+                    color: '#8A2BE2',
+                    textPython: `
+light_matrix.write('<step number here>')`
+                }
+            ]
+        },
+        4: {
+            colorClass: 'events-color',
+            snippets: [
+                {
+                    id: 'ev1',
+                    buttonText: 'When',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+# When
+while #<your condition or function here>`
+                },
+                {
+                    id: 'ev2',
+                    buttonText: 'When not',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+# When not
+while not (#<your condition or function here>)`
+                }
+            ]
+        },
+        5: {
+            colorClass: 'control-color',
+            snippets: [
+                {
+                    id: 'ctrl1',
+                    buttonText: 'Wait for 1 seconds',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+# Wait for 1 second
+sleep(1)`
+                },
+                {
+                    id: 'ctrl2',
+                    buttonText: 'Repeat 10 times',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+# Under construction - Repeat 10 times`
+                },
+                {
+                    id: 'ctrl3',
+                    buttonText: 'Forever',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+# Forever
+while True:`
+                },
+                {
+                    id: 'ctrl4',
+                    buttonText: 'If',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+if # <your condition or function here>`
+                },
+                {
+                    id: 'ctrl5',
+                    buttonText: 'Forever loop',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+while True:`
+                },
+                {
+                    id: 'ctrl6',
+                    buttonText: 'Wait until condition',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+# wait until condition
+await runloop.until # <your sensor condition here>`
+                },
+                {
+                    id: 'ctrl7',
+                    buttonText: 'Repeat until (function)',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+# Repeat until (function)
+while # <your sensor function here>`
+                }
+            ]
+        },
+        6: {
+            colorClass: 'sensors-color',
+            snippets: [
+                {
+                    id: 'fn2a',
+                    buttonText: 'is color red (condition)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `(is_color_red)`
+                },
+                {
+                    id: 'fn2b',
+                    buttonText: 'is pressed (condition)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `(is_pressed)`
+                },
+                {
+                    id: 'fn3',
+                    buttonText: 'is near (condition)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `(is_near)`
+                },
+                {
+                    id: 'fn5',
+                    buttonText: 'is color red (function)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `is_color_red():`
+                },
+                {
+                    id: 'fn4',
+                    buttonText: 'is pressed (function)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `is_pressed():`
+                },
+                {
+                    id: 'fn6a',
+                    buttonText: 'is near (function)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `
+is_near():
+    # your code here`
+                },
+                {
+                    id: 'fn6b',
+                    buttonText: 'relative position reset',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `
+# Reset relative position to 0
+motor.reset_relative_position(port.A, 0)`
+                },
+                {
+                    id: 'fn6c',
+                    buttonText: 'relative position (function)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `
+(motor.relative_position(port.D) > 1000):
+    # <Your code here>`
+                }
+            ]
+        },
+        7: {
+            colorClass: 'operators-color',
+            snippets: [
+                {
+                    id: 'op1',
+                    buttonText: 'Operator Example',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: `
+# Operator example
+a = 3
+b = 5
+result = a + b`
+                }
+            ]
+        },
+        8: {
+            colorClass: 'hints-color',
+            snippets: [
+                {
+                    id: 'fn1',
+                    buttonText: 'Getting Started',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Getting Started
+import runloop, time, sys, motor_pair, motor, force_sensor, runloop
+import color, color_sensor, distance_sensor
+from hub import light, light_matrix, port, sound
+from time import sleep, sleep_ms
+from runloop import run
+
+# Ports on the robot hub
+color_port = port.A
+distance_port = port.B
+force_port = port.E
+
+# Conversion constants
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
+
+# how many times we see each color
+blue_count = 0
+yellow_count = 0
+red_count = 0
+
+# Color codes - these numbers represent different colors to the robot
+blue = 3
+yellow = 7
+red = 9
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+# Remember the last color seen so we don't count the same color twice in a row
+last_color = None
+
+# This is like a stop sign for our program - when it's True, everything stops
+should_stop = False
+
+########################################################################
+# 🛑 is_color_red - Function to check if the color sensor sees red
+########################################################################
+def is_color_red():
+    return color_sensor.color(color_port) == color.RED
+
+########################################################################
+# 🎯 is_pressed - Function to check if force sensor is pressed
+########################################################################
+def is_pressed():
+    return force_sensor.pressed(force_port)
+
+########################################################################
+# ☀️ is_near - Function to check if something is near
+########################################################################
+def is_near(distance_threshold=100):
+    distance = distance_sensor.distance(distance_port)
+    if distance == -1:
+        print("Warning: Distance sensor not detecting anything")
+        return False
+    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+    return distance < distance_threshold
+
+########################################################################
+# 🤖 Main - Start and Stop is_near test using Wait until
+########################################################################
+async def main():
+    while True:
+        motor_pair.move(motor_pair.PAIR_1, 0)
+        await runloop.until(is_near)
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10)
+
+runloop.run(main())
+sys.exit()`
+                }
+            ]
+        }
+    };
+
+    global.SpikeShared = { ui, renderers, snippetData, escapeHtml };
+})(window);
