@@ -225,7 +225,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                 }
             ]
         },
-        3: {   // light matrix 
+        3: {   // light 
             colorClass: 'light-color',
             snippets: [
                 {
@@ -273,10 +273,11 @@ light_matrix.write('<step number here>')`
                 {
                     id: 'sound1',
                     buttonText: 'play beep for 60 for 0.2 seconds',
-                    emoji: '🧿',
-                    color: '#7a16d7',
+                    emoji: '🔊',
+                    color: '#a564e1',
                     textPython: `
-# play sound for 0.2 seconds`
+# play sound for 0.2 seconds
+await sound.beep(60, 200)`
                 }
             ]
         },
@@ -451,7 +452,22 @@ result = a + b`
                 }
             ]
         },
-        9: {   // hints 
+        9: {   // variables 
+            colorClass: 'variables-color',
+            snippets: [
+                {
+                    id: 'op1',
+                    buttonText: 'New Variable',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: `
+# variable example
+a = 0
+`
+               }
+            ]
+        },
+        10: {   // hints 
             colorClass: 'hints-color',
             snippets: [
                 {
