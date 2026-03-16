@@ -57,9 +57,10 @@
     <script src="./scripts/spike-shared.js"></script>
     <script>
         const shared = window.SpikeShared || {};
-        const ui = shared.ui || {};
-        const renderers = shared.renderers || {};
+        const ui = shared.ui || {}; // FIX: was missing
         const snippetData = shared.snippetData || {};
+        const renderers = shared.renderers || {};
+        const applyGroupTextColor = shared.applyGroupTextColor || ((_, snippets) => snippets || []);
 
         if (!shared.ui || !shared.renderers || !shared.snippetData) {
             console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js export.');
@@ -117,7 +118,7 @@
             const group = currentSnippetData[groupId];
             renderers.renderSnippetButtons({
                 containerId: 'snippet-column',
-                snippets: group?.snippets || []
+                snippets: applyGroupTextColor(groupId, group?.snippets || [])
             });
         }
 
@@ -132,11 +133,11 @@
             });
 
             if (campKey === 'camp1') {
-                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
+                const movement = applyGroupTextColor(2, (snippetData[2]?.snippets || []).slice(0, 7));
+                const events = applyGroupTextColor(5, (snippetData[5]?.snippets || []).slice(0, 2));
+                const control = applyGroupTextColor(6, (snippetData[6]?.snippets || []).slice(0, 2));
+                const sensors = applyGroupTextColor(7, (snippetData[7]?.snippets || []).slice(0, 2));
+                const operators = applyGroupTextColor(8, (snippetData[8]?.snippets || []).slice(0, 2));
 
                 currentSnippetData[CAMP1_COMBINED_ID] = {
                     colorClass: 'movement-color',
@@ -145,11 +146,11 @@
             }
 
             if (campKey === 'camp2') {
-                const motors = (snippetData[1]?.snippets || []).slice(0, 2);
-                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const sound = (snippetData[4]?.snippets || []).slice(0, 2);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
+                const motors = applyGroupTextColor(1, (snippetData[1]?.snippets || []).slice(0, 2));
+                const movement = applyGroupTextColor(2, (snippetData[2]?.snippets || []).slice(0, 7));
+                const sound = applyGroupTextColor(4, (snippetData[4]?.snippets || []).slice(0, 2));
+                const events = applyGroupTextColor(5, (snippetData[5]?.snippets || []).slice(0, 2));
+                const control = applyGroupTextColor(6, (snippetData[6]?.snippets || []).slice(0, 2));
 
                 currentSnippetData[CAMP2_COMBINED_ID] = {
                     colorClass: 'motors-color',
@@ -158,31 +159,24 @@
             }
 
             if (campKey === 'camp3') {
-                const movement = [
+                const movement = applyGroupTextColor(2, [
                     ...(snippetData[2]?.snippets || []).slice(0, 3),
                     ...(snippetData[2]?.snippets || []).slice(4, 8)
-                ];
-                const light = (snippetData[3]?.snippets || []).slice(0, 2);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
-                const variables = (snippetData[9]?.snippets || []).slice(0, 2);
-                const moreMotors = (snippetData[10]?.snippets || []).slice(0, 2);
-                const moreMovement = (snippetData[11]?.snippets || []).slice(0, 2);
+                ]);
+                const light = applyGroupTextColor(3, (snippetData[3]?.snippets || []).slice(0, 2));
+                const events = applyGroupTextColor(5, (snippetData[5]?.snippets || []).slice(0, 2));
+                const control = applyGroupTextColor(6, (snippetData[6]?.snippets || []).slice(0, 2));
+                const sensors = applyGroupTextColor(7, (snippetData[7]?.snippets || []).slice(0, 2));
+                const operators = applyGroupTextColor(8, (snippetData[8]?.snippets || []).slice(0, 2));
+                const variables = applyGroupTextColor(9, (snippetData[9]?.snippets || []).slice(0, 2));
+                const moreMotors = applyGroupTextColor(10, (snippetData[10]?.snippets || []).slice(0, 2));
+                const moreMovement = applyGroupTextColor(11, (snippetData[11]?.snippets || []).slice(0, 2));
 
                 currentSnippetData[CAMP3_COMBINED_ID] = {
                     colorClass: 'movement-color',
                     snippets: [
-                        ...movement,
-                        ...light,
-                        ...events,
-                        ...control,
-                        ...sensors,
-                        ...operators,
-                        ...variables,
-                        ...moreMotors,
-                        ...moreMovement
+                        ...movement, ...light, ...events, ...control,
+                        ...sensors, ...operators, ...variables, ...moreMotors, ...moreMovement
                     ]
                 };
             }

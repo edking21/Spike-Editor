@@ -461,7 +461,7 @@ result = a + b`
                     id: 'var1',
                     buttonText: 'New Variable',
                     emoji: '🧿',
-                    color: '#32CD32',
+                    color: '#dfdae8',
                     textPython: `
 # variable example
 a = 0
@@ -581,5 +581,31 @@ sys.exit()`
         }
     };
 
-    global.SpikeShared = { ui, renderers, snippetData };  // Remove escapeHtml from export
+    // Shared text color by snippet group
+    const snippetTextColorByGroup = {
+        1: '#ffffff', // Motors
+        2: '#ffffff', // Movement
+        3: '#ffffff', // Light
+        4: '#ffffff', // Sound
+        5: '#000000', // Events
+        6: '#ffffff', // Control
+        7: '#000000', // Sensors
+        8: '#ffffff', // Operators
+        9: '#000000', // Variables
+        10: '#ffffff', // More Motors  <-- changed to white
+        11: '#000000' // More Movement
+    };
+
+    function applyGroupTextColor(groupId, snippets) {
+        const color = snippetTextColorByGroup[groupId] || '#000000';
+        return (snippets || []).map(s => ({ ...s, textColor: s.textColor || color }));
+    }
+
+    global.SpikeShared = {
+        ui,
+        renderers,
+        snippetData,
+        snippetTextColorByGroup,
+        applyGroupTextColor
+    };
 })(window);

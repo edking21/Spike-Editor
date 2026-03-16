@@ -50,13 +50,13 @@
             <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(8)"></button>
                 <div class="emoji-label">Operators</div>
             </div>
-            <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(9)"></button>
+            <div class="emoji-container"><button class="color-circle orange-circle" onclick="refreshSnippets(9)"></button>
                 <div class="emoji-label">Variables</div>
             </div>
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(10)"></button>
+            <div class="emoji-container"><button class="color-circle blue-circle" onclick="refreshSnippets(10)"></button>
                 <div class="emoji-label">More Motors</div>
             </div>
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(11)"></button>
+            <div class="emoji-container"><button class="color-circle pink-circle" onclick="refreshSnippets(11)"></button>
                 <div class="emoji-label">More Movement</div>
             </div>
         </div>
@@ -85,6 +85,7 @@
         const ui = shared.ui || {};
         const renderers = shared.renderers || {};
         const snippetData = shared.snippetData || {};
+        const applyGroupTextColor = shared.applyGroupTextColor || ((_, snippets) => snippets || []);
 
         if (!shared.ui || !shared.renderers || !shared.snippetData) {
             console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js');
@@ -93,27 +94,6 @@
         function toggleMobileMenu() { ui.toggleMobileMenu && ui.toggleMobileMenu(); }
         function closeMobileMenu() { ui.closeMobileMenu && ui.closeMobileMenu(); }
         function searchCurrentPage() { ui.searchCurrentPage && ui.searchCurrentPage(); }
-
-        // Text color by snippet group number (left menu numbers)
-        // Adjust values here only.
-        const snippetTextColorByGroup = {
-            1: '#ffffff', // Motors
-            2: '#ffffff', // Movement
-            3: '#ffffff', // Light
-            4: '#ffffff', // Sound
-            5: '#000000', // Events
-            6: '#ffffff', // Control
-            7: '#000000', // Sensors
-            8: '#ffffff', // Operators
-            9: '#ffffff', // Variables
-            10: '#000000', // More Motors
-            11: '#000000' // More Movement
-        };
-
-        function applyGroupTextColor(groupId, snippets) {
-            const color = snippetTextColorByGroup[groupId] || '#000000';
-            return (snippets || []).map(s => ({ ...s, textColor: s.textColor || color }));
-        }
 
         function refreshSnippets(groupId) {
             const group = snippetData[groupId];
