@@ -1,146 +1,6 @@
 (function (global) {
     'use strict';
 
-    function escapeHtml(value) {
-        return String(value ?? '')
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll('"', '&quot;')
-            .replaceAll("'", '&#39;');
-    }
-
-    const ui = {
-        toggleMobileMenu() {
-            document.body.classList.toggle('mobile-menu-open');
-        },
-        closeMobileMenu() {
-            document.body.classList.remove('mobile-menu-open');
-        },
-        searchCurrentPage() {
-            const query = prompt('Search this page:');
-            if (!query) return;
-            const found = window.find(query, false, false, true, false, false, false);
-            if (!found) alert(`No matches found for "${query}".`);
-        },
-        toggleDropdown(dropdownId, event) {
-            if (event) event.stopPropagation();
-            const dropdown = document.getElementById(dropdownId);
-            if (!dropdown) return;
-            const expanded = dropdown.classList.toggle('open');
-            const btn = dropdown.querySelector('.menu-dropdown-toggle');
-            if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        },
-        closeDropdown(dropdownId) {
-            const dropdown = document.getElementById(dropdownId);
-            if (!dropdown) return;
-            dropdown.classList.remove('open');
-            const btn = dropdown.querySelector('.menu-dropdown-toggle');
-            if (btn) btn.setAttribute('aria-expanded', 'false');
-        }
-    };
-
-    const renderers = {
-        renderEmojiButtons({ containerId, buttons, onClickFnName }) {
-            const host = document.getElementById(containerId);
-            if (!host) return;
-
-            host.innerHTML = (buttons || []).map(button => `
-                <div class="emoji-container">
-                    <button
-                        type="button"
-                        class="color-circle ${escapeHtml(button.className)}"
-                        title="${escapeHtml(button.bubbleLabel)}"
-                        aria-label="${escapeHtml(button.bubbleLabel)}"
-                        onclick="${escapeHtml(onClickFnName)}(${Number(button.id)})">
-                    </button>
-                    <div class="emoji-label">${escapeHtml(button.label)}</div>
-                </div>
-            `).join('');
-        },
-
-        renderSnippetButtons({ containerId, snippets }) {
-            const host = document.getElementById(containerId);
-            if (!host) return;
-
-            const inserted = new Set();
-
-            const normalize = (value) =>
-                String(value || '')
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, ' ')
-                    .trim();
-
-            // Supports current ids and future snippetData labels.
-            const sectionRules = [
-                { key: 'motors',      label: 'Motors',      match: ['motors', 'motor'] },
-                { key: 'movement',    label: 'Movement',    match: ['move', 'movement'] },
-                { key: 'light',       label: 'Light',       match: ['light'] },
-                { key: 'sound',       label: 'Sound',       match: ['sound', 'audio', 'beep', 'tone'] },
-                { key: 'events',      label: 'Events',      match: ['event', 'events'] },
-                { key: 'control',     label: 'Control',     match: ['control'] },
-                { key: 'sensors',     label: 'Sensors',     match: ['sensor', 'sensors'] },
-                { key: 'operators',   label: 'Operators',   match: ['operator', 'operators'] },
-                { key: 'variables',   label: 'Variables',   match: ['variable', 'variables'] },
-                { key: 'myblocks',    label: 'My Blocks',   match: ['my blocks', 'myblocks', 'my block'] },
-                { key: 'moremotors',  label: 'More Motors', match: ['more motors', 'moremotors'] }
-            ];
-
-            function resolveSection(snippet) {
-                const explicit = normalize(snippet?.section || snippet?.sectionLabel || snippet?.groupLabel);
-                const id = normalize(snippet?.id);
-                const text = normalize(snippet?.buttonText);
-
-                // 1) Explicit section always wins
-                if (explicit) {
-                    const explicitRule = sectionRules.find(
-                        rule => normalize(rule.label) === explicit || rule.key === explicit.replace(/\s+/g, '')
-                    );
-                    if (explicitRule) return explicitRule;
-                }
-
-                // 2) ID prefix wins (prevents "motors" keyword in movement text from mislabeling)
-                if (id.startsWith('motor')) return sectionRules.find(r => r.key === 'motors');
-                if (id.startsWith('move')) return sectionRules.find(r => r.key === 'movement');
-                if (id.startsWith('light')) return sectionRules.find(r => r.key === 'light');
-                if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
-                if (id.startsWith('event')) return sectionRules.find(r => r.key === 'events');
-                if (id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
-                if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
-                if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
-
-                // 3) Fallback keyword match
-                return sectionRules.find(rule =>
-                    rule.match.some(token =>
-                        id.startsWith(token) || text.startsWith(token) || text.includes(` ${token}`)
-                    )
-                );
-            }
-
-            host.innerHTML = (snippets || []).map(snippet => {
-                const section = resolveSection(snippet);
-                let labelHtml = '';
-
-                if (section && !inserted.has(section.key)) {
-                    inserted.add(section.key);
-                    labelHtml = `<div class="snippet-group-label">${escapeHtml(section.label)}</div>`;
-                }
-
-                const textColor = snippet.textColor || '#ffffff';
-
-                return `
-                    ${labelHtml}
-                    <div class="snippet">
-                        <button type="button" style="background-color: ${escapeHtml(snippet.color || '#666')}; color: ${escapeHtml(textColor)};">
-                            <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
-                            <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-    };
-
     const snippetData = {
         1: {   // motors
             colorClass: 'motors-color',
@@ -155,16 +15,16 @@
 await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
                 },
                 {
-                    id: 'motors1',
+                    id: 'motors2',
                     buttonText: 'Go shortest path to position 0',     
                     emoji: '🧿' ,
                     color: '#0066FF',
                     textPython: ` 
 # Go shortest path to position 0
 await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_PATH)`
-                },
+                }
             ]
-        },   
+        },
         2: {   // movement
             colorClass: 'movement-color',
             snippets: [
@@ -233,7 +93,7 @@ movement_speed = int(0.2 * 1100)`
                     textPython: `
 # set movement motors to C+D
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
-                },
+                }
             ]
         },
         3: {   // light 
@@ -467,7 +327,7 @@ result = a + b`
             colorClass: 'variables-color',
             snippets: [
                 {
-                    id: 'op1',
+                    id: 'var1',
                     buttonText: 'New Variable',
                     emoji: '🧿',
                     color: '#32CD32',
@@ -478,7 +338,35 @@ a = 0
                }
             ]
         },
-        10: {   // hints 
+        10: {   // More Motors
+            colorClass: 'moremotors-color',
+            snippets: [
+                {
+                    id: 'moremotors1',
+                    buttonText: 'Run motor E at 50% power',
+                    emoji: '🧿' ,
+                    color: '#0066FF',
+                    textPython: `
+# Run motor E at 50% power
+motor.run(port.E, 550)`
+                }
+            ]
+        },
+        11: {   // More Movement
+            colorClass: 'movement-color',
+            snippets: [
+                {
+                    id: 'move7',
+                    buttonText: 'move backward for 10 rotations',
+                    emoji: '🧿',
+                    color: '#FF69B4',
+                    textPython: `
+# move backward for 10cm
+await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
+                }
+            ]
+        },
+        12: {   // hints 
             colorClass: 'hints-color',
             snippets: [
                 {
@@ -562,5 +450,5 @@ sys.exit()`
         }
     };
 
-    global.SpikeShared = { ui, renderers, snippetData, escapeHtml };
+    global.SpikeShared = { ui, renderers, snippetData };  // Remove escapeHtml from export
 })(window);
