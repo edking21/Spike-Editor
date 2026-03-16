@@ -299,6 +299,7 @@ body {
     filter: brightness(110%);
 }
 
+.emoji-container .light-blue-circle   { background-color: #92b1e0 !important; }
 .emoji-container .blue-circle         { background-color: #0066FF !important; }
 .emoji-container .light-blue-circle   { background-color: #87CEEB !important; }
 .emoji-container .red-circle          { background-color: #CC0000 !important; }
