@@ -1,6 +1,137 @@
 (function (global) {
     'use strict';
 
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    const ui = {
+        toggleMobileMenu() { document.body.classList.toggle('mobile-menu-open'); },
+        closeMobileMenu() { document.body.classList.remove('mobile-menu-open'); },
+        searchCurrentPage() {
+            const query = prompt('Search this page:');
+            if (!query) return;
+            const found = window.find(query, false, false, true, false, false, false);
+            if (!found) alert(`No matches found for "${query}".`);
+        },
+        toggleDropdown(dropdownId, event) {
+            if (event) event.stopPropagation();
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+            const expanded = dropdown.classList.toggle('open');
+            const btn = dropdown.querySelector('.menu-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        },
+        closeDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+            dropdown.classList.remove('open');
+            const btn = dropdown.querySelector('.menu-dropdown-toggle');
+            if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+    };
+
+    const renderers = {
+        renderEmojiButtons({ containerId, buttons, onClickFnName }) {
+            const host = document.getElementById(containerId);
+            if (!host) return;
+            host.innerHTML = (buttons || []).map(b => `
+                <div class="emoji-container">
+                    <button type="button"
+                        class="color-circle ${b.className || ''}"
+                        onclick="${onClickFnName}(${Number(b.id)})"></button>
+                    <div class="emoji-label">${b.label || ''}</div>
+                </div>
+            `).join('');
+        },
+        renderSnippetButtons({ containerId, snippets }) {
+            const host = document.getElementById(containerId);
+            if (!host) return;
+
+            const shown = new Set();
+
+            const normalize = (v) =>
+                String(v || '')
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, ' ')
+                    .trim();
+
+            const sectionRules = [
+                { key: 'motors', label: 'Motors', match: ['motor', 'motors'] },
+                { key: 'movement', label: 'Movement', match: ['move', 'movement'] },
+                { key: 'light', label: 'Light', match: ['light'] },
+                { key: 'sound', label: 'Sound', match: ['sound', 'beep', 'audio'] },
+                { key: 'events', label: 'Events', match: ['ev', 'event', 'events', 'when'] },
+                { key: 'control', label: 'Control', match: ['ctrl', 'control', 'repeat', 'forever'] },
+                { key: 'sensors', label: 'Sensors', match: ['sensor', 'fn', 'distance', 'color'] },
+                { key: 'operators', label: 'Operators', match: ['op', 'operator', 'operators'] },
+                { key: 'variables', label: 'Variables', match: ['var', 'variable', 'variables'] },
+                { key: 'moremotors', label: 'More Motors', match: ['more motors', 'moremotors'] },
+                { key: 'moremovement', label: 'More Movement', match: ['more movement', 'moremovement'] }
+            ];
+
+            function resolveSection(snippet) {
+                const explicit = normalize(snippet?.section || snippet?.sectionLabel || snippet?.groupLabel);
+                const id = normalize(snippet?.id);
+                const idCompact = id.replace(/\s+/g, '');
+                const text = normalize(snippet?.buttonText);
+
+                // explicit section first
+                if (explicit) {
+                    const rule = sectionRules.find(r =>
+                        normalize(r.label) === explicit || r.key === explicit.replace(/\s+/g, '')
+                    );
+                    if (rule) return rule;
+                }
+
+                // id prefix rules
+                if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
+                if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
+                if (id.startsWith('motor')) return sectionRules.find(r => r.key === 'motors');
+                if (id.startsWith('move')) return sectionRules.find(r => r.key === 'movement');
+                if (id.startsWith('light')) return sectionRules.find(r => r.key === 'light');
+                if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
+                if (id.startsWith('ev')) return sectionRules.find(r => r.key === 'events');
+                if (id.startsWith('ctrl') || id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
+                if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
+                if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
+                if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
+
+                // fallback text match
+                return sectionRules.find(rule =>
+                    rule.match.some(token =>
+                        text.startsWith(token) || text.includes(` ${token}`) || id.includes(token)
+                    )
+                );
+            }
+
+            host.innerHTML = (snippets || []).map((snippet) => {
+                const section = resolveSection(snippet);
+                let labelHtml = '';
+
+                if (section && !shown.has(section.key)) {
+                    shown.add(section.key);
+                    labelHtml = `<div class="snippet-group-label">${section.label}</div>`;
+                }
+
+                return `
+                    ${labelHtml}
+                    <div class="snippet">
+                        <button type="button" style="background-color: ${snippet.color || '#666'}; color: ${snippet.textColor || '#fff'};">
+                            <span class="emoji">${snippet.emoji || '🧿'}</span>
+                            <span class="label">${snippet.buttonText || ''}</span>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+    };
+
     const snippetData = {
         1: {   // motors
             colorClass: 'motors-color',

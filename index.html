@@ -81,11 +81,18 @@
                 .replaceAll("'", '&#39;');
         }
 
-        const { ui, renderers, snippetData } = window.SpikeShared;
+        const shared = window.SpikeShared || {};
+        const ui = shared.ui || {};
+        const renderers = shared.renderers || {};
+        const snippetData = shared.snippetData || {};
 
-        function toggleMobileMenu() { ui.toggleMobileMenu(); }
-        function closeMobileMenu() { ui.closeMobileMenu(); }
-        function searchCurrentPage() { ui.searchCurrentPage(); }
+        if (!shared.ui || !shared.renderers || !shared.snippetData) {
+            console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js');
+        }
+
+        function toggleMobileMenu() { ui.toggleMobileMenu && ui.toggleMobileMenu(); }
+        function closeMobileMenu() { ui.closeMobileMenu && ui.closeMobileMenu(); }
+        function searchCurrentPage() { ui.searchCurrentPage && ui.searchCurrentPage(); }
 
         // Text color by snippet group number (left menu numbers)
         // Adjust values here only.
@@ -106,28 +113,6 @@
         function applyGroupTextColor(groupId, snippets) {
             const color = snippetTextColorByGroup[groupId] || '#000000';
             return (snippets || []).map(s => ({ ...s, textColor: s.textColor || color }));
-        }
-
-        function renderSnippetsWithColor(snippets) {
-            const host = document.getElementById('snippet-column');
-            if (!host) return;
-
-            host.innerHTML = (snippets || []).map(snippet => {
-                // Use explicit textColor from snippetData first, then isWhiteTextSnippet
-                const textColor = snippet.textColor
-                    ? snippet.textColor
-                    : isWhiteTextSnippet(snippet) ? '#ffffff' : '#000000';
-
-                return `
-                    <div class="snippet">
-                        <button type="button"
-                            style="background-color: ${escapeHtml(snippet.color || '#666')}; color: ${escapeHtml(textColor)};">
-                            <span class="emoji">${escapeHtml(snippet.emoji || '🧿')}</span>
-                            <span class="label">${escapeHtml(snippet.buttonText || '')}</span>
-                        </button>
-                    </div>
-                `;
-            }).join('');
         }
 
         function refreshSnippets(groupId) {
