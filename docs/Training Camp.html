@@ -71,8 +71,10 @@
         const trainingCampEmojiButtons = {
             camp1: [
                 { id: CAMP1_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' },
-                { id: 4, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 5, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-yellow-circle' }
+                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
+                { id: 6, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-yellow-circle' },
+                { id: 7, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'light-blue-circle' },
+                { id: 8, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
             ],
             camp2: [
                 { id: CAMP2_COMBINED_ID, label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
@@ -84,11 +86,11 @@
             camp3: [
                 { id: CAMP3_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' },
                 { id: 3, label: 'Light', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
-                { id: 4, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 5, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' },
-                { id: 6, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'blue-circle' },
-                { id: 7, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
-                { id: 8, label: 'Hints', bubbleLabel: 'Red Hints bubble', className: 'red-circle' }
+                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
+                { id: 6, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' },
+                { id: 7, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'light-blue-circle' },
+                { id: 8, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
+                { id: 9, label: 'Hints', bubbleLabel: 'Red Hints bubble', className: 'red-circle' }
             ]
         };
 
@@ -120,15 +122,16 @@
                 };
             });
 
-            // Undo previous Camp1 movement change: use first 7 movement snippets
             if (campKey === 'camp1') {
                 const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const events = (snippetData[4]?.snippets || []).slice(0, 2);
-                const control = (snippetData[5]?.snippets || []).slice(0, 2);
+                const events = (snippetData[5]?.snippets || []).slice(0, 2);
+                const control = (snippetData[6]?.snippets || []).slice(0, 2);
+                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
+                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
 
                 currentSnippetData[CAMP1_COMBINED_ID] = {
                     colorClass: 'movement-color',
-                    snippets: [...movement, ...events, ...control]
+                    snippets: [...movement, ...events, ...control, ...sensors, ...operators]
                 };
             }
 
@@ -145,17 +148,16 @@
                 };
             }
 
-            // Fix Camp3 movement slicing: pick 0..2 and 4..7
             if (campKey === 'camp3') {
                 const movement = [
                     ...(snippetData[2]?.snippets || []).slice(0, 3),
                     ...(snippetData[2]?.snippets || []).slice(4, 8)
                 ];
                 const light = (snippetData[3]?.snippets || []).slice(0, 2);
-                const events = (snippetData[4]?.snippets || []).slice(0, 2);
-                const control = (snippetData[5]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[6]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[7]?.snippets || []).slice(0, 2);
+                const events = (snippetData[5]?.snippets || []).slice(0, 2);
+                const control = (snippetData[6]?.snippets || []).slice(0, 2);
+                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
+                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
 
                 currentSnippetData[CAMP3_COMBINED_ID] = {
                     colorClass: 'movement-color',
