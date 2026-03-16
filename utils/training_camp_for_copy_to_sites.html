@@ -3,13 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <title>Spike</title>
-    <link rel="stylesheet" href="./styles/spike-shared.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 50px 2px 2px 2px;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+        }
+
+        .top-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            background-color: #1a73e8;
+            border-bottom: 1px solid #1a73e8;
+            box-sizing: border-box;
+            z-index: 1000;
+            font-family: Arial, sans-serif;
+            justify-content: flex-start;
+            gap: 0;
+        }
+
+        .menu-search {
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 18px;
+            line-height: 48px;
+            height: 48px;
+            width: 28px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 14px;
+            margin-right: 0;
+        }
+
+        .menu-toggle {
+            display: none;
+            border: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: 24px;
+            line-height: 48px;
+            height: 48px;
+            width: 32px;
+            cursor: pointer;
+            padding: 0;
+            margin-right: 10px;
+        }
+
+        .menu-brand {
+            font-size: 16px;
+            font-weight: 400;
+            color: #ffffff;
+            white-space: nowrap;
+            line-height: 48px;
+        }
+
+        .menu-links {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            height: 48px;
+        }
+
+        .mobile-sidebar {
+            display: none;
+        }
+
+        .mobile-overlay {
+            display: none;
+        }
+
+        .top-menu a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            display: block;
+            height: 48px;
+            line-height: 48px;
+            border-bottom: 2px solid transparent;
+            box-sizing: border-box;
+        }
+
+        .top-menu a:visited {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .top-menu a:hover {
+            color: #ffffff;
+        }
+
+        .top-menu a.active {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .top-menu a.active:visited {
+            color: #ffffff;
+        }
+
+        .left-column {
+            position: fixed;
+            top: 48px;
+            left: 0;
+            width: 80px;
+            height: calc(100vh - 48px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #f5f5f5;
+            border-right: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .emoji-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding-top: 12px;
+            height: 100%;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .emoji-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .emoji-container button {
+            font-size: 32px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .emoji-container button:hover {
+            transform: scale(1.08);
+            filter: brightness(110%);
+        }
+
+        .emoji-label {
+            margin-top: 1px;
+            font-size: 12px;
+            color: black;
+            text-align: center;
+            width: 70px;
+            word-wrap: break-word;
+        }
+
+        .snippet-column {
+            margin-left: 80px;
+            padding: 0px 12px 12px 12px;
+        }
+
+        .snippet {
+            border: none;
+            border-radius: 8px;
+            padding: 6px;
+            margin: 8px 0;
+            background-color: transparent;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .snippet button {
+            cursor: pointer;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.12s ease, filter 0.12s ease;
+        }
+
+        .snippet button:hover {
+            transform: scale(1.04);
+            filter: brightness(110%);
+        }
+
+        .snippet .emoji {
+            font-size: 1.3em;
+            line-height: 1;
+        }
+
+        .snippet .label {
+            font-size: 1em;
+        }
+
+        .release-info {
+            text-align: center;
+            margin-top: 400px;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        .emoji-container .color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.15s ease;
+            font-size: 0; /* Remove any text content */
+        }
+
+        .emoji-container .color-circle:hover {
+            transform: scale(1.08);
+            filter: brightness(110%);
+        }
+
+        .emoji-container .blue-circle { background-color: #0066FF !important; }
+        .emoji-container .light-blue-circle { background-color: #87CEEB !important; }
+        .emoji-container .red-circle { background-color: #CC0000 !important; }
+        .emoji-container .pink-circle { background-color: #FF69B4 !important; }
+        .emoji-container .purple-circle { background-color: #8A2BE2 !important; }
+        .emoji-container .yellow-circle { background-color: #FFD700 !important; }
+        .emoji-container .dark-yellow-circle { background-color: #DAA520 !important; }
+        .emoji-container .green-circle { background-color: #32CD32 !important; }
+
+        @media (max-width: 500px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .menu-links {
+                display: none;
+            }
+
+            .menu-search {
+                margin-left: auto;
+            }
+
+            .mobile-sidebar {
+                display: block;
+                position: fixed;
+                top: 48px;
+                left: 0;
+                width: 230px;
+                height: calc(100vh - 48px);
+                background-color: #1a73e8;
+                transform: translateX(-100%);
+                transition: transform 0.2s ease;
+                z-index: 1200;
+                padding-top: 8px;
+            }
+
+            .mobile-sidebar a {
+                display: block;
+                color: #ffffff;
+                text-decoration: none;
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            .mobile-sidebar a.active {
+                background-color: rgba(255, 255, 255, 0.18);
+            }
+
+            .mobile-overlay {
+                display: block;
+                position: fixed;
+                top: 48px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.35);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s ease;
+                z-index: 1100;
+            }
+
+            body.mobile-menu-open .mobile-sidebar {
+                transform: translateX(0);
+            }
+
+            body.mobile-menu-open .mobile-overlay {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    </style>
 </head>
 <body>
     
     <div class="left-column">
-        <div class="emoji-block" id="emoji-block">
-            <!-- Dynamic emoji buttons go here -->
+        <div class="emoji-block">
+            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(1)"></button>
+                <div class="emoji-label">Main</div>
+            </div>
         </div>
     </div>
     <div class="snippet-column" id="snippet-column">
@@ -20,6 +325,157 @@
             © 2026 Spike Editor - Loading release info...
         </div>
     </div>
+    <script>
+        function toggleMobileMenu() {
+            document.body.classList.toggle('mobile-menu-open');
+        }
+
+        function closeMobileMenu() {
+            document.body.classList.remove('mobile-menu-open');
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeMobileMenu();
+            }
+        });
+
+        function searchCurrentPage() {
+            const query = prompt('Search this page:');
+            if (!query) return;
+
+            const found = window.find(query, false, false, true, false, false, false);
+            if (!found) {
+                alert(`No matches found for "${query}".`);
+            }
+        }
+
+        const snippetData = {
+            1: {  // Main
+                snippets: [
+                    {
+                        id: "fn1",
+                        buttonText: 'Line Follower Bang Bang (Main)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython:`
+
+########################################################################
+# 🤖 Main - Line Follower Bang Bang (Main)
+########################################################################
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    # set steering to 50% of maximum
+    steering = 50
+
+    # set movement speed to 20%
+    turn_speed = int(0.2 * 1100)
+
+    # set sleep seconds to 40 milliseconds 
+    sleep_milliseconds = 40
+
+    # set repeat range to 200 (this is an example, adjust as needed)
+    repeat_range = 200
+
+    # Repeat until returning to the start point 
+    for i in range (repeat_range): pass
+
+        # if the color sensor detects blue
+            # turn left at turn_speed 
+            # sleep for sleep_milliseconds  
+        # else:
+            # turn right at turn_speed
+            # sleep for sleep_milliseconds  
+
+runloop.run(main())
+sys.exit()
+            `
+                    },
+                    {
+                        id: "fn3",
+                        buttonText: 'Line Follower Proportional (Main)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+########################################################################
+# 🤖 Main - Line Follower Proportional (Main)
+########################################################################
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+    motor.reset_relative_position(port.D, 0)
+
+    # Insert the Line Follower Proportional class above this main function.
+    # Create a robot object from the LineFollower class.
+    robot = LineFollower(target_light=70, speed=140, kp=6.5)
+
+    # Repeat until returning to the start point 
+    # use relative position in sensors
+
+        # Follow a line using proportional corrections.
+        # robot object calls the follow_line method
+        await robot.follow_line()
+
+        # if a hand is near stop wait for 2 seconds then continue
+        `
+                    },
+                    {
+                        id: "fn4",
+                        buttonText: 'Robot Movement',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `
+#####################################################################
+# 🤖 Robot Movement
+#####################################################################
+async def robot_movement():
+    global should_stop
+
+    while not should_stop:
+
+        # turn left 90 degrees
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, -100)
+
+        if should_stop:
+            break
+
+        # move forward 4in
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 4 * 53, 0)
+`
+                    },
+                    {
+                        id: "fn6",
+                        buttonText: 'Line Counter (Main)',
+                        emoji: '🧿',
+                        color: '#8A2BE2',
+                        textPython: `   
+########################################################################
+# 🤖 Main - Line Counter Main
+########################################################################
+async def main():
+
+    # Run all functions concurrently as events
+    run(
+        when_hand_wave(),
+        when_blue(),
+        when_yellow(),
+        when_red(),
+        robot_movement()
+    )
+
+   `
+                    },
+
+                ]
+            },   // Functions
+            
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshSnippets(1);
+            fetchGitHubRelease();
+        });
+    </script>
     <script>
         // Utility functions (from utils.js)
         function refreshSnippets(buttonId) {
@@ -134,158 +590,9 @@
         }
         
     </script>
-    <script src="./scripts/spike-shared.js"></script>
-    <script>
-        const { ui, renderers, snippetData } = window.SpikeShared;
-
-        function toggleMobileMenu() { ui.toggleMobileMenu(); }
-        function closeMobileMenu() { ui.closeMobileMenu(); }
-        function searchCurrentPage() { ui.searchCurrentPage(); }
-        function toggleTrainingCampDropdown(event) { ui.toggleDropdown('training-camp-dropdown', event); }
-        function closeTrainingCampDropdown()       { ui.closeDropdown('training-camp-dropdown'); }
-
-        const CAMP1_COMBINED_ID = 2001;
-        const CAMP2_COMBINED_ID = 1001;
-        const CAMP3_COMBINED_ID = 3001;
-
-        const trainingCampEmojiButtons = {
-            camp1: [
-                { id: CAMP1_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' },
-                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 6, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-yellow-circle' },
-                { id: 7, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'light-blue-circle' },
-                { id: 8, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
-            ],
-            camp2: [
-                { id: CAMP2_COMBINED_ID, label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
-                { id: 2, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
-                { id: 4, label: 'Sound', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
-                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 6, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' }
-            ],
-            camp3: [
-                { id: CAMP3_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' },
-                { id: 3, label: 'Light', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
-                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 6, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' },
-                { id: 7, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'light-blue-circle' },
-                { id: 8, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
-                { id: 9, label: 'Variables', bubbleLabel: 'Orange Variables bubble', className: 'orange-circle' },
-                { id: 10, label: 'More Motors', bubbleLabel: 'Blue More Motors bubble', className: 'blue-circle' },
-                { id: 11, label: 'More Movement', bubbleLabel: 'Pink Move Movement bubble', className: 'pink-circle' }
-            ]
-        };
-
-        let currentSnippetData = {};
-
-        function renderEmojiButtons(buttons) {
-            renderers.renderEmojiButtons({
-                containerId: 'emoji-block',
-                buttons,
-                onClickFnName: 'refreshSnippets'
-            });
-        }
-
-        function refreshSnippets(groupId) {
-            const group = currentSnippetData[groupId];
-            renderers.renderSnippetButtons({
-                containerId: 'snippet-column',
-                snippets: group?.snippets || []
-            });
-        }
-
-        function buildCampData(campKey) {
-            currentSnippetData = {};
-
-            Object.keys(snippetData).forEach(k => {
-                currentSnippetData[k] = {
-                    ...snippetData[k],
-                    snippets: [...(snippetData[k].snippets || [])]
-                };
-            });
-
-            if (campKey === 'camp1') {
-                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
-
-                currentSnippetData[CAMP1_COMBINED_ID] = {
-                    colorClass: 'movement-color',
-                    snippets: [...movement, ...events, ...control, ...sensors, ...operators]
-                };
-            }
-
-            if (campKey === 'camp2') {
-                const motors = (snippetData[1]?.snippets || []).slice(0, 2);
-                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const sound = (snippetData[4]?.snippets || []).slice(0, 2);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-
-                currentSnippetData[CAMP2_COMBINED_ID] = {
-                    colorClass: 'motors-color',
-                    snippets: [...motors, ...movement, ...sound, ...events, ...control]
-                };
-            }
-
-            if (campKey === 'camp3') {
-                const movement = [
-                    ...(snippetData[2]?.snippets || []).slice(0, 3),
-                    ...(snippetData[2]?.snippets || []).slice(4, 8)
-                ];
-                const light = (snippetData[3]?.snippets || []).slice(0, 2);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
-                const variables = (snippetData[9]?.snippets || []).slice(0, 2);
-                const moreMotors = (snippetData[10]?.snippets || []).slice(0, 2);
-                const moreMovement = (snippetData[11]?.snippets || []).slice(0, 2);
-
-                currentSnippetData[CAMP3_COMBINED_ID] = {
-                    colorClass: 'movement-color',
-                    snippets: [
-                        ...movement,
-                        ...light,
-                        ...events,
-                        ...control,
-                        ...sensors,
-                        ...operators,
-                        ...variables,
-                        ...moreMotors,
-                        ...moreMovement
-                    ]
-                };
-            }
-        }
-
-        function selectTrainingCamp(campKey, event) {
-            if (event) event.preventDefault();
-
-            const buttons = trainingCampEmojiButtons[campKey];
-            if (!buttons) return;
-
-            buildCampData(campKey);
-            renderEmojiButtons(buttons);
-            refreshSnippets(buttons[0].id);
-            closeTrainingCampDropdown();
-        }
-
-        document.addEventListener('click', closeTrainingCampDropdown);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeMobileMenu();
-                closeTrainingCampDropdown();
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            selectTrainingCamp('camp1');
-            if (typeof fetchGitHubRelease === 'function') fetchGitHubRelease();
-        });
-    </script>
 </body>
 </html>
+
+
+
+
