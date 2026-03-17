@@ -2,6 +2,8 @@ param(
     [string]$IndexFile = "index.html",
     [string]$TrainingCampFile = "Training Camp.html",
     [string]$ClassLibraryFile = "Class Library.html",
+    [string]$StylesFile = "styles/spike-shared.css",
+    [string]$ScriptsFile = "scripts/spike-shared.js",
     [string]$UtilsFile = "utils.js",
     [string]$IndexOutputFile = "index_for_copy_to_sites.html",
     [string]$TrainingCampOutputFile = "training_camp_for_copy_to_sites.html",
@@ -26,6 +28,8 @@ function Resolve-PathWithBase {
 $IndexFile = Resolve-PathWithBase -PathValue $IndexFile -BasePath $ProjectRoot
 $TrainingCampFile = Resolve-PathWithBase -PathValue $TrainingCampFile -BasePath $ProjectRoot
 $ClassLibraryFile = Resolve-PathWithBase -PathValue $ClassLibraryFile -BasePath $ProjectRoot
+$StylesFile = Resolve-PathWithBase -PathValue $StylesFile -BasePath $ProjectRoot
+$ScriptsFile = Resolve-PathWithBase -PathValue $ScriptsFile -BasePath $ProjectRoot
 $UtilsFile = Resolve-PathWithBase -PathValue $UtilsFile -BasePath $PSScriptRoot
 $IndexOutputFile = Resolve-PathWithBase -PathValue $IndexOutputFile -BasePath $PSScriptRoot
 $TrainingCampOutputFile = Resolve-PathWithBase -PathValue $TrainingCampOutputFile -BasePath $PSScriptRoot
@@ -112,8 +116,62 @@ function New-OutputDirectories {
     }
 }
 
+function Inline-SharedCssInOutput {
+    param(
+        [string]$OutputFile,
+        [string]$CssContent
+    )
+
+    $content = Get-Content $OutputFile -Raw -Encoding UTF8
+    $patternCssLink = '(?im)^\s*<link\s+rel="stylesheet"\s+href="\.\/styles\/spike-shared\.css"\s*>\s*$'
+    $inlineCssBlock = "    <style>`n$CssContent`n    </style>"
+    $updated = $content -replace $patternCssLink, $inlineCssBlock
+
+    if ($updated -eq $content) {
+        Write-Host "No stylesheet link found to inline in $OutputFile" -ForegroundColor Yellow
+    } else {
+        $updated | Set-Content $OutputFile -Encoding UTF8
+        Write-Host "Temporarily inlined spike-shared.css into $OutputFile" -ForegroundColor DarkCyan
+    }
+}
+
+function Inline-SharedJsInOutput {
+    param(
+        [string]$OutputFile,
+        [string]$JsContent
+    )
+
+    $content = Get-Content $OutputFile -Raw -Encoding UTF8
+    $patternJsLink = '(?im)^\s*<script\s+src="\.\/scripts\/spike-shared\.js"><\/script>\s*$'
+    $inlineJsBlock = "    <script>`n        // Shared script (from scripts/spike-shared.js)`n$JsContent`n    </script>"
+    $updated = $content -replace $patternJsLink, $inlineJsBlock
+
+    # If no shared-script tag exists (for example class library output), inject before </body>.
+    if ($updated -eq $content) {
+        $updated = $content -replace '(?is)</body>', "$inlineJsBlock`n</body>"
+    }
+
+    if ($updated -eq $content) {
+        Write-Host "No suitable insertion point found to inline JS in $OutputFile" -ForegroundColor Yellow
+    } else {
+        $updated | Set-Content $OutputFile -Encoding UTF8
+        Write-Host "Temporarily inlined spike-shared.js into $OutputFile" -ForegroundColor DarkCyan
+    }
+}
+
+function Restore-OriginalOutputFiles {
+    param(
+        [hashtable]$OriginalFiles
+    )
+
+    foreach ($filePath in $OriginalFiles.Keys) {
+        $OriginalFiles[$filePath] | Set-Content $filePath -Encoding UTF8
+        Write-Host "Restored original file: $filePath" -ForegroundColor DarkGreen
+    }
+}
+
 # Check if required files exist
-$filesToCheck = @($IndexFile, $TrainingCampFile, $ClassLibraryFile, $UtilsFile)
+$filesToCheck = @($IndexFile, $TrainingCampFile, $ClassLibraryFile, $StylesFile, $ScriptsFile, $UtilsFile)
 foreach ($file in $filesToCheck) {
     if (-not (Test-Path $file)) {
         Write-Error "Error: $file not found!"
@@ -158,42 +216,57 @@ try {
     Write-Host "$TrainingCampOutputFile size: $((Get-Item $TrainingCampOutputFile).Length) bytes" -ForegroundColor Cyan
     Write-Host "$ClassLibraryOutputFile size: $((Get-Item $ClassLibraryOutputFile).Length) bytes" -ForegroundColor Cyan
     Write-Host "`nAll files are ready for copy-paste to Google Sites." -ForegroundColor Yellow
-    
-    # Ask if user wants to open the files
-    $response = Read-Host "`nOpen all files in notepad? (y/n)"
-    if ($response -eq 'y' -or $response -eq 'Y') {
-        Start-Process notepad $IndexOutputFile
-        Start-Process notepad $TrainingCampOutputFile
-        Start-Process notepad $ClassLibraryOutputFile
+
+    # Temporarily inline shared CSS/JS before manual copy for Google Sites embedding.
+    $cssContent = Get-Content $StylesFile -Raw -Encoding UTF8
+    $jsContent = Get-Content $ScriptsFile -Raw -Encoding UTF8
+    $outputFiles = @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
+    $originalOutputContent = @{}
+    foreach ($outputFile in $outputFiles) {
+        $originalOutputContent[$outputFile] = Get-Content $outputFile -Raw -Encoding UTF8
+        Inline-SharedCssInOutput -OutputFile $outputFile -CssContent $cssContent
+        Inline-SharedJsInOutput -OutputFile $outputFile -JsContent $jsContent
     }
     
-    # Ask which file to copy to clipboard
-    Write-Host "`nWhich file would you like to copy to clipboard?"
-    Write-Host "1. $IndexOutputFile (Main/Index)"
-    Write-Host "2. $TrainingCampOutputFile (Training Camp)"
-    Write-Host "3. $ClassLibraryOutputFile (Class Library)"
-    Write-Host "4. Neither"
-    $clipboardChoice = Read-Host "Enter choice (1/2/3/4)"
-    
-    switch ($clipboardChoice) {
-        '1' {
-            Get-Content $IndexOutputFile -Raw | Set-Clipboard
-            Write-Host "$IndexOutputFile content copied to clipboard!" -ForegroundColor Green
+    try {
+        # Ask if user wants to open the files
+        $response = (Read-Host "`nOpen all files in notepad? (y/n)").Trim()
+        if ($response -eq 'y' -or $response -eq 'Y') {
+            Start-Process notepad $IndexOutputFile
+            Start-Process notepad $TrainingCampOutputFile
+            Start-Process notepad $ClassLibraryOutputFile
         }
-        '2' {
-            Get-Content $TrainingCampOutputFile -Raw | Set-Clipboard
-            Write-Host "$TrainingCampOutputFile content copied to clipboard!" -ForegroundColor Green
+
+        # Ask which file to copy to clipboard
+        Write-Host "`nWhich file would you like to copy to clipboard?"
+        Write-Host "1. $IndexOutputFile (Main/Index)"
+        Write-Host "2. $TrainingCampOutputFile (Training Camp)"
+        Write-Host "3. $ClassLibraryOutputFile (Class Library)"
+        Write-Host "4. Neither"
+        $clipboardChoice = (Read-Host "Enter choice (1/2/3/4)").Trim()
+
+        switch ($clipboardChoice) {
+            '1' {
+                Get-Content $IndexOutputFile -Raw | Set-Clipboard
+                Write-Host "$IndexOutputFile content copied to clipboard!" -ForegroundColor Green
+            }
+            '2' {
+                Get-Content $TrainingCampOutputFile -Raw | Set-Clipboard
+                Write-Host "$TrainingCampOutputFile content copied to clipboard!" -ForegroundColor Green
+            }
+            '3' {
+                Get-Content $ClassLibraryOutputFile -Raw | Set-Clipboard
+                Write-Host "$ClassLibraryOutputFile content copied to clipboard!" -ForegroundColor Green
+            }
+            '4' {
+                Write-Host "No files copied to clipboard." -ForegroundColor Yellow
+            }
+            default {
+                Write-Host "Invalid choice. No files copied to clipboard." -ForegroundColor Yellow
+            }
         }
-        '3' {
-            Get-Content $ClassLibraryOutputFile -Raw | Set-Clipboard
-            Write-Host "$ClassLibraryOutputFile content copied to clipboard!" -ForegroundColor Green
-        }
-        '4' {
-            Write-Host "No files copied to clipboard." -ForegroundColor Yellow
-        }
-        default {
-            Write-Host "Invalid choice. No files copied to clipboard." -ForegroundColor Yellow
-        }
+    } finally {
+        Restore-OriginalOutputFiles -OriginalFiles $originalOutputContent
     }
     
 } catch {
