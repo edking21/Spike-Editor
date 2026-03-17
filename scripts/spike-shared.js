@@ -578,8 +578,23 @@ runloop.run(main())
 sys.exit()`
                 }
             ]
+        },
+        20: {   // class
+            colorClass: 'class-color',
+            snippets: [
+                {
+                    id: 'class1',
+                    buttonText: 'Class Example',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: `
+# Class example
+class MyClass:
+    def __init__(self, value):
+        self.value = value`
+                }
+            ]
         }
-    };
-
+    }
     global.SpikeShared = { ui, renderers, snippetData };  // Remove escapeHtml from export
 })(window);

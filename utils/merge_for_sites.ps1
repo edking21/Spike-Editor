@@ -66,14 +66,20 @@ function Update-PageWithUtils {
 
     $content = Get-Content $InputFile -Raw -Encoding UTF8
 
-    # Replace external utils.js include when present.
-    $patternScriptSrc = '<script src="\.\/(?:utils\/)?utils\.js"><\/script>'
-    $updated = $content -replace $patternScriptSrc, $UtilsReplacement
+    # Keep generated output using external utils.js, so utils inlining can remain a temporary copy step.
+    $updated = $content
+    $patternInlineUtils = '(?s)<script>\s*// Utility functions \(from utils\.js\).*?<\/script>'
+    $updated = $updated -replace $patternInlineUtils, '    <script src="./utils/utils.js"></script>'
 
-    # If file already has inlined utils block, refresh that block instead.
-    if ($updated -eq $content) {
-        $patternInlineUtils = '(?s)<script>\s*// Utility functions \(from utils\.js\).*?<\/script>'
-        $updated = $content -replace $patternInlineUtils, $UtilsReplacement
+    # Normalize utils.js includes to exactly one tag.
+    $patternUtilsSrcAll = '(?im)^\s*<script\s+src="\.\/utils\/utils\.js"><\/script>\s*\r?\n?'
+    $updated = [regex]::Replace($updated, $patternUtilsSrcAll, '')
+
+    $patternSharedSrc = '(?im)^\s*<script\s+src="\.\/scripts\/spike-shared\.js"><\/script>\s*$'
+    if ([regex]::IsMatch($updated, $patternSharedSrc)) {
+        $updated = [regex]::Replace($updated, $patternSharedSrc, '    <script src="./utils/utils.js"></script>' + "`n" + '$0', 1)
+    } else {
+        $updated = $updated -replace '(?is)</body>', ('    <script src="./utils/utils.js"></script>' + "`n</body>")
     }
 
     # Remove mobile/sidebar/top-menu/menu-links/menu-search markup for Google Sites output.
@@ -135,6 +141,35 @@ function Inline-SharedCssInOutput {
     }
 }
 
+function Inline-UtilsJsInOutput {
+    param(
+        [string]$OutputFile,
+        [string]$UtilsContent
+    )
+
+    $content = Get-Content $OutputFile -Raw -Encoding UTF8
+    $patternUtilsSrc = '(?im)^\s*<script\s+src="\.\/(?:utils\/)?utils\.js"><\/script>\s*$'
+    $patternInlineUtils = '(?s)<script>\s*// Utility functions \(from utils\.js\).*?<\/script>'
+    $inlineUtilsBlock = "    <script>`n        // Utility functions (from utils.js)`n$UtilsContent`n    </script>"
+
+    $updated = $content -replace $patternUtilsSrc, $inlineUtilsBlock
+
+    if ($updated -eq $content) {
+        $updated = $content -replace $patternInlineUtils, $inlineUtilsBlock
+    }
+
+    if ($updated -eq $content) {
+        $updated = $content -replace '(?is)</body>', "$inlineUtilsBlock`n</body>"
+    }
+
+    if ($updated -eq $content) {
+        Write-Host "No suitable insertion point found to inline utils.js in $OutputFile" -ForegroundColor Yellow
+    } else {
+        $updated | Set-Content $OutputFile -Encoding UTF8
+        Write-Host "Temporarily inlined utils.js into $OutputFile" -ForegroundColor DarkCyan
+    }
+}
+
 function Inline-SharedJsInOutput {
     param(
         [string]$OutputFile,
@@ -185,12 +220,7 @@ New-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, 
 try {
     # Read the utils.js file once
     $utilsContent = Get-Content $UtilsFile -Raw -Encoding UTF8
-    
-    # Add proper indentation to utils.js content
-    $indentedUtils = ($utilsContent -split "`n" | ForEach-Object { "        $_" }) -join "`n"
-    
-    # Create the replacement content with proper script tags
-    $utilsReplacement = "<script>`n        // Utility functions (from utils.js)`n$indentedUtils`n    </script>"
+    $utilsReplacement = ''
     
     # Process index.html
     Write-Host "Processing $IndexFile..." -ForegroundColor Cyan
@@ -217,13 +247,14 @@ try {
     Write-Host "$ClassLibraryOutputFile size: $((Get-Item $ClassLibraryOutputFile).Length) bytes" -ForegroundColor Cyan
     Write-Host "`nAll files are ready for copy-paste to Google Sites." -ForegroundColor Yellow
 
-    # Temporarily inline shared CSS/JS before manual copy for Google Sites embedding.
+    # Temporarily inline utils/shared CSS/shared JS before manual copy for Google Sites embedding.
     $cssContent = Get-Content $StylesFile -Raw -Encoding UTF8
     $jsContent = Get-Content $ScriptsFile -Raw -Encoding UTF8
     $outputFiles = @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
     $originalOutputContent = @{}
     foreach ($outputFile in $outputFiles) {
         $originalOutputContent[$outputFile] = Get-Content $outputFile -Raw -Encoding UTF8
+        Inline-UtilsJsInOutput -OutputFile $outputFile -UtilsContent $utilsContent
         Inline-SharedCssInOutput -OutputFile $outputFile -CssContent $cssContent
         Inline-SharedJsInOutput -OutputFile $outputFile -JsContent $jsContent
     }
