@@ -5,7 +5,8 @@
     <title>Spike</title>
     <link rel="stylesheet" href="./styles/spike-shared.css">
 </head>
-<body>   
+<body>
+    
     <div class="left-column">
         <div class="emoji-block">
             <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(1)"></button>
@@ -13,67 +14,74 @@
             </div>
         </div>
     </div>
-    <div class="snippet-column" id="snippet-column">
-        <!-- Snippets will be dynamically inserted here -->
-    </div>
-    <div class="snippet-column">
-        <div class="release-info" id="release-info">
-            © 2026 Spike Editor - Loading release info...
-        </div>
-    </div>
+    <div class="snippet-column" id="snippet-column"></div>
+    <script src="./utils/utils.js"></script>
+<script src="./scripts/spike-shared.js"></script>
     <script>
-        function toggleMobileMenu() {
-            document.body.classList.toggle('mobile-menu-open');
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
         }
 
-        function closeMobileMenu() {
-            document.body.classList.remove('mobile-menu-open');
+        const shared = window.SpikeShared || {};
+        const ui = shared.ui || {};
+        const renderers = shared.renderers || {};
+        const snippetData = shared.snippetData || {};
+
+        if (!shared.ui || !shared.renderers || !shared.snippetData) {
+            console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js');
         }
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closeMobileMenu();
-            }
-        });
+        function toggleMobileMenu() { ui.toggleMobileMenu && ui.toggleMobileMenu(); }
+        function closeMobileMenu() { ui.closeMobileMenu && ui.closeMobileMenu(); }
+        function searchCurrentPage() { ui.searchCurrentPage && ui.searchCurrentPage(); }
 
-        function searchCurrentPage() {
-            const query = prompt('Search this page:');
-            if (!query) return;
+        // Text color by snippet group number (left menu numbers)
+        // Adjust values here only.
+        const snippetTextColorByGroup = {
+            1: '#ffffff', // Motors
+            2: '#ffffff', // Movement
+            3: '#ffffff', // Light
+            4: '#ffffff', // Sound
+            5: '#000000', // Events
+            6: '#ffffff', // Control
+            7: '#000000', // Sensors
+            8: '#ffffff', // Operators
+            9: '#ffffff', // Variables
+            10: '#000000', // More Motors
+            11: '#000000' // More Movement
+        };
 
-            const found = window.find(query, false, false, true, false, false, false);
-            if (!found) {
-                alert(`No matches found for "${query}".`);
-            }
+        function applyGroupTextColor(groupId, snippets) {
+            const color = snippetTextColorByGroup[groupId] || '#000000';
+            return (snippets || []).map(s => ({ ...s, textColor: s.textColor || color }));
+        }
+
+        function refreshSnippets(groupId) {
+            const group = snippetData[groupId];
+            renderers.renderSnippetButtons({
+                containerId: 'snippet-column',
+                snippets: applyGroupTextColor(groupId, group?.snippets || [])
+            });
+        }
+
+        function renderAllSnippetGroups() {
+            const order = [20];
+            const combined = order.flatMap(id => applyGroupTextColor(id, snippetData[id]?.snippets || []));
+            renderers.renderSnippetButtons({
+                containerId: 'snippet-column',
+                snippets: combined
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            refreshSnippets(1);
-            fetchGitHubRelease();
+            renderAllSnippetGroups();
         });
     </script>
-    <script src="./utils/utils.js"></script>
-<script src="./scripts/spike-shared.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
