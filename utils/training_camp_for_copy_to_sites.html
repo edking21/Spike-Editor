@@ -136,13 +136,20 @@
     </script>
     <script src="./scripts/spike-shared.js"></script>
     <script>
-        const { ui, renderers, snippetData } = window.SpikeShared;
+        const shared = window.SpikeShared || {};
+        const ui = shared.ui || {};
+        const renderers = shared.renderers || {};
+        const snippetData = shared.snippetData || {};
 
-        function toggleMobileMenu() { ui.toggleMobileMenu(); }
-        function closeMobileMenu() { ui.closeMobileMenu(); }
-        function searchCurrentPage() { ui.searchCurrentPage(); }
-        function toggleTrainingCampDropdown(event) { ui.toggleDropdown('training-camp-dropdown', event); }
-        function closeTrainingCampDropdown()       { ui.closeDropdown('training-camp-dropdown'); }
+        if (!shared.ui || !shared.renderers || !shared.snippetData) {
+            console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js export.');
+        }
+
+        function toggleMobileMenu() { ui.toggleMobileMenu && ui.toggleMobileMenu(); }
+        function closeMobileMenu() { ui.closeMobileMenu && ui.closeMobileMenu(); }
+        function searchCurrentPage() { ui.searchCurrentPage && ui.searchCurrentPage(); }
+        function toggleTrainingCampDropdown(event) { ui.toggleDropdown && ui.toggleDropdown('training-camp-dropdown', event); }
+        function closeTrainingCampDropdown() { ui.closeDropdown && ui.closeDropdown('training-camp-dropdown'); }
 
         const CAMP1_COMBINED_ID = 2001;
         const CAMP2_COMBINED_ID = 1001;
