@@ -36,6 +36,83 @@
         }
     };
 
+    function bootstrapPage(options = {}) {
+        const {
+            dropdownId,
+            toggleDropdownFnName,
+            closeDropdownFnName
+        } = options;
+
+        // Expose common menu/search handlers for existing inline onclick hooks.
+        global.toggleMobileMenu = () => ui.toggleMobileMenu();
+        global.closeMobileMenu = () => ui.closeMobileMenu();
+        global.searchCurrentPage = () => ui.searchCurrentPage();
+
+        if (dropdownId && toggleDropdownFnName) {
+            global[toggleDropdownFnName] = (event) => ui.toggleDropdown(dropdownId, event);
+        }
+
+        if (dropdownId && closeDropdownFnName) {
+            global[closeDropdownFnName] = () => ui.closeDropdown(dropdownId);
+        }
+
+        return { ui, renderers, snippetData, colorUtils };
+    }
+
+    const colorUtils = {
+        emojiByGroupId: {
+            1: { label: 'Motors', className: 'blue-circle', bubbleLabel: 'Blue Motors bubble' },
+            2: { label: 'Movement', className: 'pink-circle', bubbleLabel: 'Pink Movement bubble' },
+            3: { label: 'Light', className: 'purple-circle', bubbleLabel: 'Purple Light bubble' },
+            4: { label: 'Sound', className: 'light-purple-circle', bubbleLabel: 'Light Purple Sound bubble' },
+            5: { label: 'Events', className: 'yellow-circle', bubbleLabel: 'Yellow Events bubble' },
+            6: { label: 'Control', className: 'dark-yellow-circle', bubbleLabel: 'Dark Yellow Control bubble' },
+            7: { label: 'Sensors', className: 'light-blue-circle', bubbleLabel: 'Light Blue Sensors bubble' },
+            8: { label: 'Operators', className: 'green-circle', bubbleLabel: 'Green Operators bubble' },
+            9: { label: 'Variables', className: 'red-circle', bubbleLabel: 'Red Variables bubble' },
+            10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
+            11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
+            20: { label: 'Class', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
+        },
+        getEmojiButton(groupId, overrides = {}) {
+            const base = this.emojiByGroupId[groupId] || {};
+            return {
+                id: Number(groupId),
+                label: overrides.label || base.label || String(groupId),
+                bubbleLabel: overrides.bubbleLabel || base.bubbleLabel || '',
+                className: overrides.className || base.className || ''
+            };
+        },
+        getEmojiButtons(groupIds, overridesById = {}) {
+            return (groupIds || []).map((id) => this.getEmojiButton(id, overridesById[id] || {}));
+        },
+        getTextColorForBackground(backgroundColor) {
+            if (typeof backgroundColor !== 'string') return '#ffffff';
+
+            const value = backgroundColor.trim();
+            const hexMatch = value.match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/);
+            if (!hexMatch) return '#ffffff';
+
+            let hex = hexMatch[1];
+            if (hex.length === 3) {
+                hex = hex.split('').map((c) => c + c).join('');
+            }
+
+            const r = parseInt(hex.slice(0, 2), 16);
+            const g = parseInt(hex.slice(2, 4), 16);
+            const b = parseInt(hex.slice(4, 6), 16);
+            const luminance = ((0.299 * r) + (0.587 * g) + (0.114 * b)) / 255;
+
+            return luminance > 0.6 ? '#000000' : '#ffffff';
+        },
+        applySnippetTextColor(snippets) {
+            return (snippets || []).map((snippet) => ({
+                ...snippet,
+                textColor: snippet?.textColor || this.getTextColorForBackground(snippet?.color)
+            }));
+        }
+    };
+
     const renderers = {
         renderEmojiButtons({ containerId, buttons, onClickFnName }) {
             const host = document.getElementById(containerId);
@@ -635,5 +712,5 @@ class MyClass:
             ]
         }
     }
-    global.SpikeShared = { ui, renderers, snippetData };  // Remove escapeHtml from export
+    global.SpikeShared = { ui, renderers, snippetData, bootstrapPage, colorUtils };
 })(window);

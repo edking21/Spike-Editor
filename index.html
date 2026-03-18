@@ -25,40 +25,7 @@
         <button class="menu-search" type="button" aria-label="Search this page" title="Search this page" onclick="searchCurrentPage()">&#128269;</button>
     </div>
     <div class="left-column">
-        <div class="emoji-block">
-            <div class="emoji-container"><button class="color-circle blue-circle" onclick="refreshSnippets(1)"></button>
-                <div class="emoji-label">Motors</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle pink-circle" onclick="refreshSnippets(2)"></button>
-                <div class="emoji-label">Movement</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(3)"></button>
-                <div class="emoji-label">Light</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle light-purple-circle" onclick="refreshSnippets(4)"></button>
-                <div class="emoji-label">Sound</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle yellow-circle" onclick="refreshSnippets(5)"></button>
-                <div class="emoji-label">Events</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle dark-yellow-circle" onclick="refreshSnippets(6)"></button>
-                <div class="emoji-label">Control</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle light-blue-circle" onclick="refreshSnippets(7)"></button>
-                <div class="emoji-label">Sensors</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle green-circle" onclick="refreshSnippets(8)"></button>
-                <div class="emoji-label">Operators</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle red-circle" onclick="refreshSnippets(9)"></button>
-                <div class="emoji-label">Variables</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(10)"></button>
-                <div class="emoji-label">More Motors</div>
-            </div>
-            <div class="emoji-container"><button class="color-circle purple-circle" onclick="refreshSnippets(11)"></button>
-                <div class="emoji-label">More Movement</div>
-            </div>
+        <div class="emoji-block" id="emoji-block">
         </div>
     </div>
     <div class="snippet-column" id="snippet-column">
@@ -72,60 +39,33 @@
     <script src="./utils/utils.js"></script>
     <script src="./scripts/spike-shared.js"></script>
     <script>
-        function escapeHtml(value) {
-            return String(value ?? '')
-                .replaceAll('&', '&amp;')
-                .replaceAll('<', '&lt;')
-                .replaceAll('>', '&gt;')
-                .replaceAll('"', '&quot;')
-                .replaceAll("'", '&#39;');
-        }
-
         const shared = window.SpikeShared || {};
-        const ui = shared.ui || {};
-        const renderers = shared.renderers || {};
-        const snippetData = shared.snippetData || {};
+        const { renderers = {}, snippetData = {}, colorUtils = {} } =
+            (typeof shared.bootstrapPage === 'function' ? shared.bootstrapPage() : shared);
 
-        if (!shared.ui || !shared.renderers || !shared.snippetData) {
+        if ((typeof shared.bootstrapPage !== 'function') && (!shared.renderers || !shared.snippetData)) {
             console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js');
         }
 
-        function toggleMobileMenu() { ui.toggleMobileMenu && ui.toggleMobileMenu(); }
-        function closeMobileMenu() { ui.closeMobileMenu && ui.closeMobileMenu(); }
-        function searchCurrentPage() { ui.searchCurrentPage && ui.searchCurrentPage(); }
-
-        // Text color by snippet group number (left menu numbers)
-        // Adjust values here only.
-        const snippetTextColorByGroup = {
-            1: '#ffffff', // Motors
-            2: '#ffffff', // Movement
-            3: '#ffffff', // Light
-            4: '#ffffff', // Sound
-            5: '#000000', // Events
-            6: '#ffffff', // Control
-            7: '#000000', // Sensors
-            8: '#ffffff', // Operators
-            9: '#ffffff', // Variables
-            10: '#000000', // More Motors
-            11: '#000000' // More Movement
-        };
-
-        function applyGroupTextColor(groupId, snippets) {
-            const color = snippetTextColorByGroup[groupId] || '#000000';
-            return (snippets || []).map(s => ({ ...s, textColor: s.textColor || color }));
-        }
+        const mainEmojiGroupOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
         function refreshSnippets(groupId) {
             const group = snippetData[groupId];
             renderers.renderSnippetButtons({
                 containerId: 'snippet-column',
-                snippets: applyGroupTextColor(groupId, group?.snippets || [])
+                snippets: (typeof colorUtils.applySnippetTextColor === 'function')
+                    ? colorUtils.applySnippetTextColor(group?.snippets || [])
+                    : (group?.snippets || [])
             });
         }
 
         function renderAllSnippetGroups() {
-            const order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-            const combined = order.flatMap(id => applyGroupTextColor(id, snippetData[id]?.snippets || []));
+            const combined = mainEmojiGroupOrder.flatMap(id => {
+                const source = snippetData[id]?.snippets || [];
+                return (typeof colorUtils.applySnippetTextColor === 'function')
+                    ? colorUtils.applySnippetTextColor(source)
+                    : source;
+            });
             renderers.renderSnippetButtons({
                 containerId: 'snippet-column',
                 snippets: combined
@@ -133,6 +73,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            renderers.renderEmojiButtons({
+                containerId: 'emoji-block',
+                buttons: (typeof colorUtils.getEmojiButtons === 'function')
+                    ? colorUtils.getEmojiButtons(mainEmojiGroupOrder)
+                    : [],
+                onClickFnName: 'refreshSnippets'
+            });
             renderAllSnippetGroups();
         });
     </script>
