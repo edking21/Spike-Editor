@@ -40,14 +40,38 @@
         renderEmojiButtons({ containerId, buttons, onClickFnName }) {
             const host = document.getElementById(containerId);
             if (!host) return;
-            host.innerHTML = (buttons || []).map(b => `
-                <div class="emoji-container">
-                    <button type="button"
-                        class="color-circle ${b.className || ''}"
-                        onclick="${onClickFnName}(${Number(b.id)})"></button>
-                    <div class="emoji-label">${b.label || ''}</div>
-                </div>
-            `).join('');
+            host.textContent = '';
+
+            const clickHandler = (typeof global[onClickFnName] === 'function') ? global[onClickFnName] : null;
+
+            (buttons || []).forEach((b) => {
+                const container = document.createElement('div');
+                container.className = 'emoji-container';
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.classList.add('color-circle');
+
+                String(b?.className || '')
+                    .split(/\s+/)
+                    .filter(Boolean)
+                    .forEach((name) => button.classList.add(name));
+
+                const id = Number(b?.id);
+                button.addEventListener('click', () => {
+                    if (clickHandler && Number.isFinite(id)) {
+                        clickHandler(id);
+                    }
+                });
+
+                const label = document.createElement('div');
+                label.className = 'emoji-label';
+                label.textContent = String(b?.label || '');
+
+                container.appendChild(button);
+                container.appendChild(label);
+                host.appendChild(container);
+            });
         },
         renderSnippetButtons({ containerId, snippets }) {
             const host = document.getElementById(containerId);
@@ -110,25 +134,40 @@
                 );
             }
 
-            host.innerHTML = (snippets || []).map((snippet) => {
-                const section = resolveSection(snippet);
-                let labelHtml = '';
+            host.textContent = '';
 
+            (snippets || []).forEach((snippet) => {
+                const section = resolveSection(snippet);
                 if (section && !shown.has(section.key)) {
                     shown.add(section.key);
-                    labelHtml = `<div class="snippet-group-label">${section.label}</div>`;
+
+                    const sectionLabel = document.createElement('div');
+                    sectionLabel.className = 'snippet-group-label';
+                    sectionLabel.textContent = section.label;
+                    host.appendChild(sectionLabel);
                 }
 
-                return `
-                    ${labelHtml}
-                    <div class="snippet">
-                        <button type="button" style="background-color: ${snippet.color || '#666'}; color: ${snippet.textColor || '#fff'};">
-                            <span class="emoji">${snippet.emoji || '🧿'}</span>
-                            <span class="label">${snippet.buttonText || ''}</span>
-                        </button>
-                    </div>
-                `;
-            }).join('');
+                const snippetContainer = document.createElement('div');
+                snippetContainer.className = 'snippet';
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.style.backgroundColor = String(snippet?.color || '#666');
+                button.style.color = String(snippet?.textColor || '#fff');
+
+                const emoji = document.createElement('span');
+                emoji.className = 'emoji';
+                emoji.textContent = String(snippet?.emoji || '🧿');
+
+                const label = document.createElement('span');
+                label.className = 'label';
+                label.textContent = String(snippet?.buttonText || '');
+
+                button.appendChild(emoji);
+                button.appendChild(label);
+                snippetContainer.appendChild(button);
+                host.appendChild(snippetContainer);
+            });
         }
     };
 
