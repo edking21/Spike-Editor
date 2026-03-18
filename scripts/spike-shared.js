@@ -404,22 +404,49 @@ await sound.beep(60, 200)`
             snippets: [
                 {
                     id: 'event1',
-                    buttonText: 'When',
+                    buttonText: 'when program starts',
                     emoji: '🧿',
                     color: '#FFD700',
                     textPython: `
-# When
+# When program starts
 while #<your condition or function here>`
                 },
                 {
                     id: 'event2',
-                    buttonText: 'When not',
+                    buttonText: 'When color is red',
                     emoji: '🧿',
                     color: '#FFD700',
                     textPython: `
-# When not
+# When left button pressed
 while not (#<your condition or function here>)`
-                }
+                },
+                {
+                    id: 'event3',
+                    buttonText: 'When closer than 8 %',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+# When left button pressed
+while not (#<your condition or function here>)`
+                },
+                {
+                    id: 'event4',
+                    buttonText: 'When left button pressed',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+# When left button pressed
+while not (#<your condition or function here>)`
+                },
+                {
+                    id: 'event5',
+                    buttonText: 'When',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+# When 
+when`
+                },
             ]
         },
         6: {   // control 
@@ -427,7 +454,7 @@ while not (#<your condition or function here>)`
             snippets: [
                 {
                     id: 'control1',
-                    buttonText: 'Wait for 1 seconds',
+                    buttonText: 'Wait 1 seconds',
                     emoji: '🧿',
                     color: '#DAA520',
                     textPython: `
@@ -436,14 +463,14 @@ sleep(1)`
                 },
                 {
                     id: 'control2',
-                    buttonText: 'Repeat 10 times',
+                    buttonText: 'Repeat 10',
                     emoji: '🧿',
                     color: '#DAA520',
                     textPython: `
 # Under construction - Repeat 10 times`
                 },
                 {
-                    id: 'control33',
+                    id: 'control3',
                     buttonText: 'Forever',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -477,7 +504,7 @@ while True:`
 await runloop.until # <your sensor condition here>`
                 },
                 {
-                    id: 'control57',
+                    id: 'control7',
                     buttonText: 'Repeat until (function)',
                     emoji: '🧿',
                     color: '#DAA520',
@@ -491,42 +518,42 @@ while # <your sensor function here>`
             colorClass: 'sensors-color',
             snippets: [
                 {
-                    id: 'fn2a',
+                    id: 'sensor1',
                     buttonText: 'is color red (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `(is_color_red)`
                 },
                 {
-                    id: 'fn2b',
+                    id: 'sensor2',
                     buttonText: 'is pressed (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `(is_pressed)`
                 },
                 {
-                    id: 'fn3',
+                    id: 'sensor3',
                     buttonText: 'is near (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `(is_near)`
                 },
                 {
-                    id: 'fn5',
+                    id: 'sensor4',
                     buttonText: 'is color red (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `is_color_red():`
                 },
                 {
-                    id: 'fn4',
+                    id: 'sensor5',
                     buttonText: 'is pressed (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `is_pressed():`
                 },
                 {
-                    id: 'fn6a',
+                    id: 'sensor6',
                     buttonText: 'is near (function)',
                     emoji: '🧿',
                     color: '#87CEEB',

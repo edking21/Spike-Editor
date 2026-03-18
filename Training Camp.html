@@ -45,8 +45,19 @@
             <!-- Dynamic emoji buttons go here -->
         </div>
     </div>
-    <div class="snippet-column" id="snippet-column">
-        <!-- Snippets will be dynamically inserted here -->
+    <div class="snippet-column training-camp-snippet-column" id="snippet-column">
+        <div id="snippet-content">
+            <!-- Snippets will be dynamically inserted here -->
+        </div>
+        <button
+            class="lesson-launcher"
+            type="button"
+            aria-label="Choose training lesson"
+            title="Choose lesson"
+            onclick="toggleTrainingCampDropdown(event)">
+            <span class="lesson-launcher-icon" aria-hidden="true">⋮</span>
+            <span class="lesson-launcher-text">Lesson</span>
+        </button>
     </div>
     <div class="snippet-column">
         <div class="release-info" id="release-info">
@@ -76,6 +87,65 @@
         const CAMP1_COMBINED_ID = 2001;
         const CAMP2_COMBINED_ID = 1001;
         const CAMP3_COMBINED_ID = 3001;
+
+        const trainingCampSnippetSelections = {
+            camp1: {
+                combined: {
+                    [CAMP1_COMBINED_ID]: {
+                        colorClass: 'movement-color',
+                        groups: [2, 5, 6, 7, 8],
+                        snippetIdsByGroup: {
+                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'moremovement1'],
+                            5: ['event1', 'event4'],
+                            6: ['control1', 'control2', 'control6'],
+                            7: ['sensor2', 'sensor4'],
+                            8: ['op1', 'op2']
+                        }
+                    }
+                },
+                groups: {
+                    5: ['event1', 'event4'],
+                    6: ['control1', 'control2', 'control6'],
+                    7: ['sensor2', 'sensor4']
+                }
+            },
+            camp2: {
+                combined: {
+                    [CAMP2_COMBINED_ID]: {
+                        colorClass: 'motors-color',
+                        groups: [1, 2, 4, 5, 6],
+                        snippetIdsByGroup: {
+                            1: ['motor1', 'motor2'],
+                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'moremovement1'],
+                            4: ['sound1', 'sound2'],
+                            5: ['event1', 'event2'],
+                            6: ['control1', 'control2']
+                        }
+                    }
+                },
+                groups: {}
+            },
+            camp3: {
+                combined: {
+                    [CAMP3_COMBINED_ID]: {
+                        colorClass: 'movement-color',
+                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11],
+                        snippetIdsByGroup: {
+                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'moremovement1'],
+                            3: ['light1', 'light2'],
+                            5: ['event1', 'event2'],
+                            6: ['control1', 'control2'],
+                            7: ['sensor1', 'sensor2'],
+                            8: ['op1', 'op2'],
+                            9: ['var1', 'var2'],
+                            10: ['moremotor1', 'moremotor2'],
+                            11: ['moremovement1']
+                        }
+                    }
+                },
+                groups: {}
+            }
+        };
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
@@ -109,78 +179,50 @@
         function refreshSnippets(groupId) {
             const group = currentSnippetData[groupId];
             renderers.renderSnippetButtons({
-                containerId: 'snippet-column',
+                containerId: 'snippet-content',
                 snippets: (typeof colorUtils.applySnippetTextColor === 'function')
                     ? colorUtils.applySnippetTextColor(group?.snippets || [])
                     : (group?.snippets || [])
             });
         }
 
+        function getSnippetsForIds(groupId, snippetIds) {
+            const sourceSnippets = snippetData[groupId]?.snippets || [];
+            if (!Array.isArray(snippetIds) || snippetIds.length === 0) {
+                return [...sourceSnippets];
+            }
+
+            const snippetById = new Map(sourceSnippets.map(snippet => [snippet.id, snippet]));
+            return snippetIds
+                .map(snippetId => snippetById.get(snippetId))
+                .filter(Boolean);
+        }
+
+        function buildCombinedCampSnippets(combinedConfig) {
+            return (combinedConfig.groups || []).flatMap(groupId =>
+                getSnippetsForIds(groupId, combinedConfig.snippetIdsByGroup?.[groupId])
+            );
+        }
+
         function buildCampData(campKey) {
             currentSnippetData = {};
+            const campConfig = trainingCampSnippetSelections[campKey] || {};
+            const groupSelections = campConfig.groups || {};
 
             Object.keys(snippetData).forEach(k => {
+                const numericKey = Number(k);
                 currentSnippetData[k] = {
                     ...snippetData[k],
-                    snippets: [...(snippetData[k].snippets || [])]
+                    snippets: getSnippetsForIds(numericKey, groupSelections[numericKey])
                 };
             });
 
-            if (campKey === 'camp1') {
-                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
-
-                currentSnippetData[CAMP1_COMBINED_ID] = {
-                    colorClass: 'movement-color',
-                    snippets: [...movement, ...events, ...control, ...sensors, ...operators]
+            Object.entries(campConfig.combined || {}).forEach(([combinedId, combinedConfig]) => {
+                currentSnippetData[combinedId] = {
+                    colorClass: combinedConfig.colorClass,
+                    snippets: buildCombinedCampSnippets(combinedConfig)
                 };
-            }
-
-            if (campKey === 'camp2') {
-                const motors = (snippetData[1]?.snippets || []).slice(0, 2);
-                const movement = (snippetData[2]?.snippets || []).slice(0, 7);
-                const sound = (snippetData[4]?.snippets || []).slice(0, 2);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-
-                currentSnippetData[CAMP2_COMBINED_ID] = {
-                    colorClass: 'motors-color',
-                    snippets: [...motors, ...movement, ...sound, ...events, ...control]
-                };
-            }
-
-            if (campKey === 'camp3') {
-                const movement = [
-                    ...(snippetData[2]?.snippets || []).slice(0, 3),
-                    ...(snippetData[2]?.snippets || []).slice(4, 8)
-                ];
-                const light = (snippetData[3]?.snippets || []).slice(0, 2);
-                const events = (snippetData[5]?.snippets || []).slice(0, 2);
-                const control = (snippetData[6]?.snippets || []).slice(0, 2);
-                const sensors = (snippetData[7]?.snippets || []).slice(0, 2);
-                const operators = (snippetData[8]?.snippets || []).slice(0, 2);
-                const variables = (snippetData[9]?.snippets || []).slice(0, 2);
-                const moreMotors = (snippetData[10]?.snippets || []).slice(0, 2);
-                const moreMovement = (snippetData[11]?.snippets || []).slice(0, 2);
-
-                currentSnippetData[CAMP3_COMBINED_ID] = {
-                    colorClass: 'movement-color',
-                    snippets: [
-                        ...movement,
-                        ...light,
-                        ...events,
-                        ...control,
-                        ...sensors,
-                        ...operators,
-                        ...variables,
-                        ...moreMotors,
-                        ...moreMovement
-                    ]
-                };
-            }
+            });
         }
 
         function selectTrainingCamp(campKey, event) {
