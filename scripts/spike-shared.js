@@ -69,7 +69,7 @@
             6: { label: 'Control', className: 'dark-yellow-circle', bubbleLabel: 'Dark Yellow Control bubble' },
             7: { label: 'Sensors', className: 'light-blue-circle', bubbleLabel: 'Light Blue Sensors bubble' },
             8: { label: 'Operators', className: 'green-circle', bubbleLabel: 'Green Operators bubble' },
-            9: { label: 'Variables', className: 'red-circle', bubbleLabel: 'Red Variables bubble' },
+            9: { label: 'Variables', className: 'orange-circle', bubbleLabel: 'Orange Variables bubble' },
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             20: { label: 'Class', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
@@ -603,7 +603,7 @@ motor.run(port.E, 550)`
             colorClass: 'movement-color',
             snippets: [
                 {
-                    id: 'move7',
+                    id: 'moremovement1',
                     buttonText: 'move backward for 10 rotations',
                     emoji: '🧿',
                     color: '#FF69B4',
