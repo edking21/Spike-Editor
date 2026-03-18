@@ -191,8 +191,6 @@
                 }
 
                 // id prefix rules
-                if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
-                if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
                 if (id.startsWith('motor')) return sectionRules.find(r => r.key === 'motors');
                 if (id.startsWith('move')) return sectionRules.find(r => r.key === 'movement');
                 if (id.startsWith('light')) return sectionRules.find(r => r.key === 'light');
@@ -202,6 +200,8 @@
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
+                if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
+                if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
 
                 // fallback text match
                 return sectionRules.find(rule =>
@@ -577,7 +577,7 @@ result = a + b`
                     id: 'var1',
                     buttonText: 'New Variable',
                     emoji: '🧿',
-                    color: '#32CD32',
+                    color: '#d8a22d',
                     textPython: `
 # variable example
 a = 0
