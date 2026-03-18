@@ -57,50 +57,43 @@
     <script src="./scripts/spike-shared.js"></script>
     <script>
         const shared = window.SpikeShared || {};
-        const ui = shared.ui || {};
-        const renderers = shared.renderers || {};
-        const snippetData = shared.snippetData || {};
+        const { renderers = {}, snippetData = {}, colorUtils = {} } =
+            (typeof shared.bootstrapPage === 'function'
+                ? shared.bootstrapPage({
+                    dropdownId: 'training-camp-dropdown',
+                    toggleDropdownFnName: 'toggleTrainingCampDropdown',
+                    closeDropdownFnName: 'closeTrainingCampDropdown'
+                })
+                : shared);
 
-        if (!shared.ui || !shared.renderers || !shared.snippetData) {
+        if ((typeof shared.bootstrapPage !== 'function') && (!shared.renderers || !shared.snippetData)) {
             console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js export.');
         }
 
-        function toggleMobileMenu() { ui.toggleMobileMenu && ui.toggleMobileMenu(); }
-        function closeMobileMenu() { ui.closeMobileMenu && ui.closeMobileMenu(); }
-        function searchCurrentPage() { ui.searchCurrentPage && ui.searchCurrentPage(); }
-        function toggleTrainingCampDropdown(event) { ui.toggleDropdown && ui.toggleDropdown('training-camp-dropdown', event); }
-        function closeTrainingCampDropdown() { ui.closeDropdown && ui.closeDropdown('training-camp-dropdown'); }
+        const toggleTrainingCampDropdown = window.toggleTrainingCampDropdown;
+        const closeTrainingCampDropdown = window.closeTrainingCampDropdown;
 
         const CAMP1_COMBINED_ID = 2001;
         const CAMP2_COMBINED_ID = 1001;
         const CAMP3_COMBINED_ID = 3001;
 
         const trainingCampEmojiButtons = {
-            camp1: [
-                { id: CAMP1_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' },
-                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 6, label: 'Control', bubbleLabel: 'Dark Orange Control bubble', className: 'dark-yellow-circle' },
-                { id: 7, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'light-blue-circle' },
-                { id: 8, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
-            ],
-            camp2: [
-                { id: CAMP2_COMBINED_ID, label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
-                { id: 2, label: 'Movement', bubbleLabel: 'Pink Movement bubble', className: 'pink-circle' },
-                { id: 4, label: 'Sound', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
-                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 6, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' }
-            ],
-            camp3: [
-                { id: CAMP3_COMBINED_ID, label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' },
-                { id: 3, label: 'Light', bubbleLabel: 'Purple Light bubble', className: 'purple-circle' },
-                { id: 5, label: 'Events', bubbleLabel: 'Yellow Events bubble', className: 'yellow-circle' },
-                { id: 6, label: 'Control', bubbleLabel: 'Dark Yellow Control bubble', className: 'dark-yellow-circle' },
-                { id: 7, label: 'Sensors', bubbleLabel: 'Blue Sensors bubble', className: 'light-blue-circle' },
-                { id: 8, label: 'Operators', bubbleLabel: 'Green Operators bubble', className: 'green-circle' },
-                { id: 9, label: 'Variables', bubbleLabel: 'Orange Variables bubble', className: 'orange-circle' },
-                { id: 10, label: 'More Motors', bubbleLabel: 'Blue More Motors bubble', className: 'blue-circle' },
-                { id: 11, label: 'More Movement', bubbleLabel: 'Pink Move Movement bubble', className: 'pink-circle' }
-            ]
+            camp1: (typeof colorUtils.getEmojiButtons === 'function')
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8], {
+                    [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
+                })
+                : [],
+            camp2: (typeof colorUtils.getEmojiButtons === 'function')
+                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6], {
+                    [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
+                    4: { className: 'purple-circle', bubbleLabel: 'Purple Light bubble' }
+                })
+                : [],
+            camp3: (typeof colorUtils.getEmojiButtons === 'function')
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11], {
+                    [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
+                })
+                : []
         };
 
         let currentSnippetData = {};
@@ -117,7 +110,9 @@
             const group = currentSnippetData[groupId];
             renderers.renderSnippetButtons({
                 containerId: 'snippet-column',
-                snippets: group?.snippets || []
+                snippets: (typeof colorUtils.applySnippetTextColor === 'function')
+                    ? colorUtils.applySnippetTextColor(group?.snippets || [])
+                    : (group?.snippets || [])
             });
         }
 
