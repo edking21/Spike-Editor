@@ -29,9 +29,7 @@
                     Training Camp ▾
                 </button>
                 <div class="menu-dropdown-menu">
-                    <a href="#" onclick="selectTrainingCamp('camp1', event)">Training Camp #1 Driving Arround</a>
-                    <a href="#" onclick="selectTrainingCamp('camp2', event)">Training Camp #2 Playing with Objects</a>
-                    <a href="#" onclick="selectTrainingCamp('camp3', event)">Training Camp #3 Reacting to Lines</a>
+                    <!-- Populated from trainingCampOptions in script -->
                 </div>
             </div>
 
@@ -87,6 +85,12 @@
         const CAMP1_COMBINED_ID = 2001;
         const CAMP2_COMBINED_ID = 1001;
         const CAMP3_COMBINED_ID = 3001;
+
+        const trainingCampOptions = [
+            { key: 'camp1', label: 'Training Camp #1 Driving Arround' },
+            { key: 'camp2', label: 'Training Camp #2 Playing with Objects' },
+            { key: 'camp3', label: 'Training Camp #3 Reacting to Lines' }
+        ];
 
         const trainingCampSnippetSelections = {
             camp1: {
@@ -204,6 +208,39 @@
             );
         }
 
+        function getCampLabel(campKey) {
+            return trainingCampOptions.find(c => c.key === campKey)?.label || 'Lesson';
+        }
+
+        function renderTrainingCampMenu() {
+            const menu = document.querySelector('#training-camp-dropdown .menu-dropdown-menu');
+            if (!menu) return;
+
+            menu.textContent = '';
+            trainingCampOptions.forEach(({ key, label }) => {
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = label;
+                link.addEventListener('click', (event) => selectTrainingCamp(key, event));
+                menu.appendChild(link);
+            });
+        }
+
+        function updateLessonButtonLabel(campKey) {
+            const lessonText = document.querySelector('.lesson-launcher-text');
+            const lessonButton = document.querySelector('.lesson-launcher');
+            const label = getCampLabel(campKey);
+
+            if (lessonText) {
+                lessonText.textContent = label;
+            }
+
+            if (lessonButton) {
+                lessonButton.title = label;
+                lessonButton.setAttribute('aria-label', label);
+            }
+        }
+
         function buildCampData(campKey) {
             currentSnippetData = {};
             const campConfig = trainingCampSnippetSelections[campKey] || {};
@@ -234,6 +271,7 @@
             buildCampData(campKey);
             renderEmojiButtons(buttons);
             refreshSnippets(buttons[0].id);
+            updateLessonButtonLabel(campKey);
             closeTrainingCampDropdown();
         }
 
@@ -247,6 +285,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            renderTrainingCampMenu();
             selectTrainingCamp('camp1');
             if (typeof fetchGitHubRelease === 'function') fetchGitHubRelease();
         });

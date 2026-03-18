@@ -29,9 +29,7 @@
                     Training Camp ▾
                 </button>
                 <div class="menu-dropdown-menu">
-                    <a href="#" onclick="selectTrainingCamp('camp1', event)">Training Camp #1 Driving Arround</a>
-                    <a href="#" onclick="selectTrainingCamp('camp2', event)">Training Camp #2 Playing with Objects</a>
-                    <a href="#" onclick="selectTrainingCamp('camp3', event)">Training Camp #3 Reacting to Lines</a>
+                    <!-- Populated from trainingCampOptions in script -->
                 </div>
             </div>
 
@@ -88,38 +86,47 @@
         const CAMP2_COMBINED_ID = 1001;
         const CAMP3_COMBINED_ID = 3001;
 
+        const trainingCampOptions = [
+            { key: 'camp1', label: 'Training Camp #1 Driving Arround' },
+            { key: 'camp2', label: 'Training Camp #2 Playing with Objects' },
+            { key: 'camp3', label: 'Training Camp #3 Reacting to Lines' }
+        ];
+
         const trainingCampSnippetSelections = {
             camp1: {
                 combined: {
                     [CAMP1_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 5, 6, 7, 8],
+                        groups: [2, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'moremovement1'],
+                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
                             5: ['event1', 'event4'],
                             6: ['control1', 'control2', 'control6'],
                             7: ['sensor2', 'sensor4'],
-                            8: ['op1', 'op2']
+                            8: ['op1', 'op2'],
+                            12: ['hints1'],
                         }
                     }
                 },
                 groups: {
                     5: ['event1', 'event4'],
                     6: ['control1', 'control2', 'control6'],
-                    7: ['sensor2', 'sensor4']
+                    7: ['sensor2', 'sensor4'],
+                    12: ['hints1']
                 }
             },
             camp2: {
                 combined: {
                     [CAMP2_COMBINED_ID]: {
                         colorClass: 'motors-color',
-                        groups: [1, 2, 4, 5, 6],
+                        groups: [1, 2, 4, 5, 6, 12],
                         snippetIdsByGroup: {
                             1: ['motor1', 'motor2'],
-                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'moremovement1'],
+                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
                             4: ['sound1', 'sound2'],
                             5: ['event1', 'event2'],
-                            6: ['control1', 'control2']
+                            6: ['control1', 'control2'],
+                            12: ['hints1'],
                         }
                     }
                 },
@@ -129,9 +136,9 @@
                 combined: {
                     [CAMP3_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11],
+                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'moremovement1'],
+                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event2'],
                             6: ['control1', 'control2'],
@@ -139,7 +146,8 @@
                             8: ['op1', 'op2'],
                             9: ['var1', 'var2'],
                             10: ['moremotor1', 'moremotor2'],
-                            11: ['moremovement1']
+                            11: ['moremovement1'],
+                            12: ['hints1']
                         }
                     }
                 },
@@ -149,18 +157,18 @@
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8], {
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8, 12], {
                     [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp2: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6], {
+                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 12], {
                     [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
                     4: { className: 'purple-circle', bubbleLabel: 'Purple Light bubble' }
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11], {
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 12], {
                     [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
                 })
                 : []
@@ -204,6 +212,39 @@
             );
         }
 
+        function getCampLabel(campKey) {
+            return trainingCampOptions.find(c => c.key === campKey)?.label || 'Lesson';
+        }
+
+        function renderTrainingCampMenu() {
+            const menu = document.querySelector('#training-camp-dropdown .menu-dropdown-menu');
+            if (!menu) return;
+
+            menu.textContent = '';
+            trainingCampOptions.forEach(({ key, label }) => {
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = label;
+                link.addEventListener('click', (event) => selectTrainingCamp(key, event));
+                menu.appendChild(link);
+            });
+        }
+
+        function updateLessonButtonLabel(campKey) {
+            const lessonText = document.querySelector('.lesson-launcher-text');
+            const lessonButton = document.querySelector('.lesson-launcher');
+            const label = getCampLabel(campKey);
+
+            if (lessonText) {
+                lessonText.textContent = label;
+            }
+
+            if (lessonButton) {
+                lessonButton.title = label;
+                lessonButton.setAttribute('aria-label', label);
+            }
+        }
+
         function buildCampData(campKey) {
             currentSnippetData = {};
             const campConfig = trainingCampSnippetSelections[campKey] || {};
@@ -234,6 +275,7 @@
             buildCampData(campKey);
             renderEmojiButtons(buttons);
             refreshSnippets(buttons[0].id);
+            updateLessonButtonLabel(campKey);
             closeTrainingCampDropdown();
         }
 
@@ -247,6 +289,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            renderTrainingCampMenu();
             selectTrainingCamp('camp1');
             if (typeof fetchGitHubRelease === 'function') fetchGitHubRelease();
         });

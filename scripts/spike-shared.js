@@ -72,6 +72,7 @@
             9: { label: 'Variables', className: 'orange-circle', bubbleLabel: 'Orange Variables bubble' },
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
+            12: { label: 'Hints', className: 'red-circle', bubbleLabel: 'Red Hints bubble' },
             20: { label: 'Class', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
@@ -173,7 +174,8 @@
                 { key: 'operators', label: 'Operators', match: ['op', 'operator', 'operators'] },
                 { key: 'variables', label: 'Variables', match: ['var', 'variable', 'variables'] },
                 { key: 'moremotors', label: 'More Motors', match: ['more motors', 'moremotors'] },
-                { key: 'moremovement', label: 'More Movement', match: ['more movement', 'moremovement'] }
+                { key: 'moremovement', label: 'More Movement', match: ['more movement', 'moremovement'] },
+                { key: 'hints', label: 'Hints', match: ['hi', 'hints'] }
             ];
 
             function resolveSection(snippet) {
@@ -202,6 +204,7 @@
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
                 if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
                 if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
+                if (idCompact.startsWith('hints')) return sectionRules.find(r => r.key === 'hints');
 
                 // fallback text match
                 return sectionRules.find(rule =>
@@ -333,7 +336,7 @@ sleep_ms(10)`
 movement_speed = int(0.2 * 1100)`
                 },
                 {
-                    id: 'move8',
+                    id: 'move7',
                     buttonText: 'set movement motors to C+D',
                     emoji: '🧿',
                     color: '#FF69B4',
@@ -644,7 +647,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
             colorClass: 'hints-color',
             snippets: [
                 {
-                    id: 'fn1',
+                    id: 'hints1',
                     buttonText: 'Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
