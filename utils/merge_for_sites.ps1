@@ -249,6 +249,9 @@ try {
 
     # Temporarily inline utils/shared CSS/shared JS before manual copy for Google Sites embedding.
     $cssContent = Get-Content $StylesFile -Raw -Encoding UTF8
+    # Google Sites layout needs content columns closer to the top after top-menu removal.
+    $cssContent = $cssContent -replace '(?im)(\bpadding:\s*)50px\s+2px\s+2px\s+2px\s*;', '${1}0px 2px 2px 2px;'
+    $cssContent = $cssContent -replace '(?is)(\.left-column\s*\{[^}]*?\btop:\s*)50px(\s*;)', '${1}0px${2}'
     $jsContent = Get-Content $ScriptsFile -Raw -Encoding UTF8
     $outputFiles = @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
     $originalOutputContent = @{}
