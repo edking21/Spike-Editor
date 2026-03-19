@@ -194,12 +194,14 @@ body {
 }
 
 .training-camp-snippet-column .lesson-launcher {
+    --launcher-left: calc(80px + 12px);
     position: fixed;
-    left: calc(80px + 12px);
-    right: 12px;
-    bottom: 0;
-    width: auto;
-    height: clamp(42px, 8vh, 64px);
+    left: var(--launcher-left);
+    right: auto;
+    bottom: max(0px, env(safe-area-inset-bottom));
+    width: min(460px, calc(100vw - var(--launcher-left) - 12px));
+    min-height: 38px;
+    height: clamp(38px, 7vh, 56px);
     border: none;
     border-radius: 0;
     background: #f5f7fb;
@@ -225,15 +227,48 @@ body {
     display: none;
     position: fixed;
     left: calc(80px + 12px);
-    right: 12px;
-    bottom: calc(clamp(42px, 8vh, 64px) + 8px);
+    right: auto;
+    bottom: calc(max(0px, env(safe-area-inset-bottom)) + clamp(38px, 7vh, 56px) + 2px);
+    width: min(420px, calc(100vw - (80px + 12px) - 12px));
     min-width: 260px;
     max-width: 420px;
+    padding: 2px 0;
     z-index: 1301;
 }
 
 .lesson-launcher-menu.open {
     display: block;
+}
+
+.lesson-launcher-menu a {
+    padding: 7px 10px;
+    line-height: 1.25;
+}
+
+@media (max-width: 900px) {
+    .training-camp-snippet-column .lesson-launcher {
+        --launcher-left: 12px;
+        width: calc(100vw - 24px);
+    }
+
+    .lesson-launcher-menu {
+        left: 12px;
+        width: calc(100vw - 24px);
+        min-width: 0;
+        max-width: none;
+    }
+}
+
+@media (max-height: 520px) {
+    .training-camp-snippet-column .lesson-launcher {
+        min-height: 34px;
+        height: 34px;
+        padding: 0 10px;
+    }
+
+    .lesson-launcher-menu {
+        bottom: calc(max(0px, env(safe-area-inset-bottom)) + 36px + 2px);
+    }
 }
 
 .lesson-launcher-icon {

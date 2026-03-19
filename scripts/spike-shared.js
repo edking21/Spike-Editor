@@ -674,7 +674,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     buttonText: 'Training Camp1 Moving Around',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 1 - Moving Arround
+                    textPython: `# Training Camp 1 - Moving Around
 import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light, light_matrix, port, sound
