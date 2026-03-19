@@ -285,8 +285,8 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# move forward for 10cm
-await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
+    # move forward for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
                 },
                 {
                     id: 'move2',
@@ -294,8 +294,8 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# start moving
-motor_pair.move(motor_pair.PAIR_1, 0)`
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0)`
                 },
                 {
                     id: 'move3',
@@ -303,9 +303,9 @@ motor_pair.move(motor_pair.PAIR_1, 0)`
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# move right 30 for 10 rotations
-await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
-sleep_ms(40)`
+    # move right 30 for 10 rotations
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
+    sleep_ms(40)`
                 },
                 {
                     id: 'move4',
@@ -313,9 +313,9 @@ sleep_ms(40)`
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# start moving right 30
-motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
-sleep_ms(40)`
+    # start moving right 30
+    motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
+    sleep_ms(40)`
                 },
                 {
                     id: 'move5',
@@ -323,9 +323,9 @@ sleep_ms(40)`
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# stop moving
-motor_pair.stop(motor_pair.PAIR_1)
-sleep_ms(10)`
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
+    sleep_ms(10)`
                 },
                 {
                     id: 'move6',
@@ -333,8 +333,8 @@ sleep_ms(10)`
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# set movement speed to 20% of 1100
-movement_speed = int(0.2 * 1100)`
+    # set movement speed to 20% of 1100
+    movement_speed = int(0.2 * 1100)`
                 },
                 {
                     id: 'move7',
@@ -342,8 +342,8 @@ movement_speed = int(0.2 * 1100)`
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
-# set movement motors to C+D
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+    # set movement motors to C+D
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
                 }
             ]
         },
@@ -649,11 +649,11 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
             snippets: [
                 {
                     id: 'hints1',
-                    buttonText: 'Getting Started',
+                    buttonText: 'Training Camp1 Moving Around',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Getting Started
-import runloop, time, sys, motor_pair, motor, force_sensor, runloop
+                    textPython: `# Training Camp 1 - Moving Arround
+import runloop, time, sys, motor_pair, motor, force_sensor
 import color, color_sensor, distance_sensor
 from hub import light, light_matrix, port, sound
 from time import sleep, sleep_ms
@@ -723,7 +723,161 @@ async def main():
 
 runloop.run(main())
 sys.exit()`
-                }
+                },
+                {
+                    id: 'hints2',
+                    buttonText: 'Training Camp2 Playing with Objects',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Training Camp 2 - Playing with Objects
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light, light_matrix, port, sound
+from time import sleep, sleep_ms
+from runloop import run
+
+# Ports on the robot hub
+color_port = port.A
+distance_port = port.B
+force_port = port.E
+
+# Conversion constants
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
+
+# how many times we see each color
+blue_count = 0
+yellow_count = 0
+red_count = 0
+
+# Color codes - these numbers represent different colors to the robot
+blue = 3
+yellow = 7
+red = 9
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+# Remember the last color seen so we don't count the same color twice in a row
+last_color = None
+
+# This is like a stop sign for our program - when it's True, everything stops
+should_stop = False
+
+########################################################################
+# 🛑 is_color_red - Function to check if the color sensor sees red
+########################################################################
+def is_color_red():
+    return color_sensor.color(color_port) == color.RED
+
+########################################################################
+# 🎯 is_pressed - Function to check if force sensor is pressed
+########################################################################
+def is_pressed():
+    return force_sensor.pressed(force_port)
+
+########################################################################
+# ☀️ is_near - Function to check if something is near
+########################################################################
+def is_near(distance_threshold=100):
+    distance = distance_sensor.distance(distance_port)
+    if distance == -1:
+        print("Warning: Distance sensor not detecting anything")
+        return False
+    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+    return distance < distance_threshold
+
+########################################################################
+# 🤖 Main - Start and Stop is_near test using Wait until
+########################################################################
+async def main():
+    while True:
+        motor_pair.move(motor_pair.PAIR_1, 0)
+        await runloop.until(is_near)
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10)
+
+runloop.run(main())
+sys.exit()`
+                },
+                {
+                    id: 'hints3',
+                    buttonText: 'Training Camp3 Reacting to Lines',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Training Camp 3 - Reacting to lines
+import runloop, time, sys, motor_pair, motor, force_sensor
+import color, color_sensor, distance_sensor
+from hub import light, light_matrix, port, sound
+from time import sleep, sleep_ms
+from runloop import run
+
+# Ports on the robot hub
+color_port = port.A
+distance_port = port.B
+force_port = port.E
+
+# Conversion constants
+DEGREES_PER_CM = 21
+DEGREES_PER_INCH = 53
+MM_PER_INCH = 25.4
+
+# how many times we see each color
+blue_count = 0
+yellow_count = 0
+red_count = 0
+
+# Color codes - these numbers represent different colors to the robot
+blue = 3
+yellow = 7
+red = 9
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+# Remember the last color seen so we don't count the same color twice in a row
+last_color = None
+
+# This is like a stop sign for our program - when it's True, everything stops
+should_stop = False
+
+########################################################################
+# 🛑 is_color_red - Function to check if the color sensor sees red
+########################################################################
+def is_color_red():
+    return color_sensor.color(color_port) == color.RED
+
+########################################################################
+# 🎯 is_pressed - Function to check if force sensor is pressed
+########################################################################
+def is_pressed():
+    return force_sensor.pressed(force_port)
+
+########################################################################
+# ☀️ is_near - Function to check if something is near
+########################################################################
+def is_near(distance_threshold=100):
+    distance = distance_sensor.distance(distance_port)
+    if distance == -1:
+        print("Warning: Distance sensor not detecting anything")
+        return False
+    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+    return distance < distance_threshold
+
+########################################################################
+# 🤖 Main - Start and Stop is_near test using Wait until
+########################################################################
+async def main():
+    while True:
+        motor_pair.move(motor_pair.PAIR_1, 0)
+        await runloop.until(is_near)
+        motor_pair.stop(motor_pair.PAIR_1)
+        sleep_ms(10)
+
+runloop.run(main())
+sys.exit()`
+                },
             ]
         },
         20: {   // class

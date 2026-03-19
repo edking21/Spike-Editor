@@ -87,7 +87,7 @@
         const CAMP3_COMBINED_ID = 3001;
 
         const trainingCampOptions = [
-            { key: 'camp1', label: 'Training Camp #1 Driving Arround' },
+            { key: 'camp1', label: 'Training Camp #1 Moving Arround' },
             { key: 'camp2', label: 'Training Camp #2 Playing with Objects' },
             { key: 'camp3', label: 'Training Camp #3 Reacting to Lines' }
         ];
@@ -126,11 +126,13 @@
                             4: ['sound1', 'sound2'],
                             5: ['event1', 'event2'],
                             6: ['control1', 'control2'],
-                            12: ['hints1'],
+                            12: ['hints2'],
                         }
                     }
                 },
-                groups: {}
+                groups: {
+                    12: ['hints2']
+                }
             },
             camp3: {
                 combined: {
@@ -147,11 +149,13 @@
                             9: ['var1', 'var2'],
                             10: ['moremotor1', 'moremotor2'],
                             11: ['moremovement1'],
-                            12: ['hints1']
+                            12: ['hints3']
                         }
                     }
                 },
-                groups: {}
+                groups: {
+                        12: ['hints3']
+                }
             }
         };
 
@@ -163,8 +167,7 @@
                 : [],
             camp2: (typeof colorUtils.getEmojiButtons === 'function')
                 ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 12], {
-                    [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' },
-                    4: { className: 'purple-circle', bubbleLabel: 'Purple Light bubble' }
+                    [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' }
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
