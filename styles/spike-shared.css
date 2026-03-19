@@ -233,6 +233,8 @@ body {
     min-width: 260px;
     max-width: 420px;
     padding: 2px 0;
+    height: 111px;
+    overflow: hidden;
     z-index: 1301;
 }
 
