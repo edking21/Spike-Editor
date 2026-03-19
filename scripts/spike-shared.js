@@ -243,6 +243,7 @@
                 label.className = 'label';
                 label.textContent = String(snippet?.buttonText || '');
 
+                button.addEventListener('click', () => navigator.clipboard.writeText(String(snippet?.textPython || '')));
                 button.appendChild(emoji);
                 button.appendChild(label);
                 snippetContainer.appendChild(button);
