@@ -72,7 +72,7 @@
             9: { label: 'Variables', className: 'orange-circle', bubbleLabel: 'Orange Variables bubble' },
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
-            12: { label: 'Hints', className: 'red-circle', bubbleLabel: 'Red Hints bubble' },
+            12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
             20: { label: 'Class', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
@@ -175,7 +175,7 @@
                 { key: 'variables', label: 'Variables', match: ['var', 'variable', 'variables'] },
                 { key: 'moremotors', label: 'More Motors', match: ['more motors', 'moremotors'] },
                 { key: 'moremovement', label: 'More Movement', match: ['more movement', 'moremovement'] },
-                { key: 'hints', label: 'Hints', match: ['hi', 'hints'] }
+                { key: 'gettingstarted', label: 'Getting Started', match: ['get', 'gettingstarted'] }
             ];
 
             function resolveSection(snippet) {
@@ -204,7 +204,7 @@
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
                 if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
                 if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
-                if (idCompact.startsWith('hints')) return sectionRules.find(r => r.key === 'hints');
+                if (idCompact.startsWith('gettingstarted')) return sectionRules.find(r => r.key === 'gettingstarted');
 
                 // fallback text match
                 return sectionRules.find(rule =>
@@ -589,7 +589,7 @@ motor.reset_relative_position(port.A, 0)`
             colorClass: 'operators-color',
             snippets: [
                 {
-                    id: 'op1',
+                    id: 'oper1',
                     buttonText: 'Operator Example',
                     emoji: '🧿',
                     color: '#32CD32',
@@ -598,7 +598,29 @@ motor.reset_relative_position(port.A, 0)`
 a = 3
 b = 5
 result = a + b`
-                }
+                },
+                {
+                    id: 'oper2',
+                    buttonText: 'Operator Example',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: `
+# Operator example
+a = 3
+b = 5
+result = a + b`
+                },
+                {
+                    id: 'oper3',
+                    buttonText: 'Operator Example',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: `
+# Operator example
+a = 3
+b = 5
+result = a + b`
+                },
             ]
         },
         9: {   // variables 
@@ -644,11 +666,11 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                 }
             ]
         },
-        12: {   // hints 
-            colorClass: 'hints-color',
+        12: {   // Getting Started 
+            colorClass: 'gettingstarted-color',
             snippets: [
                 {
-                    id: 'hints1',
+                    id: 'gettingstarted1',
                     buttonText: 'Training Camp1 Moving Around',
                     emoji: '🧿',
                     color: '#CC0000',
@@ -725,7 +747,7 @@ runloop.run(main())
 sys.exit()`
                 },
                 {
-                    id: 'hints2',
+                    id: 'gettingstarted2',
                     buttonText: 'Training Camp2 Playing with Objects',
                     emoji: '🧿',
                     color: '#CC0000',
@@ -802,7 +824,7 @@ runloop.run(main())
 sys.exit()`
                 },
                 {
-                    id: 'hints3',
+                    id: 'gettingstarted3',
                     buttonText: 'Training Camp3 Reacting to Lines',
                     emoji: '🧿',
                     color: '#CC0000',
