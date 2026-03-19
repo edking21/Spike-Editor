@@ -51,11 +51,16 @@
             class="lesson-launcher"
             type="button"
             aria-label="Choose training lesson"
+            aria-haspopup="true"
+            aria-expanded="false"
             title="Choose lesson"
-            onclick="toggleTrainingCampDropdown(event)">
+            onclick="toggleLessonLauncherMenu(event)">
             <span class="lesson-launcher-icon" aria-hidden="true">⋮</span>
             <span class="lesson-launcher-text">Lesson</span>
         </button>
+        <div class="menu-dropdown-menu lesson-launcher-menu" id="lesson-launcher-menu">
+            <!-- Populated from trainingCampOptions in script -->
+        </div>
     </div>
     <div class="snippet-column">
         <div class="release-info" id="release-info">
@@ -79,8 +84,49 @@
             console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js export.');
         }
 
-        const toggleTrainingCampDropdown = window.toggleTrainingCampDropdown;
-        const closeTrainingCampDropdown = window.closeTrainingCampDropdown;
+        const baseToggleTrainingCampDropdown = window.toggleTrainingCampDropdown;
+        const baseCloseTrainingCampDropdown = window.closeTrainingCampDropdown;
+
+        function closeTrainingCampDropdown() {
+            if (typeof baseCloseTrainingCampDropdown === 'function') {
+                baseCloseTrainingCampDropdown();
+            }
+        }
+
+        function closeLessonLauncherMenu() {
+            const lessonMenu = document.getElementById('lesson-launcher-menu');
+            const lessonButton = document.querySelector('.lesson-launcher');
+            if (lessonMenu) lessonMenu.classList.remove('open');
+            if (lessonButton) lessonButton.setAttribute('aria-expanded', 'false');
+        }
+
+        function toggleTrainingCampDropdown(event) {
+            closeLessonLauncherMenu();
+            if (typeof baseToggleTrainingCampDropdown === 'function') {
+                baseToggleTrainingCampDropdown(event);
+            }
+        }
+
+        function toggleLessonLauncherMenu(event) {
+            if (event) event.stopPropagation();
+
+            const lessonMenu = document.getElementById('lesson-launcher-menu');
+            const lessonButton = document.querySelector('.lesson-launcher');
+            if (!lessonMenu) return;
+
+            const shouldOpen = !lessonMenu.classList.contains('open');
+            closeTrainingCampDropdown();
+            closeLessonLauncherMenu();
+
+            if (shouldOpen) {
+                lessonMenu.classList.add('open');
+                if (lessonButton) lessonButton.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        window.toggleTrainingCampDropdown = toggleTrainingCampDropdown;
+        window.closeTrainingCampDropdown = closeTrainingCampDropdown;
+        window.toggleLessonLauncherMenu = toggleLessonLauncherMenu;
 
         const CAMP1_COMBINED_ID = 2001;
         const CAMP2_COMBINED_ID = 1001;
@@ -221,16 +267,18 @@
         }
 
         function renderTrainingCampMenu() {
-            const menu = document.querySelector('#training-camp-dropdown .menu-dropdown-menu');
-            if (!menu) return;
+            const menus = document.querySelectorAll('#training-camp-dropdown .menu-dropdown-menu, #lesson-launcher-menu');
+            if (!menus.length) return;
 
-            menu.textContent = '';
-            trainingCampOptions.forEach(({ key, label }) => {
-                const link = document.createElement('a');
-                link.href = '#';
-                link.textContent = label;
-                link.addEventListener('click', (event) => selectTrainingCamp(key, event));
-                menu.appendChild(link);
+            menus.forEach((menu) => {
+                menu.textContent = '';
+                trainingCampOptions.forEach(({ key, label }) => {
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.textContent = label;
+                    link.addEventListener('click', (event) => selectTrainingCamp(key, event));
+                    menu.appendChild(link);
+                });
             });
         }
 
@@ -281,14 +329,19 @@
             refreshSnippets(buttons[0].id);
             updateLessonButtonLabel(campKey);
             closeTrainingCampDropdown();
+            closeLessonLauncherMenu();
         }
 
-        document.addEventListener('click', closeTrainingCampDropdown);
+        document.addEventListener('click', () => {
+            closeTrainingCampDropdown();
+            closeLessonLauncherMenu();
+        });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeMobileMenu();
                 closeTrainingCampDropdown();
+                closeLessonLauncherMenu();
             }
         });
 

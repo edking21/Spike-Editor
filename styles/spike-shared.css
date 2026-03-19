@@ -221,6 +221,21 @@ body {
     background: #edf2fb;
 }
 
+.lesson-launcher-menu {
+    display: none;
+    position: fixed;
+    left: calc(80px + 12px);
+    right: 12px;
+    bottom: calc(clamp(42px, 8vh, 64px) + 8px);
+    min-width: 260px;
+    max-width: 420px;
+    z-index: 1301;
+}
+
+.lesson-launcher-menu.open {
+    display: block;
+}
+
 .lesson-launcher-icon {
     display: inline-block;
     min-width: 16px;
@@ -427,5 +442,11 @@ body {
     body.mobile-menu-open .mobile-overlay {
         opacity: 1;
         visibility: visible;
+    }
+
+    .lesson-launcher-menu {
+        left: 12px;
+        right: 12px;
+        max-width: none;
     }
 }
