@@ -249,11 +249,6 @@ body {
     display: block;
 }
 
-.lesson-launcher-menu a {
-    padding: 7px 10px;
-    line-height: 1.25;
-}
-
 @media (max-width: 900px) {
     .training-camp-snippet-column .lesson-launcher {
         --launcher-left: 12px;
@@ -488,9 +483,4 @@ body {
         visibility: visible;
     }
 
-    .lesson-launcher-menu {
-        left: 12px;
-        right: 12px;
-        max-width: none;
-    }
 }
