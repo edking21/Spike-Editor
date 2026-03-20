@@ -226,6 +226,7 @@ body {
 .lesson-launcher-menu {
     display: none;
     position: fixed;
+    top: auto;
     left: calc(80px + 12px);
     right: auto;
     bottom: calc(max(0px, env(safe-area-inset-bottom)) + clamp(38px, 7vh, 56px) + 2px);
