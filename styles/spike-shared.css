@@ -118,6 +118,12 @@ body {
     text-decoration: none;
 }
 
+.top-menu .menu-dropdown-menu a {
+    height: auto;
+    line-height: 1.25;
+    border-bottom: none;
+}
+
 .menu-dropdown-menu a:hover {
     background: #f5f7fb;
 }
