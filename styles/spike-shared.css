@@ -203,9 +203,9 @@ body {
     --launcher-left: calc(80px + 12px);
     position: fixed;
     left: var(--launcher-left);
-    right: auto;
+    right: 12px;
     bottom: max(0px, env(safe-area-inset-bottom));
-    width: min(460px, calc(100vw - var(--launcher-left) - 12px));
+    max-width: 460px;
     min-height: 38px;
     height: clamp(38px, 7vh, 56px);
     border: none;
@@ -234,9 +234,8 @@ body {
     position: fixed;
     top: auto;
     left: calc(80px + 12px);
-    right: auto;
+    right: 12px;
     bottom: calc(max(0px, env(safe-area-inset-bottom)) + clamp(38px, 7vh, 56px) + 2px);
-    width: min(420px, calc(100vw - (80px + 12px) - 12px));
     min-width: 260px;
     max-width: 420px;
     padding: 2px 0;
@@ -252,12 +251,12 @@ body {
 @media (max-width: 900px) {
     .training-camp-snippet-column .lesson-launcher {
         --launcher-left: 12px;
-        width: calc(100vw - 24px);
+        right: 12px;
     }
 
     .lesson-launcher-menu {
         left: 12px;
-        width: calc(100vw - 24px);
+        right: 12px;
         min-width: 0;
         max-width: none;
     }
