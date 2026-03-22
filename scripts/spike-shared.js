@@ -10,7 +10,21 @@
             .replaceAll("'", '&#39;');
     }
 
-    const ICON_HEX = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40" aria-hidden="true" style="transform: translateY(8px);"><polygon points="40,20 80,40 80,80 40,100 0,80 0,40" fill="#8e7665" transform="rotate(0 0 0)"/></svg>';    const ui = {
+    const ICON_HEX_POINTS1= '20,0 60,0 80,30 60,60 20,60 0,30';
+    const ICON_HEX_POINTS2 = '40,20 80,40 80,80 40,100 0,80 0,40';
+
+    const ICON_HEX = [
+        '<svg xmlns="http://www.w3.org/2000/svg"',
+        ' viewBox="0 0 80 80"',
+        ' width="30" height="16"',
+        ' aria-hidden="true"',
+        ' style="transform: translateY(1px);">',
+        `<polygon points="${ICON_HEX_POINTS1}"`,
+        ' fill="#8e7665" transform="rotate(0 0 0)"/>',
+        '</svg>'
+    ].join('');
+
+    const ui = {
         toggleMobileMenu() { document.body.classList.toggle('mobile-menu-open'); },
         closeMobileMenu() { document.body.classList.remove('mobile-menu-open'); },
         searchCurrentPage() {
