@@ -365,6 +365,7 @@ body {
 
 .snippet .label {
     font-size: 1em;
+    white-space: pre-line;
 }
 
 .snippet-group-label {

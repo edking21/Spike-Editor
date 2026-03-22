@@ -10,7 +10,7 @@
             .replaceAll("'", '&#39;');
     }
 
-    const ui = {
+    const ICON_HEX = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40" aria-hidden="true" style="transform: translateY(8px);"><polygon points="40,20 80,40 80,80 40,100 0,80 0,40" fill="#8e7665" transform="rotate(0 0 0)"/></svg>';    const ui = {
         toggleMobileMenu() { document.body.classList.toggle('mobile-menu-open'); },
         closeMobileMenu() { document.body.classList.remove('mobile-menu-open'); },
         searchCurrentPage() {
@@ -98,6 +98,9 @@
             if (hex.length === 3) {
                 hex = hex.split('').map((c) => c + c).join('');
             }
+
+            // Keep Control category text white for readability on dark yellow.
+            if (hex.toLowerCase() === 'daa520') return '#ffffff';
 
             const r = parseInt(hex.slice(0, 2), 16);
             const g = parseInt(hex.slice(2, 4), 16);
@@ -235,16 +238,37 @@
                 button.style.backgroundColor = String(snippet?.color || '#666');
                 button.style.color = String(snippet?.textColor || '#fff');
 
-                const emoji = document.createElement('span');
-                emoji.className = 'emoji';
-                emoji.textContent = String(snippet?.emoji || '🧿');
+                const emojiText = String(snippet?.emoji ?? '🧿');
 
                 const label = document.createElement('span');
                 label.className = 'label';
-                label.textContent = String(snippet?.buttonText || '');
+                const buttonText = String(snippet?.buttonText || '');
+                if (buttonText.includes('<svg')) {
+                    // Preserve intentional spacing in mixed text + SVG labels.
+                    label.style.whiteSpace = 'pre';
+                    label.innerHTML = buttonText;
+
+                    // Nudge only text around the SVG up by 2px for visual centering.
+                    Array.from(label.childNodes).forEach((node) => {
+                        if (node.nodeType === Node.TEXT_NODE && (node.textContent || '').trim()) {
+                            const textNode = document.createElement('span');
+                            textNode.textContent = node.textContent || '';
+                            textNode.style.display = 'inline-block';
+                            textNode.style.transform = 'translateY(-4px)';
+                            node.replaceWith(textNode);
+                        }
+                    });
+                } else {
+                    label.textContent = buttonText;
+                }
 
                 button.addEventListener('click', () => navigator.clipboard.writeText(String(snippet?.textPython || '')));
-                button.appendChild(emoji);
+                if (emojiText) {
+                    const emoji = document.createElement('span');
+                    emoji.className = 'emoji';
+                    emoji.textContent = emojiText;
+                    button.appendChild(emoji);
+                }
                 button.appendChild(label);
                 snippetContainer.appendChild(button);
                 host.appendChild(snippetContainer);
@@ -299,7 +323,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 },
                 {
                     id: 'move3',
-                    buttonText: 'move right 30 for 10 rotations',
+                    buttonText: 'turn right 90 for 10 rotations',
                     emoji: '🧿',
                     color: '#FF69B4',
                     textPython: `
@@ -459,63 +483,57 @@ when`
                 {
                     id: 'control1',
                     buttonText: 'Wait 1 seconds',
-                    emoji: '🧿',
+                    emoji: '',
                     color: '#DAA520',
                     textPython: `
-# Wait for 1 second
-sleep(1)`
+    # wait for 1 second
+    sleep(1)`
                 },
                 {
                     id: 'control2',
+                    buttonText: `if    ${ICON_HEX} then`,
+                    emoji: '',
+                    color: '#DAA520',
+                    textPython: `
+    # wait until 
+    await runloop.until # <your sensor here>`
+                },
+                {
+                    id: 'control3',
+                    buttonText: `repeat until    ${ICON_HEX} `,
+                    emoji: '',
+                    color: '#DAA520',
+                    textPython: `
+    # Repeat until
+    while # <your sensor here>`
+                },
+                {
+                    id: 'control4',
                     buttonText: 'Repeat 10',
                     emoji: '🧿',
                     color: '#DAA520',
                     textPython: `
-# Under construction - Repeat 10 times`
+    # Repeat 10 times
+    for i in range(10):
+         # <your code here>`
                 },
                 {
-                    id: 'control3',
+                    id: 'control5',
                     buttonText: 'Forever',
                     emoji: '🧿',
                     color: '#DAA520',
                     textPython: `
-# Forever
-while True:`
-                },
-                {
-                    id: 'control4',
-                    buttonText: 'If',
-                    emoji: '🧿',
-                    color: '#DAA520',
-                    textPython: `
-if # <your condition or function here>`
-                },
-                {
-                    id: 'control5',
-                    buttonText: 'Forever loop',
-                    emoji: '🧿',
-                    color: '#DAA520',
-                    textPython: `
-while True:`
+    # Forever
+    while True:`
                 },
                 {
                     id: 'control6',
-                    buttonText: 'Wait until condition',
-                    emoji: '🧿',
+                    buttonText: `repeat until    ${ICON_HEX} `,
+                    emoji: '',
                     color: '#DAA520',
                     textPython: `
-# wait until condition
-await runloop.until # <your sensor condition here>`
+    if # <your condition or function here>`
                 },
-                {
-                    id: 'control7',
-                    buttonText: 'Repeat until (function)',
-                    emoji: '🧿',
-                    color: '#DAA520',
-                    textPython: `
-# Repeat until (function)
-while # <your sensor function here>`
-                }
             ]
         },
         7: {   // sensors 
@@ -675,230 +693,28 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `# Training Camp 1 - Moving Around
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light, light_matrix, port, sound
-from time import sleep, sleep_ms
+import runloop, time, sys, motor_pair
+from hub port, moton_sensor
+from time import sleep_ms
 from runloop import run
-
-# Ports on the robot hub
-color_port = port.A
-distance_port = port.B
-force_port = port.E
-
-# Conversion constants
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
-
-# how many times we see each color
-blue_count = 0
-yellow_count = 0
-red_count = 0
-
-# Color codes - these numbers represent different colors to the robot
-blue = 3
-yellow = 7
-red = 9
 
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-# Remember the last color seen so we don't count the same color twice in a row
-last_color = None
-
-# This is like a stop sign for our program - when it's True, everything stops
-should_stop = False
-
 ########################################################################
-# 🛑 is_color_red - Function to check if the color sensor sees red
+# 🤖 Gyro Turn 90 Degrees
 ########################################################################
-def is_color_red():
-    return color_sensor.color(color_port) == color.RED
-
-########################################################################
-# 🎯 is_pressed - Function to check if force sensor is pressed
-########################################################################
-def is_pressed():
-    return force_sensor.pressed(force_port)
-
-########################################################################
-# ☀️ is_near - Function to check if something is near
-########################################################################
-def is_near(distance_threshold=100):
-    distance = distance_sensor.distance(distance_port)
-    if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
-        return False
-    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-    return distance < distance_threshold
-
-########################################################################
-# 🤖 Main - Start and Stop is_near test using Wait until
-########################################################################
-async def main():
-    while True:
-        motor_pair.move(motor_pair.PAIR_1, 0)
-        await runloop.until(is_near)
-        motor_pair.stop(motor_pair.PAIR_1)
-        sleep_ms(10)
+async def gyro_turn():
+    
+    #reset the yaw angle to 0
+    motor_sensor.reset_yaw(0)
+    motor_pair.move(motor_pair.PAIR_1, 0)
+    await runloop.until(is_near)
+    motor_pair.stop(motor_pair.PAIR_1)
+    sleep_ms(10)
 
 runloop.run(main())
-sys.exit()`
-                },
-                {
-                    id: 'gettingstarted2',
-                    buttonText: 'Training Camp2 Playing with Objects',
-                    emoji: '🧿',
-                    color: '#CC0000',
-                    textPython: `# Training Camp 2 - Playing with Objects
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light, light_matrix, port, sound
-from time import sleep, sleep_ms
-from runloop import run
-
-# Ports on the robot hub
-color_port = port.A
-distance_port = port.B
-force_port = port.E
-
-# Conversion constants
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
-
-# how many times we see each color
-blue_count = 0
-yellow_count = 0
-red_count = 0
-
-# Color codes - these numbers represent different colors to the robot
-blue = 3
-yellow = 7
-red = 9
-
-# Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-# Remember the last color seen so we don't count the same color twice in a row
-last_color = None
-
-# This is like a stop sign for our program - when it's True, everything stops
-should_stop = False
-
-########################################################################
-# 🛑 is_color_red - Function to check if the color sensor sees red
-########################################################################
-def is_color_red():
-    return color_sensor.color(color_port) == color.RED
-
-########################################################################
-# 🎯 is_pressed - Function to check if force sensor is pressed
-########################################################################
-def is_pressed():
-    return force_sensor.pressed(force_port)
-
-########################################################################
-# ☀️ is_near - Function to check if something is near
-########################################################################
-def is_near(distance_threshold=100):
-    distance = distance_sensor.distance(distance_port)
-    if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
-        return False
-    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-    return distance < distance_threshold
-
-########################################################################
-# 🤖 Main - Start and Stop is_near test using Wait until
-########################################################################
-async def main():
-    while True:
-        motor_pair.move(motor_pair.PAIR_1, 0)
-        await runloop.until(is_near)
-        motor_pair.stop(motor_pair.PAIR_1)
-        sleep_ms(10)
-
-runloop.run(main())
-sys.exit()`
-                },
-                {
-                    id: 'gettingstarted3',
-                    buttonText: 'Training Camp3 Reacting to Lines',
-                    emoji: '🧿',
-                    color: '#CC0000',
-                    textPython: `# Training Camp 3 - Reacting to lines
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light, light_matrix, port, sound
-from time import sleep, sleep_ms
-from runloop import run
-
-# Ports on the robot hub
-color_port = port.A
-distance_port = port.B
-force_port = port.E
-
-# Conversion constants
-DEGREES_PER_CM = 21
-DEGREES_PER_INCH = 53
-MM_PER_INCH = 25.4
-
-# how many times we see each color
-blue_count = 0
-yellow_count = 0
-red_count = 0
-
-# Color codes - these numbers represent different colors to the robot
-blue = 3
-yellow = 7
-red = 9
-
-# Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-# Remember the last color seen so we don't count the same color twice in a row
-last_color = None
-
-# This is like a stop sign for our program - when it's True, everything stops
-should_stop = False
-
-########################################################################
-# 🛑 is_color_red - Function to check if the color sensor sees red
-########################################################################
-def is_color_red():
-    return color_sensor.color(color_port) == color.RED
-
-########################################################################
-# 🎯 is_pressed - Function to check if force sensor is pressed
-########################################################################
-def is_pressed():
-    return force_sensor.pressed(force_port)
-
-########################################################################
-# ☀️ is_near - Function to check if something is near
-########################################################################
-def is_near(distance_threshold=100):
-    distance = distance_sensor.distance(distance_port)
-    if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
-        return False
-    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-    return distance < distance_threshold
-
-########################################################################
-# 🤖 Main - Start and Stop is_near test using Wait until
-########################################################################
-async def main():
-    while True:
-        motor_pair.move(motor_pair.PAIR_1, 0)
-        await runloop.until(is_near)
-        motor_pair.stop(motor_pair.PAIR_1)
-        sleep_ms(10)
-
-runloop.run(main())
-sys.exit()`
+`
                 },
             ]
         },
