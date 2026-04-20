@@ -814,27 +814,33 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `# Training Camp 1 - Moving Around
-import runloop, time, sys, motor_pair
+import runloop, sys, motor_pair
 from hub import port, motion_sensor
-from time import sleep_ms
-from runloop import run
 
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 ########################################################################
-# 🤖 Gyro Turn 90 Degrees
+# 🤖 Check for 90 degree tilt/yaw angle
 ########################################################################
-async def gyro_turn():
-    
-    #reset the yaw angle to 0
+def check_angle():
+    # 900 means 900 degrees
+    return motion_sensor.tilt_angles()[0] >= 900
+
+########################################################################
+# 🤖 Gyro Turn 45 Degrees
+########################################################################
+async def main():
+
     motion_sensor.reset_yaw(0)
-    motor_pair.move(motor_pair.PAIR_1, 0)
-    await runloop.until(is_near)
+
+    # spin right until yaw reaches 90 degrees
+    motor_pair.move(motor_pair.PAIR_1, -100, velocity=150)
+    await runloop.until(check_angle)
     motor_pair.stop(motor_pair.PAIR_1)
-    sleep_ms(10)
 
 runloop.run(main())
+sys.exit()
 `
                 },
             ]
