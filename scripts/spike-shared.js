@@ -821,22 +821,15 @@ from hub import port, motion_sensor
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 ########################################################################
-# 🤖 Check for 90 degree tilt/yaw angle
-########################################################################
-def check_angle():
-    # 900 means 900 degrees
-    return motion_sensor.tilt_angles()[0] >= 900
-
-########################################################################
-# 🤖 Gyro Turn 45 Degrees
+# 🤖 Gyro Turn 90 Degrees CLOCKWISE
 ########################################################################
 async def main():
 
     motion_sensor.reset_yaw(0)
 
-    # spin right until yaw reaches 90 degrees
-    motor_pair.move(motor_pair.PAIR_1, -100, velocity=150)
-    await runloop.until(check_angle)
+    # spin cclw until yaw reaches 90 degrees
+    motor_pair.move(motor_pair.PAIR_1, -100)
+    await runloop.until(lambda: motion_sensor.tilt_angles()[0] >= 900)
     motor_pair.stop(motor_pair.PAIR_1)
 
 runloop.run(main())
