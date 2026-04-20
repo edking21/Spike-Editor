@@ -815,7 +815,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     color: '#CC0000',
                     textPython: `# Training Camp 1 - Moving Around
 import runloop, time, sys, motor_pair
-from hub port, moton_sensor
+from hub import port, motion_sensor
 from time import sleep_ms
 from runloop import run
 
@@ -828,7 +828,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 async def gyro_turn():
     
     #reset the yaw angle to 0
-    motor_sensor.reset_yaw(0)
+    motion_sensor.reset_yaw(0)
     motor_pair.move(motor_pair.PAIR_1, 0)
     await runloop.until(is_near)
     motor_pair.stop(motor_pair.PAIR_1)
