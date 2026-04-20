@@ -10,6 +10,79 @@
             .replaceAll("'", '&#39;');
     }
 
+    const ICON_MOTORS = [
+        '<svg xmlns="http://www.w3.org/2000/svg"',
+        ' viewBox="0 0 24 24"',
+        ' width="18" height="18"',
+        ' aria-hidden="true"',
+        ' style="display:block;">',
+        ' <circle cx="12" cy="12" r="10.5" fill="#fff7fd" stroke="#4c14c4" stroke-width="1.5"/>',
+        ' <circle cx="8" cy="8" r="2.35" fill="#4c14c4"/>',
+        ' <circle cx="16" cy="8" r="2.35" fill="#4c14c4"/>',
+        ' <circle cx="8" cy="16" r="2.35" fill="#4c14c4"/>',
+        ' <circle cx="16" cy="16" r="2.35" fill="#4c14c4"/>',
+        ' <rect x="11" y="8.5" width="2" height="7" rx="1" fill="#4c14c4"/>',
+        ' <rect x="8.5" y="11" width="7" height="2" rx="1" fill="#4c14c4"/>',
+        '</svg>'
+    ].join('');
+
+    const ICON_MOVEMENT = [
+        '<svg xmlns="http://www.w3.org/2000/svg"',
+        ' viewBox="0 0 24 24"',
+        ' width="18" height="18"',
+        ' aria-hidden="true"',
+        ' style="display:block;">',
+        ' <circle cx="12" cy="12" r="10.5" fill="#fff7fd" stroke="#c41496" stroke-width="1.5"/>',
+        ' <circle cx="8" cy="8" r="2.35" fill="#c41496"/>',
+        ' <circle cx="16" cy="8" r="2.35" fill="#c41496"/>',
+        ' <circle cx="8" cy="16" r="2.35" fill="#c41496"/>',
+        ' <circle cx="16" cy="16" r="2.35" fill="#c41496"/>',
+        ' <rect x="11" y="8.5" width="2" height="7" rx="1" fill="#c41496"/>',
+        ' <rect x="8.5" y="11" width="7" height="2" rx="1" fill="#c41496"/>',
+        '</svg>'
+    ].join('');
+
+    const ICON_COLOR_SENSOR = [
+        '<svg xmlns="http://www.w3.org/2000/svg"',
+        ' viewBox="0 0 24 24"',
+        ' width="18" height="18"',
+        ' aria-hidden="true"',
+        ' style="display:block;">',
+        ' <rect x="1.5" y="1.5" width="21" height="21" rx="4" fill="#ffffff" stroke="#c9a300" stroke-width="1.5"/>',
+        ' <circle cx="12" cy="12" r="6.25" fill="none" stroke="#c9a300" stroke-width="1.5"/>',
+        ' <circle cx="12" cy="12" r="4.1" fill="#c9a300"/>',
+        '</svg>'
+    ].join('');
+
+    const ICON_FORCE_SENSOR = [
+        '<svg xmlns="http://www.w3.org/2000/svg"',
+        ' viewBox="0 0 24 24"',
+        ' width="18" height="18"',
+        ' aria-hidden="true"',
+        ' style="display:block;">',
+        ' <rect x="1.5" y="1.5" width="21" height="21" rx="4" fill="#ffffff" stroke="#c9a300" stroke-width="1.5"/>',
+        ' <rect x="4" y="10" width="5.8" height="4" rx="2" fill="#c9a300"/>',
+        ' <rect x="14.2" y="10" width="5.8" height="4" rx="2" fill="#c9a300"/>',
+        ' <circle cx="12" cy="12" r="4.6" fill="#c9a300"/>',
+        ' <rect x="11.3" y="9.2" width="1.4" height="5.6" rx="0.7" fill="#ffffff"/>',
+        ' <rect x="9.2" y="11.3" width="5.6" height="1.4" rx="0.7" fill="#ffffff"/>',
+        '</svg>'
+    ].join('');
+
+    const ICON_DISTANCE_SENSOR = [
+        '<svg xmlns="http://www.w3.org/2000/svg"',
+        ' viewBox="0 0 24 24"',
+        ' width="18" height="18"',
+        ' aria-hidden="true"',
+        ' style="display:block;">',
+        ' <rect x="1.5" y="3" width="21" height="18" rx="4" fill="#ffffff" stroke="#c9a300" stroke-width="1.5"/>',
+        ' <circle cx="7" cy="12" r="3.2" fill="none" stroke="#c9a300" stroke-width="1.2"/>',
+        ' <circle cx="7" cy="12" r="2" fill="#c9a300"/>',
+        ' <circle cx="17" cy="12" r="3.2" fill="none" stroke="#c9a300" stroke-width="1.2"/>',
+        ' <circle cx="17" cy="12" r="2" fill="#c9a300"/>',
+        '</svg>'
+    ].join('');
+
     const ICON_HEX_POINTS= '20,0 60,0 80,30 60,60 20,60 0,30';
 
     const ICON_HEX = [
@@ -267,7 +340,11 @@
                 if (emojiText) {
                     const emoji = document.createElement('span');
                     emoji.className = 'emoji';
-                    emoji.textContent = emojiText;
+                    if (emojiText.includes('<svg')) {
+                        emoji.innerHTML = emojiText;
+                    } else {
+                        emoji.textContent = emojiText;
+                    }
                     button.appendChild(emoji);
                 }
                 button.appendChild(label);
@@ -284,7 +361,7 @@
                 {
                     id: 'motors1',
                     buttonText: 'Run CLOCKWISE for 1 rotation',     
-                    emoji: '🧿' ,
+                    emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
 # Run CLOCKWISE for 1 rotation
@@ -293,7 +370,7 @@ await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
                 {
                     id: 'motors2',
                     buttonText: 'Go shortest path to position 0',     
-                    emoji: '🧿' ,
+                    emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
 # Go shortest path to position 0
@@ -307,7 +384,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move1',
                     buttonText: 'move forward for 10 rotations',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # move forward for 10cm
@@ -316,7 +393,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move2',
                     buttonText: 'start moving',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # start moving
@@ -325,7 +402,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move3',
                     buttonText: 'turn right 90 for 10 rotations',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # move right 30 for 10 rotations
@@ -335,7 +412,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move4',
                     buttonText: 'start moving right 30',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # start moving right 30
@@ -345,7 +422,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move5',
                     buttonText: 'stop moving',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # stop moving
@@ -355,7 +432,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move6',
                     buttonText: 'set movement speed to 20%',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # set movement speed to 20% of 1100
@@ -364,7 +441,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                 {
                     id: 'move7',
                     buttonText: 'set movement motors to C+D',
-                    emoji: '🧿',
+                    emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
     # set movement motors to C+D
@@ -433,17 +510,60 @@ await sound.beep(60, 200)`
             snippets: [
                 {
                     id: 'event1',
-                    buttonText: 'when program starts',
-                    emoji: '🧿',
+                    buttonText: 'When Training Camp1 starts',
+                    emoji: '',
                     color: '#FFD700',
                     textPython: `
-# When program starts
-while #<your condition or function here>`
+from hub import light_matrix, port
+import runloop, motor_pair, sys
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+# conversion units
+DEGREES_PER_CM = 21
+DEGREES_PER_IN = 53
+
+########################################################################
+# 🤖 Main - Training Camp #1 Moving Arround
+########################################################################
+async def main():
+
+    await light_matrix.write("Hi!")
+
+    # move forward at 200 degrees/sec for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0, velocity=200)
+
+    # move backward at 300 degrees/sec for 10cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * DEGREES_PER_CM, 0, velocity=300)
+
+
+runloop.run(main())
+sys.exit()
+`
                 },
                 {
                     id: 'event2',
+                    buttonText: 'When program starts',
+                    emoji: '',
+                    color: '#FFD700',
+                    textPython: `
+
+########################################################################
+# 🤖 Main - Training Camp #2 Playing with objects
+########################################################################
+async def main():
+
+    # Connect two motors together so they work as a team
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+    # <Paste your code here>
+`
+                },
+                {
+                    id: 'event4',
                     buttonText: 'When color is red',
-                    emoji: '🧿',
+                    emoji: ICON_COLOR_SENSOR,
                     color: '#FFD700',
                     textPython: `
 # When left button pressed
@@ -451,24 +571,24 @@ while not (#<your condition or function here>)`
                 },
                 {
                     id: 'event3',
-                    buttonText: 'When closer than 8 %',
-                    emoji: '🧿',
+                    buttonText: 'When closer than 10 cm',
+                    emoji: ICON_DISTANCE_SENSOR,
                     color: '#FFD700',
                     textPython: `
-# When left button pressed
-while not (#<your condition or function here>)`
-                },
-                {
-                    id: 'event4',
-                    buttonText: 'When left button pressed',
-                    emoji: '🧿',
-                    color: '#FFD700',
-                    textPython: `
-# When left button pressed
-while not (#<your condition or function here>)`
+    # When closer than
+    while not is_near()`
                 },
                 {
                     id: 'event5',
+                    buttonText: 'When left button pressed',
+                    emoji: ICON_FORCE_SENSOR,
+                    color: '#FFD700',
+                    textPython: `
+# When left button pressed
+while not (#<your condition or function here>)`
+                },
+                {
+                    id: 'event6',
                     buttonText: 'When',
                     emoji: '🧿',
                     color: '#FFD700',
@@ -492,6 +612,25 @@ when`
                 },
                 {
                     id: 'control2',
+                    buttonText: 'Repeat 10',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+    # Repeat 10 times
+    for i in range(10):
+         # <your code here>`
+                },
+                {
+                    id: 'control3',
+                    buttonText: 'Forever',
+                    emoji: '🧿',
+                    color: '#DAA520',
+                    textPython: `
+    # Forever
+    while True:`
+                },
+                {
+                    id: 'control2',
                     buttonText: `if    ${ICON_HEX} then`,
                     emoji: '',
                     color: '#DAA520',
@@ -507,25 +646,6 @@ when`
                     textPython: `
     # Repeat until
     while # <your sensor here>`
-                },
-                {
-                    id: 'control4',
-                    buttonText: 'Repeat 10',
-                    emoji: '🧿',
-                    color: '#DAA520',
-                    textPython: `
-    # Repeat 10 times
-    for i in range(10):
-         # <your code here>`
-                },
-                {
-                    id: 'control5',
-                    buttonText: 'Forever',
-                    emoji: '🧿',
-                    color: '#DAA520',
-                    textPython: `
-    # Forever
-    while True:`
                 },
                 {
                     id: 'control6',

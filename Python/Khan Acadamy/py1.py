@@ -1,0 +1,5 @@
+print("Run me!")
+print("Syntax errors mean that the code is not valid Python.")
+print (43 + 31 + 589)
+print(12.43 + 38.43 )
+print("Can you find the error?")
