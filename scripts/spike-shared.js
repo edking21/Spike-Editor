@@ -364,8 +364,8 @@
                     emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
-# Run CLOCKWISE for 1 rotation
-await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
+    # Run CLOCKWISE for 1 rotation
+    await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
                 },
                 {
                     id: 'motors2',
@@ -373,8 +373,8 @@ await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
                     emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
-# Go shortest path to position 0
-await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_PATH)`
+    # Go shortest path to position 0
+    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)`
                 }
             ]
         },
@@ -700,8 +700,7 @@ when`
                     buttonText: 'is near (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `
-is_near():
+                    textPython: `is_near():
     # your code here`
                 },
                 {
