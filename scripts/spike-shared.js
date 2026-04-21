@@ -387,7 +387,7 @@ await motor.run_to_relative_position(port.E, 360, 200, direction=motor.SHORTEST_
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
-    # move forward for 10cm
+    # move forward for 10 rotations
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
                 },
                 {
@@ -810,10 +810,10 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
             snippets: [
                 {
                     id: 'gettingstarted1',
-                    buttonText: 'Training Camp1 Moving Around',
+                    buttonText: 'Training Camp1 Driving Around',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 1 - Moving Around
+                    textPython: `# Training Camp 1 - Driving Around
 import runloop, sys, motor_pair
 from hub import port, motion_sensor
 
@@ -821,18 +821,74 @@ from hub import port, motion_sensor
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 ########################################################################
-# 🤖 Gyro Turn 90 Degrees CLOCKWISE
+# 🤖 Gyro turn left 90 degrees
 ########################################################################
-async def main():
+async def gyro_90_degree_turn():
 
     motion_sensor.reset_yaw(0)
 
-    # spin cclw until yaw reaches 90 degrees
+    # spin until yaw reaches 90 degrees
     motor_pair.move(motor_pair.PAIR_1, -100)
     await runloop.until(lambda: motion_sensor.tilt_angles()[0] >= 900)
     motor_pair.stop(motor_pair.PAIR_1)
 
-runloop.run(main())
+runloop.run(gyro_90_degree_turn())
+sys.exit()
+`
+                },
+                {
+                    id: 'gettingstarted2',
+                    buttonText: 'Training Camp2 Playing with objects',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Training Camp 2 - Playing with objects
+import runloop, sys, motor_pair
+from hub import port, motion_sensor
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+########################################################################
+# 🤖 Gyro turn left 90 degrees
+########################################################################
+async def gyro_90_degree_turn():
+
+    motion_sensor.reset_yaw(0)
+
+    # spin until yaw reaches 90 degrees
+    motor_pair.move(motor_pair.PAIR_1, -100)
+    await runloop.until(lambda: motion_sensor.tilt_angles()[0] >= 900)
+    motor_pair.stop(motor_pair.PAIR_1)
+
+runloop.run(gyro_90_degree_turn())
+sys.exit()
+`
+                },
+                {
+                    id: 'gettingstarted3',
+                    buttonText: 'Training Camp3 Reacting to Lines',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Training Camp 3 - Reacting to lines
+import runloop, sys, motor_pair
+from hub import port, motion_sensor
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+
+########################################################################
+# 🤖 Gyro turn left 90 degrees
+########################################################################
+async def gyro_90_degree_turn():
+
+    motion_sensor.reset_yaw(0)
+
+    # spin until yaw reaches 90 degrees
+    motor_pair.move(motor_pair.PAIR_1, -100)
+    await runloop.until(lambda: motion_sensor.tilt_angles()[0] >= 900)
+    motor_pair.stop(motor_pair.PAIR_1)
+
+runloop.run(gyro_90_degree_turn())
 sys.exit()
 `
                 },
