@@ -102,7 +102,7 @@
         const CAMP3_COMBINED_ID = 3001;
 
         const trainingCampOptions = [
-            { key: 'camp1', label: 'Training Camp #1 Moving Around' },
+            { key: 'camp1', label: 'Training Camp #1 Driving Around' },
             { key: 'camp2', label: 'Training Camp #2 Playing with Objects' },
             { key: 'camp3', label: 'Training Camp #3 Reacting to Lines' }
         ];
@@ -115,8 +115,8 @@
                         groups: [2, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
-                            5: ['event1', 'event4'],
-                            6: ['control1', 'control2', 'control6'],
+                            5: ['event1', 'event6'],
+                            6: ['control1', 'control2', 'control3'],
                             7: ['sensor2', 'sensor4'],
                             8: ['oper1'],
                             12: ['gettingstarted1'],
@@ -124,7 +124,7 @@
                     }
                 },
                 groups: {
-                    5: ['event1', 'event4'],
+                    5: ['event1', 'event6'],
                     6: ['control1', 'control2', 'control6'],
                     7: ['sensor2', 'sensor4'],
                     8: ['oper1'],
@@ -140,13 +140,14 @@
                             1: ['motor1', 'motor2'],
                             2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
                             4: ['sound1', 'sound2'],
-                            5: ['event1', 'event2'],
+                            5: ['event2', 'event6'],
                             6: ['control1', 'control2'],
                             12: ['gettingstarted2'],
                         }
                     }
                 },
                 groups: {
+                    5: ['event2', 'event6'],
                     12: ['gettingstarted2']
                 }
             },
@@ -322,18 +323,6 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
