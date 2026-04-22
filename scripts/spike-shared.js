@@ -888,26 +888,131 @@ sys.exit()
                     buttonText: 'Training Camp2 Playing with objects',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 2 - Playing with objects
-import runloop, sys, motor_pair
-from hub import port, motion_sensor
+                    textPython: 
+`# Training Camp 2 - Playing with objects
+import runloop, sys, motor_pair, motor
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button
+from runloop import run
+from time import sleep, sleep_ms
+
+# Constants
+CM_TO_DEGREES = 21
+
+# Ports on the robot hub
+color_port = port.F
+distance_port = port.B
+force_port = port.A
 
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
+
+########################7################################################
+# ☀️ is_near - Function or condition to check if something is close
 ########################################################################
-# 🤖 Gyro turn left 90 degrees
+def is_near(distance_threshold=150): # 100mm (6 inches) minimum
+    """
+    Examples:
+        with if            if is_near():
+        with wait until    await runloop.until(is_near):
+        with repeat until  while not (is_near()):
+    """
+    distance = distance_sensor.distance(distance_port)
+
+    if distance == -1:
+        print("Warning: Distance sensor not detecting anything")
+        return False
+
+    # print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+
+    return distance < distance_threshold
+
+
 ########################################################################
-async def gyro_90_degree_turn():
+# 🛑 is_color_red - Function to check if the color sensor sees red
+########################################################################
+def is_color_red():
+    """
+    Examples:
+        with if             if is_red():
+        with wait until     await runloop.until(is_red):
+        with repeat until   while not (is_red()):
+    """
+    return color_sensor.color(color_port) == color.RED
 
-    motion_sensor.reset_yaw(0)
 
-    # spin until yaw reaches 90 degrees
-    motor_pair.move(motor_pair.PAIR_1, -100)
-    await runloop.until(lambda: motion_sensor.tilt_angles()[0] >= 900)
-    motor_pair.stop(motor_pair.PAIR_1)
+########################################################################
+# 🛑 is_pressed - Function to check if the force sensor pressed
+########################################################################
+def is_pressed():
+    """
+    Examples:
+        with if             if is_pressed():
+        with wait until     await runloop.until(is_pressed):
+        with repeat until   while not (is_pressed()):
+    """
+    return force_sensor.pressed(force_port)
 
-runloop.run(gyro_90_degree_turn())
+
+########################################################################
+# 🤖 Lower and raise the arm
+########################################################################
+async def lower_and_raise_the_arm():
+
+    # Go shortest path to position -75 then to 0
+    await motor.run_to_absolute_position(port.E, -75, 100, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
+
+
+########################################################################
+# 🤖 when left button pressed detect pressed
+########################################################################
+async def when_left_button_pressed():
+
+    if button.pressed(button.LEFT):
+
+        motor_pair.move(motor_pair.PAIR_1, 0)
+
+        await runloop.until (is_pressed)
+
+        # backup 10 cm
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
+        sleep(.2)
+
+
+########################################################################
+# 🤖 when right button pressed detect near
+########################################################################
+async def when_right_button_pressed():
+
+    if button.pressed(button.RIGHT):
+
+        motor_pair.move(motor_pair.PAIR_1, 0)
+
+        await runloop.until (is_near)
+
+        # backup 10 cm
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
+        sleep(.2)
+
+
+########################################################################
+# 🤖 main
+########################################################################
+async def main():
+
+    await lower_and_raise_the_arm()
+
+    while True:
+
+        # Run all functions concurrently as events
+        run(
+            when_left_button_pressed(),
+            when_right_button_pressed(),
+        )
+
+runloop.run(main())
 sys.exit()
 `
                 },
