@@ -1049,7 +1049,8 @@ def is_near(distance_threshold=150): # 100mm (6 inches) minimum
     Examples:
         with if            if is_near():
         with wait until    await runloop.until(is_near):
-        with repeat untilwhile not (is_near()):
+        with wait until    await runloop.until(lambda: is_near(100)):
+        with repeat until  while not (is_near()):
     """
     distance = distance_sensor.distance(distance_port)
 
@@ -1070,7 +1071,7 @@ def is_color_red():
     Examples:
         with if            if is_red():
         with wait until    await runloop.until(is_red):
-        with repeat untilwhile not (is_red()):
+        with repeat until  while not (is_red()):
     """
     return color_sensor.color(color_port) == color.RED
 
@@ -1083,7 +1084,7 @@ def is_pressed():
     Examples:
         with if            if is_pressed():
         with wait until    await runloop.until(is_pressed):
-        with repeat untilwhile not (is_pressed()):
+        with repeat until  while not (is_pressed()):
     """
     return force_sensor.pressed(force_port)
 
