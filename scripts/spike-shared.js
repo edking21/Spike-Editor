@@ -1021,8 +1021,7 @@ sys.exit()
                     buttonText: 'Training Camp3 Reacting to Lines',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `
-# Training Camp 3 - Reacting to lines
+                    textPython: `# Training Camp 3 - Reacting to lines
 import runloop, sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
