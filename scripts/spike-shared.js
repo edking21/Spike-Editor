@@ -959,7 +959,8 @@ def is_pressed():
 ########################################################################
 async def lower_and_raise_the_arm():
 
-    # Go shortest path to position -75 then to 0
+    # Go shortest path to position -75 then to back to 0
+    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
     await motor.run_to_absolute_position(port.E, -75, 100, direction=motor.SHORTEST_PATH)
     await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
 
@@ -1020,7 +1021,8 @@ sys.exit()
                     buttonText: 'Training Camp3 Reacting to Lines',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 3 - Reacting to lines
+                    textPython: `
+# Training Camp 3 - Reacting to lines
 import runloop, sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
@@ -1040,7 +1042,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 
 ########################7################################################
-# ☀️ is_near - Function or condition to check if something is close
+# ☀️ is the distance sensor seeing something close
 ########################################################################
 def is_near(distance_threshold=150): # 100mm (6 inches) minimum
     """
@@ -1061,7 +1063,7 @@ def is_near(distance_threshold=150): # 100mm (6 inches) minimum
 
 
 ########################################################################
-# 🛑 is_color_red - Function to check if the color sensor sees red
+# 🛑 is the color sensor seeing red
 ########################################################################
 def is_color_red():
     """
@@ -1074,7 +1076,7 @@ def is_color_red():
 
 
 ########################################################################
-# 🛑 is_pressed - Function to check if the force sensor pressed
+# 🛑 is the force sensor pressed
 ########################################################################
 def is_pressed():
     """
@@ -1091,13 +1093,14 @@ def is_pressed():
 ########################################################################
 async def lower_and_raise_the_arm():
 
-    # Go shortest path to position -75 then to 0
+    # Go shortest path to position -75 then back to0
+    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
     await motor.run_to_absolute_position(port.E, -75, 100, direction=motor.SHORTEST_PATH)
     await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
 
 
 ########################################################################
-# 🤖 when left button pressed detect pressed
+# 🤖 when left button pressed detect red line
 ########################################################################
 async def when_left_button_pressed():
 
@@ -1105,7 +1108,7 @@ async def when_left_button_pressed():
 
         motor_pair.move(motor_pair.PAIR_1, 0)
 
-        await runloop.until (is_pressed)
+        await runloop.until (is_color_red)
 
         # backup 10 cm
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
@@ -1113,19 +1116,35 @@ async def when_left_button_pressed():
 
 
 ########################################################################
-# 🤖 when right button pressed detect near
+# 🤖 when right button pressed - line follower bang bang
 ########################################################################
 async def when_right_button_pressed():
 
     if button.pressed(button.RIGHT):
 
-        motor_pair.move(motor_pair.PAIR_1, 0)
+        # set steering to 50% of maximum
+        steering = 50
 
-        await runloop.until (is_near)
+        # set movement speed to 20% of maximum 1100
+        speed = int(0.2 * 1100)
 
-        # backup 10 cm
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-        sleep(.2)
+        # set sleep seconds to 40 milliseconds
+        sleep_milliseconds = 40
+
+        for i in range (1280):
+
+            if is_near():
+
+                # stop moving
+                motor_pair.stop(motor_pair.PAIR_1)
+                sleep_ms(2000) # sleep 2000 milliseconds (2 seconds)
+
+            if color_sensor.color(color_port) == color.BLUE:
+                motor_pair.move(motor_pair.PAIR_1, -steering, velocity=speed)
+                sleep_ms(sleep_milliseconds)
+            else:
+                motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
+                sleep_ms(sleep_milliseconds)
 
 
 ########################################################################
