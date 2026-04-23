@@ -1047,10 +1047,12 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 def is_near(distance_threshold=150): # 100mm (6 inches) minimum
     """
     Examples:
-        with if            if is_near():
-        with wait until    await runloop.until(is_near):
-        with wait until    await runloop.until(lambda: is_near(100)):
-        with repeat until  while not (is_near()):
+        with                code
+        ------------        --------------------------
+        if                  if is_near():
+        wait until          await runloop.until(is_near):
+        wait until          await runloop.until(lambda: is_near(100)):
+        repeat until        while not (is_near()):
     """
     distance = distance_sensor.distance(distance_port)
 
@@ -1069,9 +1071,11 @@ def is_near(distance_threshold=150): # 100mm (6 inches) minimum
 def is_color_red():
     """
     Examples:
-        with if            if is_red():
-        with wait until    await runloop.until(is_red):
-        with repeat until  while not (is_red()):
+        with          code
+        ------------  --------------------------
+        if            if is_red():
+        wait until    await runloop.until(is_red):
+        repeat until  while not (is_red()):
     """
     return color_sensor.color(color_port) == color.RED
 
