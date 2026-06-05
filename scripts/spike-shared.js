@@ -846,7 +846,7 @@ async def when_left_button_pressed():
     # wait for 1 second
     sleep(1)
 
-    # when left button pressed
+    # move forward 10 cm and then move back 10 cm
     if button.pressed(button.LEFT):
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0)
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
