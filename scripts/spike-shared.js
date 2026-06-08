@@ -846,7 +846,7 @@ async def when_left_button_pressed():
     # wait for 1 second
     sleep(1)
 
-    # move forward 10 cm and then move back 10 cm
+    # move forward 10 cm and then move back 10 cm 
     if button.pressed(button.LEFT):
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0)
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
@@ -863,6 +863,7 @@ async def when_right_button_pressed():
     # pivot turn left 10 wheel rotations
     if button.pressed(button.RIGHT):
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, -40)
+
 
 ########################################################################
 # 🤖 main
@@ -966,9 +967,9 @@ async def lower_and_raise_the_arm():
 
 
 ########################################################################
-# 🤖 when left button pressed detect pressed
+# 🤖 when force sensor pressed 
 ########################################################################
-async def when_left_button_pressed():
+async def when_force_sensor_pressed():
 
     if button.pressed(button.LEFT):
 
@@ -1009,7 +1010,7 @@ async def main():
         # Run all functions concurrently as events
         run(
             when_left_button_pressed(),
-            when_right_button_pressed(),
+            when_force_sensor_pressed(),
         )
 
 runloop.run(main())
