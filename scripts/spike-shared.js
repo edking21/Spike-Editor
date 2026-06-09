@@ -538,7 +538,7 @@ async def main():
     await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * DEGREES_PER_CM, 0, velocity=300)
 
 
-runloop.run(main())
+run(main())
 sys.exit()
 `
                 },
@@ -636,7 +636,7 @@ when`
                     color: '#DAA520',
                     textPython: `
     # wait until 
-    await runloop.until # <your sensor here>`
+    await until # <your sensor here>`
                 },
                 {
                     id: 'control3',
@@ -834,7 +834,7 @@ async def gyro_90_degree_turn():
 
     # turn left in place until yaw reaches 90 degrees
     motor_pair.move(motor_pair.PAIR_1, -100)
-    await runloop.until(lambda: motion_sensor.tilt_angles()[0] >= 900)
+    await until(lambda: motion_sensor.tilt_angles()[0] >= 900)
     motor_pair.stop(motor_pair.PAIR_1)
 
 
@@ -870,7 +870,7 @@ async def when_right_button_pressed():
 ########################################################################
 async def main():
 
-    runloop.run(gyro_90_degree_turn())
+    run(gyro_90_degree_turn())
 
     while True:
         
@@ -880,7 +880,7 @@ async def main():
             when_right_button_pressed(),
         )
 
-runloop.run(main())
+run(main())
 sys.exit()
 `
                 },
@@ -915,7 +915,7 @@ def is_near(distance_threshold=150): # 100mm (6 inches) minimum
     """
     Examples:
         with if            if is_near():
-        with wait until    await runloop.until(is_near):
+        with wait until    await until(is_near):
         with repeat until  while not (is_near()):
     """
     distance = distance_sensor.distance(distance_port)
@@ -936,7 +936,7 @@ def is_color_red():
     """
     Examples:
         with if             if is_red():
-        with wait until     await runloop.until(is_red):
+        with wait until     await until(is_red):
         with repeat until   while not (is_red()):
     """
     return color_sensor.color(color_port) == color.RED
@@ -949,7 +949,7 @@ def is_pressed():
     """
     Examples:
         with if             if is_pressed():
-        with wait until     await runloop.until(is_pressed):
+        with wait until     await until(is_pressed):
         with repeat until   while not (is_pressed()):
     """
     return force_sensor.pressed(force_port)
@@ -975,7 +975,7 @@ async def when_force_sensor_pressed():
 
         motor_pair.move(motor_pair.PAIR_1, 0)
 
-        await runloop.until (is_pressed)
+        await until (is_pressed)
 
         # backup 10 cm
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
@@ -991,7 +991,7 @@ async def when_right_button_pressed():
 
         motor_pair.move(motor_pair.PAIR_1, 0)
 
-        await runloop.until (is_near)
+        await until (is_near)
 
         # backup 10 cm
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
@@ -1013,7 +1013,7 @@ async def main():
             when_force_sensor_pressed(),
         )
 
-runloop.run(main())
+run(main())
 sys.exit()
 `
                 },
@@ -1026,7 +1026,7 @@ sys.exit()
 import runloop, sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
-from runloop import run
+from runloop import run, until
 from time import sleep, sleep_ms
 
 # Constants
@@ -1041,18 +1041,18 @@ force_port = port.A
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 
-########################7################################################
+#########################################################################
 # ☀️ is the distance sensor seeing something close
 ########################################################################
-def is_near(distance_threshold=150): # 100mm (6 inches) minimum
+def is_near(distance_threshold=100): # 100mm (6 inches) minimum
     """
     Examples:
-        with            code
-        ------------    --------------------------
-        if              if is_near():
-        wait until      await runloop.until(is_near):
-        wait until      await runloop.until(lambda: is_near(100)):
-        repeat until    while not (is_near()):
+      with                code
+      ------------        --------------------------
+      if                  if is_near():
+      wait until          await until(is_near):
+      wait until          await until(lambda: is_near(150)):
+      repeat until        while not (is_near()):
     """
     distance = distance_sensor.distance(distance_port)
 
@@ -1066,18 +1066,18 @@ def is_near(distance_threshold=150): # 100mm (6 inches) minimum
 
 
 ########################################################################
-# 🛑 is the color sensor seeing red
+# 🛑 is the color sensor seeing blue
 ########################################################################
-def is_color_red():
+def is_blue():
     """
     Examples:
         with          code
         ------------  --------------------------
-        if            if is_red():
-        wait until    await runloop.until(is_red):
-        repeat until  while not (is_red()):
+        if            if is_blue():
+        wait until    await until(is_blue):
+        repeat until  while not (is_blue()):
     """
-    return color_sensor.color(color_port) == color.RED
+    return color_sensor.color(color_port) == color.BLUE
 
 
 ########################################################################
@@ -1087,25 +1087,30 @@ def is_pressed():
     """
     Examples:
         with if            if is_pressed():
-        with wait until    await runloop.until(is_pressed):
+        with wait until    await until(is_pressed):
         with repeat until  while not (is_pressed()):
     """
     return force_sensor.pressed(force_port)
 
 
 ########################################################################
-# 🤖 Lower and raise the arm
+# 🤖 when_right_button_pressed Lower and raise the arm
 ########################################################################
-async def lower_and_raise_the_arm():
+async def when_right_button_pressed():
 
-    # Go shortest path to position -75 then back to0
-    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(port.E, -75, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
+    if button.pressed(button.RIGHT):
+
+        velocity = 100      # degrees per second
+
+        # Go shortest path to position -45 degrees then back to 0
+        await motor.run_to_absolute_position(port.E, 0, velocity, direction=motor.SHORTEST_PATH)
+        await motor.run_to_absolute_position(port.E, -40, velocity, direction=motor.SHORTEST_PATH)
+        sleep(1)
+        await motor.run_to_absolute_position(port.E, 0, velocity, direction=motor.SHORTEST_PATH)
 
 
 ########################################################################
-# 🤖 when left button pressed detect red line
+# 🤖 when left button pressed detect blue line
 ########################################################################
 async def when_left_button_pressed():
 
@@ -1113,7 +1118,7 @@ async def when_left_button_pressed():
 
         motor_pair.move(motor_pair.PAIR_1, 0)
 
-        await runloop.until (is_color_red)
+        await until (is_blue)
 
         # backup 10 cm
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
@@ -1121,43 +1126,36 @@ async def when_left_button_pressed():
 
 
 ########################################################################
-# 🤖 when right button pressed - line follower bang bang
+# 🤖 line follower bang bang
 ########################################################################
-async def when_right_button_pressed():
+async def line_follower_bang_bang():
 
-    if button.pressed(button.RIGHT):
+    steering = 50              # set steering to 50 for line following 
+    speed    = int(0.2 * 1100) # set speed to 20% of max speed
+    sleep_milliseconds = 40    # sleep for 40 milliseconds between each check of the color sensor
 
-        # set steering to 50% of maximum
-        steering = 50
+    for i in range (100):  #  run for 100 iterations (this number controls when to stop)
 
-        # set movement speed to 20% of maximum 1100
-        speed = int(0.2 * 1100)
+        if is_near():   # if hand wave stop moving for 2 seconds
+            motor_pair.stop(motor_pair.PAIR_1)
+            sleep_ms(2000) # sleep 2000 milliseconds (2 seconds)
 
-        # set sleep seconds to 40 milliseconds
-        sleep_milliseconds = 40
+        if is_blue():   # if on the line turn right
+            motor_pair.move(motor_pair.PAIR_1, -steering, velocity=speed)
+            sleep_ms(sleep_milliseconds)
 
-        for i in range (1280):
-
-            if is_near():
-
-                # stop moving
-                motor_pair.stop(motor_pair.PAIR_1)
-                sleep_ms(2000) # sleep 2000 milliseconds (2 seconds)
-
-            if color_sensor.color(color_port) == color.BLUE:
-                motor_pair.move(motor_pair.PAIR_1, -steering, velocity=speed)
-                sleep_ms(sleep_milliseconds)
-            else:
-                motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
-                sleep_ms(sleep_milliseconds)
-
+        else:           # if off the line turn left
+            motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
+            sleep_ms(sleep_milliseconds)
+        
+    motor_pair.stop(motor_pair.PAIR_1)
 
 ########################################################################
 # 🤖 main
 ########################################################################
 async def main():
 
-    await lower_and_raise_the_arm()
+    await line_follower_bang_bang()
 
     while True:
 
@@ -1167,7 +1165,7 @@ async def main():
             when_right_button_pressed(),
         )
 
-runloop.run(main())
+run(main())
 sys.exit()
 `
                 },
