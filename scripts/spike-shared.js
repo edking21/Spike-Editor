@@ -813,29 +813,50 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `# Training Camp 1 - Driving Around
-import runloop, sys, motor_pair
+import sys, motor_pair, motor
 from hub import port, motion_sensor, button
-from runloop import run
+from runloop import run, until
 from time import sleep, sleep_ms
 
 # Constants
 CM_TO_DEGREES = 21
+INCHES_TO_DEGREES = 53
+
+# Sensor Ports
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+
+# Motor Ports
+left_motor = port.C
+right_motor = port.D
+arm_motor = port.E
+
+# Default speed (20 percent of maximum for medium motor)
+speed = int(.2 * 1100)
 
 # Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
 
 
 ########################################################################
-# 🤖 Gyro turn left 90 degrees
+# 🤖 Gyro turn left 90 degrees then right 90 degrees
 ########################################################################
 async def gyro_90_degree_turn():
 
     motion_sensor.reset_yaw(0)
 
     # turn left in place until yaw reaches 90 degrees
-    motor_pair.move(motor_pair.PAIR_1, -100)
-    await until(lambda: motion_sensor.tilt_angles()[0] >= 900)
-    motor_pair.stop(motor_pair.PAIR_1)
+    motor_pair.move(motor_pair.PAIR_1, -100, velocity=speed)
+    await until(lambda: motion_sensor.tilt_angles()[0] >= 885)
+    motor_pair.stop(motor_pair.PAIR_1, stop=motor.BRAKE)
+    #sleep_ms(40)
+
+    # turn right in place until yaw reaches 0 degrees
+    motor_pair.move(motor_pair.PAIR_1, 100, velocity=speed)
+    await until(lambda: motion_sensor.tilt_angles()[0] <= 15)
+    motor_pair.stop(motor_pair.PAIR_1, stop=motor.BRAKE)
+    #sleep_ms(40)
 
 
 ########################################################################
@@ -843,8 +864,8 @@ async def gyro_90_degree_turn():
 ########################################################################
 async def when_left_button_pressed():
 
-    # wait for 1 second
-    sleep(1)
+    # wait for .5 seconds
+    sleep_ms(500)
 
     # move forward 10 cm and then move back 10 cm 
     if button.pressed(button.LEFT):
@@ -857,10 +878,10 @@ async def when_left_button_pressed():
 ########################################################################
 async def when_right_button_pressed():
 
-    # wait for 1 second
-    sleep(1)
+    # wait for .5 seconds
+    sleep_ms(500)
 
-    # pivot turn left 10 wheel rotations
+    # pivot turn left 10 wheel rotations -40 steering
     if button.pressed(button.RIGHT):
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, -40)
 
@@ -870,7 +891,8 @@ async def when_right_button_pressed():
 ########################################################################
 async def main():
 
-    run(gyro_90_degree_turn())
+    for i in range(5):
+        run(gyro_90_degree_turn())
 
     while True:
         
@@ -893,30 +915,38 @@ sys.exit()
 import runloop, sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
-from runloop import run
+from runloop import run, until
 from time import sleep, sleep_ms
 
 # Constants
 CM_TO_DEGREES = 21
+INCHES_TO_DEGREES = 53
 
-# Ports on the robot hub
-color_port = port.F
-distance_port = port.B
+# Sensor Ports
 force_port = port.A
+distance_port = port.B
+color_port = port.F
+
+# Motor Ports
+left_motor = port.C
+right_motor = port.D
+arm_motor = port.E
 
 # Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
 
 
-########################7################################################
-# ☀️ is_near - Function or condition to check if something is close
+#########################$##############################################
+# ☀️ is the distance sensor seeing something close
 ########################################################################
-def is_near(distance_threshold=150): # 100mm (6 inches) minimum
+def is_near(distance_threshold=100): # 100mm (3.937 inches)
     """
     Examples:
-        with if            if is_near():
-        with wait until    await until(is_near):
-        with repeat until  while not (is_near()):
+        if..                    if is_near():
+        repeat until            while not (is_near()):
+        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
+        wait until..            await until (is_near()):
+        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
     """
     distance = distance_sensor.distance(distance_port)
 
@@ -930,14 +960,14 @@ def is_near(distance_threshold=150): # 100mm (6 inches) minimum
 
 
 ########################################################################
-# 🛑 is_color_red - Function to check if the color sensor sees red
+# 🛑 is_color_blue - Function to check if the color sensor sees red
 ########################################################################
-def is_color_red():
+def is_color_blue():
     """
     Examples:
-        with if             if is_red():
-        with wait until     await until(is_red):
-        with repeat until   while not (is_red()):
+        if..                    if is_blue():
+        repeat until            while not (is_blue()):
+        wait until..            await until (is_blue()):
     """
     return color_sensor.color(color_port) == color.RED
 
@@ -951,6 +981,12 @@ def is_pressed():
         with if             if is_pressed():
         with wait until     await until(is_pressed):
         with repeat until   while not (is_pressed()):
+    """
+    """
+    Examples:
+        if..                    if is_presses():
+        repeat until            while not (is_presses()):
+        wait until..            await until (is_presses()):
     """
     return force_sensor.pressed(force_port)
 
@@ -1023,7 +1059,7 @@ sys.exit()
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `# Training Camp 3 - Reacting to lines
-import runloop, sys, motor_pair, motor
+import sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
 from runloop import run, until
@@ -1031,28 +1067,33 @@ from time import sleep, sleep_ms
 
 # Constants
 CM_TO_DEGREES = 21
+INCHES_TO_DEGREES = 53
 
-# Ports on the robot hub
-color_port = port.F
-distance_port = port.B
+# Sensor ports
 force_port = port.A
+distance_port = port.B
+color_port = port.F
+
+# Motor Ports
+left_motor = port.C 
+right_motor = port.D 
+arm_motor = port.E 
 
 # Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
 
 
-#########################################################################
+########################################################################
 # ☀️ is the distance sensor seeing something close
 ########################################################################
-def is_near(distance_threshold=100): # 100mm (6 inches) minimum
+def is_near(distance_threshold=100): # 100mm (3.937 inches) 
     """
     Examples:
-      with                code
-      ------------        --------------------------
-      if                  if is_near():
-      wait until          await until(is_near):
-      wait until          await until(lambda: is_near(150)):
-      repeat until        while not (is_near()):
+        if..                    if is_near():
+        repeat until            while not (is_near()):
+        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
+        wait until..            await until (is_near()):
+        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
     """
     distance = distance_sensor.distance(distance_port)
 
@@ -1071,11 +1112,9 @@ def is_near(distance_threshold=100): # 100mm (6 inches) minimum
 def is_blue():
     """
     Examples:
-        with          code
-        ------------  --------------------------
-        if            if is_blue():
-        wait until    await until(is_blue):
-        repeat until  while not (is_blue()):
+        if                  if is_blue():
+        wait until          await until(is_blue):
+        repeat until        while not (is_blue()):
     """
     return color_sensor.color(color_port) == color.BLUE
 
@@ -1086,9 +1125,9 @@ def is_blue():
 def is_pressed():
     """
     Examples:
-        with if            if is_pressed():
-        with wait until    await until(is_pressed):
-        with repeat until  while not (is_pressed()):
+        if                  if is_pressed():
+        wait until          await until(is_pressed):
+        repeat until        while not (is_pressed()):
     """
     return force_sensor.pressed(force_port)
 
@@ -1102,11 +1141,11 @@ async def when_right_button_pressed():
 
         velocity = 100      # degrees per second
 
-        # Go shortest path to position -45 degrees then back to 0
-        await motor.run_to_absolute_position(port.E, 0, velocity, direction=motor.SHORTEST_PATH)
-        await motor.run_to_absolute_position(port.E, -40, velocity, direction=motor.SHORTEST_PATH)
-        sleep(1)
-        await motor.run_to_absolute_position(port.E, 0, velocity, direction=motor.SHORTEST_PATH)
+        # Go shortest path to position -40 degrees then back to 0
+        await motor.run_to_absolute_position(arm_motor, 0, velocity, direction=motor.SHORTEST_PATH)
+        await motor.run_to_absolute_position(arm_motor, -40, velocity, direction=motor.SHORTEST_PATH)
+        sleep_ms(200)
+        await motor.run_to_absolute_position(arm_motor, 0, velocity, direction=motor.SHORTEST_PATH)
 
 
 ########################################################################
@@ -1134,17 +1173,17 @@ async def line_follower_bang_bang():
     speed    = int(0.2 * 1100) # set speed to 20% of max speed
     sleep_milliseconds = 40    # sleep for 40 milliseconds between each check of the color sensor
 
-    for i in range (100):  #  run for 100 iterations (this number controls when to stop)
+    for i in range (100):      # run for 100 iterations (this number controls when to stop)
 
-        if is_near():   # if hand wave stop moving for 2 seconds
+        if is_near():          # if hand wave stop moving for 2 seconds
             motor_pair.stop(motor_pair.PAIR_1)
-            sleep_ms(2000) # sleep 2000 milliseconds (2 seconds)
+            sleep_ms(2000)     # sleep 2000 milliseconds (2 seconds)
 
-        if is_blue():   # if on the line turn right
+        if is_blue():          # if on the line turn right
             motor_pair.move(motor_pair.PAIR_1, -steering, velocity=speed)
             sleep_ms(sleep_milliseconds)
 
-        else:           # if off the line turn left
+        else:                  # if off the line turn left
             motor_pair.move(motor_pair.PAIR_1, steering, velocity=speed)
             sleep_ms(sleep_milliseconds)
         
