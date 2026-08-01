@@ -12,11 +12,6 @@
 
     function copyTextToClipboard(text) {
         const content = String(text ?? '');
-
-        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
-            return navigator.clipboard.writeText(content).catch(() => fallbackCopyTextToClipboard(content));
-        }
-
         return Promise.resolve(fallbackCopyTextToClipboard(content));
     }
 
