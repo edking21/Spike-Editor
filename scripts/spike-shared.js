@@ -10,6 +10,40 @@
             .replaceAll("'", '&#39;');
     }
 
+    function copyTextToClipboard(text) {
+        const content = String(text ?? '');
+
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+            return navigator.clipboard.writeText(content).catch(() => fallbackCopyTextToClipboard(content));
+        }
+
+        return Promise.resolve(fallbackCopyTextToClipboard(content));
+    }
+
+    function fallbackCopyTextToClipboard(text) {
+        const field = document.createElement('textarea');
+        field.value = String(text ?? '');
+        field.setAttribute('readonly', '');
+        field.style.position = 'fixed';
+        field.style.opacity = '0';
+        field.style.pointerEvents = 'none';
+        document.body.appendChild(field);
+
+        field.focus();
+        field.select();
+        field.setSelectionRange(0, field.value.length);
+
+        let succeeded = false;
+        try {
+            succeeded = document.execCommand('copy');
+        } catch {
+            succeeded = false;
+        }
+
+        field.remove();
+        return succeeded;
+    }
+
     const ICON_MOTORS = [
         '<svg xmlns="http://www.w3.org/2000/svg"',
         ' viewBox="0 0 24 24"',
@@ -336,7 +370,9 @@
                     label.textContent = buttonText;
                 }
 
-                button.addEventListener('click', () => navigator.clipboard.writeText(String(snippet?.textPython || '')));
+                button.addEventListener('click', () => {
+                    copyTextToClipboard(snippet?.textPython || '');
+                });
                 if (emojiText) {
                     const emoji = document.createElement('span');
                     emoji.className = 'emoji';
