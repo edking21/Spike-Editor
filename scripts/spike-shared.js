@@ -188,7 +188,7 @@
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
-            20: { label: 'Class', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
+            20: { label: 'Challenge', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
@@ -414,12 +414,11 @@
             snippets: [
                 {
                     id: 'move1',
-                    buttonText: 'move forward for 10 rotations',
+                    buttonText: 'move forward for 10 cm',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # move forward for 10 rotations
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 0)`
+                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0, velocity=int(.5 * SPEED))
+`
                 },
                 {
                     id: 'move2',
@@ -488,10 +487,9 @@
                     buttonText: 'Turn On Smiley Face For 2 Seconds',
                     emoji: '🧿',
                     color: '#8A2BE2',
-                    textPython: `
-# Turn On Smiley Face For 2 Seconds
-light_matrix.show_image(light_matrix.IMAGE_SMILE)
-sleep(2)`
+                    textPython: `    light_matrix.show_image(light_matrix.IMAGE_SMILE)
+    sleep(2)
+`
                 },
                 {
                     id: 'light2',
@@ -637,9 +635,8 @@ when`
                     buttonText: 'Wait 1 seconds',
                     emoji: '',
                     color: '#DAA520',
-                    textPython: `
-    # wait for 1 second
-    sleep(1)`
+                    textPython: `    sleep(1)
+`
                 },
                 {
                     id: 'control2',
@@ -1241,19 +1238,55 @@ sys.exit()
                 },
             ]
         },
-        20: {   // class
+        20: {   // challenges
             colorClass: 'class-color',
             snippets: [
                 {
                     id: 'class1',
-                    buttonText: 'Class Example',
+                    buttonText: 'Robot Shuffle',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `
-# Class example
-class MyClass:
-    def __init__(self, value):
-        self.value = value`
+                    textPython: `# Robot Shuffle
+import sys, motor_pair
+from hub import port, light_matrix
+from runloop import run
+from time import sleep
+
+CM_TO_DEGREES = 21      # (360 degrees)/(17.5 cm)  rounded to nearest integer
+SPEED = 1100            # top speed for medium motor is 1100 degrees/sec                
+left_motor = port.C
+right_motor = port.D
+arm_motor = port.E
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
+
+########################################################################
+# 🤖 main
+########################################################################
+async def main():
+
+    # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
+
+    # 2. Wait 2 seconds.
+
+    # 3. Move to Line 2, 38 cm from the Start Line, at 25% speed.
+
+    # 4. Move forward 20 cm to Line 3 at 75% speed.
+
+    # 5. Wait 2 seconds.
+
+    # 6. Move forward at 50% speed and stop on line 4.
+
+    # 7. Wait 2 seconds.
+
+    # 8. Move backwards at 75% speed and stop on the Start Line.
+
+    # 9. Display a smiley face.
+
+run(main())
+sys.exit()
+`
                 }
             ]
         }
