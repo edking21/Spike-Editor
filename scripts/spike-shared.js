@@ -417,7 +417,7 @@
                     buttonText: 'move forward for 10 cm',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0, velocity=int(.5 * SPEED))
+                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0, velocity=int(.5 * 1100))
 `
                 },
                 {
@@ -837,98 +837,29 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
             snippets: [
                 {
                     id: 'gettingstarted1',
-                    buttonText: 'Training Camp1 Driving Around',
+                    buttonText: 'Training Camp1 Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 1 - Driving Around
-import sys, motor_pair, motor
-from hub import port, motion_sensor, button
-from runloop import run, until
-from time import sleep_ms
+                    textPython: `# Training Camp 1 - Getting Started
+import motor_pair, sys
+from hub import port, light_matrix
+from runloop import run
+from time import sleep
 
-# Constants
+# Conversions
 CM_TO_DEGREES = 21
 INCHES_TO_DEGREES = 53
 
-# Sensor Ports
-force_port = port.A
-distance_port = port.B
-color_port = port.F
-
-# Motor Ports
-left_motor = port.C
-right_motor = port.D
-arm_motor = port.E
-
-# Default speed (20 percent of maximum for medium motor)
-speed = int(.2 * 1100)
-
 # Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
-
-
-########################################################################
-# 🤖 Gyro turn 90 degrees
-########################################################################
-async def gyro_turn_90_degrees(direction):
-
-    motion_sensor.reset_yaw(0)
-
-    if direction == "ccw":
-        # turn left in place until yaw reaches 90 degrees
-        motor_pair.move(motor_pair.PAIR_1, -100, velocity=speed)
-        await until(lambda: motion_sensor.tilt_angles()[0] >= 885)
-    else:
-        # turn right in place until yaw reaches -90 degrees
-        motor_pair.move(motor_pair.PAIR_1, 100, velocity=speed)
-        await until(lambda: motion_sensor.tilt_angles()[0] <= -885)
-
-    motor_pair.stop(motor_pair.PAIR_1, stop=motor.BRAKE)
-
-
-########################################################################
-# 🤖 when left button pressed
-########################################################################
-async def when_left_button_pressed():
-
-    # wait for .5 seconds
-    sleep_ms(500)
-
-    # move forward 10 cm and then move back 10 cm
-    if button.pressed(button.LEFT):
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0)
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-
-
-########################################################################
-# 🤖 when right button pressed
-########################################################################
-async def when_right_button_pressed():
-
-    # wait for .5 seconds
-    sleep_ms(500)
-
-    # pivot turn left 10 wheel rotations -40 steering
-    if button.pressed(button.RIGHT):
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, -40)
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
 
 ########################################################################
 # 🤖 main
 ########################################################################
 async def main():
-
-    for i in range(5):
-        await gyro_turn_90_degrees("ccw")
-        await gyro_turn_90_degrees("cw")
-
-    while True:
-
-        # Run all functions concurrently as events
-        run(
-            when_left_button_pressed(),
-            when_right_button_pressed(),
-        )
+    
+    await light_matrix.write("Hi!")
 
 run(main())
 sys.exit()
@@ -1246,26 +1177,7 @@ sys.exit()
                     buttonText: 'Robot Shuffle',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `# Robot Shuffle
-import sys, motor_pair
-from hub import port, light_matrix
-from runloop import run
-from time import sleep
-
-CM_TO_DEGREES = 21      # (360 degrees)/(17.5 cm)  rounded to nearest integer
-SPEED = 1100            # top speed for medium motor is 1100 degrees/sec                
-left_motor = port.C
-right_motor = port.D
-arm_motor = port.E
-
-# Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
-
-########################################################################
-# 🤖 main
-########################################################################
-async def main():
-
+                    textPython: `
     # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
 
     # 2. Wait 2 seconds.
@@ -1283,9 +1195,6 @@ async def main():
     # 8. Move backwards at 75% speed and stop on the Start Line.
 
     # 9. Display a smiley face.
-
-run(main())
-sys.exit()
 `
                 }
             ]
