@@ -32,30 +32,32 @@
         <!-- Snippets will be dynamically inserted here -->
     </div>
 
-    <div class="figure-panel" aria-label="Figure viewer panel">
-        <div class="figure-header">
-            <h2>Figure Viewer</h2>
-            <div class="figure-year-picker">
-                <label for="figure-year">School year</label>
-                <select id="figure-year" aria-label="Select school year">
-                    <option value="2026-2027">2026-2027</option>
-                    <option value="2027-2028">2027-2028</option>
-                    <option value="2028-2029">2028-2029</option>
-                    <option value="2029-2030">2029-2030</option>
-                </select>
-                <button id="figure-close" class="figure-close" type="button" aria-label="Close figure" title="Close figure">✕</button>
+    <div id="figure-modal-backdrop" class="figure-modal-backdrop" aria-label="Figure viewer modal">
+        <div class="figure-panel" aria-label="Figure viewer panel">
+            <button id="figure-close" class="figure-close" type="button" aria-label="Close figure" title="Close figure">✕</button>
+            <div class="figure-header">
+                <h2>Figure Viewer</h2>
+                <div class="figure-year-picker">
+                    <label for="figure-year">School year</label>
+                    <select id="figure-year" aria-label="Select school year">
+                        <option value="2026-2027">2026-2027</option>
+                        <option value="2027-2028">2027-2028</option>
+                        <option value="2028-2029">2028-2029</option>
+                        <option value="2029-2030">2029-2030</option>
+                    </select>
+                </div>
             </div>
-        </div>
 
-        <div class="figure-button-list" id="figure-button-list" aria-label="Figure buttons"></div>
+            <div class="figure-button-list" id="figure-button-list" aria-label="Figure buttons"></div>
 
-        <div class="figure-display-card">
-            <div class="figure-image-wrap">
-                <img id="figure-image" alt="Selected figure" loading="eager" crossorigin="anonymous" />
-            </div>
-            <div class="figure-meta">
-                <div id="figure-caption" class="figure-caption">Choose a figure to view.</div>
-                <div class="figure-note">Shared Google Drive images for student sign-in accounts on Chromebook.</div>
+            <div class="figure-display-card">
+                <div class="figure-image-wrap">
+                    <img id="figure-image" alt="Selected figure" loading="eager" crossorigin="anonymous" />
+                </div>
+                <div class="figure-meta">
+                    <div id="figure-caption" class="figure-caption">Choose a figure to view.</div>
+                    <div class="figure-note">Shared Google Drive images for student sign-in accounts on Chromebook.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -203,6 +205,7 @@
         function hideFigureView() {
             const image = document.getElementById('figure-image');
             const caption = document.getElementById('figure-caption');
+            const modal = document.getElementById('figure-modal-backdrop');
 
             if (image) {
                 image.removeAttribute('src');
@@ -212,6 +215,10 @@
 
             if (caption) {
                 caption.textContent = 'Choose a figure to view.';
+            }
+
+            if (modal) {
+                modal.style.display = 'none';
             }
         }
 
@@ -230,6 +237,11 @@
                     caption.textContent = getFigureAccessMessage(year, figure);
                 }
                 return;
+            }
+
+            const modal = document.getElementById('figure-modal-backdrop');
+            if (modal) {
+                modal.style.display = 'flex';
             }
 
             if (image) {

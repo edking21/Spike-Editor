@@ -384,16 +384,28 @@ body {
     border-top: none;
 }
 
+.figure-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.38);
+    backdrop-filter: blur(2px);
+    z-index: 2000;
+}
+
 .figure-panel {
-    margin-left: 100px;
-    margin-top: 18px;
-    width: calc(100% - 120px);
-    max-width: 900px;
+    position: relative;
+    width: min(680px, calc(100vw - 32px));
+    max-width: 680px;
     background: #f7f9fc;
     border: 1px solid #dbe3ee;
-    border-radius: 12px;
+    border-radius: 14px;
     box-sizing: border-box;
-    padding: 16px;
+    padding: 20px 20px 18px 20px;
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.22);
 }
 
 .figure-header {
@@ -403,6 +415,7 @@ body {
     gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 12px;
+    padding-right: 36px;
 }
 
 .figure-header h2 {
@@ -430,11 +443,14 @@ body {
 }
 
 .figure-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
     border: 1px solid #d6dce5;
     background: #ffffff;
     color: #374151;
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
@@ -442,6 +458,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 
 .figure-close:hover {
