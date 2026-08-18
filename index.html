@@ -50,7 +50,7 @@
 
         <div class="figure-display-card">
             <div class="figure-image-wrap">
-                <img id="figure-image" alt="Selected figure" referrerpolicy="no-referrer" loading="eager" />
+                <img id="figure-image" alt="Selected figure" loading="eager" crossorigin="anonymous" />
             </div>
             <div class="figure-meta">
                 <div id="figure-caption" class="figure-caption">Choose a figure to view.</div>
@@ -77,33 +77,43 @@
 
         const mainEmojiGroupOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
+        // The 26 Jamboree folder is a shared Google Drive folder for the figure images.
+        // To work for a student sign-in account, the folder or the individual files must be shared
+        // with the student account (for example: srobot01-08) or made public.
+        const sharedFigureFolderUrl = 'https://drive.google.com/drive/folders/1nhUIUV7-DiepCjXh55r4oxrSNTRwJ_yl';
+
         const figureLibrary = {
             '2026-2027': [
                 {
                     number: 1,
-                    fileId: '12uTaoSqzxV6IS8SHtD0_ZaOZea_SPQ_b',
-                    label: 'Figure 1'
+                    fileId: '1b6Ph-BJyrJDjHIXU0hrj6CQ-ymrVKu8N',
+                    label: 'Figure 1',
+                    folderUrl: sharedFigureFolderUrl
                 },
                 ...Array.from({ length: 9 }, (_, index) => ({
                     number: index + 2,
                     fileId: '',
-                    label: `Figure ${index + 2}`
+                    label: `Figure ${index + 2}`,
+                    folderUrl: sharedFigureFolderUrl
                 }))
             ],
             '2027-2028': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
                 fileId: '',
-                label: `Figure ${index + 1}`
+                label: `Figure ${index + 1}`,
+                folderUrl: sharedFigureFolderUrl
             })),
             '2028-2029': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
                 fileId: '',
-                label: `Figure ${index + 1}`
+                label: `Figure ${index + 1}`,
+                folderUrl: sharedFigureFolderUrl
             })),
             '2029-2030': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
                 fileId: '',
-                label: `Figure ${index + 1}`
+                label: `Figure ${index + 1}`,
+                folderUrl: sharedFigureFolderUrl
             }))
         };
 
@@ -125,6 +135,17 @@
             const normalized = normalizeGoogleDriveId(fileId);
             if (!normalized) return '';
             return 'https://drive.google.com/uc?export=view&id=' + normalized;
+        }
+
+        function safeDriveImageUrl(fileId) {
+            const normalized = normalizeGoogleDriveId(fileId);
+            if (!normalized) return '';
+            return 'https://drive.google.com/uc?export=view&id=' + normalized;
+        }
+
+        function getFigureAccessMessage(year, figure) {
+            const folderLabel = figure?.folderUrl || sharedFigureFolderUrl;
+            return `${year} ${figure.label}: add the shared Google Drive file IDs from ${folderLabel} or share the files with the student account.`;
         }
 
         function refreshSnippets(groupId) {
@@ -181,7 +202,7 @@
         function showFigure(year, figure, silent = false) {
             const image = document.getElementById('figure-image');
             const caption = document.getElementById('figure-caption');
-            const url = toGoogleDriveViewUrl(figure.fileId);
+            const url = safeDriveImageUrl(figure.fileId);
 
             if (!url) {
                 if (image) {
@@ -190,25 +211,28 @@
                     image.style.display = 'none';
                 }
                 if (caption) {
-                    caption.textContent = `${year} ${figure.label}: add a shared Google Drive file ID to display the figure.`;
+                    caption.textContent = getFigureAccessMessage(year, figure);
                 }
                 return;
             }
 
             if (image) {
-                image.src = url;
-                image.alt = `${year} ${figure.label}`;
-                image.style.display = 'block';
+                image.onload = function () {
+                    image.style.display = 'block';
+                    if (caption && !silent) {
+                        caption.textContent = `${year} - ${figure.label}`;
+                    }
+                };
+
                 image.onerror = function () {
+                    image.style.display = 'none';
                     if (caption) {
                         caption.textContent = `${year} ${figure.label}: unable to load this shared Google Drive image. Check the Drive sharing permissions.`;
                     }
-                    image.style.display = 'none';
                 };
-            }
 
-            if (caption && !silent) {
-                caption.textContent = `${year} - ${figure.label}`;
+                image.src = url;
+                image.alt = `${year} ${figure.label}`;
             }
         }
 
