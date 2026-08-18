@@ -78,11 +78,18 @@
         const mainEmojiGroupOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
         const figureLibrary = {
-            '2026-2027': Array.from({ length: 10 }, (_, index) => ({
-                number: index + 1,
-                fileId: '',
-                label: `Figure ${index + 1}`
-            })),
+            '2026-2027': [
+                {
+                    number: 1,
+                    fileId: '12uTaoSqzxV6IS8SHtD0_ZaOZea_SPQ_b',
+                    label: 'Figure 1'
+                },
+                ...Array.from({ length: 9 }, (_, index) => ({
+                    number: index + 2,
+                    fileId: '',
+                    label: `Figure ${index + 2}`
+                }))
+            ],
             '2027-2028': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
                 fileId: '',
@@ -100,9 +107,24 @@
             }))
         };
 
+        function normalizeGoogleDriveId(value) {
+            if (!value) return '';
+            const text = String(value).trim();
+            if (/^[A-Za-z0-9_-]+$/.test(text)) return text;
+
+            const fileMatch = text.match(/(?:\/d\/|id=)([A-Za-z0-9_-]+)/);
+            if (fileMatch && fileMatch[1]) return fileMatch[1];
+
+            const folderMatch = text.match(/\/folders\/([A-Za-z0-9_-]+)/);
+            if (folderMatch && folderMatch[1]) return folderMatch[1];
+
+            return '';
+        }
+
         function toGoogleDriveViewUrl(fileId) {
-            if (!fileId || !/^[A-Za-z0-9_-]+$/.test(fileId)) return '';
-            return 'https://drive.google.com/uc?export=view&id=' + fileId;
+            const normalized = normalizeGoogleDriveId(fileId);
+            if (!normalized) return '';
+            return 'https://drive.google.com/uc?export=view&id=' + normalized;
         }
 
         function refreshSnippets(groupId) {
