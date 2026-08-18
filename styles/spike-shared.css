@@ -429,6 +429,25 @@ body {
     min-width: 140px;
 }
 
+.figure-close {
+    border: 1px solid #d6dce5;
+    background: #ffffff;
+    color: #374151;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.figure-close:hover {
+    background: #f3f4f6;
+}
+
 .figure-button-list {
     display: flex;
     flex-wrap: wrap;

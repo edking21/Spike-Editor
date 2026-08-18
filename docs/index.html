@@ -43,6 +43,7 @@
                     <option value="2028-2029">2028-2029</option>
                     <option value="2029-2030">2029-2030</option>
                 </select>
+                <button id="figure-close" class="figure-close" type="button" aria-label="Close figure" title="Close figure">✕</button>
             </div>
         </div>
 
@@ -199,6 +200,21 @@
             }
         }
 
+        function hideFigureView() {
+            const image = document.getElementById('figure-image');
+            const caption = document.getElementById('figure-caption');
+
+            if (image) {
+                image.removeAttribute('src');
+                image.alt = 'Selected figure';
+                image.style.display = 'none';
+            }
+
+            if (caption) {
+                caption.textContent = 'Choose a figure to view.';
+            }
+        }
+
         function showFigure(year, figure, silent = false) {
             const image = document.getElementById('figure-image');
             const caption = document.getElementById('figure-caption');
@@ -250,6 +266,12 @@
             if (yearSelect) {
                 yearSelect.addEventListener('change', renderFigureButtons);
             }
+
+            const figureCloseButton = document.getElementById('figure-close');
+            if (figureCloseButton) {
+                figureCloseButton.addEventListener('click', hideFigureView);
+            }
+
             renderFigureButtons();
         });
     </script>
