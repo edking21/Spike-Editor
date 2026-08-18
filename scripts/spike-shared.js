@@ -188,7 +188,8 @@
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
-            20: { label: 'Challenge', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
+            20: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' },
+            21: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
@@ -1174,7 +1175,7 @@ sys.exit()
             snippets: [
                 {
                     id: 'class1',
-                    buttonText: 'Robot Shuffle',
+                    buttonText: 'Description',
                     emoji: '🧿',
                     color: '#32CD32',
                     textPython: `
@@ -1196,9 +1197,19 @@ sys.exit()
 
     # 9. Display a smiley face.
 `
+                },
+                {
+                    id: 'class2',
+                    buttonText: 'Figures',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: `
+test for figures
+`
                 }
             ]
         }
-    }
+    };
+
     global.SpikeShared = { ui, renderers, snippetData, bootstrapPage, colorUtils };
 })(window);
