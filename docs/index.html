@@ -85,39 +85,47 @@
         // with the student account (for example: srobot01-08) or made public.
         const sharedFigureFolderUrl = 'https://drive.google.com/drive/folders/1nhUIUV7-DiepCjXh55r4oxrSNTRwJ_yl';
 
+        function challengeImagePath(number) {
+            const imageMap = {
+                1: './images/Challenge 1 Figure.jpg',
+                2: './images/Challenge 2 Figure.jpg',
+                3: './images/Challenge 3 Figure .jpg',
+                4: './images/Challenge 4 Figure.jpg',
+                5: '',
+                6: './images/Challenge 6 Figure.jpg',
+                7: './images/Challenge 7 Figure.jpg',
+                8: './images/Challenge 8 Figure.jpg',
+                9: './images/Challenge 9 Figure.jpg',
+                10: './images/Challenge 10 Figure.jpg'
+            };
+            return imageMap[number] || '';
+        }
+
         const figureLibrary = {
-            '2026-2027': [
-                {
-                    number: 1,
-                    imagePath: './images/Challenge 1.jpg',
-                    label: 'Figure 1',
-                    folderUrl: sharedFigureFolderUrl
-                },
-                ...Array.from({ length: 9 }, (_, index) => ({
-                    number: index + 2,
-                    imagePath: `./images/Challenge ${index + 2}.jpg`,
-                    fileId: '',
-                    label: `Figure ${index + 2}`,
-                    folderUrl: sharedFigureFolderUrl
-                }))
-            ],
+            '2026-2027': Array.from({ length: 10 }, (_, index) => ({
+                number: index + 1,
+                imagePath: challengeImagePath(index + 1),
+                fileId: '',
+                label: `Figure ${index + 1}`,
+                folderUrl: sharedFigureFolderUrl
+            })),
             '2027-2028': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
-                imagePath: `./images/Challenge ${index + 1}.jpg`,
+                imagePath: challengeImagePath(index + 1),
                 fileId: '',
                 label: `Figure ${index + 1}`,
                 folderUrl: sharedFigureFolderUrl
             })),
             '2028-2029': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
-                imagePath: `./images/Challenge ${index + 1}.jpg`,
+                imagePath: challengeImagePath(index + 1),
                 fileId: '',
                 label: `Figure ${index + 1}`,
                 folderUrl: sharedFigureFolderUrl
             })),
             '2029-2030': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
-                imagePath: `./images/Challenge ${index + 1}.jpg`,
+                imagePath: challengeImagePath(index + 1),
                 fileId: '',
                 label: `Figure ${index + 1}`,
                 folderUrl: sharedFigureFolderUrl
