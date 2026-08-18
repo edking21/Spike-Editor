@@ -8,6 +8,18 @@ if (!(Test-Path "docs/utils")) {
     New-Item -Path "docs/utils" -ItemType Directory -Force | Out-Null
 }
 
+if (!(Test-Path "docs/styles")) {
+    New-Item -Path "docs/styles" -ItemType Directory -Force | Out-Null
+}
+
+if (!(Test-Path "docs/scripts")) {
+    New-Item -Path "docs/scripts" -ItemType Directory -Force | Out-Null
+}
+
+if (!(Test-Path "docs/images")) {
+    New-Item -Path "docs/images" -ItemType Directory -Force | Out-Null
+}
+
 function Sync-ByNewest {
     param(
         [string]$RootPath,
@@ -46,6 +58,9 @@ Sync-ByNewest -RootPath "Training Camp.html" -DocsPath "docs/Training Camp.html"
 Sync-ByNewest -RootPath "Class Library.html" -DocsPath "docs/Class Library.html"
 Sync-ByNewest -RootPath "Videos.html" -DocsPath "docs/Videos.html"
 Sync-ByNewest -RootPath "utils/utils.js" -DocsPath "docs/utils/utils.js"
+Copy-Item "styles/*" "docs/styles/" -Recurse -Force
+Copy-Item "scripts/*" "docs/scripts/" -Recurse -Force
+Copy-Item "images/*" "docs/images/" -Recurse -Force
 
 # Publish lowercase alias to support links that use class library.html
 if (!(Test-Path "docs/class-library")) {
