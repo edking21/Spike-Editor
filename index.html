@@ -91,7 +91,6 @@
                 2: './images/Challenge 2 Figure.jpg',
                 3: './images/Challenge 3 Figure .jpg',
                 4: './images/Challenge 4 Figure.jpg',
-                5: '',
                 6: './images/Challenge 6 Figure.jpg',
                 7: './images/Challenge 7 Figure.jpg',
                 8: './images/Challenge 8 Figure.jpg',
@@ -102,34 +101,20 @@
         }
 
         const figureLibrary = {
-            '2026-2027': Array.from({ length: 10 }, (_, index) => ({
-                number: index + 1,
-                imagePath: challengeImagePath(index + 1),
-                fileId: '',
-                label: `Figure ${index + 1}`,
-                folderUrl: sharedFigureFolderUrl
-            })),
-            '2027-2028': Array.from({ length: 10 }, (_, index) => ({
-                number: index + 1,
-                imagePath: challengeImagePath(index + 1),
-                fileId: '',
-                label: `Figure ${index + 1}`,
-                folderUrl: sharedFigureFolderUrl
-            })),
-            '2028-2029': Array.from({ length: 10 }, (_, index) => ({
-                number: index + 1,
-                imagePath: challengeImagePath(index + 1),
-                fileId: '',
-                label: `Figure ${index + 1}`,
-                folderUrl: sharedFigureFolderUrl
-            })),
-            '2029-2030': Array.from({ length: 10 }, (_, index) => ({
-                number: index + 1,
-                imagePath: challengeImagePath(index + 1),
-                fileId: '',
-                label: `Figure ${index + 1}`,
-                folderUrl: sharedFigureFolderUrl
-            }))
+            '2026-2027': [
+                { number: 1, imagePath: challengeImagePath(1), fileId: '', label: 'Figure 1', folderUrl: sharedFigureFolderUrl },
+                { number: 2, imagePath: challengeImagePath(2), fileId: '', label: 'Figure 2', folderUrl: sharedFigureFolderUrl },
+                { number: 3, imagePath: challengeImagePath(3), fileId: '', label: 'Figure 3', folderUrl: sharedFigureFolderUrl },
+                { number: 4, imagePath: challengeImagePath(4), fileId: '', label: 'Figure 4', folderUrl: sharedFigureFolderUrl },
+                { number: 6, imagePath: challengeImagePath(6), fileId: '', label: 'Figure 6', folderUrl: sharedFigureFolderUrl },
+                { number: 7, imagePath: challengeImagePath(7), fileId: '', label: 'Figure 7', folderUrl: sharedFigureFolderUrl },
+                { number: 8, imagePath: challengeImagePath(8), fileId: '', label: 'Figure 8', folderUrl: sharedFigureFolderUrl },
+                { number: 9, imagePath: challengeImagePath(9), fileId: '', label: 'Figure 9', folderUrl: sharedFigureFolderUrl },
+                { number: 10, imagePath: challengeImagePath(10), fileId: '', label: 'Figure 10', folderUrl: sharedFigureFolderUrl }
+            ],
+            '2027-2028': [],
+            '2028-2029': [],
+            '2029-2030': []
         };
 
         function normalizeGoogleDriveId(value) {
@@ -200,28 +185,30 @@
             const yearSelect = document.getElementById('figure-year');
             const buttonHost = document.getElementById('figure-button-list');
             const year = yearSelect?.value || '2026-2027';
-            const figures = figureLibrary[year] || [];
+            const figures = (figureLibrary[year] || []).filter(figure => Boolean(figure.imagePath || figure.fileId));
 
             if (!buttonHost) return;
             buttonHost.innerHTML = '';
 
             figures.forEach((figure) => {
                 const button = document.createElement('button');
+                const hasFigureSource = Boolean(figure.imagePath || figure.fileId);
                 button.type = 'button';
                 button.className = 'figure-button';
                 button.textContent = `Figure ${figure.number}`;
-                button.disabled = !figure.fileId;
-                button.title = figure.fileId
+                button.disabled = !hasFigureSource;
+                button.title = hasFigureSource
                     ? `${figure.label} (${year})`
-                    : 'Add a Google Drive file ID for this figure.';
-                button.addEventListener('click', () => showFigure(year, figure));
+                    : 'Add a local image or Google Drive file ID for this figure.';
+                button.addEventListener('click', () => {
+                    const modal = document.getElementById('figure-modal-backdrop');
+                    if (modal) {
+                        modal.style.display = 'flex';
+                    }
+                    showFigure(year, figure, false);
+                });
                 buttonHost.appendChild(button);
             });
-
-            const firstFigure = figures[0];
-            if (firstFigure) {
-                showFigure(year, firstFigure, true);
-            }
         }
 
         function hideFigureView() {
