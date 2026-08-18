@@ -293,8 +293,11 @@
                 figureCloseButton.addEventListener('click', hideFigureView);
             }
 
-            hideFigureView();
             renderFigureButtons();
+            const firstFigure = (figureLibrary['2026-2027'] || [])[0];
+            if (firstFigure) {
+                showFigure('2026-2027', firstFigure, true);
+            }
         });
     </script>
 </body>
