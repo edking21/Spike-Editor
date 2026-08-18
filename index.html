@@ -89,12 +89,13 @@
             '2026-2027': [
                 {
                     number: 1,
-                    fileId: '1b6Ph-BJyrJDjHIXU0hrj6CQ-ymrVKu8N',
+                    imagePath: './images/Challenge 1.jpg',
                     label: 'Figure 1',
                     folderUrl: sharedFigureFolderUrl
                 },
                 ...Array.from({ length: 9 }, (_, index) => ({
                     number: index + 2,
+                    imagePath: `./images/Challenge ${index + 2}.jpg`,
                     fileId: '',
                     label: `Figure ${index + 2}`,
                     folderUrl: sharedFigureFolderUrl
@@ -102,18 +103,21 @@
             ],
             '2027-2028': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
+                imagePath: `./images/Challenge ${index + 1}.jpg`,
                 fileId: '',
                 label: `Figure ${index + 1}`,
                 folderUrl: sharedFigureFolderUrl
             })),
             '2028-2029': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
+                imagePath: `./images/Challenge ${index + 1}.jpg`,
                 fileId: '',
                 label: `Figure ${index + 1}`,
                 folderUrl: sharedFigureFolderUrl
             })),
             '2029-2030': Array.from({ length: 10 }, (_, index) => ({
                 number: index + 1,
+                imagePath: `./images/Challenge ${index + 1}.jpg`,
                 fileId: '',
                 label: `Figure ${index + 1}`,
                 folderUrl: sharedFigureFolderUrl
@@ -144,6 +148,16 @@
             const normalized = normalizeGoogleDriveId(fileId);
             if (!normalized) return '';
             return 'https://drive.google.com/uc?export=view&id=' + normalized;
+        }
+
+        function resolveFigureSource(figure) {
+            if (figure?.imagePath) {
+                return figure.imagePath;
+            }
+            if (figure?.fileId) {
+                return safeDriveImageUrl(figure.fileId);
+            }
+            return '';
         }
 
         function getFigureAccessMessage(year, figure) {
@@ -225,7 +239,7 @@
         function showFigure(year, figure, silent = false) {
             const image = document.getElementById('figure-image');
             const caption = document.getElementById('figure-caption');
-            const url = safeDriveImageUrl(figure.fileId);
+            const url = resolveFigureSource(figure);
 
             if (!url) {
                 if (image) {
@@ -255,7 +269,7 @@
                 image.onerror = function () {
                     image.style.display = 'none';
                     if (caption) {
-                        caption.textContent = `${year} ${figure.label}: unable to load this shared Google Drive image. Check the Drive sharing permissions.`;
+                        caption.textContent = `${year} ${figure.label}: unable to load this image. Check the file path, file name, or Drive sharing permissions.`;
                     }
                 };
 
@@ -284,6 +298,7 @@
                 figureCloseButton.addEventListener('click', hideFigureView);
             }
 
+            hideFigureView();
             renderFigureButtons();
         });
     </script>
