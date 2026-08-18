@@ -384,6 +384,130 @@ body {
     border-top: none;
 }
 
+.figure-panel {
+    margin-left: 100px;
+    margin-top: 18px;
+    width: calc(100% - 120px);
+    max-width: 900px;
+    background: #f7f9fc;
+    border: 1px solid #dbe3ee;
+    border-radius: 12px;
+    box-sizing: border-box;
+    padding: 16px;
+}
+
+.figure-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.figure-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+.figure-year-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #1f2937;
+}
+
+.figure-year-picker select {
+    border: 1px solid #cfd8e3;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1f2937;
+    font-size: 13px;
+    padding: 8px 10px;
+    min-width: 140px;
+}
+
+.figure-button-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.figure-button {
+    background: #1a73e8;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.figure-button:hover:not(:disabled) {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.figure-button:disabled {
+    background: #b7c2d1;
+    color: #eef3f8;
+    cursor: not-allowed;
+}
+
+.figure-display-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    background: #ffffff;
+    border: 1px solid #dfe7f3;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.figure-image-wrap {
+    width: min(100%, 420px);
+    min-height: 220px;
+    background: linear-gradient(135deg, #f3f7ff, #edf5ff);
+    border: 1px solid #d6e0f0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.figure-image-wrap img {
+    display: none;
+    max-width: 100%;
+    max-height: 420px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.figure-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.figure-caption {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.figure-note {
+    font-size: 12px;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
 .release-info {
     text-align: center;
     margin-top: 400px;
