@@ -55,18 +55,18 @@ function Sync-ByNewest {
 
 Sync-ByNewest -RootPath "index.html" -DocsPath "docs/index.html"
 Sync-ByNewest -RootPath "Training Camp.html" -DocsPath "docs/Training Camp.html"
-Sync-ByNewest -RootPath "Class Library.html" -DocsPath "docs/Class Library.html"
+Sync-ByNewest -RootPath "challenges_library.html" -DocsPath "docs/challenges_library.html"
 Sync-ByNewest -RootPath "Videos.html" -DocsPath "docs/Videos.html"
 Sync-ByNewest -RootPath "utils/utils.js" -DocsPath "docs/utils/utils.js"
 Copy-Item "styles/*" "docs/styles/" -Recurse -Force
 Copy-Item "scripts/*" "docs/scripts/" -Recurse -Force
 Copy-Item "images/*" "docs/images/" -Recurse -Force
 
-# Publish lowercase alias to support links that use class library.html
+# Publish lowercase alias to support old class-library links as a fallback.
 if (!(Test-Path "docs/class-library")) {
     New-Item -Path "docs/class-library" -ItemType Directory -Force | Out-Null
 }
-Copy-Item "Class Library.html" "docs/class-library/index.html" -Force
+Copy-Item "challenges_library.html" "docs/class-library/index.html" -Force
 
 git add .
 git commit -m "Publish-Spike-Editor" 2>$null
