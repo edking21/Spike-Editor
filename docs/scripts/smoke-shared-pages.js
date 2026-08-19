@@ -59,7 +59,7 @@ function main() {
     const sharedJsPath = path.join(repoRoot, 'scripts', 'spike-shared.js');
     const indexPath = path.join(repoRoot, 'index.html');
     const trainingPath = path.join(repoRoot, 'Training Camp.html');
-    const classLibraryPath = path.join(repoRoot, 'Class Library.html');
+    const classLibraryPath = path.join(repoRoot, 'challenges_library.html');
 
     const sharedJs = fs.readFileSync(sharedJsPath, 'utf8');
     const indexHtml = fs.readFileSync(indexPath, 'utf8');

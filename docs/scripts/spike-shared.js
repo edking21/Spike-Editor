@@ -189,7 +189,9 @@
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
             20: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' },
-            21: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' }
+            21: { label: 'Round', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
+            22: { label: 'Hay', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
+            23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
@@ -294,7 +296,10 @@
                 { key: 'variables', label: 'Variables', match: ['var', 'variable', 'variables'] },
                 { key: 'moremotors', label: 'More Motors', match: ['more motors', 'moremotors'] },
                 { key: 'moremovement', label: 'More Movement', match: ['more movement', 'moremovement'] },
-                { key: 'gettingstarted', label: 'Getting Started', match: ['get', 'gettingstarted'] }
+                { key: 'gettingstarted', label: 'Getting Started', match: ['get', 'gettingstarted'] },
+                { key: 'hay', label: 'Hay Bale', match: ['hay', 'hay bale'] },
+                { key: 'round', label: 'Round the Garage', match: ['round', 'round the'] },
+                { key: 'robot', label: 'Robot Shuffle', match: ['robot', 'robot shuffle'] }
             ];
 
             function resolveSection(snippet) {
@@ -1175,7 +1180,7 @@ sys.exit()
             snippets: [
                 {
                     id: 'class1',
-                    buttonText: 'Description',
+                    buttonText: 'Robot Shuffle Description',
                     emoji: '🧿',
                     color: '#32CD32',
                     textPython: `
@@ -1200,15 +1205,132 @@ sys.exit()
                 },
                 {
                     id: 'class2',
-                    buttonText: 'Figures',
+                    buttonText: 'Robot Shuffle Figure',
                     emoji: '🧿',
                     color: '#32CD32',
                     textPython: `
 test for figures
 `
-                }
+                },
             ]
-        }
+        },
+        21: {   // challenges
+            colorClass: 'class-color',
+            snippets: [
+                {
+                    id: 'class3',
+                    buttonText: 'Round the Garage Description',
+                    emoji: '🧿',
+                    color: '#0066FF',
+                    textPython: `
+    # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
+
+    # 2. Wait 2 seconds.
+
+    # 3. Move to Line 2, 38 cm from the Start Line, at 25% speed.
+
+    # 4. Move forward 20 cm to Line 3 at 75% speed.
+
+    # 5. Wait 2 seconds.
+
+    # 6. Move forward at 50% speed and stop on line 4.
+
+    # 7. Wait 2 seconds.
+
+    # 8. Move backwards at 75% speed and stop on the Start Line.
+
+    # 9. Display a smiley face.
+`
+                },
+                {
+                    id: 'class4',
+                    buttonText: 'Round the Garage Figure',
+                    emoji: '🧿',
+                    color: '#0066FF',
+                    textPython: `
+test for figures
+`
+                },
+            ]
+        },
+        22: {   // challenges
+            colorClass: 'class-color',
+            snippets: [
+                {
+                    id: 'class5',
+                    buttonText: 'Hay Bale Description',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+    # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
+
+    # 2. Wait 2 seconds.
+
+    # 3. Move to Line 2, 38 cm from the Start Line, at 25% speed.
+
+    # 4. Move forward 20 cm to Line 3 at 75% speed.
+
+    # 5. Wait 2 seconds.
+
+    # 6. Move forward at 50% speed and stop on line 4.
+
+    # 7. Wait 2 seconds.
+
+    # 8. Move backwards at 75% speed and stop on the Start Line.
+
+    # 9. Display a smiley face.
+`
+                },
+                {
+                    id: 'class6',
+                    buttonText: 'Hay Bale Figure',
+                    emoji: '🧿',
+                    color: '#FFD700',
+                    textPython: `
+test for figures
+`
+                },
+            ]
+        },
+        23: {   // challenges
+            colorClass: 'class-color',
+            snippets: [
+                {
+                    id: 'class7',
+                    buttonText: 'Sensors Description',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `
+    # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
+
+    # 2. Wait 2 seconds.
+
+    # 3. Move to Line 2, 38 cm from the Start Line, at 25% speed.
+
+    # 4. Move forward 20 cm to Line 3 at 75% speed.
+
+    # 5. Wait 2 seconds.
+
+    # 6. Move forward at 50% speed and stop on line 4.
+
+    # 7. Wait 2 seconds.
+
+    # 8. Move backwards at 75% speed and stop on the Start Line.
+
+    # 9. Display a smiley face.
+`
+                },
+                {
+                    id: 'class8',
+                    buttonText: 'Sensors Figure',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `
+test for figures
+`
+                },
+            ]
+        },
     };
 
     global.SpikeShared = { ui, renderers, snippetData, bootstrapPage, colorUtils };
