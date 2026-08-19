@@ -102,15 +102,15 @@
 
         const figureLibrary = {
             '2026-2027': [
-                { number: 1, imagePath: challengeImagePath(1), fileId: '', label: 'Figure 1', folderUrl: sharedFigureFolderUrl },
-                { number: 2, imagePath: challengeImagePath(2), fileId: '', label: 'Figure 2', folderUrl: sharedFigureFolderUrl },
-                { number: 3, imagePath: challengeImagePath(3), fileId: '', label: 'Figure 3', folderUrl: sharedFigureFolderUrl },
-                { number: 4, imagePath: challengeImagePath(4), fileId: '', label: 'Figure 4', folderUrl: sharedFigureFolderUrl },
-                { number: 6, imagePath: challengeImagePath(6), fileId: '', label: 'Figure 6', folderUrl: sharedFigureFolderUrl },
-                { number: 7, imagePath: challengeImagePath(7), fileId: '', label: 'Figure 7', folderUrl: sharedFigureFolderUrl },
-                { number: 8, imagePath: challengeImagePath(8), fileId: '', label: 'Figure 8', folderUrl: sharedFigureFolderUrl },
-                { number: 9, imagePath: challengeImagePath(9), fileId: '', label: 'Figure 9', folderUrl: sharedFigureFolderUrl },
-                { number: 10, imagePath: challengeImagePath(10), fileId: '', label: 'Figure 10', folderUrl: sharedFigureFolderUrl }
+                { number: 1, imagePath: challengeImagePath(1), fileId: '', label: 'Challenge 1', folderUrl: sharedFigureFolderUrl },
+                { number: 2, imagePath: challengeImagePath(2), fileId: '', label: 'Challenge 2', folderUrl: sharedFigureFolderUrl },
+                { number: 3, imagePath: challengeImagePath(3), fileId: '', label: 'Challenge 3', folderUrl: sharedFigureFolderUrl },
+                { number: 4, imagePath: challengeImagePath(4), fileId: '', label: 'Challenge 4', folderUrl: sharedFigureFolderUrl },
+                { number: 6, imagePath: challengeImagePath(6), fileId: '', label: 'Challenge 6', folderUrl: sharedFigureFolderUrl },
+                { number: 7, imagePath: challengeImagePath(7), fileId: '', label: 'Challenge 7', folderUrl: sharedFigureFolderUrl },
+                { number: 8, imagePath: challengeImagePath(8), fileId: '', label: 'Challenge 8', folderUrl: sharedFigureFolderUrl },
+                { number: 9, imagePath: challengeImagePath(9), fileId: '', label: 'Challenge 9', folderUrl: sharedFigureFolderUrl },
+                { number: 10, imagePath: challengeImagePath(10), fileId: '', label: 'Challenge 10', folderUrl: sharedFigureFolderUrl }
             ],
             '2027-2028': [],
             '2028-2029': [],
@@ -195,11 +195,11 @@
                 const hasFigureSource = Boolean(figure.imagePath || figure.fileId);
                 button.type = 'button';
                 button.className = 'figure-button';
-                button.textContent = `Figure ${figure.number}`;
+                button.textContent = `Challenge ${figure.number}`;
                 button.disabled = !hasFigureSource;
                 button.title = hasFigureSource
                     ? `${figure.label} (${year})`
-                    : 'Add a local image or Google Drive file ID for this figure.';
+                    : 'Add a local image or Google Drive file ID for this challenge.';
                 button.addEventListener('click', () => {
                     const modal = document.getElementById('figure-modal-backdrop');
                     if (modal) {
