@@ -235,6 +235,58 @@
         }
     };
 
+    function showChallengeImage(imagePath, imageLabel) {
+        let modal = document.getElementById('challenge-image-modal');
+
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'challenge-image-modal';
+            modal.className = 'figure-modal-backdrop';
+            modal.setAttribute('aria-label', 'Challenge image');
+
+            const panel = document.createElement('div');
+            panel.className = 'figure-panel';
+            panel.setAttribute('role', 'dialog');
+            panel.setAttribute('aria-modal', 'true');
+            panel.setAttribute('aria-label', 'Challenge 1 figure');
+
+            const closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.className = 'figure-close';
+            closeButton.setAttribute('aria-label', 'Close challenge image');
+            closeButton.title = 'Close challenge image';
+            closeButton.textContent = 'X';
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            const image = document.createElement('img');
+            image.src = imagePath;
+            image.alt = imageLabel;
+            image.loading = 'eager';
+            image.style.display = 'block';
+            image.style.width = '100%';
+            image.style.height = 'auto';
+
+            panel.appendChild(closeButton);
+            panel.appendChild(image);
+            modal.appendChild(panel);
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            document.body.appendChild(modal);
+        }
+
+        const image = modal.querySelector('img');
+        if (image) {
+            image.src = imagePath;
+            image.alt = imageLabel;
+        }
+        modal.style.display = 'flex';
+    }
+
     const renderers = {
         renderEmojiButtons({ containerId, buttons, onClickFnName }) {
             const host = document.getElementById(containerId);
@@ -372,6 +424,22 @@
                 }
 
                 button.addEventListener('click', () => {
+                    if (snippet?.id === 'challenge2') {
+                        showChallengeImage('./images/Challenge 1 Figure.jpg', 'Challenge 1 Figure');
+                        return;
+                    }
+                    if (snippet?.id === 'challenge4') {
+                        showChallengeImage('./images/Challenge 2 Figure.jpg', 'Challenge 2 Figure');
+                        return;
+                    }
+                    if (snippet?.id === 'challenge6') {
+                        showChallengeImage('./images/Challenge 3 Figure .jpg', 'Challenge 3 Figure');
+                        return;
+                    }
+                    if (snippet?.id === 'challenge8') {
+                        showChallengeImage('./images/Challenge 4 Figure.jpg', 'Challenge 4 Figure');
+                        return;
+                    }
                     copyTextToClipboard(snippet?.textPython || '');
                 });
                 if (emojiText) {
@@ -1175,11 +1243,11 @@ sys.exit()
                 },
             ]
         },
-        20: {   // challenges
-            colorClass: 'class-color',
+        20: {   // robot shuffle
+            colorClass: 'challenge-color',
             snippets: [
                 {
-                    id: 'class1',
+                    id: 'challenge1',
                     buttonText: 'Robot Shuffle Description',
                     emoji: '🧿',
                     color: '#32CD32',
@@ -1204,7 +1272,7 @@ sys.exit()
 `
                 },
                 {
-                    id: 'class2',
+                    id: 'challenge2',
                     buttonText: 'Robot Shuffle Figure',
                     emoji: '🧿',
                     color: '#32CD32',
@@ -1214,11 +1282,11 @@ test for figures
                 },
             ]
         },
-        21: {   // challenges
-            colorClass: 'class-color',
+        21: {   // round the garage
+            colorchallenge: 'challenge-color',
             snippets: [
                 {
-                    id: 'class3',
+                    id: 'challenge3',
                     buttonText: 'Round the Garage Description',
                     emoji: '🧿',
                     color: '#0066FF',
@@ -1243,7 +1311,7 @@ test for figures
 `
                 },
                 {
-                    id: 'class4',
+                    id: 'challenge4',
                     buttonText: 'Round the Garage Figure',
                     emoji: '🧿',
                     color: '#0066FF',
@@ -1253,11 +1321,11 @@ test for figures
                 },
             ]
         },
-        22: {   // challenges
-            colorClass: 'class-color',
+        22: {   // hay bale
+            colorClass: 'challenge-color',
             snippets: [
                 {
-                    id: 'class5',
+                    id: 'challenge5',
                     buttonText: 'Hay Bale Description',
                     emoji: '🧿',
                     color: '#FFD700',
@@ -1282,7 +1350,7 @@ test for figures
 `
                 },
                 {
-                    id: 'class6',
+                    id: 'challenge6',
                     buttonText: 'Hay Bale Figure',
                     emoji: '🧿',
                     color: '#FFD700',
@@ -1292,11 +1360,11 @@ test for figures
                 },
             ]
         },
-        23: {   // challenges
-            colorClass: 'class-color',
+        23: {   // sensor
+            colorClass: 'challenge-color',
             snippets: [
                 {
-                    id: 'class7',
+                    id: 'challenge7',
                     buttonText: 'Sensors Description',
                     emoji: '🧿',
                     color: '#CC0000',
@@ -1321,7 +1389,7 @@ test for figures
 `
                 },
                 {
-                    id: 'class8',
+                    id: 'challenge8',
                     buttonText: 'Sensors Figure',
                     emoji: '🧿',
                     color: '#CC0000',
