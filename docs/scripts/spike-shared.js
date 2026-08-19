@@ -424,6 +424,14 @@
                 }
 
                 button.addEventListener('click', () => {
+                    if (snippet?.id === 'challenge1') {
+                        copyTextToClipboard(snippet?.textPython || '');
+                        return;
+                    }
+                    if (snippet?.id === 'challenge7') {
+                        copyTextToClipboard(snippet?.textPython || '');
+                        return;
+                    }
                     if (snippet?.id === 'challenge2') {
                         showChallengeImage('./images/Challenge 1 Figure.jpg', 'Challenge 1 Figure');
                         return;
@@ -1369,14 +1377,26 @@ test for figures
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `
-1. The Driving Base tires are placed in the center of a 12” by 12” taped square at the bottom right corner of a 4’ by 4’ table surrounded by walls.
-2. The Driving Base moves forward toward the top wall of the table. When the force sensor is pressed, the Driving Base moves backward 6”, then waits for 2 seconds.
-3. The Driving Base then turns left 90 degrees and moves forward until it is 10” from the left wall of the table.
-4. The Driving Base turns 90 degrees to the left, moves forward toward the bottom wall of the table, and moves backward 4” when the force sensor is pressed.
-5. The Hub displays a frowny face, and the Driving Base waits for 2 seconds.
-6. The Driving Base turns 90 degrees to the left and moves forward 10 in, then backwards 10 in, then repeats this movement (back and forth) until the judge waves his hand in front of the robot (6” or less) and the robot stops.
-7. The student then depresses the force sensor, and after a four second delay, the robot moves forward toward the right wall of the table.
-8. Using the color sensor, when the Driving Base enters the 12” by 12” taped square, it turns 90 degrees to the left to face the top wall. The Driving Base must finish inside the taped square without touching the tape.
+    # 1. The Driving Base tires are placed in the center of a 12” by 12” taped square at the bottom right corner of a 4’ by 4’ table surrounded by walls.
+
+    # 2. The Driving Base moves forward toward the top wall of the table. 
+    #    When the force sensor is pressed, the Driving Base moves backward 6”, then waits for 2 seconds.
+
+    # 3. The Driving Base then turns left 90 degrees and moves forward until it is 10” from the left wall of the table.
+
+    # 4. The Driving Base turns 90 degrees to the left, moves forward toward the bottom wall of the table, 
+    #    and moves backward 4” when the force sensor is pressed.
+
+    # 5. The Hub displays a frowny face, and the Driving Base waits for 2 seconds.
+
+    # 6. The Driving Base turns 90 degrees to the left and moves forward 10 in, then backwards 10 in, 
+    #    then repeats this movement (back and forth) until the judge waves his hand in front of the robot (6” or less) and the robot stops.
+
+    # 7. The student then depresses the force sensor, and after a four second delay, 
+    #    the robot moves forward toward the right wall of the table.
+
+    # 8. Using the color sensor, when the Driving Base enters the 12” by 12” taped square, 
+    #    it turns 90 degrees to the left to face the top wall. The Driving Base must finish inside the taped square without touching the tape.
 
 `
                 },
