@@ -496,10 +496,10 @@
             snippets: [
                 {
                     id: 'move1',
-                    buttonText: 'move forward for 10 cm',
+                    buttonText: 'move forward for 10 cm at 50% speed',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES, 0, velocity=int(.5 * 1100))
+                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5), 0, velocity=int(.5 * 1100))
 `
                 },
                 {
@@ -507,48 +507,40 @@
                     buttonText: 'start moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0)`
+                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 0)
+`
                 },
                 {
                     id: 'move3',
-                    buttonText: 'turn right 90 for 10 rotations',
+                    buttonText: 'turn right 90 degrees',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # move right 30 for 10 rotations
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 3600, 30)
-    sleep_ms(40)`
+                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)
+`
                 },
                 {
                     id: 'move4',
                     buttonText: 'start moving right 30',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # start moving right 30
-    motor_pair.move(motor_pair.PAIR_1, 30, velocity=220)
-    sleep_ms(40)`
+                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 30, velocity=220) 
+`
                 },
                 {
                     id: 'move5',
                     buttonText: 'stop moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
-    sleep_ms(10)`
+                    textPython: `    motor_pair.stop(motor_pair.PAIR_1)
+`
                 },
                 {
                     id: 'move6',
                     buttonText: 'set movement speed to 20%',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # set movement speed to 20% of 1100
-    movement_speed = int(0.2 * 1100)`
+                    textPython: `    movement_speed = int(0.2 * 1100)
+`
                 },
                 {
                     id: 'move7',
@@ -557,7 +549,8 @@
                     color: '#FF69B4',
                     textPython: `
     # set movement motors to C+D
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)`
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+`
                 }
             ]
         },
