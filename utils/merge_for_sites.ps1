@@ -10,6 +10,7 @@ param(
     [string]$ChallengesLibraryOutputFile = "challenges_library_for_copy_to_sites.html"
 )
 
+
 $ProjectRoot = Split-Path -Path $PSScriptRoot -Parent
 
 function Resolve-PathWithBase {
