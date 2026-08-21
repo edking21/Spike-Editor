@@ -288,6 +288,69 @@
         modal.style.display = 'flex';
     }
 
+    function showShortcutWindow() {
+        let modal = document.getElementById('shortcut-help-modal');
+
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'shortcut-help-modal';
+            modal.className = 'figure-modal-backdrop';
+            modal.setAttribute('aria-label', 'Shortcut help window');
+
+            const panel = document.createElement('div');
+            panel.className = 'figure-panel';
+            panel.setAttribute('role', 'dialog');
+            panel.setAttribute('aria-modal', 'true');
+            panel.setAttribute('aria-label', 'Spike Editor shortcuts');
+            panel.style.maxWidth = '700px';
+            panel.style.maxHeight = '80vh';
+            panel.style.overflowY = 'auto';
+
+            const closeButton = document.createElement('button');
+            closeButton.type = 'button';
+            closeButton.className = 'figure-close';
+            closeButton.setAttribute('aria-label', 'Close shortcut help');
+            closeButton.title = 'Close shortcut help';
+            closeButton.textContent = 'X';
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            const title = document.createElement('h2');
+            title.textContent = 'Spike Editor Shortcuts';
+
+            const content = document.createElement('div');
+            content.style.padding = '0 8px 8px';
+            content.style.lineHeight = '1.6';
+            content.innerHTML = `
+                <h3>Scroll up and down</h3>
+                <ul>
+                    <li>Use the mouse scroll wheel to move up or down.</li>
+                    <li>Scrolling happens in the window region occupied by the mouse at that moment.</li>
+                </ul>
+                <h3>Zoom in and out</h3>
+                <ul>
+                    <li>Hold the left Shift key while using the scroll wheel.</li>
+                    <li>Scroll forward to zoom in and backward to zoom out.</li>
+                    <li>The zoom applies to the window region where the mouse is currently located.</li>
+                </ul>
+            `;
+
+            panel.appendChild(closeButton);
+            panel.appendChild(title);
+            panel.appendChild(content);
+            modal.appendChild(panel);
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            document.body.appendChild(modal);
+        }
+
+        modal.style.display = 'flex';
+    }
+
     const renderers = {
         renderEmojiButtons({ containerId, buttons, onClickFnName }) {
             const host = document.getElementById(containerId);
@@ -352,7 +415,8 @@
                 { key: 'gettingstarted', label: 'Getting Started', match: ['get', 'gettingstarted'] },
                 { key: 'hay', label: 'Hay Bale', match: ['hay', 'hay bale'] },
                 { key: 'round', label: 'Round the Garage', match: ['round', 'round the'] },
-                { key: 'robot', label: 'Robot Shuffle', match: ['robot', 'robot shuffle'] }
+                { key: 'robot', label: 'Robot Shuffle', match: ['robot', 'robot shuffle'] },
+                { key: 'figure', label: 'Figures', match: ['figure', 'figures'] }
             ];
 
             function resolveSection(snippet) {
@@ -377,6 +441,7 @@
                 if (id.startsWith('ev')) return sectionRules.find(r => r.key === 'events');
                 if (id.startsWith('ctrl') || id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
+                if (id.startsWith('figure')) return sectionRules.find(r => r.key === 'figures');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
                 if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
@@ -453,6 +518,10 @@
                         if (typeof global.openFigureViewer === 'function') {
                             global.openFigureViewer();
                         }
+                        return;
+                    }
+                    if (snippet?.id === 'challenge10') {
+                        showShortcutWindow();
                         return;
                     }
                     copyTextToClipboard(snippet?.textPython || '');
@@ -863,9 +932,7 @@ result = a + b`
                     buttonText: 'Operator Example',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `
-# Operator example
-a = 3
+                    textPython: `a = 3
 b = 5
 result = a + b`
                 },
@@ -879,9 +946,7 @@ result = a + b`
                     buttonText: 'New Variable',
                     emoji: '🧿',
                     color: '#d8a22d',
-                    textPython: `
-# variable example
-a = 0
+                    textPython: `a = 0
 `
                }
             ]
@@ -894,9 +959,7 @@ a = 0
                     buttonText: 'Run motor E at 50% power',
                     emoji: '🧿' ,
                     color: '#0066FF',
-                    textPython: `
-# Run motor E at 50% power
-motor.run(port.E, 550)`
+                    textPython: `motor.run(port.E, 550)`
                 }
             ]
         },
@@ -1405,9 +1468,26 @@ test for figures
                     buttonText: 'Sensors Figure',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `
-test for figures
-`
+                    textPython: ``
+                },
+            ]
+        },
+        24: {   // figures
+            colorClass: 'challenge-color',
+            snippets: [
+                {
+                    id: 'challenge9',
+                    buttonText: 'Figures',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: ``
+                },
+                {
+                    id: 'challenge10',
+                    buttonText: 'Shortcuts',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: ``
                 },
             ]
         },

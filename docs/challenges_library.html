@@ -29,6 +29,35 @@
         </div>
     </div>
     <div class="snippet-column" id="snippet-column"></div>
+
+    <div id="figure-modal-backdrop" class="figure-modal-backdrop" aria-label="Figure viewer modal">
+        <div class="figure-panel" aria-label="Figure viewer panel">
+            <button id="figure-close" class="figure-close" type="button" aria-label="Close figure" title="Close figure">X</button>
+            <div class="figure-header">
+                <h2>Figure Viewer</h2>
+                <div class="figure-year-picker">
+                    <label for="figure-year">School year</label>
+                    <select id="figure-year" aria-label="Select school year">
+                        <option value="2026-2027">2026-2027</option>
+                        <option value="2027-2028">2027-2028</option>
+                        <option value="2028-2029">2028-2029</option>
+                        <option value="2029-2030">2029-2030</option>
+                    </select>
+                </div>
+            </div>
+            <div class="figure-button-list" id="figure-button-list" aria-label="Figure buttons"></div>
+            <div class="figure-display-card">
+                <div class="figure-image-wrap">
+                    <img id="figure-image" alt="Selected figure" loading="eager" />
+                </div>
+                <div class="figure-meta">
+                    <div id="figure-caption" class="figure-caption">Choose a figure to view.</div>
+                    <div class="figure-note">Local challenge figure images.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="./utils/utils.js"></script>
     <script src="./scripts/spike-shared.js"></script>
     <script>
@@ -40,7 +69,90 @@
             console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js');
         }
 
-        const classEmojiGroupOrder = [20,21,22,23];
+        const classEmojiGroupOrder = [20,21,22,23,24];
+
+        const sharedFigureFolderUrl = 'https://drive.google.com/drive/folders/1nhUIUV7-DiepCjXh55r4oxrSNTRwJ_yl';
+        const figureLibrary = {
+            '2026-2027': [1, 2, 3, 4, 6, 7, 8, 9, 10].map(number => ({
+                number,
+                imagePath: ({
+                    1: './images/Challenge 1 Figure.jpg',
+                    2: './images/Challenge 2 Figure.jpg',
+                    3: './images/Challenge 3 Figure .jpg',
+                    4: './images/Challenge 4 Figure.jpg',
+                    6: './images/Challenge 6 Figure.jpg',
+                    7: './images/Challenge 7 Figure.jpg',
+                    8: './images/Challenge 8 Figure.jpg',
+                    9: './images/Challenge 9 Figure.jpg',
+                    10: './images/Challenge 10 Figure.jpg'
+                })[number],
+                label: `Challenge ${number}`,
+                folderUrl: sharedFigureFolderUrl
+            })),
+            '2027-2028': [],
+            '2028-2029': [],
+            '2029-2030': []
+        };
+
+        function resolveFigureSource(figure) {
+            return figure?.imagePath || '';
+        }
+
+        function hideFigureView() {
+            const modal = document.getElementById('figure-modal-backdrop');
+            const image = document.getElementById('figure-image');
+            if (modal) modal.style.display = 'none';
+            if (image) image.removeAttribute('src');
+        }
+
+        function showFigure(year, figure) {
+            const image = document.getElementById('figure-image');
+            const caption = document.getElementById('figure-caption');
+            const url = resolveFigureSource(figure);
+            if (!image || !caption || !url) return;
+            image.onload = () => {
+                image.style.display = 'block';
+                caption.textContent = `${year} - ${figure.label}`;
+            };
+            image.onerror = () => {
+                image.style.display = 'none';
+                caption.textContent = `${year} ${figure.label}: unable to load this image.`;
+            };
+            image.src = url;
+            image.alt = `${year} ${figure.label}`;
+        }
+
+        function renderFigureButtons() {
+            const year = document.getElementById('figure-year')?.value || '2026-2027';
+            const host = document.getElementById('figure-button-list');
+            if (!host) return;
+            host.textContent = '';
+            (figureLibrary[year] || []).forEach(figure => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'figure-button';
+                button.textContent = `Challenge ${figure.number}`;
+                button.addEventListener('click', () => showFigure(year, figure));
+                host.appendChild(button);
+            });
+        }
+
+        function openFigureViewer() {
+            const modal = document.getElementById('figure-modal-backdrop');
+            if (!modal) return;
+            if (!modal.dataset.initialized) {
+                document.getElementById('figure-year')?.addEventListener('change', renderFigureButtons);
+                document.getElementById('figure-close')?.addEventListener('click', hideFigureView);
+                modal.addEventListener('click', event => {
+                    if (event.target === modal) hideFigureView();
+                });
+                modal.dataset.initialized = 'true';
+            }
+            renderFigureButtons();
+            modal.style.display = 'flex';
+        }
+
+        window.openFigureViewer = openFigureViewer;
 
         function refreshSnippets(groupId) {
             const group = snippetData[groupId];
