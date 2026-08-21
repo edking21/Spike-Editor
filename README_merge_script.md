@@ -32,6 +32,7 @@ This repository uses `utils/merge_for_sites.ps1` to merge source HTML files with
 
 - Script location: `utils/merge_for_sites.ps1`
 - It replaces `<script src="./utils/utils.js"></script>` (and legacy `<script src="./utils.js"></script>`) with inlined JS.
+- When copying the Challenges Library (option 3), local JPG figure images are temporarily embedded as data URLs so Google Sites receives the images with the HTML. Generated files are restored after copying.
 - Output directories are auto-created if missing.
 
 ## Troubleshooting

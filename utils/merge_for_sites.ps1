@@ -30,6 +30,7 @@ $TrainingCampFile = Resolve-PathWithBase -PathValue $TrainingCampFile -BasePath 
 $ChallengesLibraryFile = Resolve-PathWithBase -PathValue $ChallengesLibraryFile -BasePath $ProjectRoot
 $StylesFile = Resolve-PathWithBase -PathValue $StylesFile -BasePath $ProjectRoot
 $ScriptsFile = Resolve-PathWithBase -PathValue $ScriptsFile -BasePath $ProjectRoot
+$ImagesDirectory = Join-Path $ProjectRoot 'images'
 $UtilsFile = Resolve-PathWithBase -PathValue $UtilsFile -BasePath $PSScriptRoot
 $IndexOutputFile = Resolve-PathWithBase -PathValue $IndexOutputFile -BasePath $PSScriptRoot
 $TrainingCampOutputFile = Resolve-PathWithBase -PathValue $TrainingCampOutputFile -BasePath $PSScriptRoot
@@ -194,6 +195,28 @@ function Inline-SharedJsInOutput {
     }
 }
 
+function Inline-FigureImagesInOutput {
+    param(
+        [string]$OutputFile,
+        [string]$ImagesDirectory
+    )
+
+    $content = Get-Content $OutputFile -Raw -Encoding UTF8
+    $updated = $content
+    foreach ($imageFile in Get-ChildItem -Path $ImagesDirectory -File | Where-Object Extension -Match '^\.jpe?g$') {
+        $relativePath = './images/' + $imageFile.Name
+        $base64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($imageFile.FullName))
+        $dataUri = "data:image/jpeg;base64,$base64"
+        $updated = $updated.Replace("'$relativePath'", "'$dataUri'")
+        $updated = $updated.Replace('"' + $relativePath + '"', '"' + $dataUri + '"')
+    }
+
+    if ($updated -ne $content) {
+        $updated | Set-Content $OutputFile -Encoding UTF8
+        Write-Host "Temporarily inlined figure JPGs into $OutputFile" -ForegroundColor DarkCyan
+    }
+}
+
 function Restore-OriginalOutputFiles {
     param(
         [hashtable]$OriginalFiles
@@ -261,6 +284,7 @@ try {
         Inline-SharedCssInOutput -OutputFile $outputFile -CssContent $cssContent
         Inline-SharedJsInOutput -OutputFile $outputFile -JsContent $jsContent
     }
+    Inline-FigureImagesInOutput -OutputFile $ChallengesLibraryOutputFile -ImagesDirectory $ImagesDirectory
     
     try {
         # Ask if user wants to open the files
