@@ -1,13 +1,13 @@
 param(
     [string]$IndexFile = "index.html",
     [string]$TrainingCampFile = "Training Camp.html",
-    [string]$ClassLibraryFile = "Class Library.html",
+    [string]$ChallengesLibraryFile = "challenges_library.html",
     [string]$StylesFile = "styles/spike-shared.css",
     [string]$ScriptsFile = "scripts/spike-shared.js",
     [string]$UtilsFile = "utils.js",
     [string]$IndexOutputFile = "index_for_copy_to_sites.html",
     [string]$TrainingCampOutputFile = "training_camp_for_copy_to_sites.html",
-    [string]$ClassLibraryOutputFile = "class_library_for_copy_to_sites.html"
+    [string]$ChallengesLibraryOutputFile = "challenges_library_for_copy_to_sites.html"
 )
 
 $ProjectRoot = Split-Path -Path $PSScriptRoot -Parent
@@ -27,13 +27,13 @@ function Resolve-PathWithBase {
 
 $IndexFile = Resolve-PathWithBase -PathValue $IndexFile -BasePath $ProjectRoot
 $TrainingCampFile = Resolve-PathWithBase -PathValue $TrainingCampFile -BasePath $ProjectRoot
-$ClassLibraryFile = Resolve-PathWithBase -PathValue $ClassLibraryFile -BasePath $ProjectRoot
+$ChallengesLibraryFile = Resolve-PathWithBase -PathValue $ChallengesLibraryFile -BasePath $ProjectRoot
 $StylesFile = Resolve-PathWithBase -PathValue $StylesFile -BasePath $ProjectRoot
 $ScriptsFile = Resolve-PathWithBase -PathValue $ScriptsFile -BasePath $ProjectRoot
 $UtilsFile = Resolve-PathWithBase -PathValue $UtilsFile -BasePath $PSScriptRoot
 $IndexOutputFile = Resolve-PathWithBase -PathValue $IndexOutputFile -BasePath $PSScriptRoot
 $TrainingCampOutputFile = Resolve-PathWithBase -PathValue $TrainingCampOutputFile -BasePath $PSScriptRoot
-$ClassLibraryOutputFile = Resolve-PathWithBase -PathValue $ClassLibraryOutputFile -BasePath $PSScriptRoot
+$ChallengesLibraryOutputFile = Resolve-PathWithBase -PathValue $ChallengesLibraryOutputFile -BasePath $PSScriptRoot
 
 Write-Host "Merging HTML files with $UtilsFile for Google Sites deployment..." -ForegroundColor Green
 
@@ -181,7 +181,7 @@ function Inline-SharedJsInOutput {
     $inlineJsBlock = "    <script>`n        // Shared script (from scripts/spike-shared.js)`n$JsContent`n    </script>"
     $updated = $content -replace $patternJsLink, $inlineJsBlock
 
-    # If no shared-script tag exists (for example class library output), inject before </body>.
+    # If no shared-script tag exists (for example challenges library output), inject before </body>.
     if ($updated -eq $content) {
         $updated = $content -replace '(?is)</body>', "$inlineJsBlock`n</body>"
     }
@@ -206,7 +206,7 @@ function Restore-OriginalOutputFiles {
 }
 
 # Check if required files exist
-$filesToCheck = @($IndexFile, $TrainingCampFile, $ClassLibraryFile, $StylesFile, $ScriptsFile, $UtilsFile)
+$filesToCheck = @($IndexFile, $TrainingCampFile, $ChallengesLibraryFile, $StylesFile, $ScriptsFile, $UtilsFile)
 foreach ($file in $filesToCheck) {
     if (-not (Test-Path $file)) {
         Write-Error "Error: $file not found!"
@@ -215,7 +215,7 @@ foreach ($file in $filesToCheck) {
 }
 
 # Ensure output directories exist before writing merged files
-New-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
+New-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, $ChallengesLibraryOutputFile)
 
 try {
     # Read the utils.js file once
@@ -234,17 +234,17 @@ try {
     Update-PageWithUtils -InputFile $trainingCampInputFile -OutputFile $TrainingCampOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $TrainingCampOutputFile" -ForegroundColor Green
     
-    # Process Class Library.html
-    Write-Host "Processing $ClassLibraryFile..." -ForegroundColor Cyan
-    $classLibraryInputFile = Get-PreferredInputFile -SourceFile $ClassLibraryFile -OutputFile $ClassLibraryOutputFile
-    Update-PageWithUtils -InputFile $classLibraryInputFile -OutputFile $ClassLibraryOutputFile -UtilsReplacement $utilsReplacement
-    Write-Host "Created $ClassLibraryOutputFile" -ForegroundColor Green
+    # Process challenges_library.html
+    Write-Host "Processing $ChallengesLibraryFile..." -ForegroundColor Cyan
+    $challengesLibraryInputFile = Get-PreferredInputFile -SourceFile $ChallengesLibraryFile -OutputFile $ChallengesLibraryOutputFile
+    Update-PageWithUtils -InputFile $challengesLibraryInputFile -OutputFile $ChallengesLibraryOutputFile -UtilsReplacement $utilsReplacement
+    Write-Host "Created $ChallengesLibraryOutputFile" -ForegroundColor Green
     
     # Display file information
     Write-Host "`nFile Information:" -ForegroundColor Yellow
     Write-Host "$IndexOutputFile size: $((Get-Item $IndexOutputFile).Length) bytes" -ForegroundColor Cyan
     Write-Host "$TrainingCampOutputFile size: $((Get-Item $TrainingCampOutputFile).Length) bytes" -ForegroundColor Cyan
-    Write-Host "$ClassLibraryOutputFile size: $((Get-Item $ClassLibraryOutputFile).Length) bytes" -ForegroundColor Cyan
+    Write-Host "$ChallengesLibraryOutputFile size: $((Get-Item $ChallengesLibraryOutputFile).Length) bytes" -ForegroundColor Cyan
     Write-Host "`nAll files are ready for copy-paste to Google Sites." -ForegroundColor Yellow
 
     # Temporarily inline utils/shared CSS/shared JS before manual copy for Google Sites embedding.
@@ -253,7 +253,7 @@ try {
     $cssContent = $cssContent -replace '(?im)(\bpadding:\s*)50px\s+2px\s+2px\s+2px\s*;', '${1}0px 2px 2px 2px;'
     $cssContent = $cssContent -replace '(?is)(\.left-column\s*\{[^}]*?\btop:\s*)50px(\s*;)', '${1}0px${2}'
     $jsContent = Get-Content $ScriptsFile -Raw -Encoding UTF8
-    $outputFiles = @($IndexOutputFile, $TrainingCampOutputFile, $ClassLibraryOutputFile)
+    $outputFiles = @($IndexOutputFile, $TrainingCampOutputFile, $ChallengesLibraryOutputFile)
     $originalOutputContent = @{}
     foreach ($outputFile in $outputFiles) {
         $originalOutputContent[$outputFile] = Get-Content $outputFile -Raw -Encoding UTF8
@@ -268,14 +268,14 @@ try {
         if ($response -eq 'y' -or $response -eq 'Y') {
             Start-Process notepad $IndexOutputFile
             Start-Process notepad $TrainingCampOutputFile
-            Start-Process notepad $ClassLibraryOutputFile
+            Start-Process notepad $ChallengesLibraryOutputFile
         }
 
         # Ask which file to copy to clipboard
         Write-Host "`nWhich file would you like to copy to clipboard?"
         Write-Host "1. $IndexOutputFile (Main/Index)"
         Write-Host "2. $TrainingCampOutputFile (Training Camp)"
-        Write-Host "3. $ClassLibraryOutputFile (Class Library)"
+        Write-Host "3. $ChallengesLibraryOutputFile (Challenges Library)"
         Write-Host "4. Neither"
         $clipboardChoice = (Read-Host "Enter choice (1/2/3/4)").Trim()
 
@@ -289,8 +289,8 @@ try {
                 Write-Host "$TrainingCampOutputFile content copied to clipboard!" -ForegroundColor Green
             }
             '3' {
-                Get-Content $ClassLibraryOutputFile -Raw | Set-Clipboard
-                Write-Host "$ClassLibraryOutputFile content copied to clipboard!" -ForegroundColor Green
+                Get-Content $ChallengesLibraryOutputFile -Raw | Set-Clipboard
+                Write-Host "$ChallengesLibraryOutputFile content copied to clipboard!" -ForegroundColor Green
             }
             '4' {
                 Write-Host "No files copied to clipboard." -ForegroundColor Yellow

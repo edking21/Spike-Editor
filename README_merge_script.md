@@ -20,13 +20,13 @@ This repository uses `utils/merge_for_sites.ps1` to merge source HTML files with
 
 ## Workflow
 
-1. Edit snippets in `index.html`, `Training Camp.html`, or `Class Library.html`.
+1. Edit snippets in `index.html`, `Training Camp.html`, or `challenges_library.html`.
 2. Update utility functions in `utils/utils.js`.
 3. Run `./utils/merge_for_sites.ps1`.
 4. Use generated files from `utils/`:
 	- `index_for_copy_to_sites.html`
 	- `training_camp_for_copy_to_sites.html`
-	- `class_library_for_copy_to_sites.html`
+	- `challenges_library_for_copy_to_sites.html`
 
 ## Notes
 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Spike</title>
+    <link rel="stylesheet" href="./styles/spike-shared.css">
+</head>
+<body>
+    
+    <div class="left-column">
+        <div class="emoji-block" id="emoji-block">
+        </div>
+    </div>
+    <div class="snippet-column" id="snippet-column"></div>
+    <script src="./utils/utils.js"></script>
+<script src="./scripts/spike-shared.js"></script>
+    <script>
+        const shared = window.SpikeShared || {};
+        const { renderers = {}, snippetData = {}, colorUtils = {} } =
+            (typeof shared.bootstrapPage === 'function' ? shared.bootstrapPage() : shared);
+
+        if ((typeof shared.bootstrapPage !== 'function') && (!shared.renderers || !shared.snippetData)) {
+            console.error('SpikeShared not loaded correctly. Check ./scripts/spike-shared.js');
+        }
+
+        const classEmojiGroupOrder = [20,21,22,23];
+
+        function refreshSnippets(groupId) {
+            const group = snippetData[groupId];
+            renderers.renderSnippetButtons({
+                containerId: 'snippet-column',
+                snippets: (typeof colorUtils.applySnippetTextColor === 'function')
+                    ? colorUtils.applySnippetTextColor(group?.snippets || [])
+                    : (group?.snippets || [])
+            });
+        }
+
+        function renderAllSnippetGroups() {
+            const combined = classEmojiGroupOrder.flatMap(id => {
+                const source = snippetData[id]?.snippets || [];
+                return (typeof colorUtils.applySnippetTextColor === 'function')
+                    ? colorUtils.applySnippetTextColor(source)
+                    : source;
+            });
+            renderers.renderSnippetButtons({
+                containerId: 'snippet-column',
+                snippets: combined
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderers.renderEmojiButtons({
+                containerId: 'emoji-block',
+                buttons: (typeof colorUtils.getEmojiButtons === 'function')
+                    ? colorUtils.getEmojiButtons(classEmojiGroupOrder)
+                    : [],
+                onClickFnName: 'refreshSnippets'
+            });
+            renderAllSnippetGroups();
+        });
+    </script>
+</body>
+</html>
+
