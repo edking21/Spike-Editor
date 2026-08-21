@@ -191,7 +191,8 @@
             20: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' },
             21: { label: 'Round', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
             22: { label: 'Hay', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
-            23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' }
+            23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
+            24: { label: 'Figures', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
@@ -351,7 +352,8 @@
                 { key: 'gettingstarted', label: 'Getting Started', match: ['get', 'gettingstarted'] },
                 { key: 'hay', label: 'Hay Bale', match: ['hay', 'hay bale'] },
                 { key: 'round', label: 'Round the Garage', match: ['round', 'round the'] },
-                { key: 'robot', label: 'Robot Shuffle', match: ['robot', 'robot shuffle'] }
+                { key: 'robot', label: 'Robot Shuffle', match: ['robot', 'robot shuffle'] },
+                { key: 'figure', label: 'Figures', match: ['figure', 'figures'] }
             ];
 
             function resolveSection(snippet) {
@@ -376,6 +378,7 @@
                 if (id.startsWith('ev')) return sectionRules.find(r => r.key === 'events');
                 if (id.startsWith('ctrl') || id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
+                if (id.startsWith('figure')) return sectionRules.find(r => r.key === 'figures');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
                 if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
@@ -856,9 +859,7 @@ result = a + b`
                     buttonText: 'Operator Example',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `
-# Operator example
-a = 3
+                    textPython: `a = 3
 b = 5
 result = a + b`
                 },
@@ -872,9 +873,7 @@ result = a + b`
                     buttonText: 'New Variable',
                     emoji: '🧿',
                     color: '#d8a22d',
-                    textPython: `
-# variable example
-a = 0
+                    textPython: `a = 0
 `
                }
             ]
@@ -887,9 +886,7 @@ a = 0
                     buttonText: 'Run motor E at 50% power',
                     emoji: '🧿' ,
                     color: '#0066FF',
-                    textPython: `
-# Run motor E at 50% power
-motor.run(port.E, 550)`
+                    textPython: `motor.run(port.E, 550)`
                 }
             ]
         },
@@ -1398,9 +1395,19 @@ test for figures
                     buttonText: 'Sensors Figure',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `
-test for figures
-`
+                    textPython: ``
+                },
+            ]
+        },
+        24: {   // figures
+            colorClass: 'challenge-color',
+            snippets: [
+                {
+                    id: 'challenge9',
+                    buttonText: 'Figures',
+                    emoji: '🧿',
+                    color: '#32CD32',
+                    textPython: ``
                 },
             ]
         },

@@ -191,7 +191,8 @@
             20: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' },
             21: { label: 'Round', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
             22: { label: 'Hay', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
-            23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' }
+            23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
+            24: { label: 'Figures', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
