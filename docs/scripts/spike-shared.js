@@ -449,6 +449,12 @@
                         showChallengeImage('./images/Challenge 4 Figure.jpg', 'Challenge 4 Figure');
                         return;
                     }
+                    if (snippet?.id === 'challenge9') {
+                        if (typeof global.openFigureViewer === 'function') {
+                            global.openFigureViewer();
+                        }
+                        return;
+                    }
                     copyTextToClipboard(snippet?.textPython || '');
                 });
                 if (emojiText) {
