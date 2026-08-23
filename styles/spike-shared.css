@@ -527,15 +527,8 @@ body {
 }
 
 .figure-meta {
-    display: block;
     flex: 1;
     min-width: 0;
-}
-
-@media (max-width: 650px) {
-    .figure-meta {
-        display: none;
-    }
 }
 
 .figure-caption {
