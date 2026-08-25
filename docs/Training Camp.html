@@ -143,14 +143,14 @@
                 combined: {
                     [CAMP1_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 5, 6, 7, 8, 12],
+                        groups: [2, 5, 6, 7, 8, 20],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
                             5: ['event1', 'event6'],
                             6: ['control1', 'control2', 'control3'],
                             7: ['sensor2', 'sensor4'],
                             8: ['oper1'],
-                            12: ['gettingstarted1'],
+                            20: ['gettingstarted1'],
                         }
                     }
                 },
@@ -159,14 +159,14 @@
                     6: ['control1', 'control2', 'control6'],
                     7: ['sensor2', 'sensor4'],
                     8: ['oper1'],
-                    12: ['gettingstarted1']
+                    20: ['gettingstarted1']
                 }
             },
             camp2: {
                 combined: {
                     [CAMP2_COMBINED_ID]: {
                         colorClass: 'motors-color',
-                        groups: [1, 2, 4, 5, 6, 7, 12],
+                        groups: [1, 2, 4, 5, 6, 7, 20],
                         snippetIdsByGroup: {
                             1: ['motors1', 'motors2'],
                             2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
@@ -174,21 +174,21 @@
                             5: ['event2', 'event6'],
                             6: ['control1', 'control2'],
                             7: ['sensor3'],
-                            12: ['gettingstarted2'],
+                            20: ['gettingstarted2'],
                         }
                     }
                 },
                 groups: {
                     5: ['event2', 'event6'],
                     7: ['sensor3'],
-                    12: ['gettingstarted2']
+                    20: ['gettingstarted2']
                 }
             },
             camp3: {
                 combined: {
                     [CAMP3_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11, 12],
+                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11, 20],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
@@ -199,29 +199,29 @@
                             9: ['var1', 'var2'],
                             10: ['moremotor1', 'moremotor2'],
                             11: ['moremovement1'],
-                            12: ['gettingstarted3'],
+                            20: ['gettingstarted3'],
                         }
                     }
                 },
                 groups: {
-                        12: ['gettingstarted3']
+                        20: ['gettingstarted3']
                 }
             }
         };
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8, 12], {
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8, 20], {
                     [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp2: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 7, 12], {
+                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 7, 20], {
                     [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' }
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 12], {
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 20], {
                     [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
                 })
                 : []

@@ -911,10 +911,11 @@ motor.reset_relative_position(port.A, 0)`
                     emoji: '🧿',
                     color: '#32CD32',
                     textPython: `
-# Operator example
-a = 3
-b = 5
-result = a + b`
+    # Operator example
+    a = 3
+    b = 5
+    result = a + b
+`
                 },
                 {
                     id: 'oper2',
@@ -923,18 +924,23 @@ result = a + b`
                     color: '#32CD32',
                     textPython: `
 # Operator example
-a = 3
-b = 5
-result = a + b`
+wheel_circumference = 17.5
+degrees_in_a_circle = 360
+CM_TO_DEGREES = int(degrees_in_a_circle / wheel_circumference)
+print("CM_TO_DEGREES = ", CM_TO_DEGREES)
+`
                 },
                 {
                     id: 'oper3',
                     buttonText: 'Operator Example',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `a = 3
-b = 5
-result = a + b`
+                    textPython: `
+    # Operator example
+    a = 3
+    b = 5
+    result = a + b
+`
                 },
             ]
         },
