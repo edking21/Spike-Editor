@@ -1,6 +1,6 @@
 param(
     [string]$IndexFile = "index.html",
-    [string]$TrainingCampFile = "Training Camp.html",
+    [string]$TrainingCampFile = "training_camp.html",
     [string]$ChallengesLibraryFile = "challenges_library.html",
     [string]$StylesFile = "styles/spike-shared.css",
     [string]$ScriptsFile = "scripts/spike-shared.js",
@@ -252,7 +252,7 @@ try {
     Update-PageWithUtils -InputFile $indexInputFile -OutputFile $IndexOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $IndexOutputFile" -ForegroundColor Green
     
-    # Process Training Camp.html
+    # Process training_camp.html
     Write-Host "Processing $TrainingCampFile..." -ForegroundColor Cyan
     $trainingCampInputFile = Get-PreferredInputFile -SourceFile $TrainingCampFile -OutputFile $TrainingCampOutputFile
     Update-PageWithUtils -InputFile $trainingCampInputFile -OutputFile $TrainingCampOutputFile -UtilsReplacement $utilsReplacement

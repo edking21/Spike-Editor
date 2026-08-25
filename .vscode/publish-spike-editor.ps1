@@ -54,7 +54,7 @@ function Sync-ByNewest {
 }
 
 Sync-ByNewest -RootPath "index.html" -DocsPath "docs/index.html"
-Sync-ByNewest -RootPath "Training Camp.html" -DocsPath "docs/Training Camp.html"
+Sync-ByNewest -RootPath "training_camp.html" -DocsPath "docs/training_camp.html"
 Sync-ByNewest -RootPath "challenges_library.html" -DocsPath "docs/challenges_library.html"
 Sync-ByNewest -RootPath "Videos.html" -DocsPath "docs/Videos.html"
 Sync-ByNewest -RootPath "utils/utils.js" -DocsPath "docs/utils/utils.js"
