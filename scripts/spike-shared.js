@@ -977,7 +977,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                 }
             ]
         },
-        12: {   // Getting Started 
+        20: {   // Getting Started 
             colorClass: 'gettingstarted-color',
             snippets: [
                 {
