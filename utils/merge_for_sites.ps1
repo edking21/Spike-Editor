@@ -45,15 +45,14 @@ function Get-PreferredInputFile {
         [string]$OutputFile
     )
 
-    if ((Test-Path $OutputFile) -and ((Get-Item $OutputFile).LastWriteTime -gt (Get-Item $SourceFile).LastWriteTime)) {
+    # Always prefer the canonical source HTML. Generated files are temporary Google Sites copies
+    # and should never be fed back into the source pipeline because they can contain inlined CSS,
+    # JS, and image data URIs from a prior run.
+    if (Test-Path $OutputFile) {
         $outputPreview = Get-Content $OutputFile -Raw -Encoding UTF8
-        if ($outputPreview -match '\$12px\s+2px\s+2px\s+2px;|\$10;') {
-            Write-Host "Detected invalid CSS in generated output. Reverting to source input: $SourceFile" -ForegroundColor Yellow
-            return $SourceFile
+        if ($outputPreview -match '(?is)Temporary inlined|data:image/jpeg;base64|<style>|<script>\s*// Shared script') {
+            Write-Host "Detected temporary generated markup in $OutputFile. Reverting to source input: $SourceFile" -ForegroundColor Yellow
         }
-
-        Write-Host "Using newer output as input: $OutputFile" -ForegroundColor DarkYellow
-        return $OutputFile
     }
 
     return $SourceFile
@@ -67,32 +66,24 @@ function Update-PageWithUtils {
     )
 
     $content = Get-Content $InputFile -Raw -Encoding UTF8
-
-    # Keep generated output using external utils.js, so utils inlining can remain a temporary copy step.
     $updated = $content
-    $patternInlineUtils = '(?s)<script>\s*// Utility functions \(from utils\.js\).*?<\/script>'
-    $updated = $updated -replace $patternInlineUtils, '    <script src="./utils/utils.js"></script>'
 
-    # Normalize utils.js includes to exactly one tag.
-    $patternUtilsSrcAll = '(?im)^\s*<script\s+src="\.\/utils\/utils\.js"><\/script>\s*\r?\n?'
-    $updated = [regex]::Replace($updated, $patternUtilsSrcAll, '')
+    # Remove any previous generated script includes so the output is built from the canonical source only.
+    $updated = [regex]::Replace($updated, '(?is)\s*<script\s+src="\.?/?(?:utils/)?utils\.js"\s*>\s*</script>\s*', '')
+    $updated = [regex]::Replace($updated, '(?is)\s*<script\s+src="\.?/?scripts/spike-shared\.js"\s*>\s*</script>\s*', '')
 
-    $patternSharedSrc = '(?im)^\s*<script\s+src="\.\/scripts\/spike-shared\.js"><\/script>\s*$'
-    if ([regex]::IsMatch($updated, $patternSharedSrc)) {
-        $updated = [regex]::Replace($updated, $patternSharedSrc, '    <script src="./utils/utils.js"></script>' + "`n" + '$0', 1)
-    } else {
-        $updated = $updated -replace '(?is)</body>', ('    <script src="./utils/utils.js"></script>' + "`n</body>")
-    }
+    $scriptBlock = @'
+    <script src="./utils/utils.js"></script>
+    <script src="./scripts/spike-shared.js"></script>
+'@
+    $updated = $updated -replace '(?is)</body>', ($scriptBlock + "</body>")
 
     # Remove mobile/sidebar/top-menu/menu-links/menu-search markup for Google Sites output.
-    # Matches elements where class contains mobile-sidebar, mobile-overlay, top-menu, menu-links, or menu-search,
-    # including additional class names and arbitrary attribute ordering.
-
-    $patternMobileSidebar = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-sidebar\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
-    $patternMobileOverlay = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-overlay\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
+    $patternMobileSidebar = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-sidebar\b[^"'']*["''])[^>]*>.*?</div>\s*'
+    $patternMobileOverlay = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-overlay\b[^"'']*["''])[^>]*>.*?</div>\s*'
     $patternTopMenu = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\btop-menu\b[^"'']*["''])[^>]*>.*?(?=\s*<div\s+class=["'']left-column["'']|\s*<h1\b)'
-    $patternMenuLinks = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-links\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
-    $patternMenuSearchButton = '(?is)<button\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-search\b[^"'']*["''])[^>]*>.*?<\/button>\s*'
+    $patternMenuLinks = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-links\b[^"'']*["''])[^>]*>.*?</div>\s*'
+    $patternMenuSearchButton = '(?is)<button\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-search\b[^"'']*["''])[^>]*>.*?</button>\s*'
     $updated = $updated -replace $patternMobileSidebar, ''
     $updated = $updated -replace $patternMobileOverlay, ''
     $updated = $updated -replace $patternTopMenu, ''
@@ -100,7 +91,6 @@ function Update-PageWithUtils {
     $updated = $updated -replace $patternMenuSearchButton, ''
 
     # Home-only vertical normalization for Google Sites copy.
-    # This keeps GitHub source untouched and aligns Home start position.
     if ([System.IO.Path]::GetFileName($OutputFile) -ieq 'index_for_copy_to_sites.html') {
         $updated = $updated -replace '(?im)(padding:\s*)50px\s+2px\s+2px\s+2px\s*;', '${1}2px 2px 2px 2px;'
         $updated = $updated -replace '(?is)(\.left-column\s*\{[^}]*?\btop:\s*)48px(\s*;)', '${1}0${2}'
@@ -204,10 +194,12 @@ function Inline-FigureImagesInOutput {
 
     $content = Get-Content $OutputFile -Raw -Encoding UTF8
     $updated = $content
-    foreach ($imageFile in Get-ChildItem -Path $ImagesDirectory -File | Where-Object Extension -Match '^\.jpe?g$') {
+
+    foreach ($imageFile in Get-ChildItem -Path $ImagesDirectory -File | Where-Object { $_.Extension -match '^\.jpe?g$' -or $_.Extension -match '^\.JPE?G$' }) {
         $relativePath = './images/' + $imageFile.Name
         $base64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($imageFile.FullName))
         $dataUri = "data:image/jpeg;base64,$base64"
+
         $updated = $updated.Replace("'$relativePath'", "'$dataUri'")
         $updated = $updated.Replace('"' + $relativePath + '"', '"' + $dataUri + '"')
     }
@@ -241,29 +233,31 @@ foreach ($file in $filesToCheck) {
 # Ensure output directories exist before writing merged files
 New-OutputDirectories -OutputFiles @($IndexOutputFile, $TrainingCampOutputFile, $ChallengesLibraryOutputFile)
 
+$originalOutputContent = @{}
+
 try {
     # Read the utils.js file once
     $utilsContent = Get-Content $UtilsFile -Raw -Encoding UTF8
     $utilsReplacement = ''
-    
+
     # Process index.html
     Write-Host "Processing $IndexFile..." -ForegroundColor Cyan
     $indexInputFile = Get-PreferredInputFile -SourceFile $IndexFile -OutputFile $IndexOutputFile
     Update-PageWithUtils -InputFile $indexInputFile -OutputFile $IndexOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $IndexOutputFile" -ForegroundColor Green
-    
+
     # Process Training Camp.html
     Write-Host "Processing $TrainingCampFile..." -ForegroundColor Cyan
     $trainingCampInputFile = Get-PreferredInputFile -SourceFile $TrainingCampFile -OutputFile $TrainingCampOutputFile
     Update-PageWithUtils -InputFile $trainingCampInputFile -OutputFile $TrainingCampOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $TrainingCampOutputFile" -ForegroundColor Green
-    
+
     # Process challenges_library.html
     Write-Host "Processing $ChallengesLibraryFile..." -ForegroundColor Cyan
     $challengesLibraryInputFile = Get-PreferredInputFile -SourceFile $ChallengesLibraryFile -OutputFile $ChallengesLibraryOutputFile
     Update-PageWithUtils -InputFile $challengesLibraryInputFile -OutputFile $ChallengesLibraryOutputFile -UtilsReplacement $utilsReplacement
     Write-Host "Created $ChallengesLibraryOutputFile" -ForegroundColor Green
-    
+
     # Display file information
     Write-Host "`nFile Information:" -ForegroundColor Yellow
     Write-Host "$IndexOutputFile size: $((Get-Item $IndexOutputFile).Length) bytes" -ForegroundColor Cyan
@@ -278,7 +272,7 @@ try {
     $cssContent = $cssContent -replace '(?is)(\.left-column\s*\{[^}]*?\btop:\s*)50px(\s*;)', '${1}0px${2}'
     $jsContent = Get-Content $ScriptsFile -Raw -Encoding UTF8
     $outputFiles = @($IndexOutputFile, $TrainingCampOutputFile, $ChallengesLibraryOutputFile)
-    $originalOutputContent = @{}
+
     foreach ($outputFile in $outputFiles) {
         $originalOutputContent[$outputFile] = Get-Content $outputFile -Raw -Encoding UTF8
         Inline-UtilsJsInOutput -OutputFile $outputFile -UtilsContent $utilsContent
@@ -286,7 +280,7 @@ try {
         Inline-SharedJsInOutput -OutputFile $outputFile -JsContent $jsContent
     }
     Inline-FigureImagesInOutput -OutputFile $ChallengesLibraryOutputFile -ImagesDirectory $ImagesDirectory
-    
+
     try {
         # Ask if user wants to open the files
         $response = (Read-Host "`nOpen all files in notepad? (y/n)").Trim()
@@ -327,8 +321,9 @@ try {
     } finally {
         Restore-OriginalOutputFiles -OriginalFiles $originalOutputContent
     }
-    
+
 } catch {
+    Restore-OriginalOutputFiles -OriginalFiles $originalOutputContent
     Write-Error "Error occurred during merge process: $($_.Exception.Message)"
     exit 1
 }

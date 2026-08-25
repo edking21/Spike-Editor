@@ -39,10 +39,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <script src="./utils/utils.js"></script>
-<script src="./scripts/spike-shared.js"></script>
-    <script>
+    </div><script>
         const shared = window.SpikeShared || {};
         const { renderers = {}, snippetData = {}, colorUtils = {} } =
             (typeof shared.bootstrapPage === 'function' ? shared.bootstrapPage() : shared);
@@ -170,20 +167,7 @@
             renderAllSnippetGroups();
         });
     </script>
-</body>
+    <script src="./utils/utils.js"></script>
+    <script src="./scripts/spike-shared.js"></script></body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
