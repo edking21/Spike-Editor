@@ -982,10 +982,10 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
             snippets: [
                 {
                     id: 'gettingstarted1',
-                    buttonText: 'Training Camp1 Getting Started',
+                    buttonText: 'Training Camp Robot Shuffle Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 1 - Getting Started
+                    textPython: `# Training Robot Shuffle Getting Started
 import motor_pair, sys
 from hub import port, light_matrix
 from runloop import run
@@ -1012,10 +1012,10 @@ sys.exit()
                 },
                 {
                     id: 'gettingstarted2',
-                    buttonText: 'Training Camp2 Playing with objects',
+                    buttonText: 'Training Camp Round the Garage Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython:`# Training Camp 2 - Playing with objects
+                    textPython:`# Training Camp Round the Garage Getting Started
 import runloop, sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
@@ -1159,10 +1159,10 @@ sys.exit()
                 },
                 {
                     id: 'gettingstarted3',
-                    buttonText: 'Training Camp3 Reacting to Lines',
+                    buttonText: 'Training Camp Hay Bale Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 3 - Reacting to lines
+                    textPython: `# Training Camp Hay Bale Getting Started
 import sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
