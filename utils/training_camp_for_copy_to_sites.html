@@ -35,7 +35,10 @@
         <div class="release-info" id="release-info">
             © 2026 Spike Editor - Loading release info...
         </div>
-    </div><script>
+    </div>
+    <script src="./utils/utils.js"></script>
+<script src="./scripts/spike-shared.js"></script>
+    <script>
         const shared = window.SpikeShared || {};
         const { renderers = {}, snippetData = {}, colorUtils = {} } =
             (typeof shared.bootstrapPage === 'function'
@@ -320,7 +323,22 @@
             if (typeof fetchGitHubRelease === 'function') fetchGitHubRelease();
         });
     </script>
-    <script src="./utils/utils.js"></script>
-    <script src="./scripts/spike-shared.js"></script></body>
+</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
