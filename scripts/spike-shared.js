@@ -188,7 +188,7 @@
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
-            20: { label: 'Robot Shuffle', className: 'green-circle', bubbleLabel: 'Green Class bubble' },
+            20: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
             21: { label: 'Round', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
             22: { label: 'Hay', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
             23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
@@ -1320,7 +1320,7 @@ sys.exit()
                 },
             ]
         },
-        20: {   // robot shuffle
+        30: {   // robot shuffle
             colorClass: 'challenge-color',
             snippets: [
                 {
@@ -1359,7 +1359,7 @@ test for figures
                 },
             ]
         },
-        21: {   // round the garage
+        31: {   // round the garage
             colorchallenge: 'challenge-color',
             snippets: [
                 {
@@ -1398,7 +1398,7 @@ test for figures
                 },
             ]
         },
-        22: {   // hay bale
+        32: {   // hay bale
             colorClass: 'challenge-color',
             snippets: [
                 {
@@ -1437,7 +1437,7 @@ test for figures
                 },
             ]
         },
-        23: {   // sensor
+        33: {   // sensor
             colorClass: 'challenge-color',
             snippets: [
                 {
@@ -1481,7 +1481,7 @@ test for figures
                 },
             ]
         },
-        24: {   // figures
+        34: {   // figures
             colorClass: 'challenge-color',
             snippets: [
                 {
