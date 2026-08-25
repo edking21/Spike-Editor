@@ -911,10 +911,11 @@ motor.reset_relative_position(port.A, 0)`
                     emoji: '🧿',
                     color: '#32CD32',
                     textPython: `
-# Operator example
-a = 3
-b = 5
-result = a + b`
+    # Operator example
+    a = 3
+    b = 5
+    result = a + b
+`
                 },
                 {
                     id: 'oper2',
@@ -923,18 +924,23 @@ result = a + b`
                     color: '#32CD32',
                     textPython: `
 # Operator example
-a = 3
-b = 5
-result = a + b`
+wheel_circumference = 17.5
+degrees_in_a_circle = 360
+CM_TO_DEGREES = int(degrees_in_a_circle / wheel_circumference)
+print("CM_TO_DEGREES = ", CM_TO_DEGREES)
+`
                 },
                 {
                     id: 'oper3',
                     buttonText: 'Operator Example',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `a = 3
-b = 5
-result = a + b`
+                    textPython: `
+    # Operator example
+    a = 3
+    b = 5
+    result = a + b
+`
                 },
             ]
         },
@@ -977,15 +983,15 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                 }
             ]
         },
-        12: {   // Getting Started 
+        20: {   // Getting Started 
             colorClass: 'gettingstarted-color',
             snippets: [
                 {
                     id: 'gettingstarted1',
-                    buttonText: 'Training Camp1 Getting Started',
+                    buttonText: 'Training Camp Robot Shuffle Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 1 - Getting Started
+                    textPython: `# Training Robot Shuffle Getting Started
 import motor_pair, sys
 from hub import port, light_matrix
 from runloop import run
@@ -1012,10 +1018,10 @@ sys.exit()
                 },
                 {
                     id: 'gettingstarted2',
-                    buttonText: 'Training Camp2 Playing with objects',
+                    buttonText: 'Training Camp Round the Garage Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython:`# Training Camp 2 - Playing with objects
+                    textPython:`# Training Camp Round the Garage Getting Started
 import runloop, sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
@@ -1159,10 +1165,10 @@ sys.exit()
                 },
                 {
                     id: 'gettingstarted3',
-                    buttonText: 'Training Camp3 Reacting to Lines',
+                    buttonText: 'Training Camp Hay Bale Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Camp 3 - Reacting to lines
+                    textPython: `# Training Camp Hay Bale Getting Started
 import sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
@@ -1440,27 +1446,30 @@ test for figures
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `
-    # 1. The Driving Base tires are placed in the center of a 12” by 12” taped square at the bottom right corner of a 4’ by 4’ table surrounded by walls.
+    # 1. The Driving Base tires are placed in the center of a 12” by 12” taped square 
+    #    at the bottom right corner of a 4’ by 4’ table surrounded by walls.
 
-    # 2. The Driving Base moves forward toward the top wall of the table. 
-    #    When the force sensor is pressed, the Driving Base moves backward 6”, then waits for 2 seconds.
+    # 2. The Driving Base moves forward toward the top wall of the table. When the force 
+    #    sensor is pressed, the Driving Base moves backward 6”, then waits for 2 seconds.
 
-    # 3. The Driving Base then turns left 90 degrees and moves forward until it is 10” from the left wall of the table.
+    # 3. The Driving Base then turns left 90 degrees and moves forward until it is 10” 
+    #    from the left wall of the table.
 
-    # 4. The Driving Base turns 90 degrees to the left, moves forward toward the bottom wall of the table, 
-    #    and moves backward 4” when the force sensor is pressed.
+    # 4. The Driving Base turns 90 degrees to the left, moves forward toward the bottom  
+    #    wall of the table, and moves backward 4” when the force sensor is pressed.
 
     # 5. The Hub displays a frowny face, and the Driving Base waits for 2 seconds.
 
-    # 6. The Driving Base turns 90 degrees to the left and moves forward 10 in, then backwards 10 in, 
-    #    then repeats this movement (back and forth) until the judge waves his hand in front of the robot (6” or less) and the robot stops.
+    # 6. The Driving Base turns 90 degrees to the left and moves forward 10 in, then  
+    #    backwards 10 in, then repeats this movement (back and forth) until the judge  
+    #    waves his hand in front of the robot (6” or less) and the robot stops.
 
     # 7. The student then depresses the force sensor, and after a four second delay, 
     #    the robot moves forward toward the right wall of the table.
 
     # 8. Using the color sensor, when the Driving Base enters the 12” by 12” taped square, 
-    #    it turns 90 degrees to the left to face the top wall. The Driving Base must finish inside the taped square without touching the tape.
-
+    #    it turns 90 degrees to the left to face the top wall. The Driving Base must finish 
+    #    inside the taped square without touching the tape.
 `
                 },
                 {
