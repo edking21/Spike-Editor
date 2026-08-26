@@ -192,7 +192,7 @@
             31: { label: 'More Garage', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
             32: { label: 'More Hay Bale', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
             33: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
-            34: { label: 'Figures', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
+            34: { label: 'Figures ', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
