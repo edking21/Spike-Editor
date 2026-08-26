@@ -446,6 +446,7 @@
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
                 if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
                 if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
+                if (idCompact.startsWith('morehaybale')) return sectionRules.find(r => r.key === 'morehaybale');
                 if (idCompact.startsWith('gettingstarted')) return sectionRules.find(r => r.key === 'gettingstarted');
 
                 // fallback text match
