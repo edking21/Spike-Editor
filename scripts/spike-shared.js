@@ -188,11 +188,11 @@
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
-            20: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
-            21: { label: 'Round', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
-            22: { label: 'Hay', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
-            23: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
-            24: { label: 'Figures', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
+            30: { label: 'More Robot Shuffle', className: 'green-circle', bubbleLabel: 'GHreen Robot Shuffle bubble' },
+            31: { label: 'More Garage', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
+            32: { label: 'More Hay Bale', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
+            33: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
+            34: { label: 'Figures', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
