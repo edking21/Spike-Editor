@@ -1414,23 +1414,26 @@ test for figures
                     emoji: '🧿',
                     color: '#FFD700',
                     textPython: `
-    # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
+    # 1. The Driving Base is positioned so its tires are on the start line.
 
-    # 2. Wait 2 seconds.
+    # 2. The Driving Base moves forward and captures the first hay bale 45 cm away from the start line.
 
-    # 3. Move to Line 2, 38 cm from the Start Line, at 25% speed.
+    # 3. The Driving Base waits 2 seconds.
 
-    # 4. Move forward 20 cm to Line 3 at 75% speed.
+    # 4. The Driving Base turns right and moves (and leaves) the first hay bale into the corral 20 cm from the center line.
 
-    # 5. Wait 2 seconds.
+    # 5. The Driving Base waits 2 seconds.
 
-    # 6. Move forward at 50% speed and stop on line 4.
+    # 6. The Driving Base returns to the center line.
 
-    # 7. Wait 2 seconds.
+    # 7. The Driving Base moves forward and captures the second hay bale 25 cm away from the first hay bale.
 
-    # 8. Move backwards at 75% speed and stop on the Start Line.
+    # 8. The Driving Base waits 2 seconds.
 
-    # 9. Display a smiley face.
+    # 9. The Driving Base moves backward and places the second hay bale on the start line.
+
+    # 10. The arm moves up, and the Hub displays a smiley face.
+
 `
                 },
                 {
