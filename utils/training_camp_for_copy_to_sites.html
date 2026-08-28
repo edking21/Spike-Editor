@@ -112,9 +112,10 @@
                 combined: {
                     [CAMP1_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 5, 6, 7, 8, 12],
+                        groups: [2, 3, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
+                            3: ['light1', 'light2'],
                             5: ['event1', 'event6'],
                             6: ['control1', 'control2', 'control3'],
                             7: ['sensor2', 'sensor4'],
@@ -180,13 +181,13 @@
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8, 30, 12], {
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 5, 6, 7, 8, 30, 12], {
                     [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp2: (typeof colorUtils.getEmojiButtons === 'function')
                 ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 7, 31, 12], {
-                    [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' }
+                    [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Camp2 snippets', className: 'blue-circle' }
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
@@ -325,22 +326,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
