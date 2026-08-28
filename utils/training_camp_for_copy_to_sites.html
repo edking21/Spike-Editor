@@ -102,9 +102,9 @@
         const CAMP3_COMBINED_ID = 3001;
 
         const trainingCampOptions = [
-            { key: 'camp1', label: 'Training Camp #1 Driving Around' },
-            { key: 'camp2', label: 'Training Camp #2 Playing with Objects' },
-            { key: 'camp3', label: 'Training Camp #3 Reacting to Lines' }
+            { key: 'camp1', label: 'Training Camp Robot Shuffle' },
+            { key: 'camp2', label: 'Training Camp Round the Garage' },
+            { key: 'camp3', label: 'Training Camp Hay Bale' }
         ];
 
         const trainingCampSnippetSelections = {
@@ -180,17 +180,17 @@
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8, 12], {
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 5, 6, 7, 8, 30, 12], {
                     [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp2: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 7, 12], {
+                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 2, 4, 5, 6, 7, 31, 12], {
                     [CAMP2_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Blue Motors bubble', className: 'blue-circle' }
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 12], {
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 32, 12], {
                     [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
                 })
                 : []
@@ -325,8 +325,6 @@
     </script>
 </body>
 </html>
-
-
 
 
 

@@ -576,7 +576,8 @@
                     buttonText: 'move forward for 10 cm at 50% speed',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5), 0, velocity=int(.5 * 1100))
+                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+        0, velocity=int(.5 * 1100))
 `
                 },
                 {
@@ -992,15 +993,11 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     buttonText: 'Training Camp Robot Shuffle Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Robot Shuffle Getting Started
+                    textPython: `# Training Camp Robot Shuffle Getting Started
 import motor_pair, sys
 from hub import port, light_matrix
 from runloop import run
 from time import sleep
-
-# Conversions
-CM_TO_DEGREES = 21
-INCHES_TO_DEGREES = 53
 
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
@@ -1028,10 +1025,6 @@ import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button
 from runloop import run, until
 from time import sleep, sleep_ms
-
-# Constants
-CM_TO_DEGREES = 21
-INCHES_TO_DEGREES = 53
 
 # Sensor Ports
 force_port = port.A
