@@ -1321,7 +1321,7 @@ sys.exit()
                     id: 'challenge1',
                     buttonText: 'Robot Shuffle Description',
                     emoji: '🧿',
-                    color: '#32CD32',
+                    color: '#FFD700',
                     textPython: `
     # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
 
@@ -1346,7 +1346,7 @@ sys.exit()
                     id: 'challenge2',
                     buttonText: 'Robot Shuffle Figure',
                     emoji: '🧿',
-                    color: '#32CD32',
+                    color: '#FFD700',
                     textPython: `
 test for figures
 `
