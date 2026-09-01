@@ -189,9 +189,9 @@
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
             30: { label: 'More Robot Shuffle', className: 'yellow-circle', bubbleLabel: 'Yellow Robot Shuffle bubble' },
-            31: { label: 'More Garage', className: 'blue-circle', bubbleLabel: 'Blue Round bubble' },
+            31: { label: 'More Garage', className: 'yellow-circle', bubbleLabel: 'Yellow Round bubble' },
             32: { label: 'More Hay Bale', className: 'yellow-circle', bubbleLabel: 'Yellow Hay bubble' },
-            33: { label: 'Sensors', className: 'red-circle', bubbleLabel: 'Red Sensors bubble' },
+            33: { label: 'More Sensors', className: 'yellow-circle', bubbleLabel: 'Yellow Sensors bubble' },
             34: { label: 'Figures ', className: 'green-circle', bubbleLabel: 'Green Figures bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
@@ -447,6 +447,7 @@
                 if (idCompact.startsWith('moremotors')) return sectionRules.find(r => r.key === 'moremotors');
                 if (idCompact.startsWith('moremovement')) return sectionRules.find(r => r.key === 'moremovement');
                 if (idCompact.startsWith('morehaybale')) return sectionRules.find(r => r.key === 'morehaybale');
+                if (idCompact.startsWith('moresensors')) return sectionRules.find(r => r.key === 'moresensors');
                 if (idCompact.startsWith('gettingstarted')) return sectionRules.find(r => r.key === 'gettingstarted');
 
                 // fallback text match
@@ -1020,16 +1021,10 @@ sys.exit()
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython:`# Training Camp Round the Garage Getting Started
-import runloop, sys, motor_pair, motor
-import color, color_sensor, distance_sensor, force_sensor
-from hub import port, motion_sensor,button
-from runloop import run, until
-from time import sleep, sleep_ms
-
-# Sensor Ports
-force_port = port.A
-distance_port = port.B
-color_port = port.F
+import motor_pair, sys
+from hub import port, light_matrix
+from runloop import run
+from time import sleep
 
 # Motor Ports
 left_motor = port.C
@@ -1040,118 +1035,12 @@ arm_motor = port.E
 motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
 
 
-#########################$##############################################
-# ☀️ is the distance sensor seeing something close
-########################################################################
-def is_near(distance_threshold=100): # 100mm (3.937 inches)
-    """
-    Examples:
-        if..                    if is_near():
-        repeat until            while not (is_near()):
-        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
-        wait until..            await until (is_near()):
-        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
-    """
-    distance = distance_sensor.distance(distance_port)
-
-    if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
-        return False
-
-    # print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-
-    return distance < distance_threshold
-
-
-########################################################################
-# 🛑 is_color_blue - Function to check if the color sensor sees red
-########################################################################
-def is_color_blue():
-    """
-    Examples:
-        if..                    if is_blue():
-        repeat until            while not (is_blue()):
-        wait until..            await until (is_blue()):
-    """
-    return color_sensor.color(color_port) == color.RED
-
-
-########################################################################
-# 🛑 is_pressed - Function to check if the force sensor pressed
-########################################################################
-def is_pressed():
-    """
-    Examples:
-        with if             if is_pressed():
-        with wait until     await until(is_pressed):
-        with repeat until   while not (is_pressed()):
-    """
-    """
-    Examples:
-        if..                    if is_presses():
-        repeat until            while not (is_presses()):
-        wait until..            await until (is_presses()):
-    """
-    return force_sensor.pressed(force_port)
-
-
-########################################################################
-# 🤖 Lower and raise the arm
-########################################################################
-async def lower_and_raise_the_arm():
-
-    # Go shortest path to position -75 then to back to 0
-    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(port.E, -75, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)
-
-
-########################################################################
-# 🤖 when force sensor pressed 
-########################################################################
-async def when_force_sensor_pressed():
-
-    if button.pressed(button.LEFT):
-
-        motor_pair.move(motor_pair.PAIR_1, 0)
-
-        await until (is_pressed)
-
-        # backup 10 cm
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-        sleep(.2)
-
-
-########################################################################
-# 🤖 when right button pressed detect near
-########################################################################
-async def when_right_button_pressed():
-
-    if button.pressed(button.RIGHT):
-
-        motor_pair.move(motor_pair.PAIR_1, 0)
-
-        await until (is_near)
-
-        # backup 10 cm
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-        sleep(.2)
-
-
 ########################################################################
 # 🤖 main
 ########################################################################
 async def main():
 
-    await lower_and_raise_the_arm()
-
-    while True:
-
-        # Run all functions concurrently as events
-        run(
-            when_left_button_pressed(),
-            when_force_sensor_pressed(),
-        )
+    await light_matrix.write("Hi!")
 
 run(main())
 sys.exit()
@@ -1199,15 +1088,90 @@ def is_near(distance_threshold=100): # 100mm (3.937 inches)
         wait until..            await until (is_near()):
         wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
     """
-    distance = distance_sensor.distance(distance_port)
+    return distance_sensor.distance(distance_port) < distance_threshold
 
-    if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
-        return False
 
-    # print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
+########################################################################
+# 🛑 is the color sensor seeing blue
+########################################################################
+def is_blue():
+    """
+    Examples:
+        if                  if is_blue():
+        wait until          await until(is_blue):
+        repeat until        while not (is_blue()):
+    """
+    return color_sensor.color(color_port) == color.BLUE
 
-    return distance < distance_threshold
+
+########################################################################
+# 🛑 is the force sensor pressed
+########################################################################
+def is_pressed():
+    """
+    Examples:
+        if                  if is_pressed():
+        wait until          await until(is_pressed):
+        repeat until        while not (is_pressed()):
+    """
+    return force_sensor.pressed(force_port)
+
+
+########################################################################
+# 🤖 main
+########################################################################
+async def main():
+
+    await light_matrix.write("Hi!")
+        )
+
+run(main())
+sys.exit()
+`
+                },
+                {
+                    id: 'gettingstarted4',
+                    buttonText: 'Training Camp Sensors Getting Started',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Training Sensors Getting Started
+import sys, motor_pair, motor
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button
+from runloop import run, until
+from time import sleep, sleep_ms
+
+# Constants
+CM_TO_DEGREES = 21
+INCHES_TO_DEGREES = 53
+
+# Sensor ports
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+
+# Motor Ports
+left_motor = port.C 
+right_motor = port.D 
+arm_motor = port.E 
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
+
+
+########################################################################
+# ☀️ is the distance sensor seeing something close
+########################################################################
+def is_near(distance_threshold=100): # 100mm (3.937 inches) 
+    """
+    Examples:
+        if..                    if is_near():
+        repeat until            while not (is_near()):
+        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
+        wait until..            await until (is_near()):
+        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
+    """
+    return distance_sensor.distance(distance_port) < distance_threshold
 
 
 ########################################################################
@@ -1312,6 +1276,88 @@ run(main())
 sys.exit()
 `
                 },
+                {
+                    id: 'gettingstarted_Save_button_presses',
+                    buttonText: 'Training Camp save Getting Started',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: `# Training Sensors Getting Started
+import sys, motor_pair, motor
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button
+from runloop import run, until
+from time import sleep, sleep_ms
+
+# Constants
+CM_TO_DEGREES = 21
+INCHES_TO_DEGREES = 53
+
+# Sensor ports
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+
+# Motor Ports
+left_motor = port.C 
+right_motor = port.D 
+arm_motor = port.E 
+
+# Connect two motors together so they work as a team
+motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
+
+
+########################################################################
+# ☀️ is the distance sensor seeing something close
+########################################################################
+def is_near(distance_threshold=100): # 100mm (3.937 inches) 
+    """
+    Examples:
+        if..                    if is_near():
+        repeat until            while not (is_near()):
+        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
+        wait until..            await until (is_near()):
+        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
+    """
+    return distance_sensor.distance(distance_port) < distance_threshold
+
+
+########################################################################
+# 🛑 is the color sensor seeing blue
+########################################################################
+def is_blue():
+    """
+    Examples:
+        if                  if is_blue():
+        wait until          await until(is_blue):
+        repeat until        while not (is_blue()):
+    """
+    return color_sensor.color(color_port) == color.BLUE
+
+
+########################################################################
+# 🛑 is the force sensor pressed
+########################################################################
+def is_pressed():
+    """
+    Examples:
+        if                  if is_pressed():
+        wait until          await until(is_pressed):
+        repeat until        while not (is_pressed()):
+    """
+    return force_sensor.pressed(force_port)
+
+
+########################################################################
+# 🤖 main
+########################################################################
+async def main():
+
+    await light_matrix.write("Hi!")
+
+run(main())
+sys.exit()
+`
+                },
             ]
         },
         30: {   // robot shuffle
@@ -1360,7 +1406,7 @@ test for figures
                     id: 'challenge3',
                     buttonText: 'Round the Garage Description',
                     emoji: '🧿',
-                    color: '#0066FF',
+                    color: '#FFD700',
                     textPython: `
     # 1. A kit box will be placed in the center of a 4’ by 4’ table with raised sides.
  
@@ -1391,7 +1437,7 @@ test for figures
                     id: 'challenge4',
                     buttonText: 'Round the Garage Figure',
                     emoji: '🧿',
-                    color: '#0066FF',
+                    color: '#FFD700',
                     textPython: `
 test for figures
 `
@@ -1447,7 +1493,7 @@ test for figures
                     id: 'challenge7',
                     buttonText: 'Sensors Description',
                     emoji: '🧿',
-                    color: '#CC0000',
+                    color: '#FFD700',
                     textPython: `
     # 1. The Driving Base tires are placed in the center of a 12” by 12” taped square 
     #    at the bottom right corner of a 4’ by 4’ table surrounded by walls.
@@ -1479,7 +1525,7 @@ test for figures
                     id: 'challenge8',
                     buttonText: 'Sensors Figure',
                     emoji: '🧿',
-                    color: '#CC0000',
+                    color: '#FFD700',
                     textPython: ``
                 },
             ]
