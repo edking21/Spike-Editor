@@ -1428,8 +1428,8 @@ test for figures
     #    winking face, signifying the completion of the challenge.
  
     # Note: Both tires should finish inside the taped square. In addition, the Driving Base is not 
-    #   allowed to touch the kit box or the sides of the table as it moves. Use the challenge figure 
-    #   for help with the setup of this course.
+    #    allowed to touch the kit box or the sides of the table as it moves. Use the challenge figure 
+    #    for help with the setup of this course.
 
 `
                 },
