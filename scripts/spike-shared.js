@@ -1438,9 +1438,7 @@ test for figures
                     buttonText: 'Round the Garage Figure',
                     emoji: '🧿',
                     color: '#FFD700',
-                    textPython: `
-test for figures
-`
+                    textPython: ``
                 },
             ]
         },
