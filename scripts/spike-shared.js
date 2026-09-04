@@ -501,7 +501,7 @@
                         return;
                     }
                     if (snippet?.id === 'challenge2') {
-                        showChallengeImage('./images/Challenge 1 Figure.jpg', 'Challenge 1 Figure');
+                        showChallengeImage('./images/challenge-1-figure.jpg', 'Challenge 1 Figure');
                         return;
                     }
                     if (snippet?.id === 'challenge4') {

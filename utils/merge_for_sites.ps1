@@ -285,7 +285,9 @@ try {
         Inline-SharedCssInOutput -OutputFile $outputFile -CssContent $cssContent
         Inline-SharedJsInOutput -OutputFile $outputFile -JsContent $jsContent
     }
-    Inline-FigureImagesInOutput -OutputFile $ChallengesLibraryOutputFile -ImagesDirectory $ImagesDirectory
+    foreach ($outputFile in $outputFiles) {
+        Inline-FigureImagesInOutput -OutputFile $outputFile -ImagesDirectory $ImagesDirectory
+    }
     
     try {
         # Ask if user wants to open the files
