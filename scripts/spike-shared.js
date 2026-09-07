@@ -1084,10 +1084,13 @@ sys.exit()
                     textPython: `# Training Camp Hay Bale Getting Started
 import sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
-from hub import port, motion_sensor,button
+from hub import port, motion_sensor, button, light_matrix
 from runloop import run, until
 from time import sleep, sleep_ms
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+force_port = port.A
+distance_port = port.B
+color_port = port.F
 
 
 ########################################################################
@@ -1096,6 +1099,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 async def main():
 
     await light_matrix.write("Hi!")
+
 
 ########################################################################
 # ☀️ is the distance sensor seeing something close
@@ -1120,7 +1124,7 @@ def is_blue():
     Examples:
         if                  if is_blue():
         wait until          await until(is_blue):
-        repeat until        while not (is_blue()):
+        repeat until..      while not (is_blue()):
     """
     return color_sensor.color(color_port) == color.BLUE
 
@@ -1133,7 +1137,7 @@ def is_pressed():
     Examples:
         if                  if is_pressed():
         wait until          await until(is_pressed):
-        repeat until        while not (is_pressed()):
+        repeat until..      while not (is_pressed()):
     """
     return force_sensor.pressed(force_port)
 
@@ -1180,26 +1184,21 @@ sys.exit()
                     textPython: `# Training Sensors Getting Started
 import sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
-from hub import port, motion_sensor,button
+from hub import port, motion_sensor,button, light_matrix
 from runloop import run, until
 from time import sleep, sleep_ms
-
-# Constants
-CM_TO_DEGREES = 21
-INCHES_TO_DEGREES = 53
-
-# Sensor ports
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 force_port = port.A
 distance_port = port.B
 color_port = port.F
 
-# Motor Ports
-left_motor = port.C 
-right_motor = port.D 
-arm_motor = port.E 
 
-# Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
+########################################################################
+# 🤖 main
+########################################################################
+async def main():
+
+    await light_matrix.write("Hi!")
 
 
 ########################################################################
@@ -1225,7 +1224,7 @@ def is_blue():
     Examples:
         if                  if is_blue():
         wait until          await until(is_blue):
-        repeat until        while not (is_blue()):
+        repeat until..      while not (is_blue()):
     """
     return color_sensor.color(color_port) == color.BLUE
 
@@ -1238,7 +1237,7 @@ def is_pressed():
     Examples:
         if                  if is_pressed():
         wait until          await until(is_pressed):
-        repeat until        while not (is_pressed()):
+        repeat until..      while not (is_pressed()):
     """
     return force_sensor.pressed(force_port)
 
@@ -1300,20 +1299,6 @@ async def line_follower_bang_bang():
         
     motor_pair.stop(motor_pair.PAIR_1)
 
-########################################################################
-# 🤖 main
-########################################################################
-async def main():
-
-    await line_follower_bang_bang()
-
-    while True:
-
-        # Run all functions concurrently as events
-        run(
-            when_left_button_pressed(),
-            when_right_button_pressed(),
-        )
 
 run(main())
 sys.exit()
