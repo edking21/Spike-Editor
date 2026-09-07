@@ -578,7 +578,7 @@
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
-        0, velocity=int(.5 * 1100))
+        0, velocity=int(.2 * 1100))
 `
                 },
                 {
@@ -642,7 +642,7 @@
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `    light_matrix.show_image(light_matrix.IMAGE_SMILE)
-    sleep(2)
+    sleep_ms(2000)
 `
                 },
                 {
@@ -662,7 +662,7 @@ blinking_eyes()`
                     textPython: `
 # Turn On Angry Face For 2 Seconds
 light_matrix.show_image(light_matrix.IMAGE_ANGRY)
-sleep(2)`
+sleep_ms(2000)`
                 },
                 {
                     id: 'light4',
@@ -789,7 +789,7 @@ when`
                     buttonText: 'Wait 1 seconds',
                     emoji: '',
                     color: '#DAA520',
-                    textPython: `    sleep(1)
+                    textPython: `    sleep_ms(1000)
 `
                 },
                 {
@@ -1021,10 +1021,10 @@ sys.exit()
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython:`# Training Camp Round the Garage Getting Started
-import motor_pair, sys
-from hub import port, light_matrix
-from runloop import run
-from time import sleep
+import motor_pair, sys, motor
+from hub import port, light_matrix, motion_sensor
+from runloop import run, until
+from time import sleep_ms
 
 # Motor Ports
 left_motor = port.C
@@ -1036,11 +1036,43 @@ motor_pair.pair(motor_pair.PAIR_1, left_motor, right_motor)
 
 
 ########################################################################
+# 🤖 turn_90
+########################################################################
+async def turn_90(direction):
+    motion_sensor.reset_yaw(0)
+    sleep_ms(100)
+
+    if direction == "left":
+        steering = -100
+        target_reached = lambda: motion_sensor.tilt_angles()[0] >= 873
+
+    elif direction == "right":
+        steering = 100
+        target_reached = lambda: motion_sensor.tilt_angles()[0] <= -873
+
+    else:
+        raise ValueError("direction must be 'left' or 'right'")
+
+    motor_pair.move(
+        motor_pair.PAIR_1,
+        steering,
+        velocity=150
+    )
+
+    await until(target_reached)
+
+    motor_pair.stop(motor_pair.PAIR_1, stop=motor.BRAKE)
+    sleep_ms(500)
+
+########################################################################
 # 🤖 main
 ########################################################################
 async def main():
 
-    await light_matrix.write("Hi!")
+    await turn_90("left")
+    
+    await turn_90("right")
+
 
 run(main())
 sys.exit()
@@ -1229,7 +1261,7 @@ async def when_left_button_pressed():
 
         # backup 10 cm
         await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-        sleep(.2)
+        sleep_ms(200)
 
 
 ########################################################################
@@ -1411,7 +1443,8 @@ test for figures
     # 1. A kit box will be placed in the center of a 4’ by 4’ table with raised sides.
  
     # 2. The kit box will be positioned such that the short sides of the box are closer 
-    #    to the top and bottom of the table, and the long sides of the box are closer to the left and right sides.
+    #    to the top and bottom of the table, and the long sides of the box are closer 
+    #    to the left and right sides.
  
     # 3. A 12” by 12” square will be taped in the bottom left corner of the table and serve
     #    as the starting point for the Driving Base.
