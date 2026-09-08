@@ -1086,17 +1086,6 @@ sys.exit()
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `# Training Camp Hay Bale Getting Started
-import sys, motor_pair, motor
-import color, color_sensor, distance_sensor, force_sensor
-from hub import port, motion_sensor, button, light_matrix
-from runloop import run, until
-from time import sleep, sleep_ms
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-force_port = port.A
-distance_port = port.B
-color_port = port.F
-
-
 ########################################################################
 # 🤖 main
 ########################################################################
@@ -1105,49 +1094,26 @@ async def main():
     await light_matrix.write("Hi!")
 
 
-########################################################################
-# ☀️ is the distance sensor seeing something close
-########################################################################
-def is_near(distance_threshold=100): # 100mm (3.937 inches) 
-    """
-    Examples:
-        if..                    if is_near():
-        repeat until            while not (is_near()):
-        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
-        wait until..            await until (is_near()):
-        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
-    """
-    distance = distance_sensor.distance(distance_port)
-    if distance == -1:
-        print("Error: distance sensor returned -1")
-        return False
-    return distance < distance_threshold
-
 
 ########################################################################
-# 🛑 is the color sensor seeing blue
+# ☀️ initilize hay bale
 ########################################################################
-def is_blue():
-    """
-    Examples:
-        if                  if is_blue():
-        wait until          await until(is_blue):
-        repeat until..      while not (is_blue()):
-    """
-    return color_sensor.color(color_port) == color.BLUE
+import sys, motor_pair, motor
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button, light_matrix
+from runloop import run, until
+from time import sleep, sleep_ms
 
+# Ports
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+arm_motor = port.E
 
-########################################################################
-# 🛑 is the force sensor pressed
-########################################################################
-def is_pressed():
-    """
-    Examples:
-        if                  if is_pressed():
-        wait until          await until(is_pressed):
-        repeat until..      while not (is_pressed()):
-    """
-    return force_sensor.pressed(force_port)
+# Constants
+CM_TO_DEGREES = int(360/17.5)   # degrees_in_wheel:360    cm_in_wheel circumference:17.5
+CM_TO_INCHES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
 
 
 ########################################################################
@@ -1195,7 +1161,7 @@ sys.exit()
 ########################################################################
 async def main():
     
-
+    await light_matrix.write("Hi!")
 
 
 
