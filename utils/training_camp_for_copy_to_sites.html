@@ -138,7 +138,7 @@
                 combined: {
                     [CAMP2_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 5, 5, 6, 7, 8, 12],
+                        groups: [2, 3, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
@@ -159,7 +159,7 @@
                 combined: {
                     [CAMP3_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11, 12],
+                        groups: [2, 3, 5, 6, 7, 8, 10, 11, 12],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
@@ -167,7 +167,6 @@
                             6: ['control1', 'control2'],
                             7: ['sensor1', 'sensor2'],
                             8: ['oper1', 'oper2','oper3'],
-                            9: ['var1', 'var2'],
                             10: ['moremotor1', 'moremotor2'],
                             11: ['moremovement1'],
                             12: ['gettingstarted3'],
@@ -182,7 +181,7 @@
                 combined: {
                     [CAMP4_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 9, 10, 11, 12],
+                        groups: [2, 3, 5, 6, 7, 8, 10, 11, 12],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
@@ -190,7 +189,6 @@
                             6: ['control1', 'control2'],
                             7: ['sensor1', 'sensor2'],
                             8: ['oper1', 'oper2','oper3'],
-                            9: ['var1', 'var2'],
                             10: ['moremotor1', 'moremotor2'],
                             11: ['moremovement1'],
                             12: ['gettingstarted4'],
@@ -215,12 +213,12 @@
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 32, 12], {
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 10, 11, 32, 12], {
                     [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp4: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP4_COMBINED_ID, 3, 5, 6, 7, 8, 9, 10, 11, 33, 12], {
+                ? colorUtils.getEmojiButtons([CAMP4_COMBINED_ID, 3, 5, 6, 7, 8, 10, 11, 33, 12], {
                     [CAMP4_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp4 snippets', className: 'pink-circle' }
                 })
                 : [],
@@ -355,10 +353,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
 

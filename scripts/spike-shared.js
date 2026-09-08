@@ -808,7 +808,8 @@ when`
                     textPython: `
     # Repeat 10 times
     for i in range(10):
-         # <your code here>`
+         # <your code here>
+`
                 },
                 {
                     id: 'control3',
@@ -817,7 +818,8 @@ when`
                     color: '#DAA520',
                     textPython: `
     # Forever
-    while True:`
+    while True:
+`
                 },
                 {
                     id: 'control2',
@@ -826,16 +828,18 @@ when`
                     color: '#DAA520',
                     textPython: `
     # wait until 
-    await until # <your sensor here>`
+    await until # <your sensor here>
+`
                 },
                 {
                     id: 'control3',
-                    buttonText: `repeat until    ${ICON_HEX} `,
+                    buttonText: `wait until    ${ICON_HEX} `,
                     emoji: '',
                     color: '#DAA520',
                     textPython: `
-    # Repeat until
-    while # <your sensor here>`
+    # Wait until condition 
+    await run.until # <your sensor here>
+`
                 },
                 {
                     id: 'control6',
@@ -1113,7 +1117,11 @@ def is_near(distance_threshold=100): # 100mm (3.937 inches)
         wait until..            await until (is_near()):
         wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
     """
-    return distance_sensor.distance(distance_port) < distance_threshold
+    distance = distance_sensor.distance(distance_port)
+    if distance == -1:
+        print("Error: distance sensor returned -1")
+        return False
+    return distance < distance_threshold
 
 
 ########################################################################
@@ -1181,24 +1189,65 @@ sys.exit()
                     buttonText: 'Training Camp Sensors Getting Started',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Training Sensors Getting Started
+                    textPython: `# Training Camp Sensors Getting Started
+########################################################################
+# 🤖 main
+########################################################################
+async def main():
+    
+
+
+
+
+########################################################################
+# ☀️ initilize sensors
+########################################################################
 import sys, motor_pair, motor
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button, light_matrix
 from runloop import run, until
 from time import sleep, sleep_ms
+
+# Ports
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 force_port = port.A
 distance_port = port.B
 color_port = port.F
+arm_motor = port.E
+
+# Constants
+CM_TO_DEGREES = int(360/17.5)   # degrees_in_wheel:360    cm_in_wheel circumference:17.5
+CM_TO_INCHES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
 
 
 ########################################################################
-# 🤖 main
+# 🤖 turn_90
 ########################################################################
-async def main():
+async def turn_90(direction):
+    motion_sensor.reset_yaw(0)
+    sleep_ms(100)
 
-    await light_matrix.write("Hi!")
+    if direction == "left":
+        steering = -100
+        target_reached = lambda: motion_sensor.tilt_angles()[0] >= 873
+
+    elif direction == "right":
+        steering = 100
+        target_reached = lambda: motion_sensor.tilt_angles()[0] <= -873
+
+    else:
+        raise ValueError("direction must be 'left' or 'right'")
+
+    motor_pair.move(
+        motor_pair.PAIR_1,
+        steering,
+        velocity=150
+    )
+
+    await until(target_reached)
+
+    motor_pair.stop(motor_pair.PAIR_1, stop=motor.BRAKE)
+    sleep_ms(500)
 
 
 ########################################################################
@@ -1208,12 +1257,17 @@ def is_near(distance_threshold=100): # 100mm (3.937 inches)
     """
     Examples:
         if..                    if is_near():
-        repeat until            while not (is_near()):
+        wait until..            await runloop.until (is_near):  # no parentheses
+        wait until lambda...    await runloop.until (lambda: is_near(150)): # use lambda to override 100
+        repeat until            while not (is_near()):  # with parentheses
         repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
-        wait until..            await until (is_near()):
-        wait until lambda...    await until (lambda: is_near(150)): # use lambda to override 100
     """
-    return distance_sensor.distance(distance_port) < distance_threshold
+    distance = distance_sensor.distance(distance_port)
+    if distance == -1:
+        print("Warning : distance sensor returned -1")
+        return False
+    print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance /25.4))
+    return distance < distance_threshold
 
 
 ########################################################################
@@ -1243,35 +1297,35 @@ def is_pressed():
 
 
 ########################################################################
-# 🤖 when_right_button_pressed Lower and raise the arm
+# 🤖 when_left_button_pressed_lower_and_raise_the_arm
 ########################################################################
-async def when_right_button_pressed():
+async def when_left_button_pressed_lower_and_raise_the_arm():
+    await until(lambda: bool(button.pressed(button.LEFT)) != 0)
+    sleep_ms(1000)
 
-    if button.pressed(button.RIGHT):
+    # Go shortest path to position -40 degrees then back to 0
+    await motor.run_to_absolute_position(arm_motor, 0, 100, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor, -40, 100, direction=motor.SHORTEST_PATH)
+    sleep_ms(200)
 
-        velocity = 100      # degrees per second
-
-        # Go shortest path to position -40 degrees then back to 0
-        await motor.run_to_absolute_position(arm_motor, 0, velocity, direction=motor.SHORTEST_PATH)
-        await motor.run_to_absolute_position(arm_motor, -40, velocity, direction=motor.SHORTEST_PATH)
-        sleep_ms(200)
-        await motor.run_to_absolute_position(arm_motor, 0, velocity, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor, 0, 100, direction=motor.SHORTEST_PATH)
 
 
 ########################################################################
-# 🤖 when left button pressed detect blue line
+# 🤖 when_right_button_pressed_detect_blue_line
 ########################################################################
-async def when_left_button_pressed():
+async def when_right_button_pressed_detect_blue_line():
+    await until(lambda: bool(button.pressed(button.RIGHT)) != 0)
+    sleep_ms(1000)
 
-    if button.pressed(button.LEFT):
+    # start moving forward
+    motor_pair.move(motor_pair.PAIR_1, 0)
 
-        motor_pair.move(motor_pair.PAIR_1, 0)
+    await until (is_blue)
 
-        await until (is_blue)
-
-        # backup 10 cm
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-        sleep_ms(200)
+    # backup 10 cm
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
+    sleep_ms(200)
 
 
 ########################################################################
