@@ -578,7 +578,7 @@
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
-        0, velocity=int(.2 * 1100))
+        0, velocity=int(.5 * 1100))
 `
                 },
                 {
@@ -586,23 +586,18 @@
                     buttonText: 'start moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 0)
+                    textPython: `    
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0)
 `
                 },
                 {
                     id: 'move3',
-                    buttonText: 'turn right 90 degrees',
+                    buttonText: 'turn 90 degrees',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await turn_90("right")
-`
-                },
-                {
-                    id: 'move4',
-                    buttonText: 'turn left 90 degrees',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    await turn_90("left")
+                    textPython: `    # turn 90 degrees
+    await turn_90("right")
 `
                 },
                 {
@@ -618,7 +613,79 @@
                     buttonText: 'stop moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    motor_pair.stop(motor_pair.PAIR_1)
+                    textPython: `    
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
+`
+                },
+                {
+                    id: 'move7',
+                    buttonText: 'set movement speed to 20%',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `    movement_speed = int(0.2 * 1100)
+`
+                },
+                {
+                    id: 'move8',
+                    buttonText: 'set movement motors to C+D',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `
+    # set movement motors to C+D
+    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+`
+                }
+            ]
+        },
+        21: {   // movement
+            colorClass: 'movement-color',
+            snippets: [
+                {
+                    id: 'move1',
+                    buttonText: 'move forward for 10 cm at 20% speed',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `
+        # move forward for 10 cm at 20% speed    
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+            0, velocity=int(.2 * 1100))
+`
+                },
+                {
+                    id: 'move2',
+                    buttonText: 'start moving',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `    
+        # start moving
+        motor_pair.move(motor_pair.PAIR_1, 0)
+`
+                },
+                {
+                    id: 'move3',
+                    buttonText: 'turn 90 degrees',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `    await turn_90("right")
+`
+                },
+                {
+                    id: 'move5',
+                    buttonText: 'start moving right 30',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 30, velocity=220) 
+`
+                },
+                {
+                    id: 'move6',
+                    buttonText: 'stop moving',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython: `    
+        # stop moving
+        motor_pair.stop(motor_pair.PAIR_1)
 `
                 },
                 {
@@ -822,23 +889,22 @@ when`
 `
                 },
                 {
-                    id: 'control2',
+                    id: 'control4',
                     buttonText: `if    ${ICON_HEX} then`,
                     emoji: '',
                     color: '#DAA520',
                     textPython: `
-    # wait until 
-    await until # <your sensor here>
+    if # <your condition or function here>
 `
                 },
                 {
-                    id: 'control3',
+                    id: 'control5',
                     buttonText: `wait until    ${ICON_HEX} `,
                     emoji: '',
                     color: '#DAA520',
                     textPython: `
-    # Wait until condition 
-    await run.until # <your sensor here>
+    # wait until "wait here until a condition is true"
+    await runloop.until # <your condition sensor here>
 `
                 },
                 {
@@ -847,7 +913,9 @@ when`
                     emoji: '',
                     color: '#DAA520',
                     textPython: `
-    if # <your condition or function here>`
+    # repeat until "repeat the block until function is true"
+    while not # <your sensor function here> 
+`
                 },
             ]
         },
@@ -880,14 +948,17 @@ when`
                     buttonText: 'is color red (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `is_color_red():`
+                    textPython: `is_color_red():
+        # your repeat block here
+`
                 },
                 {
                     id: 'sensor5',
                     buttonText: 'is pressed (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `is_pressed():`
+                    textPython: `is_pressed():
+        # your repeat block here`
                 },
                 {
                     id: 'sensor6',
@@ -895,7 +966,8 @@ when`
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `is_near():
-    # your code here`
+        # your repeat block here
+        `
                 },
                 {
                     id: 'fn6b',
@@ -1007,19 +1079,34 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: `# Training Camp Robot Shuffle Getting Started
-import motor_pair, sys
-from hub import port, light_matrix
-from runloop import run
-from time import sleep
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-
 ########################################################################
 # 🤖 main
 ########################################################################
 async def main():
     
     await light_matrix.write("Hi!")
+
+
+
+########################################################################
+# ☀️ initilize robot shuffle
+########################################################################
+import sys, motor_pair, motor, runloop
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button, light_matrix
+from runloop import run, until
+from time import sleep, sleep_ms
+
+# Ports
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+arm_motor = port.E
+
+# Constants
+CM_TO_DEGREES = int(360/17.5)   # degrees_in_wheel:360    cm_in_wheel circumference:17.5
+INCHES_TO_DEGREES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
 
 run(main())
 sys.exit()
@@ -1031,13 +1118,6 @@ sys.exit()
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython:`# Training Camp Round the Garage Getting Started
-import motor_pair, sys, motor
-from hub import port, light_matrix, motion_sensor
-from runloop import run, until
-from time import sleep_ms
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-
 ########################################################################
 # 🤖 main
 ########################################################################
@@ -1045,6 +1125,28 @@ async def main():
 
     await light_matrix.write("Hi!")
 
+
+
+########################################################################
+# ☀️ initilize round the garage
+########################################################################
+import sys, motor_pair, motor, runloop
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button, light_matrix
+from runloop import run, until
+from time import sleep, sleep_ms
+
+# Ports
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+arm_motor = port.E
+
+# Constants
+CM_TO_DEGREES = int(360/17.5)   # degrees_in_wheel:360    cm_in_wheel circumference:17.5
+INCHES_TO_DEGREES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
+ 
 ########################################################################
 # 🤖 turn_90
 ########################################################################
@@ -1098,7 +1200,7 @@ async def main():
 ########################################################################
 # ☀️ initilize hay bale
 ########################################################################
-import sys, motor_pair, motor
+import sys, motor_pair, motor, runloop
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button, light_matrix
 from runloop import run, until
@@ -1113,7 +1215,7 @@ arm_motor = port.E
 
 # Constants
 CM_TO_DEGREES = int(360/17.5)   # degrees_in_wheel:360    cm_in_wheel circumference:17.5
-CM_TO_INCHES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
+INCHES_TO_DEGREES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
 
 
 ########################################################################
@@ -1183,7 +1285,7 @@ arm_motor = port.E
 
 # Constants
 CM_TO_DEGREES = int(360/17.5)   # degrees_in_wheel:360    cm_in_wheel circumference:17.5
-CM_TO_INCHES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
+INCHES_TO_DEGREES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel circumference:6.89
 
 
 ########################################################################
@@ -1219,14 +1321,14 @@ async def turn_90(direction):
 ########################################################################
 # ☀️ is the distance sensor seeing something close
 ########################################################################
-def is_near(distance_threshold=100): # 100mm (3.937 inches) 
+def is_near(distance_threshold=200): # 200mm (7.874 inches) 
     """
     Examples:
         if..                    if is_near():
         wait until..            await runloop.until (is_near):  # no parentheses
-        wait until lambda...    await runloop.until (lambda: is_near(150)): # use lambda to override 100
-        repeat until            while not (is_near()):  # with parentheses
-        repeat until lambda.    while not (lambda: is_near(150)): # use lambda to override 100
+        wait until lambda...    await runloop.until (lambda: is_near(100)): # use lambda to override 200
+        repeat until            while not is_near():      # with parentheses default distance
+        repeat until....          while not is_near(100)): # with parentheses override distance
     """
     distance = distance_sensor.distance(distance_port)
     if distance == -1:
@@ -1336,21 +1438,21 @@ sys.exit()
                     emoji: '🧿',
                     color: '#FFD700',
                     textPython: `
-    # 1. Move from the Start Line to Line 4, 78 cm from the Start Line, at 50% speed.
+    # 1. Move from the Start Line to Line 3, 62 cm from the Start Line, at 25% speed.
 
     # 2. Wait 2 seconds.
 
-    # 3. Move to Line 2, 38 cm from the Start Line, at 25% speed.
+    # 3. Move to Line 2, 36 cm from the Start Line, at 50% speed.
 
-    # 4. Move forward 20 cm to Line 3 at 75% speed.
+    # 4. Move forward 40 cm to Line 4 at 75% speed.
 
     # 5. Wait 2 seconds.
 
-    # 6. Move forward at 50% speed and stop on line 4.
+    # 6. Move backwards at 50% speed and stop on line 2.
 
     # 7. Wait 2 seconds.
 
-    # 8. Move backwards at 75% speed and stop on the Start Line.
+    # 8. Move backwards at 25% speed and stop on the Start Line.
 
     # 9. Display a smiley face.
 `

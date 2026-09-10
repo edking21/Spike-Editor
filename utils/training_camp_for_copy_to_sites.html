@@ -116,11 +116,10 @@
                         colorClass: 'movement-color',
                         groups: [2, 3, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
+                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event6'],
-                            6: ['control1', 'control2', 'control3'],
-                            7: ['sensor2', 'sensor4'],
+                            7: [],
                             8: ['oper1'],
                             12: ['gettingstarted1'],
                         }
@@ -128,8 +127,7 @@
                 },
                 groups: {
                     5: ['event1', 'event6'],
-                    6: ['control1', 'control2', 'control6'],
-                    7: ['sensor2', 'sensor4'],
+                    7: ['sensor2', 'sensor3', 'sensor4'],
                     8: ['oper1'],
                     12: ['gettingstarted1']
                 }
@@ -138,20 +136,15 @@
                 combined: {
                     [CAMP2_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 12],
-                        snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move4', 'move5', 'move6', 'move7'],
-                            3: ['light1', 'light2'],
-                            5: ['event1', 'event6'],
-                            6: ['control1', 'control2'],
-                            7: ['sensor3'],
-                            12: ['gettingstarted2'],
+                        groups: [2],        // if not listed here, all snippets from that group will be included
+                        snippetIdsByGroup: {                         
+                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
+                            5: [event],
                         }
                     }
                 },
-                groups: {
-                    5: ['event2', 'event6'],
-                    7: ['sensor3'],
+                groups: {   // if not listed here, all snippets from that group will be included
+                    5: ['event1', 'event6'],
                     12: ['gettingstarted2']
                 }
             },
@@ -159,7 +152,7 @@
                 combined: {
                     [CAMP3_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 10, 11, 12],
+                        groups: [2, 3, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
@@ -167,8 +160,6 @@
                             6: ['control1', 'control2'],
                             7: ['sensor1', 'sensor2'],
                             8: ['oper1', 'oper2','oper3'],
-                            10: ['moremotor1', 'moremotor2'],
-                            11: ['moremovement1'],
                             12: ['gettingstarted3'],
                         }
                     }
@@ -181,16 +172,12 @@
                 combined: {
                     [CAMP4_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 10, 11, 12],
+                        groups: [21, 3, 5, 8, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
+                            21: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event6'],
-                            6: ['control1', 'control2'],
-                            7: ['sensor1', 'sensor2'],
                             8: ['oper1', 'oper2','oper3'],
-                            10: ['moremotor1', 'moremotor2'],
-                            11: ['moremovement1'],
                             12: ['gettingstarted4'],
                         }
                     }
@@ -203,22 +190,22 @@
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 5, 6, 7, 8, 30, 12], {
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 5, 6, 30, 12], {
                     [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp2: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 3, 5, 6, 7, 31, 12], {
+                ? colorUtils.getEmojiButtons([CAMP2_COMBINED_ID, 3, 5, 6, 31, 12], {
                     [CAMP2_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp2 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 7, 8, 10, 11, 32, 12], {
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 32, 12], {
                     [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
                 })
                 : [],
             camp4: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP4_COMBINED_ID, 3, 5, 6, 7, 8, 10, 11, 33, 12], {
+                ? colorUtils.getEmojiButtons([CAMP4_COMBINED_ID, 3, 5, 6, 7, 33, 12], {
                     [CAMP4_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp4 snippets', className: 'pink-circle' }
                 })
                 : [],
@@ -353,4 +340,30 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
