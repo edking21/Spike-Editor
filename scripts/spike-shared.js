@@ -1362,11 +1362,11 @@ sys.exit()
 `
                 },
                 {
-                    id: 'gettingstarted4',
+                    id: 'gettingstarted5',
                     buttonText: 'Getting Started Home',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Getting Started Home
+                    textPython: `# Your Challenge Name Here
 ########################################################################
 # 🤖 main
 ########################################################################
