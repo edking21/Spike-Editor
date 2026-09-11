@@ -1366,7 +1366,7 @@ sys.exit()
                     buttonText: 'Getting Started Home',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Getting Started Home
+                    textPython: `# Getting Started Home 2
 ########################################################################
 # 🤖 main 2
 ########################################################################
