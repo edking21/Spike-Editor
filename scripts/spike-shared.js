@@ -798,7 +798,8 @@ when`
                     buttonText: 'Wait 1 seconds',
                     emoji: '',
                     color: '#DAA520',
-                    textPython: `    sleep_ms(1000)
+                    textPython: `    
+sleep_ms(1000)
 `
                 },
                 {
@@ -858,10 +859,10 @@ when`
             snippets: [
                 {
                     id: 'sensor1',
-                    buttonText: 'is color blue (condition)',
+                    buttonText: 'is blue (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `(is_color_blue)`
+                    textPython: `(is_blue)`
                 },
                 {
                     id: 'sensor2',
@@ -879,10 +880,10 @@ when`
                 },
                 {
                     id: 'sensor4',
-                    buttonText: 'is color blue (function)',
+                    buttonText: 'is blue (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `is_color_blue():
+                    textPython: `is_blue():
         # your repeat block here
 `
                 },
@@ -1275,12 +1276,12 @@ def is_near(distance_threshold=200): # 200mm (7.874 inches)
 ########################################################################
 # 🛑 is the color sensor seeing blue
 ########################################################################
-def is_color_blue():
+def is_blue():
     """
     Examples:
-        if                  if is_color_blue():
-        wait until          await until(is_color_blue):
-        repeat until..      while not (is_color_blue()):
+        if                  if is_blue():
+        wait until          await until(is_blue):
+        repeat until..      while not (is_blue()):
     """
     return color_sensor.color(color_port) == color.BLUE
 
