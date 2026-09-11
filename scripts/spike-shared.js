@@ -588,7 +588,7 @@
                     color: '#FF69B4',
                     textPython: `    
     # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0)
+    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 `
                 },
                 {
@@ -601,14 +601,6 @@
 `
                 },
                 {
-                    id: 'move5',
-                    buttonText: 'start moving right 30',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 30, velocity=220) 
-`
-                },
-                {
                     id: 'move6',
                     buttonText: 'stop moving',
                     emoji: ICON_MOVEMENT,
@@ -616,14 +608,6 @@
                     textPython: `    
     # stop moving
     motor_pair.stop(motor_pair.PAIR_1)
-`
-                },
-                {
-                    id: 'move7',
-                    buttonText: 'set movement speed to 20%',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    movement_speed = int(0.2 * 1100)
 `
                 },
                 {
@@ -659,7 +643,7 @@
                     color: '#FF69B4',
                     textPython: `    
         # start moving
-        motor_pair.move(motor_pair.PAIR_1, 0)
+        motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 `
                 },
                 {
@@ -671,14 +655,6 @@
 `
                 },
                 {
-                    id: 'move5',
-                    buttonText: 'start moving right 30',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 30, velocity=220) 
-`
-                },
-                {
                     id: 'move6',
                     buttonText: 'stop moving',
                     emoji: ICON_MOVEMENT,
@@ -686,14 +662,6 @@
                     textPython: `    
         # stop moving
         motor_pair.stop(motor_pair.PAIR_1)
-`
-                },
-                {
-                    id: 'move7',
-                    buttonText: 'set movement speed to 20%',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    movement_speed = int(0.2 * 1100)
 `
                 },
                 {
@@ -766,40 +734,6 @@ await sound.beep(60, 200)`
         5: {   // events 
             colorClass: 'events-color',
             snippets: [
-                {
-                    id: 'event1',
-                    buttonText: 'When Training Camp1 starts',
-                    emoji: '',
-                    color: '#FFD700',
-                    textPython: `
-from hub import light_matrix, port
-import runloop, motor_pair, sys
-
-# Connect two motors together so they work as a team
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-# conversion units
-DEGREES_PER_CM = 21
-DEGREES_PER_IN = 53
-
-########################################################################
-# 🤖 Main - Training Camp #1 Moving Arround
-########################################################################
-async def main():
-
-    await light_matrix.write("Hi!")
-
-    # move forward at 200 degrees/sec for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * DEGREES_PER_CM, 0, velocity=200)
-
-    # move backward at 300 degrees/sec for 10cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * DEGREES_PER_CM, 0, velocity=300)
-
-
-run(main())
-sys.exit()
-`
-                },
                 {
                     id: 'event2',
                     buttonText: 'When program starts',
@@ -924,10 +858,10 @@ when`
             snippets: [
                 {
                     id: 'sensor1',
-                    buttonText: 'is color red (condition)',
+                    buttonText: 'is color blue (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `(is_color_red)`
+                    textPython: `(is_color_blue)`
                 },
                 {
                     id: 'sensor2',
@@ -945,10 +879,10 @@ when`
                 },
                 {
                     id: 'sensor4',
-                    buttonText: 'is color red (function)',
+                    buttonText: 'is color blue (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `is_color_red():
+                    textPython: `is_color_blue():
         # your repeat block here
 `
                 },
@@ -1270,7 +1204,7 @@ async def main():
 ########################################################################
 # ☀️ initilize sensors
 ########################################################################
-import sys, motor_pair, motor
+import sys, motor_pair, motor, runloop
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button, light_matrix
 from runloop import run, until
@@ -1341,12 +1275,12 @@ def is_near(distance_threshold=200): # 200mm (7.874 inches)
 ########################################################################
 # 🛑 is the color sensor seeing blue
 ########################################################################
-def is_blue():
+def is_color_blue():
     """
     Examples:
-        if                  if is_blue():
-        wait until          await until(is_blue):
-        repeat until..      while not (is_blue()):
+        if                  if is_color_blue():
+        wait until          await until(is_color_blue):
+        repeat until..      while not (is_color_blue()):
     """
     return color_sensor.color(color_port) == color.BLUE
 
@@ -1387,7 +1321,7 @@ async def when_right_button_pressed_detect_blue_line():
     sleep_ms(1000)
 
     # start moving forward
-    motor_pair.move(motor_pair.PAIR_1, 0)
+    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 
     await until (is_blue)
 
