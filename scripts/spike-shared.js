@@ -1366,7 +1366,7 @@ sys.exit()
                     buttonText: 'Getting Started Home',
                     emoji: '🧿',
                     color: '#CC0000',
-                    textPython: `# Your Challenge Name Here
+                    textPython: `# Getting Started Home
 ########################################################################
 # 🤖 main
 ########################################################################
