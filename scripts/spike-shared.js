@@ -703,9 +703,10 @@ blinking_eyes()`
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `
-# Turn On Angry Face For 2 Seconds
-light_matrix.show_image(light_matrix.IMAGE_ANGRY)
-sleep_ms(2000)`
+    # Turn On Angry Face For 2 Seconds
+    light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+    sleep_ms(2000)
+`
                 },
                 {
                     id: 'light4',
@@ -713,7 +714,15 @@ sleep_ms(2000)`
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `
-light_matrix.write('<step number here>')`
+    intensity = 100
+    time_per_character = 2000
+
+    colors = ["BLUE", "RED", "GREEN"]
+    count = ["3", "4", "5"]
+
+    for i in range(3):
+        await light_matrix.write(colors[i] + " " + count[i], intensity, time_per_character )
+`
                 }
             ]
         },
@@ -726,8 +735,8 @@ light_matrix.write('<step number here>')`
                     emoji: '🔊',
                     color: '#a564e1',
                     textPython: `
-# play sound for 0.2 seconds
-await sound.beep(60, 200)`
+    # play sound for 0.2 seconds
+    await sound.beep(60, 200)`
                 }
             ]
         },
