@@ -1085,19 +1085,18 @@ INCHES_TO_DEGREES = int(360/6.89)   # degrees_in_wheel:360    inches_in_wheel ci
 # 🤖 turn_90
 ########################################################################
 async def turn_90(direction):
+    if direction not in ("left", "right"):
+        raise ValueError("direction must be 'left' or 'right'")
+
     motion_sensor.reset_yaw(0)
     sleep_ms(100)
 
     if direction == "left":
         steering = -100
         target_reached = lambda: motion_sensor.tilt_angles()[0] >= 873
-
-    elif direction == "right":
+    else:  # direction == "right"
         steering = 100
         target_reached = lambda: motion_sensor.tilt_angles()[0] <= -873
-
-    else:
-        raise ValueError("direction must be 'left' or 'right'")
 
     motor_pair.move(
         motor_pair.PAIR_1,
@@ -1114,20 +1113,33 @@ async def turn_90(direction):
 ########################################################################
 # ☀️ is the distance sensor seeing something close
 ########################################################################
-def is_near(distance_threshold=200): # 200mm (7.874 inches) 
+def is_near(distance_threshold=200):  # 200mm (7.874 inches)
     """
-    Examples:
-        if..                    if is_near():
-        wait until..            await runloop.until (is_near):  # no parentheses
-        wait until lambda...    await runloop.until (lambda: is_near(100)): # use lambda to override 200
-        repeat until            while not is_near():      # with parentheses default distance
-        repeat until....          while not is_near(100)): # with parentheses override distance
+    Teacher tip:
+        wait until the object is near
+            await runloop.until(is_near) # pass the function itself
+
+        repeat until the object is near
+            while not is_near(): # call the function to get True/False
+
+        override the distance
+            await runloop.until(lambda: is_near(100))
+            while not is_near(100)
+
+    Why:
+        - wait until needs a function
+        - repeat until needs a True/False result
     """
+    if not isinstance(distance_threshold, (int, float)):
+        raise ValueError("distance_threshold must be a number")
+    if distance_threshold <= 0:
+        raise ValueError("distance_threshold must be greater than 0")
+
     distance = distance_sensor.distance(distance_port)
     if distance == -1:
         print("Warning : distance sensor returned -1")
         return False
-    print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance /25.4))
+    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance /25.4))
     return distance < distance_threshold
 
 
@@ -1136,23 +1148,34 @@ def is_near(distance_threshold=200): # 200mm (7.874 inches)
 ########################################################################
 def is_blue():
     """
-    Examples:
-        if                  if is_blue():
-        wait until          await until(is_blue):
-        repeat until..      while not (is_blue()):
-    """
-    return color_sensor.color(color_port) == color.BLUE
+    Teacher tip:
+        wait until the color is blue
+            await runloop.until(is_blue) # pass the function itself
 
+        repeat until the color is blue
+            while not is_blue(): # call the function to get True/False
+
+    Why:
+        - wait until needs a function
+        - repeat until needs a True/False result
+    """
+    return color_sensor.color(port.A) == color.BLUE
 
 ########################################################################
 # 🛑 is the force sensor pressed
 ########################################################################
 def is_pressed():
     """
-    Examples:
-        if                  if is_pressed():
-        wait until          await until(is_pressed):
-        repeat until..      while not (is_pressed()):
+    Teacher tip:
+        wait until the button is pressed
+            await runloop.until(is_pressed) # pass the function itself
+
+        repeat until the button is pressed
+            while not is_pressed(): # call the function to get True/False
+
+    Why:
+        - wait until needs a function
+        - repeat until needs a True/False result
     """
     return force_sensor.pressed(force_port)
 
