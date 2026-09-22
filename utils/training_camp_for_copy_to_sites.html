@@ -118,31 +118,37 @@
                         snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
                             3: ['light1', 'light2'],
-                            5: ['event1', 'event6'],
+                            5: ['event1', 'event5', 'event6'],
                             8: ['oper1'],
-                            12: ['gettingstarted5'],
+                            12: ['gettingstarted1'],
                         }
                     }
                 },
                 groups: {
-                    5: ['event1', 'event6'],
+                    5: ['event1', 'event5', 'event6'],
                     8: ['oper1'],
-                    12: ['gettingstarted5']
+                    12: ['gettingstarted1']
                 }
             },
             camp2: {
                 combined: {
                     [CAMP2_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2],        // if not listed here, all snippets from that group will be included
-                        snippetIdsByGroup: {                         
+                        groups: [2, 3, 5, 6, 31, 12],
+                        snippetIdsByGroup: {
                             2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
-                            5: [event],
+                            3: ['light1', 'light2'],
+                            5: ['event1', 'event6'],
+                            6: ['control1', 'control2'],
+                            31: ['challenge3', 'challenge4'],
+                            12: ['gettingstarted5'],
                         }
                     }
                 },
-                groups: {   // if not listed here, all snippets from that group will be included
+                groups: {
                     5: ['event1', 'event6'],
+                    6: ['control1', 'control2'],
+                    31: ['challenge3', 'challenge4'],
                     12: ['gettingstarted5']
                 }
             },
@@ -258,11 +264,12 @@
             menus.forEach((menu) => {
                 menu.textContent = '';
                 trainingCampOptions.forEach(({ key, label }) => {
-                    const link = document.createElement('a');
-                    link.href = '#';
-                    link.textContent = label;
-                    link.addEventListener('click', (event) => selectTrainingCamp(key, event));
-                    menu.appendChild(link);
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'dropdown-item';
+                    button.textContent = label;
+                    button.addEventListener('click', (event) => selectTrainingCamp(key, event));
+                    menu.appendChild(button);
                 });
             });
         }
@@ -338,12 +345,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 

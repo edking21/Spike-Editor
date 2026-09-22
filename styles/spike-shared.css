@@ -107,24 +107,36 @@ body {
     display: block;
 }
 
-.menu-dropdown-menu a {
+.menu-dropdown-menu a,
+.menu-dropdown-menu button,
+.menu-dropdown-menu .dropdown-item {
     color: #222 !important;
     display: block;
+    width: 100%;
     height: auto;
     line-height: 1.25;
     padding: 7px 10px;
+    border: none;
     border-bottom: none;
+    background: transparent;
     font-size: 13px;
     text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    box-sizing: border-box;
 }
 
-.top-menu .menu-dropdown-menu a {
+.top-menu .menu-dropdown-menu a,
+.top-menu .menu-dropdown-menu button,
+.top-menu .menu-dropdown-menu .dropdown-item {
     height: auto;
     line-height: 1.25;
     border-bottom: none;
 }
 
-.menu-dropdown-menu a:hover {
+.menu-dropdown-menu a:hover,
+.menu-dropdown-menu button:hover,
+.menu-dropdown-menu .dropdown-item:hover {
     background: #f5f7fb;
 }
 
