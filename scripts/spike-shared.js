@@ -1553,11 +1553,11 @@ test for figures
                     textPython: `
     # 1. The Driving Base is positioned so its tires are on the start line.
 
-    # 2. The Driving Base moves forward and captures the first hay bale 45 cm away from the start line.
+    # 2. The Driving Base moves forward and captures the first hay bale 40 cm away from the start line.
 
-    # 3. The Driving Base waits 2 seconds.
+    # 3. The Driing Base waits 2 seconds.
 
-    # 4. The Driving Base turns right and moves (and leaves) the first hay bale into the corral 20 cm from the center line.
+    # 4. The Driving Base turns left and moves the first hay bale to the corral 20 cm from the center line.
 
     # 5. The Driving Base waits 2 seconds.
 
@@ -1578,9 +1578,7 @@ test for figures
                     buttonText: 'Hay Bale Figure',
                     emoji: '🧿',
                     color: '#32CD32',
-                    textPython: `
-test for figures
-`
+                    textPython: ``
                 },
             ]
         },
