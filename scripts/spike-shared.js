@@ -1308,24 +1308,18 @@ test for figures
                     color: '#FF69B4',
                     textPython: `
     # 1. A kit box will be placed in the center of a 4’ by 4’ table with raised sides.
- 
     # 2. The kit box will be positioned such that the short sides of the box are closer 
-    #    to the top and bottom of the table, and the long sides of the box are closer 
-    #    to the left and right sides.
- 
-    # 3. A 12” by 12” square will be taped in the bottom left corner of the table and serve
-    #    as the starting point for the Driving Base.
- 
+    #    to the top and bottom of the table, and the long sides of the box are closer to 
+    #    the left and right sides.
+    # 3. A 12” by 12” square will be taped in the bottom right corner of the table and 
+    #    serve as the starting point for the Driving Base.
     # 4. The Driving Base will start facing the bottom of the table.
- 
-    # 5. The Driving Base must be programmed to turn around the kit box and finish inside the 
-    #    12” by 12” square, again facing the bottom of the table.
- 
-    # 6. The Driving Base must demonstrate at least two different turns as it moves around the kit box. 
-    #    It must also move backward along the side of the kit box at least once.
- 
-    # 7. Once the Driving Base is in the 12” by 12” square, the Hub should be programmed to display a 
-    #    winking face, signifying the completion of the challenge.
+    # 5. The Driving Base must be programmed to turn around the kit box in a clockwise 
+    #    direction, and finish inside the 12” by 12” square, this time facing the top of the table.
+    # 6. The Driving Base must demonstrate at least two different turns as it moves around the 
+    #    kit box. It must also move backward along the side of the kit box at least once.
+    # 7. Once the Driving Base is in the 12” by 12” square, the Hub should be programmed to 
+    #    display a winking face, signifying the completion of the challenge.
  
     # Note: Both tires should finish inside the taped square. In addition, the Driving Base is not 
     #    allowed to touch the kit box or the sides of the table as it moves. Use the challenge figure 
