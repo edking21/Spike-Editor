@@ -559,7 +559,7 @@ async def main():
 ########################################################################
 # ☀️ initilize modules
 ########################################################################
-import sys, motor_pair, motor, runloop
+import sys, motor_pair, motor, runloop, time
 import color, color_sensor, distance_sensor, force_sensor
 from hub import port, motion_sensor,button, light_matrix
 from runloop import run, until
@@ -575,6 +575,29 @@ arm_motor = port.E
 # Constants
 CM_TO_DEGREES = int(360/17.5)   # degrees_wheel_diameter:360 cm_wheel_circumference:17.5
 INCHES_TO_DEGREES = int(360/6.89)   # degrees_wheel_diameter:360 inches_wheel_circumference:6.89
+
+
+########################################################################
+# 🤖 blink n times
+########################################################################
+def blink(num_blinks):
+    if not isinstance(num_blinks, (int, float)):
+        raise ValueError("num_blinks must be a number")
+    if num_blinks <= 0:
+        raise ValueError("num_blinks must be greater than 0")
+
+    for _ in range(int(num_blinks)):
+        # Show a happy face on the Light Matrix.
+        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+
+        # Wait for 0.2 seconds.
+        time.sleep_ms(200)
+
+        # Show a smile on the Light Matrix.
+        light_matrix.show_image(light_matrix.IMAGE_SMILE)
+
+        # Wait for 0.2 seconds.
+        time.sleep_ms(200)
 
 
 ########################################################################
@@ -888,8 +911,9 @@ sys.exit()
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `
-# Blinking Eyes on the light matrix
-blinking_eyes()`
+    # Blink 10 times
+    blink(10)
+`
                 },
                 {
                     id: 'light3',
@@ -1019,7 +1043,7 @@ when`
                     emoji: '',
                     color: '#DAA520',
                     textPython: `    
-sleep_ms(1000)
+    sleep_ms(1000)
 `
                 },
                 {
