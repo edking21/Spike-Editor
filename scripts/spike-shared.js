@@ -570,7 +570,7 @@ motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 force_port = port.A
 distance_port = port.B
 color_port = port.F
-arm_motor = port.E
+arm_motor_port = port.E
 
 # Constants
 CM_TO_DEGREES = int(360/17.5)   # degrees_wheel_diameter:360 cm_wheel_circumference:17.5
@@ -768,34 +768,36 @@ sys.exit()
             snippets: [
                 {
                     id: 'motors1',
-                    buttonText: 'Run CLOCKWISE for 1 rotation',     
+                    buttonText: 'Go shortest path to absolute 0',     
                     emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
-    # Run CLOCKWISE for 1 rotation
-    await motor.run_for_degrees(port.E, 360, 200, direction=motor.CLOCKWISE)`
+    # Go shortest path to absolute position 0 at 20% speed 
+    await motor.run_to_absolute_position(arm_motor_port, 0, int(20*1050), direction=motor.SHORTEST_PATH)
+`
                 },
                 {
                     id: 'motors2',
-                    buttonText: 'Go shortest path to position 0',     
+                    buttonText: 'Go shortest path to absolute -40 degrees (320 degres)',     
                     emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
-    # Go shortest path to position 0
-    await motor.run_to_absolute_position(port.E, 0, 100, direction=motor.SHORTEST_PATH)`
+    # Go shortest path to absolute position -50 at 20% speed 
+    await motor.run_to_absolute_position(arm_motor_port, -50, int(20*1050), direction=motor.SHORTEST_PATH)
+`
                 }
             ]
         },
-        2: {   // movement robot shuffle 
+        2: {   // movement robot shuffle and hay bale 
             colorClass: 'movement-color',
             snippets: [
                 {
                     id: 'move1',
-                    buttonText: 'move forward for 10 cm at 50% speed',
+                    buttonText: 'move forward for 10 cm at 20% speed',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
-        0, velocity=int(.5 * 1100))
+        0, velocity=int(.2 * 1100))
 `
                 },
                 {
@@ -803,9 +805,7 @@ sys.exit()
                     buttonText: 'start moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
+                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 `
                 },
                 {
@@ -813,8 +813,7 @@ sys.exit()
                     buttonText: 'turn 90 degrees',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    # turn 90 degrees
-    await turn_90("right")
+                    textPython: `    await turn_90("right")
 `
                 },
                 {
@@ -822,9 +821,7 @@ sys.exit()
                     buttonText: 'stop moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
+                    textPython: `    motor_pair.stop(motor_pair.PAIR_1)
 `
                 },
                 {
@@ -832,9 +829,7 @@ sys.exit()
                     buttonText: 'set movement motors to C+D',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `
-    # set movement motors to C+D
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+                    textPython: `    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 `
                 }
             ]
@@ -868,7 +863,9 @@ sys.exit()
                     buttonText: 'turn 90 degrees',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await turn_90("right")
+                    textPython: `    
+        # turn 90 degrees
+        await turn_90("right")
 `
                 },
                 {
@@ -887,8 +884,8 @@ sys.exit()
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
-    # set movement motors to C+D
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+        # set movement motors to C+D
+        motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 `
                 }
             ]
@@ -1043,6 +1040,7 @@ when`
                     emoji: '',
                     color: '#DAA520',
                     textPython: `    
+    # sleep for 1 second
     sleep_ms(1000)
 `
                 },
@@ -1332,18 +1330,25 @@ test for figures
                     color: '#FF69B4',
                     textPython: `
     # 1. A kit box will be placed in the center of a 4’ by 4’ table with raised sides.
+
     # 2. The kit box will be positioned such that the short sides of the box are closer 
     #    to the top and bottom of the table, and the long sides of the box are closer to 
     #    the left and right sides.
+
     # 3. A 12” by 12” square will be taped in the bottom right corner of the table and 
     #    serve as the starting point for the Driving Base.
+
     # 4. The Driving Base will start facing the bottom of the table.
+
     # 5. The Driving Base must be programmed to turn around the kit box in a clockwise 
     #    direction, and finish inside the 12” by 12” square, this time facing the top of the table.
+
     # 6. The Driving Base must demonstrate at least two different turns as it moves around the 
     #    kit box. It must also move backward along the side of the kit box at least once.
+
     # 7. Once the Driving Base is in the 12” by 12” square, the Hub should be programmed to 
     #    display a winking face, signifying the completion of the challenge.
+
  
     # Note: Both tires should finish inside the taped square. In addition, the Driving Base is not 
     #    allowed to touch the kit box or the sides of the table as it moves. Use the challenge figure 
