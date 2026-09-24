@@ -192,6 +192,9 @@
             },
         };
 
+        const camp3MotorsId = (trainingCampSnippetSelections.camp3?.combined?.[CAMP3_COMBINED_ID]?.groups || [])
+            .find((groupId) => (snippetData[groupId]?.colorClass || '') === 'motors-color');
+
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
                 ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 5, 6, 30, 12], {
@@ -204,7 +207,11 @@
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 3, 5, 6, 32, 12], {
+                ? colorUtils.getEmojiButtons([
+                    camp3MotorsId,
+                    CAMP3_COMBINED_ID,
+                    3, 5, 6, 32, 12
+                ].filter((id) => Number.isInteger(id)), {
                     [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
                 })
                 : [],
