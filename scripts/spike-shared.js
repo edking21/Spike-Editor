@@ -834,7 +834,7 @@ sys.exit()
                 }
             ]
         },
-        21: {   // movement all others 
+        21: {  // movement all others 
             colorClass: 'movement-color',
             snippets: [
                 {
