@@ -706,9 +706,9 @@ async def when_left_button_pressed_lower_and_raise_the_arm():
     await until(lambda: bool(button.pressed(button.LEFT)) != 0)
     sleep_ms(1000)
 
-    # Go shortest path to position -40 degrees then back to 0
+    # Go shortest path to position -50 degrees then back to 0
     await motor.run_to_absolute_position(arm_motor, 0, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(arm_motor, -40, 100, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor, -50, 100, direction=motor.SHORTEST_PATH)
     sleep_ms(200)
 
     await motor.run_to_absolute_position(arm_motor, 0, 100, direction=motor.SHORTEST_PATH)
@@ -768,27 +768,27 @@ sys.exit()
             snippets: [
                 {
                     id: 'motors1',
-                    buttonText: 'Go shortest path to absolute 0',     
+                    buttonText: 'Go shortest path to absolute 0 degees',     
                     emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
-    # Go shortest path to absolute position 0 at 20% speed 
+    # Go shortest path to absolute 0 degrees at 20% speed 
     await motor.run_to_absolute_position(arm_motor_port, 0, int(20*1050), direction=motor.SHORTEST_PATH)
 `
                 },
                 {
                     id: 'motors2',
-                    buttonText: 'Go shortest path to absolute -40 degrees (320 degres)',     
+                    buttonText: 'Go shortest path to absolute -50 degrees',     
                     emoji: ICON_MOTORS ,
                     color: '#0066FF',
                     textPython: ` 
-    # Go shortest path to absolute position -50 at 20% speed 
+    # Go shortest path to absolute -50 degrees at 20% speed 
     await motor.run_to_absolute_position(arm_motor_port, -50, int(20*1050), direction=motor.SHORTEST_PATH)
 `
                 }
             ]
         },
-        2: {   // movement robot shuffle and hay bale 
+        2: {   // movement  
             colorClass: 'movement-color',
             snippets: [
                 {
@@ -823,18 +823,10 @@ sys.exit()
                     color: '#FF69B4',
                     textPython: `    motor_pair.stop(motor_pair.PAIR_1)
 `
-                },
-                {
-                    id: 'move8',
-                    buttonText: 'set movement motors to C+D',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-`
                 }
             ]
         },
-        21: {  // movement all others 
+        21: {  // movement hay bale
             colorClass: 'movement-color',
             snippets: [
                 {
@@ -843,8 +835,8 @@ sys.exit()
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `
-        # move forward for 10 cm at 20% speed    
-        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+    # move forward for 10 cm at 20% speed    
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
             0, velocity=int(.2 * 1100))
 `
                 },
@@ -854,8 +846,8 @@ sys.exit()
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `    
-        # start moving
-        motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 `
                 },
                 {
@@ -864,8 +856,8 @@ sys.exit()
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `    
-        # turn 90 degrees
-        await turn_90("right")
+    # turn 90 degrees
+    await turn_90("right")
 `
                 },
                 {
@@ -874,18 +866,8 @@ sys.exit()
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython: `    
-        # stop moving
-        motor_pair.stop(motor_pair.PAIR_1)
-`
-                },
-                {
-                    id: 'move8',
-                    buttonText: 'set movement motors to C+D',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `
-        # set movement motors to C+D
-        motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
 `
                 }
             ]
@@ -1378,7 +1360,7 @@ test for figures
 
     # 2. The Driving Base moves forward and captures the first hay bale 40 cm away from the start line.
 
-    # 3. The Driing Base waits 2 seconds.
+    # 3. The Driving Base waits 2 seconds.
 
     # 4. The Driving Base turns left and moves the first hay bale to the corral 20 cm from the center line.
 

@@ -114,19 +114,17 @@
                 combined: {
                     [CAMP1_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 8, 12],
+                        groups: [ 2, 3, 5, 6, 8, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
+                            2: ['move1', 'move2', 'move3', 'move6'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event5', 'event6'],
-                            8: ['oper1'],
                             12: ['gettingstarted1'],
                         }
                     }
                 },
                 groups: {
                     5: ['event1', 'event5', 'event6'],
-                    8: ['oper1'],
                     12: ['gettingstarted1']
                 }
             },
@@ -136,7 +134,7 @@
                         colorClass: 'movement-color',
                         groups: [2, 3, 5, 6, 31, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
+                            2: ['move1', 'move2', 'move3', 'move6'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event6'],
                             6: ['control1', 'control2'],
@@ -156,9 +154,10 @@
                 combined: {
                     [CAMP3_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 5, 6, 7, 8, 12],
+                        groups: [1, 2, 3, 5, 6, 7, 8, 12],
                         snippetIdsByGroup: {
-                            2: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
+                            1: ['motors1', 'motors2'],
+                            2: ['move1', 'move2', 'move3', 'move6'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event6'],
                             6: ['control1', 'control2'],
@@ -176,9 +175,9 @@
                 combined: {
                     [CAMP4_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [21, 3, 5, 8, 12],
+                        groups: [2, 3, 5, 8, 12],
                         snippetIdsByGroup: {
-                            21: ['move1', 'move2', 'move3', 'move5', 'move6', 'move7'],
+                            2: ['move1', 'move2', 'move3', 'move6'],
                             3: ['light1', 'light2'],
                             5: ['event1', 'event6'],
                             8: ['oper1', 'oper2','oper3'],
@@ -192,9 +191,6 @@
             },
         };
 
-        const camp3MotorsId = (trainingCampSnippetSelections.camp3?.combined?.[CAMP3_COMBINED_ID]?.groups || [])
-            .find((groupId) => (snippetData[groupId]?.colorClass || '') === 'motors-color');
-
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
                 ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 5, 6, 30, 12], {
@@ -207,12 +203,8 @@
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([
-                    camp3MotorsId,
-                    CAMP3_COMBINED_ID,
-                    3, 5, 6, 32, 12
-                ].filter((id) => Number.isInteger(id)), {
-                    [CAMP3_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp3 snippets', className: 'pink-circle' }
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 2, 3, 5, 6, 32, 12], {
+                    [CAMP3_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Camp3 snippets', className: 'blue-circle' }
                 })
                 : [],
             camp4: (typeof colorUtils.getEmojiButtons === 'function')
@@ -352,22 +344,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
