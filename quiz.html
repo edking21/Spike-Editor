@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SPIKE Prime Quiz</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            overflow: hidden;
+            background: #e8e8e8;
+            color: #171717;
+            font-family: Arial, sans-serif;
+        }
+
+        .quiz-app {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            height: 100%;
+            min-height: 100dvh;
+            padding: 10px 14px;
+        }
+
+        .slide-stage {
+            display: grid;
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+            place-items: center;
+        }
+
+        .slide-canvas {
+            position: relative;
+            width: min(100%, 140dvh, 960px);
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+        }
+
+        .slide-image {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .answer-targets {
+            position: absolute;
+            inset: 0;
+        }
+
+        .answer-target {
+            position: absolute;
+            border: 3px solid transparent;
+            border-radius: 6px;
+            background: transparent;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .answer-target:hover {
+            border-color: #f0a000;
+            background: rgba(255, 194, 46, 0.08);
+        }
+
+        .answer-target:focus-visible {
+            border-color: #1464c0;
+            outline: 3px solid #fff;
+            outline-offset: 1px;
+        }
+
+        .option-a {
+            top: 34%;
+            left: 18.5%;
+            width: 25.5%;
+            height: 22%;
+        }
+
+        .option-b {
+            top: 34%;
+            left: 53.5%;
+            width: 26%;
+            height: 22%;
+        }
+
+        .option-c {
+            top: 57%;
+            left: 18.5%;
+            width: 26%;
+            height: 23%;
+        }
+
+        .option-d {
+            top: 57%;
+            left: 53.5%;
+            width: 26%;
+            height: 23%;
+        }
+
+        .quiz-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            min-height: 44px;
+        }
+
+        #feedback {
+            margin: 0;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .quiz-action {
+            min-height: 40px;
+            padding: 8px 18px;
+            border: 0;
+            border-radius: 4px;
+            background: #1769aa;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .quiz-action:hover {
+            background: #0d558f;
+        }
+
+        .quiz-action[hidden] {
+            display: none;
+        }
+
+        @media (max-width: 520px) {
+            .quiz-app {
+                padding: 6px;
+                gap: 6px;
+            }
+
+            .slide-canvas {
+                width: min(100%, 140dvh);
+            }
+
+            .answer-target {
+                border-width: 2px;
+            }
+
+            .quiz-controls {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            #feedback {
+                flex-basis: 100%;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="quiz-app">
+    <div class="slide-stage">
+        <div class="slide-canvas">
+            <img id="slide-image" class="slide-image" src="./images/quiz-slides/slide-01.png" alt="Quiz title slide">
+            <div id="answer-targets" class="answer-targets"></div>
+        </div>
+    </div>
+    <div class="quiz-controls">
+        <p id="feedback" role="status" aria-live="polite"></p>
+        <button id="quiz-action" class="quiz-action" type="button">Start quiz</button>
+    </div>
+</main>
+
+<script>
+
+const questions = [
+    { questionSlide: 2, answerSlide: 3, answer: 'C' },
+    { questionSlide: 4, answerSlide: 5, answer: 'B' },
+    { questionSlide: 6, answerSlide: 7, answer: 'B' },
+    { questionSlide: 8, answerSlide: 9, answer: 'C' },
+    { questionSlide: 10, answerSlide: 11, answer: 'A' }
+];
+
+let currentQuestion = -1;
+let attempts = 0;
+let state = 'intro';
+
+const slideImage = document.getElementById('slide-image');
+const answerTargets = document.getElementById('answer-targets');
+const feedback = document.getElementById('feedback');
+const actionButton = document.getElementById('quiz-action');
+
+function slidePath(pageNumber) {
+    return `./images/quiz-slides/slide-${String(pageNumber).padStart(2, '0')}.png`;
+}
+
+function setSlide(pageNumber, description) {
+    slideImage.src = slidePath(pageNumber);
+    slideImage.alt = description;
+}
+
+function showQuestion(questionIndex) {
+    currentQuestion = questionIndex;
+    attempts = 0;
+    state = 'question';
+
+    const question = questions[currentQuestion];
+    setSlide(question.questionSlide, `Question ${questionIndex + 1}`);
+    feedback.textContent = '';
+    actionButton.hidden = true;
+    answerTargets.replaceChildren();
+
+    ['A', 'B', 'C', 'D'].forEach(option => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = `answer-target option-${option.toLowerCase()}`;
+        button.setAttribute('aria-label', `Option ${option}`);
+        button.addEventListener('click', () => chooseAnswer(option));
+        answerTargets.appendChild(button);
+    });
+}
+
+function revealAnswer(message) {
+    const question = questions[currentQuestion];
+    state = 'answer';
+    setSlide(question.answerSlide, `Question ${currentQuestion + 1} answer: option ${question.answer} highlighted`);
+    answerTargets.replaceChildren();
+    feedback.textContent = message;
+    actionButton.textContent = currentQuestion === questions.length - 1 ? 'Finish quiz' : 'Next question';
+    actionButton.hidden = false;
+}
+
+function chooseAnswer(option) {
+    if (state !== 'question') return;
+
+    attempts += 1;
+    const question = questions[currentQuestion];
+
+    if (option === question.answer) {
+        revealAnswer(`Correct. Option ${question.answer} is highlighted.`);
+        return;
+    }
+
+    if (attempts >= 3) {
+        revealAnswer(`The correct answer is ${question.answer}.`);
+        return;
+    }
+
+    const remainingAttempts = 3 - attempts;
+    feedback.textContent = `Try again. ${remainingAttempts} ${remainingAttempts === 1 ? 'try' : 'tries'} left.`;
+}
+
+function showCompletion() {
+    currentQuestion = -1;
+    state = 'complete';
+    setSlide(1, 'Quiz complete');
+    answerTargets.replaceChildren();
+    feedback.textContent = 'Quiz complete!';
+    actionButton.textContent = 'Play again';
+    actionButton.hidden = false;
+}
+
+function handleAction() {
+    if (state === 'intro' || state === 'complete') {
+        showQuestion(0);
+        return;
+    }
+
+    if (state === 'answer') {
+        if (currentQuestion + 1 < questions.length) {
+            showQuestion(currentQuestion + 1);
+        } else {
+            showCompletion();
+        }
+    }
+}
+
+actionButton.addEventListener('click', handleAction);
+
+</script>
+
+</body>
+</html>

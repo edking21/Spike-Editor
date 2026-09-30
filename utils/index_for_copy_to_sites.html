@@ -1196,9 +1196,11 @@ body {
                         return;
                     }
                     if (snippet?.id === 'challenge9') {
-                        if (typeof global.openFigureViewer === 'function') {
-                            global.openFigureViewer();
-                        }
+                        const quizFrame = document.createElement('iframe');
+                        quizFrame.src = './quiz.html';
+                        quizFrame.title = 'SPIKE Prime Quiz';
+                        quizFrame.style.cssText = 'display:block;width:100%;height:calc(100vh - 60px);border:0;';
+                        host.replaceChildren(quizFrame);
                         return;
                     }
                     if (snippet?.id === 'challenge10') {

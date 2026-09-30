@@ -342,6 +342,19 @@ body {
     padding: 0px 12px 12px 12px;
 }
 
+.sensor-quiz-frame {
+    position: fixed;
+    top: 48px;
+    right: 0;
+    bottom: 0;
+    left: 80px;
+    z-index: 900;
+    width: calc(100vw - 80px);
+    height: calc(100vh - 48px);
+    border: 0;
+    background: #e8e8e8;
+}
+
 .snippet {
     border: none;
     border-radius: 8px;
@@ -602,6 +615,11 @@ body {
 .emoji-container .light-purple-circle { background-color: #a564e1 !important; }
 
 @media (max-width: 500px) {
+    .sensor-quiz-frame {
+        left: 0;
+        width: 100vw;
+    }
+
     .menu-toggle {
         display: block;
     }

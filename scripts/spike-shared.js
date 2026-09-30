@@ -517,6 +517,14 @@
                         return;
                     }
                     if (snippet?.id === 'challenge9') {
+                        const quizFrame = document.createElement('iframe');
+                        quizFrame.className = 'sensor-quiz-frame';
+                        quizFrame.src = './quiz.html';
+                        quizFrame.title = 'SPIKE Prime Quiz';
+                        document.body.appendChild(quizFrame);
+                        return;
+                    }
+                    if (snippet?.id === 'challenge9x') {
                         if (typeof global.openFigureViewer === 'function') {
                             global.openFigureViewer();
                         }
@@ -1429,13 +1437,20 @@ test for figures
                     color: '#F7B267',
                     textPython: ``
                 },
+                {
+                    id: 'challenge9',
+                    buttonText: 'Sensors Quiz',
+                    emoji: '🧿',
+                    color: '#F7B267',
+                    textPython: ``
+                },
             ]
         },
         34: {   // figures
             colorClass: 'challenge-color',
             snippets: [
                 {
-                    id: 'challenge9',
+                    id: 'challenge9x',
                     buttonText: 'Figures',
                     emoji: '🧿',
                     color: '#8A2BE2',
