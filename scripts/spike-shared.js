@@ -519,7 +519,7 @@
                     if (snippet?.id === 'challenge9') {
                         const quizFrame = document.createElement('iframe');
                         quizFrame.className = 'sensor-quiz-frame';
-                        quizFrame.src = './quiz.html';
+                        quizFrame.src = 'https://edking21.github.io/Spike-Editor/quiz.html';
                         quizFrame.title = 'SPIKE Prime Quiz';
                         document.body.appendChild(quizFrame);
                         return;
