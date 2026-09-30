@@ -188,10 +188,10 @@
             10: { label: 'More Motors', className: 'blue-circle', bubbleLabel: 'Blue More Motors bubble' },
             11: { label: 'More Movement', className: 'pink-circle', bubbleLabel: 'Pink More Movement bubble' },
             12: { label: 'Getting Started', className: 'red-circle', bubbleLabel: 'Red Getting Started bubble' },
-            30: { label: 'More Robot Shuffle', className: 'light-orange-circle', bubbleLabel: 'Light Orange Robot Shuffle bubble' },
-            31: { label: 'More Garage', className: 'light-orange-circle', bubbleLabel: 'Light Orange Garage bubble' },
-            32: { label: 'More Hay Bale', className: 'light-orange-circle', bubbleLabel: 'Light Orange Hay bubble' },
-            33: { label: 'More Sensors', className: 'light-orange-circle', bubbleLabel: 'Light Orange Sensors bubble' },
+            30: { label: 'More Robot Shuffle', className: 'blue-circle', bubbleLabel: 'Blue Robot Shuffle bubble' },
+            31: { label: 'More Garage', className: 'pink-circle', bubbleLabel: 'Pink Garage bubble' },
+            32: { label: 'More Hay Bale', className: 'green-circle', bubbleLabel: 'Green Hay Bale bubble' },
+            33: { label: 'More Sensors', className: 'orange-circle', bubbleLabel: 'Orange Sensors bubble' },
             34: { label: 'Figures ', className: 'purple-circle', bubbleLabel: 'Purple Figures bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
@@ -1278,7 +1278,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     id: 'challenge1',
                     buttonText: 'Robot Shuffle Description',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#0066FF',
                     textPython: `
     # 1. Move from the Start Line to Line 3, 62 cm from the Start Line, at 25% speed.
 
@@ -1303,7 +1303,7 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     id: 'challenge2',
                     buttonText: 'Robot Shuffle Figure',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#0066FF',
                     textPython: `
 test for figures
 `
@@ -1317,7 +1317,7 @@ test for figures
                     id: 'challenge3',
                     buttonText: 'Round the Garage Description',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#FF69B4',
                     textPython: `
     # 1. A kit box will be placed in the center of a 4’ by 4’ table with raised sides.
 
@@ -1350,7 +1350,7 @@ test for figures
                     id: 'challenge4',
                     buttonText: 'Round the Garage Figure',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#FF69B4',
                     textPython: ``
                 },
             ]
@@ -1362,7 +1362,7 @@ test for figures
                     id: 'challenge5',
                     buttonText: 'Hay Bale Description',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#32CD32',
                     textPython: `
     # 1. The Driving Base is positioned so its tires are on the start line.
 
@@ -1390,7 +1390,7 @@ test for figures
                     id: 'challenge6',
                     buttonText: 'Hay Bale Figure',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#32CD32',
                     textPython: ``
                 },
             ]
@@ -1402,7 +1402,7 @@ test for figures
                     id: 'challenge7',
                     buttonText: 'Sensors Description',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#FF8C00',
                     textPython: `
     # 1. The Driving Base tires are placed in the center of a 12” by 12” taped square 
     #    at the bottom right corner of a 4’ by 4’ table surrounded by walls.
@@ -1434,14 +1434,14 @@ test for figures
                     id: 'challenge8',
                     buttonText: 'Sensors Figure',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#FF8C00',
                     textPython: ``
                 },
                 {
                     id: 'challenge9',
                     buttonText: 'Sensors Quiz',
                     emoji: '🧿',
-                    color: '#F7B267',
+                    color: '#FF8C00',
                     textPython: ``
                 },
             ]
