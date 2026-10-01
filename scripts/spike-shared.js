@@ -638,7 +638,7 @@ def blink(num_blinks):
         0, 100, 100, 100, 0
     ]
     
-    for _ in range(num_blinks):
+    for _ in range(int(num_blinks)):
         light_matrix.show(two_eyes_open)
         sleep_ms(2000)
         light_matrix.show(one_eye_open)
