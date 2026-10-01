@@ -374,6 +374,7 @@
 
                 const id = Number(b?.id);
                 button.addEventListener('click', () => {
+                    document.querySelector('.sensor-quiz-frame')?.closeQuiz?.();
                     if (clickHandler && Number.isFinite(id)) {
                         clickHandler(id);
                     }
@@ -521,7 +522,33 @@
                         quizFrame.className = 'sensor-quiz-frame';
                         quizFrame.src = 'https://edking21.github.io/Spike-Editor/quiz.html';
                         quizFrame.title = 'SPIKE Prime Quiz';
+                        const closeButton = document.createElement('button');
+                        closeButton.className = 'sensor-quiz-close';
+                        closeButton.type = 'button';
+                        closeButton.textContent = 'Close quiz';
+                        closeButton.setAttribute('aria-label', 'Close Sensors quiz');
+                        let handleQuizClose;
+                        const closeQuiz = () => {
+                            if (handleQuizClose) {
+                                global.removeEventListener('message', handleQuizClose);
+                            }
+                            quizFrame.remove();
+                            closeButton.remove();
+                        };
+                        quizFrame.closeQuiz = closeQuiz;
+                        closeButton.addEventListener('click', closeQuiz);
+                        handleQuizClose = event => {
+                            if (
+                                event.source !== quizFrame.contentWindow ||
+                                event.origin !== 'https://edking21.github.io' ||
+                                event.data?.type !== 'spike-editor-close-quiz'
+                            ) return;
+
+                            closeQuiz();
+                        };
+                        global.addEventListener('message', handleQuizClose);
                         document.body.appendChild(quizFrame);
+                        document.body.appendChild(closeButton);
                         return;
                     }
                     if (snippet?.id === 'challenge9x') {

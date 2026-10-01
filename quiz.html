@@ -41,6 +41,28 @@
             place-items: center;
         }
 
+        .quiz-toolbar {
+            display: flex;
+            min-height: 36px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .quiz-close {
+            min-height: 34px;
+            padding: 6px 12px;
+            border: 1px solid #b8b8b8;
+            border-radius: 4px;
+            background: #fff;
+            color: #222;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        .quiz-close:hover {
+            background: #f3f3f3;
+        }
+
         .slide-canvas {
             position: relative;
             width: min(100%, 140dvh, 960px);
@@ -173,6 +195,9 @@
 <body>
 
 <main class="quiz-app">
+    <div class="quiz-toolbar">
+        <button id="quiz-close" class="quiz-close" type="button" title="Close quiz">Close quiz</button>
+    </div>
     <div class="slide-stage">
         <div class="slide-canvas">
             <img id="slide-image" class="slide-image" src="./images/quiz-slides/slide-01.png" alt="Quiz title slide">
@@ -203,6 +228,7 @@ const slideImage = document.getElementById('slide-image');
 const answerTargets = document.getElementById('answer-targets');
 const feedback = document.getElementById('feedback');
 const actionButton = document.getElementById('quiz-action');
+const closeButton = document.getElementById('quiz-close');
 
 function slidePath(pageNumber) {
     return `./images/quiz-slides/slide-${String(pageNumber).padStart(2, '0')}.png`;
@@ -289,7 +315,17 @@ function handleAction() {
     }
 }
 
+function closeQuiz() {
+    if (window.parent !== window) {
+        window.parent.postMessage({ type: 'spike-editor-close-quiz' }, '*');
+        return;
+    }
+
+    window.location.href = './challenges_library.html';
+}
+
 actionButton.addEventListener('click', handleAction);
+closeButton.addEventListener('click', closeQuiz);
 
 </script>
 

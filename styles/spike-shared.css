@@ -185,6 +185,7 @@ body {
     position: fixed;
     top: 50px;
     left: 0;
+    z-index: 901;
     width: 80px;
     height: calc(100vh - 48px);
     display: flex;
@@ -353,6 +354,25 @@ body {
     height: calc(100vh - 48px);
     border: 0;
     background: #e8e8e8;
+}
+
+.sensor-quiz-close {
+    position: fixed;
+    top: 56px;
+    right: 12px;
+    z-index: 1001;
+    min-height: 36px;
+    padding: 6px 12px;
+    border: 1px solid #b8b8b8;
+    border-radius: 4px;
+    background: #fff;
+    color: #222;
+    font: inherit;
+    cursor: pointer;
+}
+
+.sensor-quiz-close:hover {
+    background: #f3f3f3;
 }
 
 .snippet {

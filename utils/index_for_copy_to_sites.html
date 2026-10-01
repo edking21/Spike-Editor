@@ -1200,6 +1200,17 @@ body {
                         quizFrame.src = 'https://edking21.github.io/Spike-Editor/quiz.html';
                         quizFrame.title = 'SPIKE Prime Quiz';
                         quizFrame.style.cssText = 'display:block;width:100%;height:calc(100vh - 60px);border:0;';
+                        const handleQuizClose = event => {
+                            if (
+                                event.source !== quizFrame.contentWindow ||
+                                event.origin !== 'https://edking21.github.io' ||
+                                event.data?.type !== 'spike-editor-close-quiz'
+                            ) return;
+
+                            global.removeEventListener('message', handleQuizClose);
+                            quizFrame.remove();
+                        };
+                        global.addEventListener('message', handleQuizClose);
                         host.replaceChildren(quizFrame);
                         return;
                     }
@@ -13971,6 +13982,14 @@ test for figures
     <script src="./utils/utils.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 
 
