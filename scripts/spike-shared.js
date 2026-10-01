@@ -937,8 +937,8 @@ sys.exit()
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `
-    # Blink 10 times
-    blink(10)
+    # Blink 2 times
+    blink(2)
 `
                 },
                 {

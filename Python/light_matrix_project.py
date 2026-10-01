@@ -7,8 +7,12 @@ async def main():
     
     await light_matrix.write("Hi!")
 
-    # Blink 10 times
-    blink(10)
+    # Blink 2 times
+    blink(2)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+        0, velocity=int(.2 * 1100))
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * int(360/17.5),
+        0, velocity=int(.2 * 1100))
 
 
 
