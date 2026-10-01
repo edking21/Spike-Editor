@@ -6,5 +6,9 @@
   "editor.insertSpaces": true,
   "editor.tabSize": 4,
   "editor.detectIndentation": false,
-  "editor.autoIndent": "none"
+  "editor.autoIndent": "none",
+  "blocklypy-vscode.feature-flags": {
+    "autostart-on-magicheader": false,
+    "plot-data-from-stdout": true
+  }
 }

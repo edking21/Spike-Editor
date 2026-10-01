@@ -581,7 +581,8 @@
     };
 
     function buildGettingStartedPython(title) {
-        return `# ${title}
+        return `# LEGO slot:0
+# ${title}
 ########################################################################
 # 🤖 main
 ########################################################################
@@ -621,18 +622,29 @@ def blink(num_blinks):
     if num_blinks <= 0:
         raise ValueError("num_blinks must be greater than 0")
 
-    for _ in range(int(num_blinks)):
-        # Show a happy face on the Light Matrix.
-        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+    two_eyes_open = [
+        0, 0, 0, 0, 0,
+        0, 100, 0, 100, 0,
+        0,0, 0,0, 0,
+        100, 0, 0, 0, 100,
+        0, 100, 100, 100, 0
+    ]
 
-        # Wait for 0.2 seconds.
-        time.sleep_ms(200)
+    one_eye_open = [
+        0, 0, 0, 0, 0,
+        0, 100, 0, 0, 0,
+        0,0, 0,0, 0,
+        100, 0, 0, 0, 100,
+        0, 100, 100, 100, 0
+    ]
+    
+    for _ in range(num_blinks):
+        light_matrix.show(two_eyes_open)
+        sleep_ms(2000)
+        light_matrix.show(one_eye_open)
+        sleep_ms(200)
 
-        # Show a smile on the Light Matrix.
-        light_matrix.show_image(light_matrix.IMAGE_SMILE)
 
-        # Wait for 0.2 seconds.
-        time.sleep_ms(200)
 
 
 ########################################################################
@@ -742,11 +754,11 @@ async def when_left_button_pressed_lower_and_raise_the_arm():
     sleep_ms(1000)
 
     # Go shortest path to position -50 degrees then back to 0
-    await motor.run_to_absolute_position(arm_motor, 0, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(arm_motor, -50, 100, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor_port, 0, 100, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor_port, -50, 100, direction=motor.SHORTEST_PATH)
     sleep_ms(200)
 
-    await motor.run_to_absolute_position(arm_motor, 0, 100, direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor_port, 0, 100, direction=motor.SHORTEST_PATH)
 
 
 ########################################################################

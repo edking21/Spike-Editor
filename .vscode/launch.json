@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "pybricks-tunnel",
+            "request": "launch",
+            "name": "Run SPIKE Prime",
+            "program": "${file}",
+            "slot": 0
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Open index.html",
