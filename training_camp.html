@@ -145,12 +145,8 @@
                 combined: {
                     [CAMP1_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [ 2, 3, 30, 12],
-                        snippetIdsByGroup: {
-                            // 2: ['move1', 'move2', 'move3', 'move6'],
-                            // 3: ['light1', 'light2'],
-                            12: ['gettingstarted1'],
-                        }
+                        groups: [ 2 ],
+                        snippetIdsByGroup: {  }
                     }
                 },
                 groups: {
@@ -161,10 +157,8 @@
                 combined: {
                     [CAMP2_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 31, 12],
+                        groups: [2 ],
                         snippetIdsByGroup: {
-                            // 2: ['move1', 'move2', 'move3', 'move6'],
-                            // 3: ['light1', 'light2'],
                             12: ['gettingstarted2'],
                         }
                     }
@@ -177,11 +171,8 @@
                 combined: {
                     [CAMP3_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [1, 2, 3, 32, 12],
+                        groups: [1],
                         snippetIdsByGroup: {
-                            // 1: ['motors1', 'motors2'],
-                            // 2: ['move1', 'move2', 'move3', 'move6'],
-                            // 3: ['light1', 'light2'],
                             12: ['gettingstarted3'],
                         }
                     }
@@ -211,7 +202,7 @@
 
         const trainingCampEmojiButtons = {
             camp1: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 30, 12], {
+                ? colorUtils.getEmojiButtons([CAMP1_COMBINED_ID, 3, 6, 30, 12], {
                     [CAMP1_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp1 snippets', className: 'pink-circle' }
                 })
                 : [],
