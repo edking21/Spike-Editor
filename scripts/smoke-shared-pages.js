@@ -13,6 +13,10 @@ function extractLastInlineScript(html) {
     return scripts[scripts.length - 1][1];
 }
 
+function extractInlineScripts(html) {
+    return [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map((match) => match[1]);
+}
+
 function createMockWindow() {
     const windowObj = {
         console,
@@ -60,15 +64,18 @@ function main() {
     const indexPath = path.join(repoRoot, 'index.html');
     const trainingPath = path.join(repoRoot, 'training_camp.html');
     const classLibraryPath = path.join(repoRoot, 'challenges_library.html');
+    const copyToSitesPath = path.join(repoRoot, 'utils', 'index_for_copy_to_sites.html');
 
     const sharedJs = fs.readFileSync(sharedJsPath, 'utf8');
     const indexHtml = fs.readFileSync(indexPath, 'utf8');
     const trainingHtml = fs.readFileSync(trainingPath, 'utf8');
     const classLibraryHtml = fs.readFileSync(classLibraryPath, 'utf8');
+    const copyToSitesHtml = fs.readFileSync(copyToSitesPath, 'utf8');
 
     const indexInlineScript = extractLastInlineScript(indexHtml);
     const trainingInlineScript = extractLastInlineScript(trainingHtml);
     const classLibraryInlineScript = extractLastInlineScript(classLibraryHtml);
+    const copyToSitesInlineScripts = extractInlineScripts(copyToSitesHtml);
 
     const windowObj = createMockWindow();
 
@@ -98,6 +105,21 @@ function main() {
     runScript(indexInlineScript, windowObj, 'index inline script');
     runScript(trainingInlineScript, windowObj, 'training inline script');
     runScript(classLibraryInlineScript, windowObj, 'class library inline script');
+
+    const copyWindow = createMockWindow();
+    runScript(copyToSitesInlineScripts[0], copyWindow, 'copy-to-sites shared script');
+    const copyToSitesSnippets = copyWindow.SpikeShared?.snippetData?.[12]?.snippets || [];
+    const canonicalGettingStartedSnippets = bootstrapResult.snippetData[12].snippets;
+    assert(
+        copyToSitesSnippets.length === canonicalGettingStartedSnippets.length,
+        'Copy-to-sites Getting Started must contain the same five snippets'
+    );
+    canonicalGettingStartedSnippets.forEach((snippet, index) => {
+        assert(
+            copyToSitesSnippets[index]?.textPython === snippet.textPython,
+            `Copy-to-sites ${snippet.id} Python must match the shared page`
+        );
+    });
 
     const displayedSnippets = [];
     windowObj.SpikeShared.bootstrapPage = () => ({
