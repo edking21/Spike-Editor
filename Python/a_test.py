@@ -31,13 +31,13 @@ INCHES_TO_DEGREES = int(360/6.89)   # degrees_wheel_diameter:360 inches_wheel_ci
 
 
 ########################################################################
-# 🤖 blink n times
+# 🤖 wink n times
 ########################################################################
-def blink(num_blinks):
-    if not isinstance(num_blinks, (int, float)):
-        raise ValueError("num_blinks must be a number")
-    if num_blinks <= 0:
-        raise ValueError("num_blinks must be greater than 0")
+def wink(num_winks):
+    if not isinstance(num_winks, (int, float)):
+        raise ValueError("num_winks must be a number")
+    if num_winks <= 0:
+        raise ValueError("num_winks must be greater than 0")
 
     two_eyes_open = [
         0, 0, 0, 0, 0,
@@ -55,7 +55,7 @@ def blink(num_blinks):
         0, 100, 100, 100, 0
     ]
     
-    for _ in range(num_blinks):
+    for _ in range(num_winks):
         light_matrix.show(two_eyes_open)
         sleep_ms(2000)
         light_matrix.show(one_eye_open)

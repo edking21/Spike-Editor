@@ -614,13 +614,13 @@ INCHES_TO_DEGREES = int(360/6.89)   # degrees_wheel_diameter:360 inches_wheel_ci
 
 
 ########################################################################
-# 🤖 blink n times
+# 🤖 wink one eye
 ########################################################################
-def blink(num_blinks):
-    if not isinstance(num_blinks, (int, float)):
-        raise ValueError("num_blinks must be a number")
-    if num_blinks <= 0:
-        raise ValueError("num_blinks must be greater than 0")
+def wink_one_eye(num_winks):
+    if not isinstance(num_winks, (int, float)):
+        raise ValueError("num_winks must be a number")
+    if num_winks <= 0:
+        raise ValueError("num_winks must be greater than 0")
 
     two_eyes_open = [
         0, 0, 0, 0, 0,
@@ -638,7 +638,7 @@ def blink(num_blinks):
         0, 100, 100, 100, 0
     ]
     
-    for _ in range(int(num_blinks)):
+    for _ in range(int(num_winks)):
         light_matrix.show(two_eyes_open)
         sleep_ms(2000)
         light_matrix.show(one_eye_open)
@@ -933,12 +933,12 @@ sys.exit()
                 },
                 {
                     id: 'light2',
-                    buttonText: 'Blinking Eyes',
+                    buttonText: 'Wink One Eye',
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `
-    # Blink 2 times
-    blink(2)
+    # wink one eye
+    wink_one_eye(2)
 `
                 },
                 {
