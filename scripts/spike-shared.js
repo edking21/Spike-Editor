@@ -1307,7 +1307,13 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     color: '#CC0000',
                     textPython: buildGettingStartedPython('Sensors')
                 },
-
+                {
+                    id: 'gettingstarted5',
+                    buttonText: 'Getting Started Home',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: buildGettingStartedPython('Home')
+                }
             ]
         },
         30: {   // robot shuffle

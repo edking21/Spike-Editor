@@ -56,13 +56,9 @@
                 ? colorUtils.applySnippetTextColor(group?.snippets || [])
                 : (group?.snippets || []);
 
-            const filteredSnippets = groupId === 12
-                ? snippets.filter(snippet => snippet?.buttonText === 'Getting Started Home')
-                : snippets;
-
             renderers.renderSnippetButtons({
                 containerId: 'snippet-column',
-                snippets: filteredSnippets
+                snippets
             });
         }
 

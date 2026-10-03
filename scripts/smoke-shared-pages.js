@@ -85,6 +85,10 @@ function main() {
 
     assert(bootstrapResult.renderers, 'renderers missing from bootstrap result');
     assert(bootstrapResult.snippetData, 'snippetData missing from bootstrap result');
+    assert(
+        bootstrapResult.snippetData[12]?.snippets?.length === 5,
+        'Getting Started must contain five snippets'
+    );
     assert(typeof windowObj.toggleMobileMenu === 'function', 'toggleMobileMenu was not bound');
     assert(typeof windowObj.closeMobileMenu === 'function', 'closeMobileMenu was not bound');
     assert(typeof windowObj.searchCurrentPage === 'function', 'searchCurrentPage was not bound');
@@ -94,6 +98,26 @@ function main() {
     runScript(indexInlineScript, windowObj, 'index inline script');
     runScript(trainingInlineScript, windowObj, 'training inline script');
     runScript(classLibraryInlineScript, windowObj, 'class library inline script');
+
+    const displayedSnippets = [];
+    windowObj.SpikeShared.bootstrapPage = () => ({
+        renderers: {
+            renderSnippetButtons: ({ snippets }) => displayedSnippets.push(...snippets)
+        },
+        snippetData: bootstrapResult.snippetData,
+        colorUtils: bootstrapResult.colorUtils
+    });
+    const getRefreshSnippets = new Function(
+        'window',
+        'document',
+        `${indexInlineScript}\nreturn refreshSnippets;`
+    );
+    getRefreshSnippets(windowObj, windowObj.document)(12);
+    assert(displayedSnippets.length === 5, 'Selecting Getting Started must render five buttons');
+    assert(
+        displayedSnippets[4]?.buttonText === 'Getting Started Home',
+        'The fifth Getting Started button must be Getting Started Home'
+    );
 
     console.log('Smoke test passed: shared bootstrap + index/training/class scripts are valid.');
 }
