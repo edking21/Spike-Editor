@@ -820,7 +820,8 @@ sys.exit()
                     color: '#0066FF',
                     textPython: ` 
     # Go shortest path to absolute 0 degrees at 20% speed 
-    await motor.run_to_absolute_position(arm_motor_port, 0, int(20*1050), direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor_port, 0, int(20*1050),
+        direction=motor.SHORTEST_PATH)
 `
                 },
                 {
@@ -830,7 +831,8 @@ sys.exit()
                     color: '#0066FF',
                     textPython: ` 
     # Go shortest path to absolute -50 degrees at 20% speed 
-    await motor.run_to_absolute_position(arm_motor_port, -50, int(20*1050), direction=motor.SHORTEST_PATH)
+    await motor.run_to_absolute_position(arm_motor_port, -50, int(20*1050),
+        direction=motor.SHORTEST_PATH)
 `
                 }
             ]
