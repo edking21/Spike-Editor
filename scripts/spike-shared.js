@@ -1109,6 +1109,26 @@ when`
     if # <your condition or function here>
 `
                 },
+                {
+                    id: 'control5',
+                    buttonText: `wait until    ${ICON_HEX} `,
+                    emoji: '',
+                    color: '#DAA520',
+                    textPython: `
+    # wait until "wait here until a condition is true"
+    await runloop.until # <your condition sensor here>
+`
+                },
+                {
+                    id: 'control6',
+                    buttonText: `repeat until    ${ICON_HEX} `,
+                    emoji: '',
+                    color: '#DAA520',
+                    textPython: `
+    # repeat until "repeat the block until function is true"
+    while not # <your sensor function here> 
+`
+                },
             ]
         },
         7: {   // sensors 
@@ -1178,26 +1198,6 @@ motor.reset_relative_position(port.A, 0)`
                     textPython: `
 (motor.relative_position(port.D) > 1000):
     # <Your code here>`
-                },
-                {
-                    id: 'sensor_wait_until',
-                    buttonText: `wait until    ${ICON_HEX} `,
-                    emoji: '',
-                    color: '#87CEEB',
-                    textPython: `
-    # wait until "wait here until a condition is true"
-    await runloop.until # <your condition sensor here>
-`
-                },
-                {
-                    id: 'sensor_repeat_until',
-                    buttonText: `repeat until    ${ICON_HEX} `,
-                    emoji: '',
-                    color: '#87CEEB',
-                    textPython: `
-    # repeat until "repeat the block until function is true"
-    while not # <your sensor function here>
-`
                 }
             ]
         },
