@@ -441,6 +441,7 @@
                 if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
                 if (id.startsWith('ev')) return sectionRules.find(r => r.key === 'events');
                 if (id.startsWith('ctrl') || id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
+                if (id === 'challenge9y') return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('figure')) return sectionRules.find(r => r.key === 'figures');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
@@ -557,8 +558,11 @@
                         }
                         return;
                     }
-                    if (snippet?.id === 'challenge10') {
-                        showShortcutWindow();
+                    if (snippet?.id === 'challenge9y') {
+                        showChallengeImage(
+                            './images/LEGO SPIKE Prime_ Wait Until vs. Repeat Until.png',
+                            'LEGO SPIKE Prime Wait Until vs. Repeat Until'
+                        );
                         return;
                     }
                     copyTextToClipboard(snippet?.textPython || '');
@@ -1105,26 +1109,6 @@ when`
     if # <your condition or function here>
 `
                 },
-                {
-                    id: 'control5',
-                    buttonText: `wait until    ${ICON_HEX} `,
-                    emoji: '',
-                    color: '#DAA520',
-                    textPython: `
-    # wait until "wait here until a condition is true"
-    await runloop.until # <your condition sensor here>
-`
-                },
-                {
-                    id: 'control6',
-                    buttonText: `repeat until    ${ICON_HEX} `,
-                    emoji: '',
-                    color: '#DAA520',
-                    textPython: `
-    # repeat until "repeat the block until function is true"
-    while not # <your sensor function here> 
-`
-                },
             ]
         },
         7: {   // sensors 
@@ -1194,6 +1178,26 @@ motor.reset_relative_position(port.A, 0)`
                     textPython: `
 (motor.relative_position(port.D) > 1000):
     # <Your code here>`
+                },
+                {
+                    id: 'sensor_wait_until',
+                    buttonText: `wait until    ${ICON_HEX} `,
+                    emoji: '',
+                    color: '#87CEEB',
+                    textPython: `
+    # wait until "wait here until a condition is true"
+    await runloop.until # <your condition sensor here>
+`
+                },
+                {
+                    id: 'sensor_repeat_until',
+                    buttonText: `repeat until    ${ICON_HEX} `,
+                    emoji: '',
+                    color: '#87CEEB',
+                    textPython: `
+    # repeat until "repeat the block until function is true"
+    while not # <your sensor function here>
+`
                 }
             ]
         },
@@ -1487,6 +1491,13 @@ test for figures
                 {
                     id: 'challenge9',
                     buttonText: 'Sensors Quiz',
+                    emoji: '🧿',
+                    color: '#FF8C00',
+                    textPython: ``
+                },
+                {
+                    id: 'challenge9y',
+                    buttonText: 'Sensors Wait Until - Repeat Until',
                     emoji: '🧿',
                     color: '#FF8C00',
                     textPython: ``
