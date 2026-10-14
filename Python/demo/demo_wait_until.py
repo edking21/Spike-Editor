@@ -61,14 +61,24 @@ def is_pressed():
 ########################################################################
 # ☀️ is_near - Function to check if something is near
 ########################################################################
-def is_near(distance_threshold=150): # 150mm (6 inches) threshold
+def is_near (distance_threshold=200):# 200mm (7.874 inches)
     """
-    Examples:
-        Using with if:                if is_near():
-        Using with wait until        await runloop.until(is_near)
-        Using with repeat until:        while not (is_near()):
-        Using with repeat until:        while not (is_near(200)):# 200mm (8 inches) threshold
+    Teacher tip:
+        wait until the object is near
+            await runloop.until(is_near) # pass the function itself
+
+        repeat until the object is near
+            while not is_near(): # call the function to get True/False
+
+        override the distance
+            await runloop.until(lambda: is_near(100))
+            while not is_near(100)
+
+    Why:
+        - wait until needs a function
+        - repeat until needs a True/False result
     """
+    
     distance = distance_sensor.distance(distance_port)
 
     if distance == -1:

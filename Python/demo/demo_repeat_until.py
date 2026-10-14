@@ -61,46 +61,64 @@ def is_pressed():
 ########################################################################
 # ☀️ is_near - Function to check if something is near
 ########################################################################
-def is_near(distance_threshold=150): # 150mm (6 inches) threshold
+def is_near (distance_threshold=200):# 200mm (7.874 inches)
     """
-    Examples:
-        Using with if:                if is_near():
-        Using with wait until        await runloop.until(is_near)
-        Using with repeat until:        while not (is_near()):
-        Using with repeat until:        while not (is_near(200)):# 200mm (8 inches) threshold
+    Teacher tip:
+        wait until the object is near
+            await runloop.until(is_near) # pass the function itself
+
+        repeat until the object is near
+            while not is_near(): # call the function to get True/False
+
+        override the distance
+            await runloop.until(lambda: is_near(100))
+            while not is_near(100)
+
+    Why:
+        - wait until needs a function
+        - repeat until needs a True/False result
     """
+    if not isinstance(distance_threshold, (int, float)):
+        raise ValueError("distance_threshold must be a number")
+    if distance_threshold <= 0:
+        raise ValueError("distance_threshold must be greater than 0")
+
     distance = distance_sensor.distance(distance_port)
-
     if distance == -1:
-        print("Warning: Distance sensor not detecting anything")
+        print("Warning : distance sensor returned -1")
         return False
-
-    print ("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance / 25.4))
-
+    print("Distance {:5.2f} cm {:6.2f} inches ".format(distance / 10, distance /25.4))
+    
     return distance < distance_threshold
 
+
 ########################################################################
-# 🤖 Test for is_near with wait until and repeat until
+# 🤖 Test is_near back and forth until hand wave
 ########################################################################
+from hub import port # pyright: ignore[reportMissingImports]
+from time import sleep_ms
+import distance_sensor, motor_pair # pyright: ignore[reportMissingImports]
+
 async def repeat_until_demo():
 
-    while True:
+    def is_near(distance_threshold=200): # 200mm (7.8 inches)
+        distance = distance_sensor.distance(port.B)
+        return distance < distance_threshold
 
-        # start moving
-        motor_pair.move(motor_pair.PAIR_1, 0)
-        light.color(light.POWER, color.BLUE)
+    while not is_near():
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+            0, velocity=int(.2 * 1100))
+        sleep_ms(200)
 
-        # Repeat Until - Keep Doing Something Until a Condition is Met
-        while is_near(): # WITH parentheses - check right now!
-                         # This means:
-                         #    "Check right now"
+        if is_near(): break
 
-            # stop moving
-            motor_pair.stop(motor_pair.PAIR_1)
-            light.color(light.POWER, color.RED)
-            sleep_ms(10) # Wait 10 milliseconds before checking again
+        await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * int(360/17.5),
+            0, velocity=int(.2 * 1100))
+        sleep_ms(200)
+
+    motor_pair.stop(motor_pair.PAIR_1)
+    print("Hand Detected! Stopped repeating.")
 
 runloop.run(repeat_until_demo())
-sys.exit()
 
 
