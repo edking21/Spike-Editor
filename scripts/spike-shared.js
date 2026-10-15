@@ -559,9 +559,10 @@
                         return;
                     }
                     if (snippet?.id === 'challenge9y') {
-                        showChallengeImage(
-                            'https://edking21.github.io/Spike-Editor/images/LEGO%20SPIKE%20Prime_%20Wait%20Until%20vs.%20Repeat%20Until.png',
-                            'LEGO SPIKE Prime Wait Until vs. Repeat Until'
+                        global.open(
+                            'https://drive.google.com/file/d/1FlvEVGlGyacdZNLM7auXYeJUa9QUku98/view?usp=sharing',
+                            '_blank',
+                            'noopener'
                         );
                         return;
                     }
