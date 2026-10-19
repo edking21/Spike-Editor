@@ -1510,7 +1510,7 @@ test for figures
             snippets: [
                 {
                     id: 'challenge9x',
-                    buttonText: 'Figures',
+                    buttonText: 'Challenge Figures',
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: ``
