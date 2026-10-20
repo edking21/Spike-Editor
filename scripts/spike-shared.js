@@ -653,6 +653,23 @@ def wink_one_eye(num_winks):
 
 
 ########################################################################
+# 🤖 frowny face
+########################################################################
+def frowny_face():
+
+    frown_face = [
+        100, 100, 0, 100, 100,
+        100, 100, 0, 100, 100,
+        0, 0, 0, 0, 0,
+        0, 100, 100, 100, 0,
+        100, 0, 0, 0, 100
+        ]
+   
+    light_matrix.show(frown_face)
+    sleep_ms(2000)
+
+
+########################################################################
 # 🤖 turn_90
 ########################################################################
 async def turn_90(direction):
@@ -684,18 +701,18 @@ async def turn_90(direction):
 ########################################################################
 # ☀️ is the distance sensor seeing something close
 ########################################################################
-def is_near(distance_threshold=200):  # 200mm (7.874 inches)
+def is_near(distance_threshold=200):  # 200 milimeters (7.874 inches)
     """
     Teacher tip:
         wait until the object is near
             await runloop.until(is_near) # pass the function itself
+            or
+            await runloop.until(lambda: is_near(10 * INCHES_TO_MILLIMETERS)) # is closer than 10 inches
 
         repeat until the object is near
             while not is_near(): # call the function to get True/False
-
-        override the distance
-            await runloop.until(lambda: is_near(100))
-            while not is_near(100)
+            or
+            while not is_near(100) # override the distance threshold
 
     Why:
         - wait until needs a function
@@ -939,10 +956,12 @@ sys.exit()
             snippets: [
                 {
                     id: 'light1',
-                    buttonText: 'Turn On Smiley Face For 2 Seconds',
+                    buttonText: 'Smiley Face',
                     emoji: '🧿',
                     color: '#8A2BE2',
-                    textPython: `    light_matrix.show_image(light_matrix.IMAGE_SMILE)
+                    textPython: `    
+    # Smiley Face
+    light_matrix.show_image(light_matrix.IMAGE_SMILE)
     sleep_ms(2000)
 `
                 },
@@ -958,13 +977,12 @@ sys.exit()
                 },
                 {
                     id: 'light3',
-                    buttonText: 'Turn On Angry Face For 2 Seconds',
+                    buttonText: 'Frowny Face',
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: `
-    # Turn On Angry Face For 2 Seconds
-    light_matrix.show_image(light_matrix.IMAGE_ANGRY)
-    sleep_ms(2000)
+    # Frowny Face
+    frowny_face()
 `
                 },
                 {
@@ -1149,7 +1167,7 @@ when`
                     buttonText: 'is blue (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `        is_blue)
+                    textPython: `        is_blue) # color sensor detects blue condition
            `
                 },
                 {
@@ -1157,12 +1175,20 @@ when`
                     buttonText: 'is pressed (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `        is_pressed)
+                    textPython: `        is_pressed) # force sensor pressed condition
            `
                 },
                 {
                     id: 'sensor3',
                     buttonText: 'is near (condition)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `        is_near) # is closer than 7.8 inches condition
+            `
+                },
+                {
+                    id: 'sensor3a',
+                    buttonText: 'is near (condition) override',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `        lambda: (is_near(10 * INCHES_TO_MILLIMETERS))) # is closer than 10 inches
@@ -1195,7 +1221,7 @@ when`
         `
                 },
                 {
-                    id: 'fn6b',
+                    id: 'sensor7',
                     buttonText: 'relative position reset',
                     emoji: '🧿',
                     color: '#87CEEB',
@@ -1204,7 +1230,7 @@ when`
 motor.reset_relative_position(port.A, 0)`
                 },
                 {
-                    id: 'fn6c',
+                    id: 'sensor8',
                     buttonText: 'relative position (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
