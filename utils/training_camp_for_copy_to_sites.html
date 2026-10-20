@@ -119,6 +119,7 @@
                     }
                 },
                 groups: {
+                    6: ['control1'],
                     12: ['gettingstarted1']
                 }
             },
@@ -147,24 +148,27 @@
                     }
                 },
                 groups: {
-                        12: ['gettingstarted3']
+                    6: ['control1'],
+                    12: ['gettingstarted3']
                 }
             },
             camp4: {
                 combined: {
                     [CAMP4_COMBINED_ID]: {
                         colorClass: 'movement-color',
-                        groups: [2, 3, 6, 7, 33, 12],
+                        groups: [2],
                         snippetIdsByGroup: {
                             // 2: ['move1', 'move2', 'move3', 'move6'],
                             // 3: ['light1', 'light2'],
-                            // 6: ['control5', 'control6'],
                             12: ['gettingstarted4'],
                         }
                     }
                 },
                 groups: {
-                        12: ['gettingstarted4']
+                    3: ['light1', 'light2', 'light3', 'light4'],
+                    6: ['control1', 'control5','control6'],
+                    7: ['sensor1', 'sensor2', 'sensor3', 'sensor3a', 'sensor4', 'sensor5', 'sensor6'],
+                    12: ['gettingstarted4']
                 }
             },
         };
@@ -181,7 +185,7 @@
                 })
                 : [],
             camp3: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 2, 3, 32, 12], {
+                ? colorUtils.getEmojiButtons([CAMP3_COMBINED_ID, 2, 3, 6, 32, 12], {
                     [CAMP3_COMBINED_ID]: { label: 'Motors', bubbleLabel: 'Camp3 snippets', className: 'blue-circle' }
                 })
                 : [],
@@ -322,14 +326,6 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
 
 
