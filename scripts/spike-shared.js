@@ -598,6 +598,8 @@ async def main():
 
 
 ########################################################################
+########################################################################
+########################################################################
 # ☀️ initilize modules
 ########################################################################
 import sys, motor_pair, motor, runloop, time
@@ -616,7 +618,7 @@ arm_motor_port = port.E
 # Constants
 CM_TO_DEGREES = int(360/17.5)   # degrees_wheel_diameter:360 cm_wheel_circumference:17.5
 INCHES_TO_DEGREES = int(360/6.89)   # degrees_wheel_diameter:360 inches_wheel_circumference:6.89
-
+INCHES_TO_MILLIMETERS = int(25.4)   # 1 inch = 25.4 millimeters
 
 ########################################################################
 # 🤖 wink one eye
@@ -648,8 +650,6 @@ def wink_one_eye(num_winks):
         sleep_ms(2000)
         light_matrix.show(one_eye_open)
         sleep_ms(200)
-
-
 
 
 ########################################################################
@@ -850,7 +850,9 @@ sys.exit()
                     buttonText: 'move forward for 10 cm at 20% speed',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+                    textPython: `    
+    # move forward for 10 cm at 20% speed
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * CM_TO_DEGREES,
         0, velocity=int(.2 * 1100))
 `
                 },
@@ -859,7 +861,9 @@ sys.exit()
                     buttonText: 'start moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
+                    textPython: `       
+    # start moving
+    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 `
                 },
                 {
@@ -867,7 +871,9 @@ sys.exit()
                     buttonText: 'turn 90 degrees',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    await turn_90("right")
+                    textPython:`        
+    # turn 90 degrees
+    await turn_90("right")
 `
                 },
                 {
@@ -875,7 +881,9 @@ sys.exit()
                     buttonText: 'stop moving',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
-                    textPython: `    motor_pair.stop(motor_pair.PAIR_1)
+                    textPython: `       
+    # stop moving
+    motor_pair.stop(motor_pair.PAIR_1)
 `
                 }
             ]
@@ -1117,7 +1125,8 @@ when`
                     color: '#DAA520',
                     textPython: `
     # wait until "wait here until a condition is true"
-    await runloop.until # <your condition sensor here>
+    await runloop.until (
+        # <your condition sensor here> 
 `
                 },
                 {
@@ -1140,21 +1149,24 @@ when`
                     buttonText: 'is blue (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `(is_blue)`
+                    textPython: `        is_blue)
+           `
                 },
                 {
                     id: 'sensor2',
                     buttonText: 'is pressed (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `(is_pressed)`
+                    textPython: `        is_pressed)
+           `
                 },
                 {
                     id: 'sensor3',
                     buttonText: 'is near (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `(is_near)`
+                    textPython: `        lambda: (is_near(10 * INCHES_TO_MILLIMETERS))) # is closer than 10 inches
+            `
                 },
                 {
                     id: 'sensor4',
