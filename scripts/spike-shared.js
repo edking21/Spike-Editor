@@ -1154,7 +1154,7 @@ when`
                     color: '#DAA520',
                     textPython: `
     # repeat until "repeat the block until function is true"
-    while not # <your sensor function here> 
+    while not ( 
 `
                 },
             ]
@@ -1216,8 +1216,7 @@ when`
                     buttonText: 'is near (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `is_near():
-        # your repeat block here
+                    textPython: `           is_near()):
         `
                 },
                 {
