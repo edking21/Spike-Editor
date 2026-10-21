@@ -1144,7 +1144,7 @@ when`
                     textPython: `
     # wait until "wait here until a condition is true"
     await runloop.until (
-        # <your condition sensor here> 
+        # <your condition sensor below this line> 
 `
                 },
                 {
@@ -1155,6 +1155,7 @@ when`
                     textPython: `
     # repeat until "repeat the block until function is true"
     while not ( 
+        # <your function sensor below this line> 
 `
                 },
             ]
@@ -1217,6 +1218,7 @@ when`
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `           is_near()):
+            # <your repeat blocks below this line>
         `
                 },
                 {
