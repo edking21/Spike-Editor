@@ -441,7 +441,7 @@
                 if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
                 if (id.startsWith('ev')) return sectionRules.find(r => r.key === 'events');
                 if (id.startsWith('ctrl') || id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
-                if (id === 'challenge9y') return sectionRules.find(r => r.key === 'sensors');
+                if (id === 'challenge9y' || id === 'challenge10y') return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('figure')) return sectionRules.find(r => r.key === 'figures');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
@@ -560,7 +560,15 @@
                     }
                     if (snippet?.id === 'challenge9y') {
                         global.open(
-                            'https://drive.google.com/file/d/1FlvEVGlGyacdZNLM7auXYeJUa9QUku98/view?usp=sharing',
+                            'https://drive.google.com/file/d/1jt3YLkeeL5O5dNNb-lIlgCtRquZ-x4D5/view?usp=sharing',
+                            '_blank',
+                            'noopener'
+                        );
+                        return;
+                    }
+                    if (snippet?.id === 'challenge9z') {
+                        global.open(
+                            'https://drive.google.com/file/d/1Fk8fPG2m05Hl3vh235q1dc6uUNQVE7TB/view?usp=sharing',
                             '_blank',
                             'noopener'
                         );
@@ -1537,7 +1545,14 @@ test for figures
                 },
                 {
                     id: 'challenge9y',
-                    buttonText: 'Sensors Wait Until - Repeat Until',
+                    buttonText: 'Sensors Wait Until',
+                    emoji: '🧿',
+                    color: '#FF8C00',
+                    textPython: ``
+                },
+                {
+                    id: 'challenge10y',
+                    buttonText: 'Sensors Repeat Until',
                     emoji: '🧿',
                     color: '#FF8C00',
                     textPython: ``
