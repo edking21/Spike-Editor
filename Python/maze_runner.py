@@ -1,8 +1,6 @@
 # Maze Runner Python
-import runloop, time, sys, motor_pair
-import color_sensor
+import color, color_sensor, motor_pair, runloop
 from hub import light, port
-from time import sleep
 from runloop import run
 
 # Conversion constants
@@ -14,17 +12,14 @@ MM_PER_INCH = 25.4
 color_port = port.F 
 
 # Color codes - these numbers represent different colors to the robot
-blue = 4
-yellow = 7
-red = 9
+blue = color.BLUE
+yellow = color.YELLOW
+red = color.RED
 
 # Separate last color tracking for each color
 last_blue = None
 last_red = None
 last_yellow = None
-
-# Remember the last color we saw so we don't count the same color twice in a row
-last_color = None
 
 # Connect two motors together so they work as a team
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
@@ -36,13 +31,15 @@ should_stop = False
 # 🛑 Watch for yellow colors continuously
 #####################################################################
 async def when_yellow():
-    global last_color, should_stop
+    global last_yellow, should_stop
 
     while not should_stop:
         current_color = color_sensor.color(color_port)
-        if current_color == yellow and last_color != yellow:
+        if current_color == yellow and last_yellow != yellow:
             light.color(light.POWER, current_color)
-            last_color = yellow
+            last_yellow = yellow
+        elif current_color != yellow:
+            last_yellow = None
 
         await runloop.sleep_ms(50)
 
@@ -69,16 +66,19 @@ async def robot_movement():
 # 🛑 Watch for blue colors continuously
 #####################################################################
 async def when_blue():
-    global should_stop
+    global last_blue, should_stop
 
     while not should_stop:
         current_color = color_sensor.color(color_port)
-        if current_color == blue:
+        if current_color == blue and last_blue != blue:
             light.color(light.POWER, current_color)
+            last_blue = blue
             
             # Stop forward movement before turning
             motor_pair.stop(motor_pair.PAIR_1)
             await motor_pair.move_for_degrees(motor_pair.PAIR_1, 180, 100)
+        elif current_color != blue:
+            last_blue = None
             
         await runloop.sleep_ms(50)
 
@@ -116,5 +116,3 @@ async def main():
     )
 
 runloop.run(main())
-sys.exit()
-

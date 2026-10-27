@@ -101,12 +101,14 @@
         const CAMP2_COMBINED_ID = 2001;
         const CAMP3_COMBINED_ID = 3001;
         const CAMP4_COMBINED_ID = 4001;
+        const CAMP5_COMBINED_ID = 5001;
 
         const trainingCampOptions = [
             { key: 'camp1', label: 'Training Camp Robot Shuffle' },
             { key: 'camp2', label: 'Training Camp Round the Garage' },
             { key: 'camp3', label: 'Training Camp Hay Bale' },
-            { key: 'camp4', label: 'Training Camp Sensors' }
+            { key: 'camp4', label: 'Training Camp Sensors' },
+            { key: 'camp5', label: 'Training Camp Maze Runner' }
         ];
 
         const trainingCampSnippetSelections = {
@@ -171,6 +173,23 @@
                     12: ['gettingstarted4']
                 }
             },
+            camp5: {
+                combined: {
+                    [CAMP5_COMBINED_ID]: {
+                        colorClass: 'movement-color',
+                        groups: [2],
+                        snippetIdsByGroup: {
+                            12: ['gettingstarted6'],
+                        }
+                    }
+                },
+                groups: {
+                    3: ['light1', 'light2', 'light3', 'light4'],
+                    6: ['control1', 'control5','control6'],
+                    7: ['sensor1', 'sensor2', 'sensor3', 'sensor3a', 'sensor4', 'sensor5', 'sensor6'],
+                    12: ['gettingstarted6']
+                }
+            },
         };
 
         const trainingCampEmojiButtons = {
@@ -192,6 +211,11 @@
             camp4: (typeof colorUtils.getEmojiButtons === 'function')
                 ? colorUtils.getEmojiButtons([CAMP4_COMBINED_ID, 3, 6, 7, 33, 12], {
                     [CAMP4_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp4 snippets', className: 'pink-circle' }
+                })
+                : [],
+            camp5: (typeof colorUtils.getEmojiButtons === 'function')
+                ? colorUtils.getEmojiButtons([CAMP5_COMBINED_ID, 3, 6, 7, 35, 12], {
+                    [CAMP5_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp5 snippets', className: 'pink-circle' }
                 })
                 : [],
         };
@@ -326,22 +350,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

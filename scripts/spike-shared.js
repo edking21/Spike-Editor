@@ -192,7 +192,8 @@
             31: { label: 'More Garage', className: 'pink-circle', bubbleLabel: 'Pink Garage bubble' },
             32: { label: 'More Hay Bale', className: 'green-circle', bubbleLabel: 'Green Hay Bale bubble' },
             33: { label: 'More Sensors', className: 'orange-circle', bubbleLabel: 'Orange Sensors bubble' },
-            34: { label: 'Figures ', className: 'purple-circle', bubbleLabel: 'Purple Figures bubble' }
+            34: { label: 'Figures ', className: 'purple-circle', bubbleLabel: 'Purple Figures bubble' },
+            35: { label: 'More Maze', className: 'orange-circle', bubbleLabel: 'Orange Maze bubble' }
         },
         getEmojiButton(groupId, overrides = {}) {
             const base = this.emojiByGroupId[groupId] || {};
@@ -1367,6 +1368,13 @@ await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * 360, 180)`
                     emoji: '🧿',
                     color: '#CC0000',
                     textPython: buildGettingStartedPython('Home')
+                },
+                {
+                    id: 'gettingstarted6',
+                    buttonText: 'Training Camp Maze Runner Getting Started',
+                    emoji: '🧿',
+                    color: '#CC0000',
+                    textPython: buildGettingStartedPython('Maze Runner')
                 }
             ]
         },
@@ -1575,6 +1583,124 @@ test for figures
                     emoji: '🧿',
                     color: '#8A2BE2',
                     textPython: ``
+                },
+            ]
+        },
+        35: {   // maze runner
+            colorClass: 'challenge-color',
+            snippets: [
+                {
+                    id: 'maze1',
+                    buttonText: 'Maze Runner Description',
+                    emoji: '🧿',
+                    color: '#FF8C00',
+                    textPython: `
+    # Maze Runner
+    # 1. The Driving Base starts moving forward.
+    # 2. When the Color Sensor sees BLUE, the Driving Base keeps moving forward.
+    # 3. When the Color Sensor sees BLACK, the Driving Base stops.
+    # 4. When the sensor moves off a color, the program is ready to react to that
+    #    color again.
+    #
+    # Event handlers: watch_black and watch_blue each wait for an event
+    # (a color seen) and react. run() starts both so they work at the same time.
+    #
+    # Lambda: a function with no name. runloop.until keeps calling it until it
+    # returns True, so we hand it over without parentheses.
+`
+                },
+                {
+                    id: 'maze2',
+                    buttonText: 'Maze Runner Without Lambda',
+                    emoji: '🧿',
+                    color: '#FF8C00',
+                    textPython: `import color
+import color_sensor
+import motor_pair
+import runloop
+from hub import port
+from runloop import run
+
+PAIR = motor_pair.PAIR_1
+SPEED = int(0.25 * 1100)  # 25% speed
+
+def sees_black():
+    return color_sensor.color(port.B) == color.BLACK
+
+def does_not_see_black():
+    return color_sensor.color(port.B) != color.BLACK
+
+def sees_blue():
+    return color_sensor.color(port.B) == color.BLUE
+
+def does_not_see_blue():
+    return color_sensor.color(port.B) != color.BLUE
+
+async def watch_black(): # stop on black
+    while True:
+        # Hand the function to runloop.until (no parentheses); it keeps checking for us
+        await runloop.until(sees_black)
+        motor_pair.stop(PAIR)  # stop at black
+        await runloop.until(does_not_see_black)
+
+async def watch_blue(): # move on blue
+    while True:
+        await runloop.until(sees_blue)
+        motor_pair.move(PAIR, 0, velocity=SPEED)
+        await runloop.until(does_not_see_blue)
+
+async def main():
+    run(watch_black(), watch_blue())
+    motor_pair.move(PAIR, 0, velocity=SPEED)  # start forward
+
+    while True:
+        await runloop.sleep_ms(100)
+
+try:
+    run(main())
+except SystemExit:
+    pass
+`
+                },
+                {
+                    id: 'maze3',
+                    buttonText: 'Maze Runner With Lambda',
+                    emoji: '🧿',
+                    color: '#FF8C00',
+                    textPython: `import color
+import color_sensor
+import motor_pair
+import runloop
+from hub import port
+from runloop import run
+
+PAIR = motor_pair.PAIR_1
+SPEED = int(0.25 * 1100)  # 25% speed
+
+async def watch_black(): # stop on black
+    while True:
+        await runloop.until(lambda: color_sensor.color(port.B) == color.BLACK)
+        motor_pair.stop(PAIR)  # stop at black
+        await runloop.until(lambda: color_sensor.color(port.B) != color.BLACK)
+
+async def watch_blue(): # move on blue
+    while True:
+        await runloop.until(lambda: color_sensor.color(port.B) == color.BLUE)
+        motor_pair.move(PAIR, 0, velocity=SPEED)
+        await runloop.until(lambda: color_sensor.color(port.B) != color.BLUE)
+
+async def main():
+    run(watch_black(), watch_blue())
+    motor_pair.move(PAIR, 0, velocity=SPEED)  # start forward
+
+    while True:
+        await runloop.sleep_ms(100)
+
+try:
+    run(main())
+except SystemExit:
+    pass
+`
                 },
             ]
         },
