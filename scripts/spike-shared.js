@@ -442,8 +442,9 @@
                 if (id.startsWith('sound')) return sectionRules.find(r => r.key === 'sound');
                 if (id.startsWith('ev')) return sectionRules.find(r => r.key === 'events');
                 if (id.startsWith('ctrl') || id.startsWith('control')) return sectionRules.find(r => r.key === 'control');
-                if (id === 'challenge10' || id === 'challenge11') return sectionRules.find(r => r.key === 'sensors');
+                if (id.startsWith('challenge') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
                 if (id.startsWith('sensor') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'sensors');
+                if (id.startsWith('maze') || id.startsWith('fn')) return sectionRules.find(r => r.key === 'maze');
                 if (id.startsWith('figure')) return sectionRules.find(r => r.key === 'figures');
                 if (id.startsWith('op')) return sectionRules.find(r => r.key === 'operators');
                 if (id.startsWith('var')) return sectionRules.find(r => r.key === 'variables');
@@ -570,6 +571,22 @@
                     if (snippet?.id === 'challenge11') {
                         global.open(
                             'https://drive.google.com/file/d/1Fk8fPG2m05Hl3vh235q1dc6uUNQVE7TB/view?usp=sharing',
+                            '_blank',
+                            'noopener'
+                        );
+                        return;
+                    }
+                    if (snippet?.id === 'maze2') {
+                        global.open(
+                            'https://drive.google.com/file/d/13U_2Hi0Ede-2t_1YDBp1V6FfTQTGLKkP/view?usp=sharing',
+                            '_blank',
+                            'noopener'
+                        );
+                        return;
+                    }
+                    if (snippet?.id === 'maze3') {
+                        global.open(
+                            'https://drive.google.com/file/d/1UWqMDHLphlWOVydZXToP7pRBcTdgI75y/view?usp=sharing',
                             '_blank',
                             'noopener'
                         );
