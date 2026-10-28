@@ -1065,15 +1065,6 @@ async def main():
 `
                 },
                 {
-                    id: 'event4',
-                    buttonText: 'When color is red',
-                    emoji: ICON_COLOR_SENSOR,
-                    color: '#FFD700',
-                    textPython: `
-# When left button pressed
-while not (#<your condition or function here>)`
-                },
-                {
                     id: 'event3',
                     buttonText: 'When closer than 10 cm',
                     emoji: ICON_DISTANCE_SENSOR,
@@ -1106,6 +1097,28 @@ while not (#<your condition or function here>)`
             await when_right_button_pressed_detect_blue_line()
             break
         sleep_ms(50)
+`
+                },
+                {
+                    id: 'event8',
+                    buttonText: 'Run (In Main)',
+                    emoji: ICON_COLOR_SENSOR,
+                    color: '#FFD700',
+                    textPython: `
+    # Run when color is blue
+    run(when_color_is_blue(), when_color_is_blue())
+`
+                },
+                {
+                    id: 'event9',
+                    buttonText: 'When color is blue (Above Main)',
+                    emoji: ICON_COLOR_SENSOR,
+                    color: '#FFD700',
+                    textPython: `
+# When color is blue
+async def when_color_is_blue():
+    while True:
+        await runloop.until(lambda: color_sensor.color(color_port) == color.BLUE)
 `
                 },
                 {
