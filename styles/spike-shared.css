@@ -252,8 +252,9 @@ body {
     min-width: 260px;
     max-width: 420px;
     padding: 2px 0;
-    height: 111px;
-    overflow: hidden;
+    max-height: calc(100vh - 120px);
+    max-height: calc(100dvh - 120px);
+    overflow-y: auto;
     z-index: 1301;
 }
 

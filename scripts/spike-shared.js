@@ -1595,18 +1595,37 @@ test for figures
                     emoji: '🧿',
                     color: '#FF8C00',
                     textPython: `
-    # Maze Runner
-    # 1. The Driving Base starts moving forward.
-    # 2. When the Color Sensor sees BLUE, the Driving Base keeps moving forward.
-    # 3. When the Color Sensor sees BLACK, the Driving Base stops.
-    # 4. When the sensor moves off a color, the program is ready to react to that
-    #    color again.
-    #
-    # Event handlers: watch_black and watch_blue each wait for an event
-    # (a color seen) and react. run() starts both so they work at the same time.
-    #
-    # Lambda: a function with no name. runloop.until keeps calling it until it
-    # returns True, so we hand it over without parentheses.
+       # This challenge requires the student to code the The Driving Base to perform the
+       # basic drive movements (forward, backward, left and right) using the color
+       # sensor. The student must choose an appropriate power/speed to ensure the desired
+       # response time from their Driving Base. The layout of the maze will change.
+
+       # 1. The Driving Base tires are placed in the center of a 10”x10” opening into a 
+       #    simple maze design laid out on a 4’ by 8’ table surrounded by walls. Since the design 
+       #     of themaze will vary, you must make sure to program the Driving Base correctly.
+
+       # 2. When the student starts their robot, the Driving Base should begin driving forward.
+
+       # 3. When the color sensor detects Black, the Driving Base should stop moving.
+
+       # 4. When the color sensor detects Green, the Driving Base should turn right 90 degrees.
+
+       # 5. When the color sensor detects Yellow, the Driving Base should turn left 90 degrees.
+
+       # 6. When the sensor detects Light Blue, the Driving Base should begin driving forward again.
+
+       # 7. Using colored Lego bricks, or colored paper, the student must navigate their Driving 
+       #    Base through the maze and reach the Finish using only the coded color sensor to maneuver 
+       #    the base.
+
+       # 8. When the Driving Base reaches the exit, the Driving Base needs to stop moving, the 
+       #    hub must display a heart and play the recorded message, “We made it!”
+
+       # Note: If the Driving Base touches the blue lines of the maze walls, the Driving Base 
+       # must be returned to the Start. Each team can run two attempts at the Jamboree before 
+       # having to go back to the beginning of the line or back to their pit to make modifications. 
+       # Feel free to have another color added to your code to activate other functions of the robot, 
+       # such as the final announcement when The Driving Base reaches the Finish.
 `
                 },
                 {
