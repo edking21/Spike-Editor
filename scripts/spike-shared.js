@@ -1101,21 +1101,19 @@ async def main():
                 },
                 {
                     id: 'event8',
-                    buttonText: 'Run (In Main)',
+                    buttonText: 'Runloop.run',
                     emoji: ICON_COLOR_SENSOR,
                     color: '#FFD700',
                     textPython: `
-    # Run when color is blue
-    run(when_color_is_blue(), when_color_is_blue())
+    runloop.run(when_color_is_black(), when_color_is_blue(), when_color_is_green())
 `
                 },
                 {
                     id: 'event9',
-                    buttonText: 'When color is blue (Above Main)',
+                    buttonText: 'When color is blue',
                     emoji: ICON_COLOR_SENSOR,
                     color: '#FFD700',
                     textPython: `
-# When color is blue
 async def when_color_is_blue():
     while True:
         await runloop.until(lambda: color_sensor.color(color_port) == color.BLUE)
@@ -1625,37 +1623,30 @@ test for figures
                     emoji: '🧿',
                     color: '#FF8C00',
                     textPython: `
-       # This challenge requires the student to code the The Driving Base to perform the
-       # basic drive movements (forward, backward, left and right) using the color
-       # sensor. The student must choose an appropriate power/speed to ensure the desired
-       # response time from their Driving Base. The layout of the maze will change.
+# This challenge requires the student to code the The Driving Base to perform the
+# basic drive movements (forward, backward, left and right) using the color
+# sensor. The student must choose an appropriate power/speed to ensure the desired
+# response time from their Driving Base. The layout of the maze will change.
 
-       # 1. The Driving Base tires are placed in the center of a 10”x10” opening into a 
-       #    simple maze design laid out on a 4’ by 8’ table surrounded by walls. Since the design 
-       #     of themaze will vary, you must make sure to program the Driving Base correctly.
+# 1. The Driving Base tires are placed in the center of a 10”x10” opening into a 
+#    simple maze design laid out on a 4 by 8 table surrounded by walls. Since the design 
+#    of the maze will vary, you must make sure to program the Driving Base correctly.
 
-       # 2. When the student starts their robot, the Driving Base should begin driving forward.
+    # 2. When the student starts their robot, the Driving Base should begin driving forward.
 
-       # 3. When the color sensor detects Black, the Driving Base should stop moving.
+    # 2a Runloop.run here to continuously check the color sensor and respond accordingly.
 
-       # 4. When the color sensor detects Green, the Driving Base should turn right 90 degrees.
+# 3. When the color sensor detects Black, the Driving Base should stop moving.
 
-       # 5. When the color sensor detects Yellow, the Driving Base should turn left 90 degrees.
+# 4. When the color sensor detects Green, the Driving Base should turn right 90 degrees.
 
-       # 6. When the sensor detects Light Blue, the Driving Base should begin driving forward again.
+# 5. When the color sensor detects Yellow, the Driving Base should turn left 90 degrees.
 
-       # 7. Using colored Lego bricks, or colored paper, the student must navigate their Driving 
-       #    Base through the maze and reach the Finish using only the coded color sensor to maneuver 
-       #    the base.
+# 6. When the sensor detects Blue, the Driving Base should begin driving forward again.
 
        # 8. When the Driving Base reaches the exit, the Driving Base needs to stop moving, the 
        #    hub must display a heart and play the recorded message, “We made it!”
 
-       # Note: If the Driving Base touches the blue lines of the maze walls, the Driving Base 
-       # must be returned to the Start. Each team can run two attempts at the Jamboree before 
-       # having to go back to the beginning of the line or back to their pit to make modifications. 
-       # Feel free to have another color added to your code to activate other functions of the robot, 
-       # such as the final announcement when The Driving Base reaches the Finish.
 `
                 },
                 {

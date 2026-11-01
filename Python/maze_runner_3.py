@@ -10,9 +10,6 @@ async def main():
     run(when_color_is_blue(), when_color_is_green(), when_color_is_black())
     motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 
-    while True:
-        await runloop.sleep_ms(100)
-
 async def when_color_is_blue():
     while True:
         await runloop.until(lambda: color_sensor.color(color_port) == color.BLUE)
