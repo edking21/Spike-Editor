@@ -1,26 +1,32 @@
+import sys, motor_pair, runloop # pyright: ignore[reportMissingImports]
+import color, color_sensor # pyright: ignore[reportMissingImports]
+from hub import port # pyright: ignore[reportMissingImports]
+from runloop import run # pyright: ignore[reportMissingImports]
 
-SPEED = int(0.25 * 1100)  # 25% speed
-
-async def watch_black(): # stop on black
-    while True:
-        await runloop.until(lambda: color_sensor.color(port.B) == color.BLACK)
-        motor_pair.stop(motor_pair.PAIR_1)  # stop at black
-        await runloop.until(lambda: color_sensor.color(port.B) != color.BLACK)
-
-async def watch_blue(): # move on blue
-    while True:
-        await runloop.until(lambda: color_sensor.color(port.B) == color.BLUE)
-        motor_motor.move(motor_pair.PAIR_1, 0, velocity=SPEED)
-        await runloop.until(lambda: color_sensor.color(port.B) != color.BLUE)
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+color_port = port.F
 
 async def main():
-    run(watch_black(), watch_blue())
-    motor_motor_pair.move(motor_pair.PAIR_1, 0, velocity=SPEED)  # start forward
+    run(when_color_is_blue(), when_color_is_green(), when_color_is_black())
+    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
 
     while True:
         await runloop.sleep_ms(100)
 
-try:
-    run(main())
-except SystemExit:
-    pass
+async def when_color_is_blue():
+    while True:
+        await runloop.until(lambda: color_sensor.color(color_port) == color.BLUE)
+        motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
+
+async def when_color_is_green():
+    while True:
+        await runloop.until(lambda: color_sensor.color(color_port) == color.GREEN)
+        motor_pair.move(motor_pair.PAIR_1, 0, velocity=-int(0.2 * 1100))
+
+async def when_color_is_black():
+    while True:
+        await runloop.until(lambda: color_sensor.color(color_port) == color.BLACK)
+        sys.exit()
+
+runloop.run(main())
+sys.exit()
