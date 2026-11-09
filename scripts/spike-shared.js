@@ -612,15 +612,13 @@
     };
 
     function buildGettingStartedPython(title) {
-        return `# LEGO slot:0
-# ${title}
+        return `# ${title}
 ########################################################################
 # 🤖 main
 ########################################################################
 async def main():
     
     await light_matrix.write("Hi!")
-
 
 
 ########################################################################
@@ -696,9 +694,9 @@ def frowny_face():
 
 
 ########################################################################
-# 🤖 turn_90
+# 🤖 turn_in_place_90
 ########################################################################
-async def turn_90(direction):
+async def turn_in_place_90(direction):
     if direction not in ("left", "right"):
         raise ValueError("direction must be 'left' or 'right'")
 
@@ -711,6 +709,35 @@ async def turn_90(direction):
     else:  # direction == "right"
         steering = 100
         target_reached = lambda: motion_sensor.tilt_angles()[0] <= -873
+
+    motor_pair.move(
+        motor_pair.PAIR_1,
+        steering,
+        velocity=150
+    )
+
+    await until(target_reached)
+
+    motor_pair.stop(motor_pair.PAIR_1, stop=motor.BRAKE)
+    sleep_ms(500)
+
+
+########################################################################
+# 🤖 pivot_turn_90
+########################################################################
+async def pivot_turn_90(direction):
+    if direction not in ("left", "right"):
+        raise ValueError("direction must be 'left' or 'right'")
+
+    motion_sensor.reset_yaw(0)
+    sleep_ms(100)
+
+    if direction == "left":
+        steering = -50# right wheel forward, left wheel stopped
+        target_reached = lambda: motion_sensor.tilt_angles()[0] >= 887
+    else:# direction == "right"
+        steering = 50# left wheel forward, right wheel stopped
+        target_reached = lambda: motion_sensor.tilt_angles()[0] <= -887
 
     motor_pair.move(
         motor_pair.PAIR_1,
@@ -911,12 +938,22 @@ sys.exit()
                 },
                 {
                     id: 'move3',
-                    buttonText: 'turn 90 degrees',
+                    buttonText: 'turn in place 90 degrees',
                     emoji: ICON_MOVEMENT,
                     color: '#FF69B4',
                     textPython:`        
-    # turn 90 degrees
-    await turn_90("right")
+    # turn in place 90 degrees
+    await turn_in_place_90("right")
+`
+                },
+                {
+                    id: 'move4',
+                    buttonText: 'pivot turn 90 degrees',
+                    emoji: ICON_MOVEMENT,
+                    color: '#FF69B4',
+                    textPython:`        
+    # pivot_turn_90 degrees
+    await pivot_turn_90("right")
 `
                 },
                 {
@@ -931,52 +968,52 @@ sys.exit()
                 }
             ]
         },
-        21: {  // movement hay bale
-            colorClass: 'movement-color',
-            snippets: [
-                {
-                    id: 'move1',
-                    buttonText: 'move forward for 10 cm at 20% speed',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `
-    # move forward for 10 cm at 20% speed    
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
-            0, velocity=int(.2 * 1100))
-`
-                },
-                {
-                    id: 'move2',
-                    buttonText: 'start moving',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    
-    # start moving
-    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
-`
-                },
-                {
-                    id: 'move3',
-                    buttonText: 'turn 90 degrees',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    
-    # turn 90 degrees
-    await turn_90("right")
-`
-                },
-                {
-                    id: 'move6',
-                    buttonText: 'stop moving',
-                    emoji: ICON_MOVEMENT,
-                    color: '#FF69B4',
-                    textPython: `    
-    # stop moving
-    motor_pair.stop(motor_pair.PAIR_1)
-`
-                }
-            ]
-        },
+//         21: {  // movement hay bale
+//             colorClass: 'movement-color',
+//             snippets: [
+//                 {
+//                     id: 'move1',
+//                     buttonText: 'move forward for 10 cm at 20% speed',
+//                     emoji: ICON_MOVEMENT,
+//                     color: '#FF69B4',
+//                     textPython: `
+//     # move forward for 10 cm at 20% speed    
+//     await motor_pair.move_for_degrees(motor_pair.PAIR_1, 10 * int(360/17.5),
+//             0, velocity=int(.2 * 1100))
+// `
+//                 },
+//                 {
+//                     id: 'move2',
+//                     buttonText: 'start moving',
+//                     emoji: ICON_MOVEMENT,
+//                     color: '#FF69B4',
+//                     textPython: `    
+//     # start moving
+//     motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
+// `
+//                 },
+//                 {
+//                     id: 'move3',
+//                     buttonText: 'turn in place 90 degrees',
+//                     emoji: ICON_MOVEMENT,
+//                     color: '#FF69B4',
+//                     textPython: `    
+//     # turn 90 degrees
+//     await turn_90("right")
+// `
+//                 },
+//                 {
+//                     id: 'move6',
+//                     buttonText: 'stop moving',
+//                     emoji: ICON_MOVEMENT,
+//                     color: '#FF69B4',
+//                     textPython: `    
+//     # stop moving
+//     motor_pair.stop(motor_pair.PAIR_1)
+// `
+//                 }
+//             ]
+//         },
         3: {   // light 
             colorClass: 'light-color',
             snippets: [
@@ -1013,18 +1050,12 @@ sys.exit()
                 },
                 {
                     id: 'light4',
-                    buttonText: 'Light Matrix Write (debug)',
-                    emoji: '🧿',
+                    buttonText: 'Heart',
                     color: '#8A2BE2',
                     textPython: `
-    intensity = 100
-    time_per_character = 2000
-
-    colors = ["BLUE", "RED", "GREEN"]
-    count = ["3", "4", "5"]
-
-    for i in range(3):
-        await light_matrix.write(colors[i] + " " + count[i], intensity, time_per_character )
+    # Heart
+    light_matrix.show_image(light_matrix.IMAGE_Heart)
+    sleep_ms(2000)
 `
                 }
             ]
@@ -1101,22 +1132,20 @@ async def main():
                 },
                 {
                     id: 'event8',
-                    buttonText: 'Runloop.run',
+                    buttonText: 'When color is blue',
                     emoji: ICON_COLOR_SENSOR,
                     color: '#FFD700',
-                    textPython: `
-    runloop.run(when_color_is_black(), when_color_is_blue(), when_color_is_green())
+                    textPython: `async def when_color_is_blue():
+    while True:
+        await runloop.until(lambda: color_sensor.color(color_port) == color.BLUE)
 `
                 },
                 {
                     id: 'event9',
-                    buttonText: 'When color is blue',
+                    buttonText: 'Runloop.run',
                     emoji: ICON_COLOR_SENSOR,
                     color: '#FFD700',
-                    textPython: `
-async def when_color_is_blue():
-    while True:
-        await runloop.until(lambda: color_sensor.color(color_port) == color.BLUE)
+                    textPython: `    runloop.run(when_color_is_black(), when_color_is_blue(), when_color_is_green())
 `
                 },
                 {
