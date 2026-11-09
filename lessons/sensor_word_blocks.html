@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensors Word Blocks - LEGO Education SPIKE</title>
+    <link rel="stylesheet" href="./styles/spike-shared.css">
+    <style>
+        .sensor-blocks-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .lesson-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .lesson-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .lesson-header p {
+            margin: 5px 0;
+            font-size: 1.1em;
+        }
+        
+        .learning-objectives {
+            background: #f0f8ff;
+            border-left: 4px solid #4169E1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .learning-objectives h2 {
+            color: #4169E1;
+            margin-top: 0;
+        }
+        
+        .learning-objectives ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .learning-objectives li {
+            margin: 8px 0;
+            font-size: 1.05em;
+        }
+        
+        .phases-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .phase-card {
+            background: white;
+            border: 2px solid #87CEEB;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(65, 105, 225, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(65, 105, 225, 0.3);
+        }
+        
+        .phase-number {
+            display: inline-block;
+            background: #4169E1;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .phase-card h3 {
+            color: #4169E1;
+            margin: 10px 0;
+            font-size: 1.3em;
+        }
+        
+        .sensor-icon {
+            font-size: 2.5em;
+            margin: 10px 0;
+        }
+        
+        .phase-card p {
+            margin: 10px 0;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            border-left: 3px solid #4169E1;
+            padding: 12px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            border-radius: 3px;
+        }
+        
+        .assembly-guide {
+            background: #fff8dc;
+            border-left: 4px solid #FFD700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .assembly-guide h2 {
+            color: #CC8800;
+            margin-top: 0;
+        }
+        
+        .assembly-guide ol {
+            padding-left: 20px;
+        }
+        
+        .assembly-guide li {
+            margin: 10px 0;
+            font-size: 1.05em;
+        }
+        
+        .teacher-tips {
+            background: #f0fff0;
+            border-left: 4px solid #32CD32;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .teacher-tips h2 {
+            color: #228B22;
+            margin-top: 0;
+        }
+        
+        .teacher-tips p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        
+        .code-download {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .download-button {
+            background: #4169E1;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.2s;
+        }
+        
+        .download-button:hover {
+            background: #1e3a8a;
+        }
+        
+        .sensor-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .legend-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4169E1;
+        }
+        
+        .legend-item .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        
+        .legend-item h4 {
+            margin: 5px 0;
+            color: #4169E1;
+        }
+        
+        .legend-item p {
+            margin: 5px 0;
+            font-size: 0.95em;
+            color: #666;
+        }
+        
+        .success-example {
+            background: #f0fff0;
+            border: 2px dashed #32CD32;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .success-example strong {
+            color: #228B22;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-sidebar">
+        <a href="/Spike-Editor/index.html" onclick="closeMobileMenu()">Home</a>
+        <a href="/Spike-Editor/training_camp.html" onclick="closeMobileMenu()">Training Camp</a>
+        <a href="/Spike-Editor/challenges_library.html" onclick="closeMobileMenu()">Challenges</a>
+        <a href="/Spike-Editor/Videos.html" onclick="closeMobileMenu()">Videos</a>
+    </div>
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+    
+    <div class="top-menu">
+        <button class="menu-toggle" type="button" aria-label="Open menu" title="Open menu" onclick="toggleMobileMenu()">☰</button>
+        <div class="menu-brand">Spike Editor</div>
+        <div class="menu-links">
+            <a href="/Spike-Editor/index.html">Home</a>
+            <a href="/Spike-Editor/training_camp.html">Training Camp</a>
+            <a href="/Spike-Editor/challenges_library.html">Challenges</a>
+            <a href="/Spike-Editor/Videos.html">Videos</a>
+        </div>
+        <button class="menu-search" type="button" aria-label="Search this page" title="Search this page" onclick="searchCurrentPage()">&#128269;</button>
+    </div>
+
+    <div class="sensor-blocks-container">
+        <div class="lesson-header">
+            <h1>🤖 Sensors Word Blocks</h1>
+            <p>Learn to Program All Three SPIKE Sensors</p>
+            <p>Move Until Touch • Near • Touch • Repeat</p>
+        </div>
+
+        <div class="learning-objectives">
+            <h2>📚 Learning Objectives</h2>
+            <p>By the end of this lesson, students will be able to:</p>
+            <ul>
+                <li><strong>Use the Force Sensor (Touch)</strong> to detect when something is pressed and stop robot movement</li>
+                <li><strong>Use the Distance Sensor (Ultrasonic)</strong> to detect when an object is near and trigger actions</li>
+                <li><strong>Use the Color Sensor</strong> to detect colors (ready for future lessons)</li>
+                <li><strong>Program robot sequences</strong> that use multiple sensors in combination</li>
+                <li><strong>Implement repeat loops</strong> that continue until a sensor detects something</li>
+                <li><strong>Understand Word Blocks</strong> concepts for robot control in LEGO Education SPIKE</li>
+            </ul>
+        </div>
+
+        <div class="assembly-guide">
+            <h2>🔧 Hardware Setup</h2>
+            <ol>
+                <li><strong>Force Sensor (Touch)</strong> - Connect to Port A
+                    <br/><small>This is your stop button. When pressed, it triggers the robot to stop.</small>
+                </li>
+                <li><strong>Distance Sensor (Ultrasonic)</strong> - Connect to Port B
+                    <br/><small>This sensor detects how far away an object is. We'll use it to detect when something is near.</small>
+                </li>
+                <li><strong>Color Sensor</strong> - Connect to Port F
+                    <br/><small>Ready for use in future challenges. For now, it can detect colors on the ground.</small>
+                </li>
+                <li><strong>Motor Pair</strong> - Connect to Ports C and D
+                    <br/><small>These drive wheels move your robot forward and backward.</small>
+                </li>
+            </ol>
+        </div>
+
+        <h2 style="text-align: center; color: #4169E1; margin-top: 40px;">📋 The Four Phases of Movement</h2>
+
+        <div class="phases-container">
+            <!-- PHASE 1: Move Until Touch -->
+            <div class="phase-card">
+                <div class="phase-number">1</div>
+                <h3>Move Until Touch</h3>
+                <div class="sensor-icon">🛑</div>
+                <p><strong>Robot Action:</strong> Moves forward until the Force Sensor (Touch) is pressed.</p>
+                <p><strong>Sensor:</strong> Force Sensor (Port A)</p>
+                <p><strong>What Happens:</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Robot starts moving forward at 30% speed</li>
+                    <li>Robot waits for the touch sensor to be pressed</li>
+                    <li>When pressed, robot stops immediately</li>
+                </ul>
+                <div class="code-block">motor_pair.move(PAIR_1, 0)
+await runloop.until(is_touch_1)</div>
+                <div class="success-example">
+                    <strong>✓ Success:</strong> Robot moves forward and stops when you press the sensor!
+                </div>
+            </div>
+
+            <!-- PHASE 2: Move Until Near -->
+            <div class="phase-card">
+                <div class="phase-number">2</div>
+                <h3>Move Until Near</h3>
+                <div class="sensor-icon">☀️</div>
+                <p><strong>Robot Action:</strong> Moves forward until the Distance Sensor detects something close.</p>
+                <p><strong>Sensor:</strong> Distance Sensor (Port B)</p>
+                <p><strong>What Happens:</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Robot starts moving forward at 30% speed</li>
+                    <li>Robot checks distance sensor continuously</li>
+                    <li>When object is within 200mm (7.8 inches), robot stops</li>
+                </ul>
+                <div class="code-block">motor_pair.move(PAIR_1, 0)
+await runloop.until(is_near)</div>
+                <div class="success-example">
+                    <strong>✓ Success:</strong> Robot moves forward and stops when it detects something nearby!
+                </div>
+            </div>
+
+            <!-- PHASE 3: Move Until Touch Again -->
+            <div class="phase-card">
+                <div class="phase-number">3</div>
+                <h3>Move Until Touch Again</h3>
+                <div class="sensor-icon">🛑</div>
+                <p><strong>Robot Action:</strong> Moves forward until the Force Sensor (Touch) is pressed a second time.</p>
+                <p><strong>Sensor:</strong> Force Sensor (Port A)</p>
+                <p><strong>What Happens:</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Robot starts moving forward at 30% speed again</li>
+                    <li>Robot waits for the touch sensor to be pressed</li>
+                    <li>When pressed, robot stops</li>
+                </ul>
+                <div class="code-block">motor_pair.move(PAIR_1, 0)
+await runloop.until(is_touch_2)</div>
+                <div class="success-example">
+                    <strong>✓ Success:</strong> Robot moves forward a second time and stops when touched!
+                </div>
+            </div>
+
+            <!-- PHASE 4: Repeat Back and Forth -->
+            <div class="phase-card">
+                <div class="phase-number">4</div>
+                <h3>Repeat Back & Forth</h3>
+                <div class="sensor-icon">↔️</div>
+                <p><strong>Robot Action:</strong> Moves back and forth repeatedly until the Force Sensor stops it.</p>
+                <p><strong>Sensor:</strong> Force Sensor (Port A) - Loop control</p>
+                <p><strong>What Happens:</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>Robot moves forward for 1 second</li>
+                    <li>Robot moves backward for 1 second</li>
+                    <li>This repeats until Force Sensor is pressed</li>
+                </ul>
+                <div class="code-block">while not is_touch_2():
+    motor_pair.move(forward)
+    sleep(1000)
+    motor_pair.move(backward)
+    sleep(1000)</div>
+                <div class="success-example">
+                    <strong>✓ Success:</strong> Robot bounces back and forth until you press the sensor!
+                </div>
+            </div>
+        </div>
+
+        <div class="sensor-legend">
+            <div class="legend-item">
+                <h4>🛑 Force Sensor (Touch Sensor)</h4>
+                <p><strong>Port:</strong> A</p>
+                <p><strong>Use:</strong> Detect when robot bumps into something</p>
+                <p><strong>Function:</strong> <code>is_pressed()</code></p>
+            </div>
+            <div class="legend-item">
+                <h4>☀️ Distance Sensor</h4>
+                <p><strong>Port:</strong> B</p>
+                <p><strong>Use:</strong> Measure how far away objects are</p>
+                <p><strong>Function:</strong> <code>is_near()</code></p>
+            </div>
+            <div class="legend-item">
+                <h4>🧿 Color Sensor</h4>
+                <p><strong>Port:</strong> F</p>
+                <p><strong>Use:</strong> Detect colors and line following</p>
+                <p><strong>Function:</strong> <code>is_blue()</code></p>
+            </div>
+        </div>
+
+        <div class="teacher-tips">
+            <h2>👨‍🏫 Teacher Tips & Vocabulary</h2>
+            <p><strong>Wait Until:</strong> A control structure that pauses your program until a condition becomes true.</p>
+            <p><strong>Repeat Until:</strong> A loop that keeps running code over and over until a condition becomes true.</p>
+            <p><strong>Sensor Function:</strong> A piece of code that checks a sensor and returns True (yes) or False (no).</p>
+            <p><strong>Velocity:</strong> How fast the robot moves (we use 30% speed = 330 units).</p>
+            <p><strong>Async/Await:</strong> Python keywords that let your program wait for things to happen without freezing.</p>
+            
+            <h3 style="color: #228B22; margin-top: 20px;">Extension Activities:</h3>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Adjust the speed: Try 10%, 50%, 100% to see how it affects movement</li>
+                <li>Change the distance threshold: Make the robot stop closer or farther away</li>
+                <li>Add sound effects: Play a beep when each phase completes</li>
+                <li>Add lights: Show different hub images for each phase</li>
+                <li>Combine sensors: Stop when EITHER touch OR distance sensor triggers</li>
+                <li>Create patterns: Design your own movement sequence with multiple sensors</li>
+            </ul>
+        </div>
+
+        <div class="code-download">
+            <h2>💾 Complete Python Code</h2>
+            <p>Download the complete example that uses all three sensors:</p>
+            <a href="./Python/sensor_three_touch_near.py" class="download-button">📥 Download sensor_three_touch_near.py</a>
+            <a href="./Python/getting_started_sensors.py" class="download-button">📥 Download getting_started_sensors.py</a>
+            <a href="./Python/sensor_four_square.py" class="download-button">📥 Download sensor_four_square.py</a>
+        </div>
+
+        <div style="background: #f0f8ff; padding: 20px; margin-top: 30px; border-radius: 5px; text-align: center;">
+            <h3 style="color: #4169E1;">🎓 Ready to Learn More?</h3>
+            <p>Check out our <a href="./training_camp.html">Training Camp</a> for more sensor programming lessons!</p>
+            <p>Or explore our <a href="./challenges_library.html">Challenge Library</a> for robotics competitions and projects.</p>
+        </div>
+    </div>
+
+    <script src="./utils/utils.js"></script>
+    <script src="./scripts/spike-shared.js"></script>
+    <script>
+        function closeMobileMenu() {
+            const sidebar = document.querySelector('.mobile-sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            if (sidebar) sidebar.style.display = 'none';
+            if (overlay) overlay.style.display = 'none';
+        }
+        
+        function toggleMobileMenu() {
+            const sidebar = document.querySelector('.mobile-sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            if (sidebar.style.display === 'none' || !sidebar.style.display) {
+                sidebar.style.display = 'block';
+                overlay.style.display = 'block';
+            } else {
+                closeMobileMenu();
+            }
+        }
+
+        function searchCurrentPage() {
+            alert('Search: Search functionality would be implemented here to search within the Word Blocks content.');
+        }
+    </script>
+</body>
+</html>
