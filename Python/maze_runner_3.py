@@ -1,14 +1,12 @@
 import sys, motor_pair, runloop # pyright: ignore[reportMissingImports]
 import color, color_sensor # pyright: ignore[reportMissingImports]
 from hub import port # pyright: ignore[reportMissingImports]
-from runloop import run # pyright: ignore[reportMissingImports]
 
 motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 color_port = port.F
 
 async def main():
-    run(when_color_is_blue(), when_color_is_green(), when_color_is_black())
-    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
+    runloop.run(when_color_is_blue(), when_color_is_green(), when_color_is_black())
 
 async def when_color_is_blue():
     while True:
