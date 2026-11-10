@@ -5,15 +5,6 @@
 ### Root Repository Level
 ```
 spike-editor/
-├── 🆕 DEPLOYMENT_COMPLETE.md                    (11,881 bytes)
-│   Final summary and quick reference guide
-│   
-├── 🆕 SENSORS_PYTHON_DEPLOYMENT_SUMMARY.md      (8,985 bytes)
-│   Overview of what's been created
-│   
-├── 🆕 IMPLEMENTATION_CHECKLIST.md               (12,203 bytes)
-│   Step-by-step 4-phase deployment checklist
-│   
 ├── README.md                                    (existing)
 ├── index.html                                   (to be edited - add menu links)
 ├── training_camp.html                           (existing)
@@ -25,6 +16,15 @@ spike-editor/
 ### Docs Folder
 ```
 docs/
+├── 🆕 DEPLOYMENT_COMPLETE.md                    (11,881 bytes)
+│   Final summary and quick reference guide
+│   
+├── 🆕 SENSORS_PYTHON_DEPLOYMENT_SUMMARY.md      (8,985 bytes)
+│   Overview of what's been created
+│   
+├── 🆕 IMPLEMENTATION_CHECKLIST.md               (12,203 bytes)
+│   Step-by-step 4-phase deployment checklist
+│   
 ├── 🆕 DEPLOYMENT_GUIDE.md                       (9,084 words)
 │   Complete reference guide with all options
 │   
@@ -78,14 +78,14 @@ lessons/
 
 | Document | Location | Size | Words | Purpose |
 |----------|----------|------|-------|---------|
-| DEPLOYMENT_COMPLETE.md | Root | 11.9 KB | ~2,000 | Final summary |
-| SENSORS_PYTHON_DEPLOYMENT_SUMMARY.md | Root | 9.0 KB | ~1,500 | Overview |
-| IMPLEMENTATION_CHECKLIST.md | Root | 12.2 KB | ~2,000 | 4-phase checklist |
+| DEPLOYMENT_COMPLETE.md | docs/ | 11.9 KB | ~2,000 | Final summary |
+| SENSORS_PYTHON_DEPLOYMENT_SUMMARY.md | docs/ | 9.0 KB | ~1,500 | Overview |
+| IMPLEMENTATION_CHECKLIST.md | docs/ | 12.2 KB | ~2,000 | 4-phase checklist |
 | DEPLOYMENT_GUIDE.md | docs/ | ~45 KB | 9,084 | Complete reference |
 | QUICK_DEPLOY.md | docs/ | ~30 KB | 6,724 | Fast track (5 min) |
 | MENU_INTEGRATION_GUIDE.md | docs/ | ~35 KB | 7,774 | Menu implementation |
 | DEPLOYMENT_ARCHITECTURE.md | docs/ | ~50 KB | 14,180 | System overview |
-| **TOTAL** | **Various** | **~193 KB** | **~56,000** | **7 guides** |
+| **TOTAL** | **docs/** | **~193 KB** | **~56,000** | **7 guides** |
 
 ---
 

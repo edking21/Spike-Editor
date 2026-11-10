@@ -37,22 +37,18 @@ cd C:\Users\eddyk\source\repos\spike-editor\utils
 
 ### 📚 Documentation Created
 
-#### Root Level (Quick Reference)
+#### Docs Folder (All Guides)
 
-1. **SENSORS_PYTHON_DEPLOYMENT_SUMMARY.md**
-   - High-level overview of what's been created
+1. **SENSORS_PYTHON_DEPLOYMENT_SUMMARY.md** - High-level overview
    - Quick reference guide
    - Checklist and next steps
    - Best for: Getting oriented quickly
 
-2. **IMPLEMENTATION_CHECKLIST.md**
-   - Step-by-step checklist format
+2. **IMPLEMENTATION_CHECKLIST.md** - Step-by-step deployment
    - 4 phases: Menu Update → Generate → Deploy → Verify
    - Detailed instructions for each step
    - Estimated time: 20-30 minutes
    - Best for: Actually implementing the deployment
-
-#### Docs Folder (Detailed Guides)
 
 3. **DEPLOYMENT_GUIDE.md** (9,084 words)
    - 🎯 3 deployment options explained
