@@ -1,9 +1,9 @@
-# Sensors Word Blocks - Student Activity Worksheet
+# Sensors Python - Student Activity Worksheet
 
 **Name:** ________________  **Date:** ________________  **Class:** ________________
 
 ## 🤖 Objective
-Learn to program a SPIKE robot that uses three sensors to move intelligently:
+Learn to program a SPIKE robot using Python that uses three sensors to move intelligently:
 - **Force Sensor** (Touch) - Detects pressure
 - **Distance Sensor** - Measures how far away objects are  
 - **Color Sensor** - Detects colors
@@ -33,7 +33,7 @@ Check off each step as you complete it:
 
 ---
 
-## 🎮 Part 2: Understanding the Code
+## 🎮 Part 2: Understanding the Python Code
 
 ### Key Terms (Fill in the blanks)
 
@@ -43,7 +43,7 @@ Check off each step as you complete it:
 
 **Velocity:** How _________________________ the motors spin (0-1100 units)
 
-**Function:** A reusable block of _________________________ 
+**Function:** A reusable block of Python _________________________ 
 
 **Condition:** Something that is either _________________________ or _________________________
 

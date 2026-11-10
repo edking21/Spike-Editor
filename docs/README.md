@@ -2,21 +2,21 @@
 
 This folder contains all curriculum documentation and guides for the Spike Editor project.
 
-## 📖 Sensors Word Blocks Curriculum
+## 📖 Sensors Python Curriculum
 
-Complete middle school robotics curriculum for LEGO Education SPIKE sensor programming.
+Complete middle school robotics curriculum for LEGO Education SPIKE sensor programming with Python.
 
 ### 🚀 Getting Started
 
-**Start here:** [START_HERE_SENSORS.md](./START_HERE_SENSORS.md)
+**Start here:** [START_HERE_PYTHON.md](./START_HERE_PYTHON.md)
 
 ### 📝 Documentation Files
 
 | File | Purpose | Audience |
 |------|---------|----------|
-| **START_HERE_SENSORS.md** | Master navigation guide | Everyone |
+| **START_HERE_PYTHON.md** | Master navigation guide | Everyone |
 | **SENSORS_QUICK_START.md** | 5-minute teacher overview | Teachers |
-| **SENSORS_WORD_BLOCKS_README.md** | Complete curriculum guide | Teachers |
+| **SENSORS_PYTHON_README.md** | Complete curriculum guide | Teachers |
 | **SENSORS_INDEX.md** | Resource index & navigation | Teachers/Advanced |
 | **SENSORS_CHEAT_SHEET.md** | Code reference & snippets | Students/Teachers |
 | **SENSORS_STUDENT_WORKSHEET.md** | Hands-on activities (75+) | Students |
@@ -27,7 +27,7 @@ Complete middle school robotics curriculum for LEGO Education SPIKE sensor progr
 
 **For Teachers:**
 1. Read [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md) (5 min)
-2. Review [../lessons/sensor_word_blocks.html](../lessons/sensor_word_blocks.html)
+2. Review [../lessons/sensor_python.html](../lessons/sensor_python.html)
 3. Download [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)
 
 **For Students:**
@@ -36,7 +36,7 @@ Complete middle school robotics curriculum for LEGO Education SPIKE sensor progr
 3. Load example code on robot
 
 **For Detailed Info:**
-- Full curriculum: [SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md)
+- Full curriculum: [SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)
 - Complete index: [SENSORS_INDEX.md](./SENSORS_INDEX.md)
 - Project overview: [SENSORS_PROJECT_SUMMARY.md](./SENSORS_PROJECT_SUMMARY.md)
 
@@ -45,9 +45,9 @@ Complete middle school robotics curriculum for LEGO Education SPIKE sensor progr
 ```
 docs/
 ├── README.md (this file)
-├── START_HERE_SENSORS.md ⭐ START HERE
+├── START_HERE_PYTHON.md ⭐ START HERE
 ├── SENSORS_QUICK_START.md (5-min overview)
-├── SENSORS_WORD_BLOCKS_README.md (full curriculum)
+├── SENSORS_PYTHON_README.md (full curriculum)
 ├── SENSORS_INDEX.md (complete resource map)
 ├── SENSORS_CHEAT_SHEET.md (code reference)
 ├── SENSORS_STUDENT_WORKSHEET.md (activities)
@@ -56,15 +56,15 @@ docs/
 
 Other related files:
 ../lessons/
-└── sensor_word_blocks.html (interactive lesson)
+└── sensor_python.html (interactive lesson)
 
 ../Python/
 └── sensor_three_touch_near.py (working code)
 ```
 
-## 🎓 The Sensors Word Blocks Project
+## 🎓 The Sensors Python Project
 
-Teaches middle school students to program LEGO SPIKE robots using:
+Teaches middle school students to program LEGO SPIKE robots using Python with:
 - 🛑 Force Sensor (Touch)
 - ☀️ Distance Sensor (Ultrasonic)
 - 🧿 Color Sensor
@@ -96,7 +96,7 @@ Teaches middle school students to program LEGO SPIKE robots using:
 
 ## 🚀 Getting Started NOW
 
-**Step 1 (5 min):** Open [START_HERE_SENSORS.md](./START_HERE_SENSORS.md)
+**Step 1 (5 min):** Open [START_HERE_PYTHON.md](./START_HERE_PYTHON.md)
 
 **Step 2 (5 min):** Read [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 
@@ -104,4 +104,4 @@ Teaches middle school students to program LEGO SPIKE robots using:
 
 ---
 
-**Welcome to Sensors Word Blocks! Let's teach some amazing robotics! 🤖**
+**Welcome to Sensors Python! Let's teach amazing robotics programming! 🤖**

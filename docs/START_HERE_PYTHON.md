@@ -1,39 +1,39 @@
-# 🚀 Sensors Word Blocks - START HERE
+# 🚀 Sensors Python - START HERE
 
-## Welcome to Your Complete SPIKE Robotics Curriculum! 
+## Welcome to Your Complete SPIKE Python Robotics Curriculum! 
 
-You now have a comprehensive, ready-to-teach middle school robotics curriculum for LEGO Education SPIKE sensors. This file is your master guide to everything included.
+You now have a comprehensive, ready-to-teach middle school robotics curriculum for programming LEGO Education SPIKE robots with Python and sensors. This file is your master guide to everything included.
 
 ---
 
 ## 📋 Quick Links (Choose Your Role)
 
-### 👨‍🏫 **I'm a Teacher - Let Me Start Teaching!**
+### 👨‍🏫 **I'm a Teacher - Let Me Start Teaching Python Sensors!**
 
 **Step 1 (5 min):** Read [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 - Get the overview
 - Understand what you'll teach
 - See the 45-minute lesson plan
 
-**Step 2 (10 min):** Review [sensor_word_blocks.html](./sensor_word_blocks.html)
+**Step 2 (10 min):** Review [sensor_python.html](../lessons/sensor_python.html)
 - This is what you'll show students
 - Open it in a web browser
 - See the visual 4-phase breakdown
 
 **Step 3 (5 min):** Gather materials per [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 - SPIKE robots with sensors
-- USB cables
+- USB cables for Python loading
 - Small objects for testing
 
 **Step 4:** Teach!
-- Project [sensor_word_blocks.html](./sensor_word_blocks.html) on your screen
+- Project [sensor_python.html](../lessons/sensor_python.html) on your screen
 - Have students follow hardware setup
-- Load [sensor_three_touch_near.py](./Python/sensor_three_touch_near.py) on their robots
+- Load [sensor_three_touch_near.py](../Python/sensor_three_touch_near.py) on their robots
 - Distribute [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
 
 ---
 
-### 👨‍🎓 **I'm a Student - Let Me Learn**
+### 👨‍🎓 **I'm a Student - Let Me Learn Python!**
 
 **Step 1:** Download [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
 - Follow along with your teacher
@@ -45,9 +45,9 @@ You now have a comprehensive, ready-to-teach middle school robotics curriculum f
 - Connect all sensors to correct ports
 - Ask teacher to verify connections
 
-**Step 3:** Load the Example Code
-- Get [sensor_three_touch_near.py](./Python/sensor_three_touch_near.py)
-- Load it on your SPIKE robot
+**Step 3:** Load the Python Code
+- Get [sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)
+- Load it on your SPIKE robot via Python environment
 - Run it!
 
 **Step 4:** Experiment & Learn
@@ -63,7 +63,7 @@ Read files in this order:
 
 1. **[SENSORS_INDEX.md](./SENSORS_INDEX.md)** - Complete project overview
 2. **[SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)** - Teaching guide
-3. **[SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md)** - Full curriculum details
+3. **[SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)** - Full curriculum details
 4. **[SENSORS_CHEAT_SHEET.md](./SENSORS_CHEAT_SHEET.md)** - Code reference
 5. **[SENSORS_PROJECT_SUMMARY.md](./SENSORS_PROJECT_SUMMARY.md)** - Project statistics
 
@@ -72,14 +72,14 @@ Read files in this order:
 ## 📦 What's Included
 
 ### 🌐 Web Content
-- **[sensor_word_blocks.html](./sensor_word_blocks.html)** - Interactive lesson page to project in class
+- **[../lessons/sensor_python.html](../lessons/sensor_python.html)** - Interactive lesson page to project in class
 
 ### 🐍 Working Code
-- **[Python/sensor_three_touch_near.py](./Python/sensor_three_touch_near.py)** - Complete, working example
+- **[../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)** - Complete, working example
 
 ### 📖 Documentation (6 files)
 1. **[SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)** - 5-min teacher overview
-2. **[SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md)** - Complete curriculum guide
+2. **[SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)** - Complete curriculum guide
 3. **[SENSORS_INDEX.md](./SENSORS_INDEX.md)** - Master index & navigation
 4. **[SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)** - Hands-on activities for students
 5. **[SENSORS_CHEAT_SHEET.md](./SENSORS_CHEAT_SHEET.md)** - Code reference for programming
@@ -166,7 +166,7 @@ By the end, students will be able to:
 4. Have all materials ready
 
 ### During Class
-1. Project [sensor_word_blocks.html](./sensor_word_blocks.html)
+1. Project [../lessons/sensor_python.html](../lessons/sensor_python.html)
 2. Explain Phase 1 using the visual
 3. Have students build and test Phase 1
 4. Repeat for Phases 2-4
@@ -184,19 +184,19 @@ By the end, students will be able to:
 ## 🔗 File Navigation
 
 ```
-Sensors Word Blocks Project
+Sensors Python Project
 │
 ├── START_HERE.md (you are here)
 │
 ├── 🌐 Interactive Lesson
-│   └── sensor_word_blocks.html (Project this in class!)
+│   └── lessons/sensor_python.html (Project this in class!)
 │
 ├── 🐍 Working Code
 │   └── Python/sensor_three_touch_near.py (Load on robot)
 │
 ├── 📖 Teacher Materials
 │   ├── SENSORS_QUICK_START.md (Read first - 5 min)
-│   ├── SENSORS_WORD_BLOCKS_README.md (Full curriculum)
+│   ├── SENSORS_PYTHON_README.md (Full curriculum)
 │   ├── SENSORS_INDEX.md (Complete guide)
 │   └── SENSORS_PROJECT_SUMMARY.md (Project overview)
 │
@@ -216,7 +216,7 @@ Sensors Word Blocks Project
 ### **RIGHT NOW - 15 Minutes**
 
 1. Open [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md) and read the first section
-2. Look at [sensor_word_blocks.html](./sensor_word_blocks.html) in your browser
+2. Look at [../lessons/sensor_python.html](../lessons/sensor_python.html) in your browser
 3. Decide: Am I teaching tomorrow, next week, or next month?
 4. Plan your timeline
 
@@ -224,12 +224,12 @@ Sensors Word Blocks Project
 
 1. Review [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md) again
 2. Download and print [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
-3. Test [sensor_three_touch_near.py](./Python/sensor_three_touch_near.py) on one robot
+3. Test [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py) on one robot
 4. Prepare demo area
 
 ### **IN CLASS**
 
-1. Project [sensor_word_blocks.html](./sensor_word_blocks.html)
+1. Project [../lessons/sensor_python.html](../lessons/sensor_python.html)
 2. Follow the lesson plan
 3. Have students code and test
 4. Distribute worksheet
@@ -263,7 +263,7 @@ A: Yes - see Challenge Levels in the worksheet and extensions in teacher guide
 
 ### Teacher Questions
 - [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md) - Troubleshooting section
-- [SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md) - Complete reference
+- [SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md) - Complete reference
 
 ### Student Questions  
 - [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md) - Troubleshooting practice
@@ -292,7 +292,7 @@ A: Yes - see Challenge Levels in the worksheet and extensions in teacher guide
 - [ ] I understand what this curriculum covers
 - [ ] I have access to SPIKE robots with sensors
 - [ ] I've read SENSORS_QUICK_START.md
-- [ ] I've reviewed sensor_word_blocks.html
+- [ ] I've reviewed lessons/sensor_python.html
 - [ ] I can access Python/sensor_three_touch_near.py
 - [ ] I can print or share SENSORS_STUDENT_WORKSHEET.md
 - [ ] I have a lesson time scheduled
@@ -313,7 +313,7 @@ It will take 5 minutes and get you ready to teach amazing robots! 🤖
 
 ---
 
-**Welcome to Sensors Word Blocks!**
+**Welcome to Sensors Python!**
 
 *Making robotics education accessible, engaging, and effective.*
 
@@ -325,6 +325,6 @@ It will take 5 minutes and get you ready to teach amazing robots! 🤖
 
 **Ready to teach?** Go to [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 
-**Want to see the full lesson?** Open [sensor_word_blocks.html](./sensor_word_blocks.html)
+**Want to see the full lesson?** Open [lessons/sensor_python.html](../lessons/sensor_python.html)
 
 **Need the code?** Download [Python/sensor_three_touch_near.py](./Python/sensor_three_touch_near.py)

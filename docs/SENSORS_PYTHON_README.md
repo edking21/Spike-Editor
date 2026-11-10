@@ -1,14 +1,16 @@
-# Sensors Word Blocks - Middle School Robotics Curriculum
+# Sensors Python - Middle School Robotics Curriculum
 
 ## Overview
 
-**Sensors Word Blocks** is a comprehensive middle school robotics curriculum designed to teach students how to program LEGO Education SPIKE robots using **all three sensors** in combination:
+**Sensors Python** is a comprehensive middle school robotics curriculum designed to teach students how to program LEGO Education SPIKE robots using **Python** and **all three sensors** in combination:
 
 1. 🛑 **Force Sensor (Touch)** - Port A
 2. ☀️ **Distance Sensor (Ultrasonic)** - Port B  
 3. 🧿 **Color Sensor** - Port F
 
-This project follows the SPIKE Word Blocks programming paradigm and teaches students to think in terms of sensor-driven robot behavior and conditional logic.
+This project teaches students to write Python code for sensor-driven robot behavior and conditional logic. It covers async/await programming patterns and demonstrates how to use sensor functions for event-based robot control.
+
+**Note:** These Python concepts and sensor functions are shared with the Word Blocks visual programming interface. Learning these foundations makes both approaches easier.
 
 ## Learning Objectives
 
@@ -112,7 +114,7 @@ motor_pair.stop(motor_pair.PAIR_1)
 - **`is_near_explanation.md`** - Detailed explanation of distance sensor usage
 
 ### HTML/Web Content
-- **`sensor_word_blocks.html`** - Interactive lesson page with:
+- **`../lessons/sensor_python.html`** - Interactive lesson page with:
   - Learning objectives
   - Hardware setup guide
   - 4 phase cards with explanations
@@ -120,7 +122,7 @@ motor_pair.stop(motor_pair.PAIR_1)
   - Teacher tips and extension activities
 
 ### Documentation
-- **`SENSORS_WORD_BLOCKS_README.md`** - This file
+- **`SENSORS_PYTHON_README.md`** - This file
 
 ## Teaching Guide
 

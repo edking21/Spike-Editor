@@ -4,27 +4,28 @@ Interactive lesson materials for Spike Editor robotics curriculum.
 
 ## 📚 Available Lessons
 
-### Sensors Word Blocks
-**File:** `sensor_word_blocks.html`
+### Sensors Python
+**File:** [sensor_python.html](./sensor_python.html)
 
-Complete interactive lesson for teaching LEGO Education SPIKE sensor programming to middle school students.
+Complete interactive lesson for teaching LEGO Education SPIKE sensor programming in Python to middle school students.
 
 **What It Covers:**
 - 🛑 Force Sensor (Touch) - Port A
 - ☀️ Distance Sensor - Port B
 - 🧿 Color Sensor - Port F
-- 4-phase robot behavior programming
+- 4-phase Python robot behavior programming
 
 **How to Use:**
-1. Open `sensor_word_blocks.html` in a web browser
+1. Open `lessons/sensor_python.html` in a web browser
 2. Project it on your classroom screen
 3. Guide students through each phase
-4. Use the explanations and diagrams
+4. Use the explanations and code examples
 
 **Features:**
 - Visual 4-phase cards
 - Hardware setup guide
 - Sensor reference guide
+- Python code examples
 - Teacher tips section
 - Extension activities
 - Mobile responsive design
@@ -32,7 +33,7 @@ Complete interactive lesson for teaching LEGO Education SPIKE sensor programming
 ## 🚀 How to Open
 
 ### Option 1: Open in Browser
-- Double-click `sensor_word_blocks.html`
+- Double-click `lessons/sensor_python.html`
 - Or drag to browser window
 
 ### Option 2: Project in Class
@@ -44,17 +45,17 @@ Complete interactive lesson for teaching LEGO Education SPIKE sensor programming
 - Place in web server directory
 - Access via HTTP URL
 
-## 📖 Related Documentation
+**Related Documentation:**
 
 For complete curriculum guides, see the `docs/` folder:
-- [docs/START_HERE_SENSORS.md](../docs/START_HERE_SENSORS.md) - Master guide
+- [docs/START_HERE_PYTHON.md](../docs/START_HERE_PYTHON.md) - Master guide
 - [docs/SENSORS_QUICK_START.md](../docs/SENSORS_QUICK_START.md) - Teacher overview
 - [docs/SENSORS_STUDENT_WORKSHEET.md](../docs/SENSORS_STUDENT_WORKSHEET.md) - Student activities
 - [docs/SENSORS_CHEAT_SHEET.md](../docs/SENSORS_CHEAT_SHEET.md) - Code reference
 
 ## 💾 Working Code
 
-Load this on your SPIKE robot:
+Load this Python code on your SPIKE robot:
 - [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)
 
 ## 🎯 The 4 Phases
@@ -113,7 +114,7 @@ Per robot:
 
 ## 🎓 Teaching Tips
 
-1. **Show the full lesson** - Project `sensor_word_blocks.html`
+1. **Show the full lesson** - Project `lessons/sensor_python.html`
 2. **Go phase by phase** - Don't skip ahead
 3. **Let students build** - Hands-on experience
 4. **Test early** - Verify hardware works
@@ -130,8 +131,8 @@ Per robot:
 - Use [docs/SENSORS_STUDENT_WORKSHEET.md](../docs/SENSORS_STUDENT_WORKSHEET.md)
 
 **Full documentation?**
-- See [docs/START_HERE_SENSORS.md](../docs/START_HERE_SENSORS.md)
+- See [docs/START_HERE_PYTHON.md](../docs/START_HERE_PYTHON.md)
 
 ---
 
-**Ready to teach? Open `sensor_word_blocks.html` now! 🚀**
+**Ready to teach? Open [sensor_python.html](./sensor_python.html) now! 🚀**

@@ -1,4 +1,4 @@
-# Sensors Word Blocks - Quick Reference Cheat Sheet
+# Sensors Python - Quick Reference Cheat Sheet
 
 ## 🤖 Robot Hardware Setup
 

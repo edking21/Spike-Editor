@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensors Word Blocks - LEGO Education SPIKE</title>
-    <link rel="stylesheet" href="./styles/spike-shared.css">
+    <title>Sensors Python - LEGO Education SPIKE</title>
+    <link rel="stylesheet" href="../styles/spike-shared.css">
     <style>
         .sensor-blocks-container {
             max-width: 1200px;
@@ -223,10 +223,10 @@
 </head>
 <body>
     <div class="mobile-sidebar">
-        <a href="/Spike-Editor/index.html" onclick="closeMobileMenu()">Home</a>
-        <a href="/Spike-Editor/training_camp.html" onclick="closeMobileMenu()">Training Camp</a>
-        <a href="/Spike-Editor/challenges_library.html" onclick="closeMobileMenu()">Challenges</a>
-        <a href="/Spike-Editor/Videos.html" onclick="closeMobileMenu()">Videos</a>
+        <a href="../index.html" onclick="closeMobileMenu()">Home</a>
+        <a href="../training_camp.html" onclick="closeMobileMenu()">Training Camp</a>
+        <a href="../challenges_library.html" onclick="closeMobileMenu()">Challenges</a>
+        <a href="../Videos.html" onclick="closeMobileMenu()">Videos</a>
     </div>
     <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
     
@@ -234,17 +234,17 @@
         <button class="menu-toggle" type="button" aria-label="Open menu" title="Open menu" onclick="toggleMobileMenu()">☰</button>
         <div class="menu-brand">Spike Editor</div>
         <div class="menu-links">
-            <a href="/Spike-Editor/index.html">Home</a>
-            <a href="/Spike-Editor/training_camp.html">Training Camp</a>
-            <a href="/Spike-Editor/challenges_library.html">Challenges</a>
-            <a href="/Spike-Editor/Videos.html">Videos</a>
+            <a href="../index.html">Home</a>
+            <a href="../training_camp.html">Training Camp</a>
+            <a href="../challenges_library.html">Challenges</a>
+            <a href="../Videos.html">Videos</a>
         </div>
         <button class="menu-search" type="button" aria-label="Search this page" title="Search this page" onclick="searchCurrentPage()">&#128269;</button>
     </div>
 
     <div class="sensor-blocks-container">
         <div class="lesson-header">
-            <h1>🤖 Sensors Word Blocks</h1>
+            <h1>🤖 Sensors Python</h1>
             <p>Learn to Program All Three SPIKE Sensors</p>
             <p>Move Until Touch • Near • Touch • Repeat</p>
         </div>
@@ -258,7 +258,7 @@
                 <li><strong>Use the Color Sensor</strong> to detect colors (ready for future lessons)</li>
                 <li><strong>Program robot sequences</strong> that use multiple sensors in combination</li>
                 <li><strong>Implement repeat loops</strong> that continue until a sensor detects something</li>
-                <li><strong>Understand Word Blocks</strong> concepts for robot control in LEGO Education SPIKE</li>
+                <li><strong>Understand Python sensor programming</strong> concepts for robot control in LEGO Education SPIKE</li>
             </ul>
         </div>
 
@@ -410,20 +410,20 @@ await runloop.until(is_touch_2)</div>
         <div class="code-download">
             <h2>💾 Complete Python Code</h2>
             <p>Download the complete example that uses all three sensors:</p>
-            <a href="./Python/sensor_three_touch_near.py" class="download-button">📥 Download sensor_three_touch_near.py</a>
-            <a href="./Python/getting_started_sensors.py" class="download-button">📥 Download getting_started_sensors.py</a>
-            <a href="./Python/sensor_four_square.py" class="download-button">📥 Download sensor_four_square.py</a>
+            <a href="../Python/sensor_three_touch_near.py" class="download-button">📥 Download sensor_three_touch_near.py</a>
+            <a href="../Python/getting_started_sensors.py" class="download-button">📥 Download getting_started_sensors.py</a>
+            <a href="../Python/sensor_four_square.py" class="download-button">📥 Download sensor_four_square.py</a>
         </div>
 
         <div style="background: #f0f8ff; padding: 20px; margin-top: 30px; border-radius: 5px; text-align: center;">
             <h3 style="color: #4169E1;">🎓 Ready to Learn More?</h3>
-            <p>Check out our <a href="./training_camp.html">Training Camp</a> for more sensor programming lessons!</p>
-            <p>Or explore our <a href="./challenges_library.html">Challenge Library</a> for robotics competitions and projects.</p>
+            <p>Check out our <a href="../training_camp.html">Training Camp</a> for more sensor programming lessons!</p>
+            <p>Or explore our <a href="../challenges_library.html">Challenge Library</a> for robotics competitions and projects.</p>
         </div>
     </div>
 
-    <script src="./utils/utils.js"></script>
-    <script src="./scripts/spike-shared.js"></script>
+    <script src="../utils/utils.js"></script>
+    <script src="../scripts/spike-shared.js"></script>
     <script>
         function closeMobileMenu() {
             const sidebar = document.querySelector('.mobile-sidebar');
@@ -444,7 +444,7 @@ await runloop.until(is_touch_2)</div>
         }
 
         function searchCurrentPage() {
-            alert('Search: Search functionality would be implemented here to search within the Word Blocks content.');
+            alert('Search: Search functionality would be implemented here to search within the Python sensor content.');
         }
     </script>
 </body>

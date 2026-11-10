@@ -1,4 +1,4 @@
-# Sensors Word Blocks - Move Until Touch/Near/Touch with Repeat
+# Sensors Python - Move Until Touch/Near/Touch with Repeat
 # This project teaches students how to use all three sensors:
 # 1. Touch Sensor to stop first time
 # 2. Distance Sensor to detect when something is near

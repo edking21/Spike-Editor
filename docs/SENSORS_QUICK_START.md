@@ -1,21 +1,21 @@
-# Sensors Word Blocks - Quick Start Guide for Teachers
+# Sensors Python - Quick Start Guide for Teachers
 
 ## 📋 What You Have
 
-This is a complete middle school robotics curriculum teaching LEGO SPIKE sensor programming:
+This is a complete middle school robotics curriculum teaching LEGO SPIKE sensor programming with Python:
 
 ### Files Created:
-1. **sensor_word_blocks.html** - Interactive web lesson page
+1. **sensor_python.html** - Interactive web lesson page
 2. **sensor_three_touch_near.py** - Complete working example code
-3. **SENSORS_WORD_BLOCKS_README.md** - Full curriculum documentation
+3. **SENSORS_PYTHON_README.md** - Full curriculum documentation
 
 ## 🚀 Quick Start (5 Minutes)
 
 ### Step 1: Access the Lesson
-Open [sensor_word_blocks.html](./sensor_word_blocks.html) in a web browser. This shows:
+Open [sensor_python.html](../lessons/sensor_python.html) in a web browser. This shows:
 - Learning objectives
 - Hardware setup instructions
-- 4-phase robot movement explanation
+- 4-phase Python robot movement explanation
 - Sensor reference guide
 - Teacher tips and extensions
 
@@ -142,7 +142,7 @@ Action: Loop stops
 - **Port**: Numbered connection point on hub (A, B, C, D, E, F)
 
 ### Code Examples in HTML
-Open sensor_word_blocks.html and scroll down for:
+Open lessons/sensor_python.html and scroll down for:
 - Phase descriptions with code snippets
 - Teacher tips section
 - Vocabulary explanations
@@ -184,7 +184,7 @@ By end of lesson, students should be able to:
 
 For questions about:
 - **SPIKE Python API**: See official LEGO documentation
-- **This curriculum**: Check SENSORS_WORD_BLOCKS_README.md
+- **This curriculum**: Check SENSORS_PYTHON_README.md
 - **General robotics**: Consult training_camp.html for more lessons
 - **Code examples**: Look at Python folder for reference files
 
@@ -202,4 +202,4 @@ For questions about:
 
 **You've got this! Happy teaching! 🤖**
 
-*For more information, see SENSORS_WORD_BLOCKS_README.md or open sensor_word_blocks.html*
+*For more information, see SENSORS_PYTHON_README.md or open lessons/sensor_python.html*

@@ -1,15 +1,15 @@
-# 🎉 Sensors Word Blocks Project - Complete Summary
+# 🎉 Sensors Python Project - Complete Summary
 
 ## ✅ Project Status: COMPLETE
 
-A comprehensive middle school robotics curriculum has been created to teach LEGO Education SPIKE sensor programming with all three sensors working together.
+A comprehensive middle school robotics curriculum has been created to teach LEGO Education SPIKE sensor programming with Python using all three sensors working together.
 
 ---
 
 ## 📦 Deliverables Created
 
 ### 1. Interactive Web Lesson
-**File:** `sensor_word_blocks.html`
+**File:** `lessons/sensor_python.html`
 - Visual presentation of all content
 - Responsive design (works on phones, tablets, desktops)
 - 4 phase cards with explanations
@@ -29,7 +29,7 @@ A comprehensive middle school robotics curriculum has been created to teach LEGO
 ### 3. Teacher Documentation
 **Files:**
 - **SENSORS_QUICK_START.md** - 5-minute teacher overview with teaching tips
-- **SENSORS_WORD_BLOCKS_README.md** - Full curriculum guide with lesson plans
+- **SENSORS_PYTHON_README.md** - Full curriculum guide with lesson plans
 - **SENSORS_INDEX.md** - Complete resource index and navigation guide
 
 ### 4. Student Materials
@@ -92,10 +92,10 @@ Students will learn to:
 
 ```
 spike-editor/
-├── sensor_word_blocks.html                    (Interactive lesson page)
+├── lessons/sensor_python.html                 (Interactive lesson page)
 ├── SENSORS_INDEX.md                           (Main index & navigation)
 ├── SENSORS_QUICK_START.md                     (Teacher quick start)
-├── SENSORS_WORD_BLOCKS_README.md              (Full curriculum)
+├── SENSORS_PYTHON_README.md                   (Full curriculum)
 ├── SENSORS_STUDENT_WORKSHEET.md               (Student activities)
 └── Python/
     └── sensor_three_touch_near.py             (Working example code)
@@ -109,11 +109,11 @@ spike-editor/
 
 1. **Start Here:**
    - Open and read `SENSORS_QUICK_START.md` (5 minutes)
-   - Review `sensor_word_blocks.html` in a browser
+   - Review `lessons/sensor_python.html` in a browser
    - Gather hardware per checklist
 
 2. **During Class:**
-   - Project `sensor_word_blocks.html` on screen
+   - Project `lessons/sensor_python.html` on screen
    - Have students follow along with setup
    - Load `Python/sensor_three_touch_near.py` on robots
    - Run one phase at a time
@@ -161,7 +161,7 @@ spike-editor/
 
 ## 📊 Content Breakdown
 
-### sensor_word_blocks.html
+### lessons/sensor_python.html
 - **Length:** ~18,300 characters
 - **Sections:** 8 (header, objectives, setup, phases, legends, tips, downloads, conclusion)
 - **Interactive Elements:** Yes (mobile menu, scrollable phases)
@@ -175,7 +175,7 @@ spike-editor/
 - **Questions:** 20+ for reflection
 - **Assessment:** Yes (checklist, peer review)
 
-### SENSORS_WORD_BLOCKS_README.md
+### SENSORS_PYTHON_README.md
 - **Length:** ~10,000 characters
 - **Sections:** 12 (overview, objectives, project description, concepts, files, teaching guide, vocabulary, troubleshooting, extensions, standards, references, resources)
 - **Code Examples:** 8 complete snippets
@@ -325,7 +325,7 @@ spike-editor/
 ## 🎯 Next Steps for Teachers
 
 1. ✅ Read `SENSORS_QUICK_START.md`
-2. ✅ Review `sensor_word_blocks.html`
+2. ✅ Review `lessons/sensor_python.html`
 3. ✅ Download `Python/sensor_three_touch_near.py`
 4. ✅ Test on one robot
 5. ✅ Print/share `SENSORS_STUDENT_WORKSHEET.md`
@@ -339,7 +339,7 @@ spike-editor/
 
 ### In This Project
 - SENSORS_QUICK_START.md - Troubleshooting section
-- SENSORS_WORD_BLOCKS_README.md - Common issues & solutions
+- SENSORS_PYTHON_README.md - Common issues & solutions
 - SENSORS_STUDENT_WORKSHEET.md - Troubleshooting practice
 
 ### External Resources
@@ -386,4 +386,4 @@ This curriculum was created with the goal of making robotics education accessibl
 
 **Start with:** `SENSORS_QUICK_START.md`
 
-**Questions?** See `SENSORS_WORD_BLOCKS_README.md` or `SENSORS_INDEX.md`
+**Questions?** See `SENSORS_PYTHON_README.md` or `SENSORS_INDEX.md`

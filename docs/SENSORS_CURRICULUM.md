@@ -1,8 +1,8 @@
-# 🤖 Sensors Word Blocks - Quick Access Guide
+# 🤖 Sensors Python - Quick Access Guide
 
 ## 📖 Complete Middle School SPIKE Robotics Curriculum
 
-Welcome! This guide helps you find everything related to the Sensors Word Blocks curriculum.
+Welcome! This guide helps you find everything related to the Sensors Python curriculum.
 
 ---
 
@@ -10,9 +10,9 @@ Welcome! This guide helps you find everything related to the Sensors Word Blocks
 
 ### 👨‍🏫 I'm a Teacher
 **Time: 5 minutes to get started**
-1. Open: [`docs/START_HERE_SENSORS.md`](./docs/START_HERE_SENSORS.md)
+1. Open: [`docs/START_HERE_PYTHON.md`](./docs/START_HERE_PYTHON.md)
 2. Read: [`docs/SENSORS_QUICK_START.md`](./docs/SENSORS_QUICK_START.md)
-3. View: [`lessons/sensor_word_blocks.html`](./lessons/sensor_word_blocks.html)
+3. View: [`lessons/sensor_python.html`](./lessons/sensor_python.html)
 
 ### 👨‍🎓 I'm a Student
 **Time: Start with the worksheet**
@@ -23,8 +23,8 @@ Welcome! This guide helps you find everything related to the Sensors Word Blocks
 ### 📊 I'm Managing This Project
 **Time: Check completion**
 1. Overview: [`docs/SENSORS_PROJECT_SUMMARY.md`](./docs/SENSORS_PROJECT_SUMMARY.md)
-2. Details: [`docs/SENSORS_WORD_BLOCKS_README.md`](./docs/SENSORS_WORD_BLOCKS_README.md)
-3. Completion: [`ORGANIZATION_COMPLETE.md`](./ORGANIZATION_COMPLETE.md)
+2. Details: [`docs/SENSORS_PYTHON_README.md`](./docs/SENSORS_PYTHON_README.md)
+3. Completion: [`docs/ORGANIZATION_COMPLETE.md`](./docs/ORGANIZATION_COMPLETE.md)
 
 ---
 
@@ -35,9 +35,9 @@ All curriculum documentation in one place.
 
 | File | Purpose |
 |------|---------|
-| **START_HERE_SENSORS.md** | Master guide - read this first! ⭐ |
+| **START_HERE_PYTHON.md** | Master guide - read this first! ⭐ |
 | **SENSORS_QUICK_START.md** | 5-minute teacher overview |
-| **SENSORS_WORD_BLOCKS_README.md** | Complete curriculum guide |
+| **SENSORS_PYTHON_README.md** | Complete curriculum guide |
 | **SENSORS_INDEX.md** | Resource index & navigation |
 | **SENSORS_CHEAT_SHEET.md** | Code reference & snippets |
 | **SENSORS_STUDENT_WORKSHEET.md** | 75+ hands-on activities |
@@ -45,17 +45,17 @@ All curriculum documentation in one place.
 | **PROJECT_COMPLETE.md** | Completion report |
 | **README.md** | Folder guide |
 
-👉 **Start here:** `docs/START_HERE_SENSORS.md`
+👉 **Start here:** `docs/START_HERE_PYTHON.md`
 
 ### 🎓 `lessons/` - Interactive Lessons
 Ready-to-use lesson materials.
 
 | File | Purpose |
 |------|---------|
-| **sensor_word_blocks.html** | Interactive 4-phase lesson page |
+| **sensor_python.html** | Interactive 4-phase lesson page |
 | **README.md** | How to use the lessons |
 
-👉 **Show students:** `lessons/sensor_word_blocks.html`
+👉 **Show students:** `lessons/sensor_python.html`
 
 ### 🐍 `Python/` - Code Examples
 Working robot code.
@@ -119,11 +119,11 @@ Robot bounces → Force Sensor stops it
 ### Finding Documentation
 → Go to `docs/` folder
 → Read `README.md` for overview
-→ Start with `START_HERE_SENSORS.md`
+→ Start with `START_HERE_PYTHON.md`
 
 ### Finding Lessons
 → Go to `lessons/` folder
-→ Open `sensor_word_blocks.html`
+→ Open `sensor_python.html`
 → Read `README.md` for instructions
 
 ### Finding Code
@@ -133,7 +133,7 @@ Robot bounces → Force Sensor stops it
 ### Project Information
 → Root folder
 → Read `SENSORS_CURRICULUM.md` (this file)
-→ Read `ORGANIZATION_COMPLETE.md`
+→ Read `docs/ORGANIZATION_COMPLETE.md`
 
 ---
 
@@ -174,10 +174,10 @@ Robot bounces → Force Sensor stops it
 → Give `docs/SENSORS_STUDENT_WORKSHEET.md`
 
 ### Detailed Information
-→ See `docs/SENSORS_WORD_BLOCKS_README.md`
+→ See `docs/SENSORS_PYTHON_README.md`
 
 ### Project Organization
-→ See `ORGANIZATION_COMPLETE.md`
+→ See `docs/ORGANIZATION_COMPLETE.md`
 
 ---
 
@@ -197,8 +197,8 @@ Robot bounces → Force Sensor stops it
 ## ✅ Quick Checklist
 
 Before teaching:
-- [ ] Read `docs/START_HERE_SENSORS.md`
-- [ ] Review `lessons/sensor_word_blocks.html`
+- [ ] Read `docs/START_HERE_PYTHON.md`
+- [ ] Review `lessons/sensor_python.html`
 - [ ] Test `Python/sensor_three_touch_near.py` on one robot
 - [ ] Print/prepare `docs/SENSORS_STUDENT_WORKSHEET.md`
 - [ ] Gather all hardware
@@ -209,10 +209,10 @@ Before teaching:
 ## 🚀 Ready to Teach?
 
 ### Step 1: Read (5 min)
-📖 [`docs/START_HERE_SENSORS.md`](./docs/START_HERE_SENSORS.md)
+📖 [`docs/START_HERE_PYTHON.md`](./docs/START_HERE_PYTHON.md)
 
 ### Step 2: Review (10 min)
-🌐 [`lessons/sensor_word_blocks.html`](./lessons/sensor_word_blocks.html)
+🌐 [`lessons/sensor_python.html`](./lessons/sensor_python.html)
 
 ### Step 3: Prepare (15 min)
 📝 Gather materials per checklist
@@ -227,9 +227,9 @@ Before teaching:
 ```
 spike-editor/
 ├── docs/                          # 📚 Documentation (9 files)
-│   ├── START_HERE_SENSORS.md      ⭐ Start here
+│   ├── START_HERE_PYTHON.md       ⭐ Start here
 │   ├── SENSORS_QUICK_START.md
-│   ├── SENSORS_WORD_BLOCKS_README.md
+│   ├── SENSORS_PYTHON_README.md
 │   ├── SENSORS_INDEX.md
 │   ├── SENSORS_CHEAT_SHEET.md
 │   ├── SENSORS_STUDENT_WORKSHEET.md
@@ -238,7 +238,7 @@ spike-editor/
 │   └── README.md
 │
 ├── lessons/                       # 🎓 Lessons (2 files)
-│   ├── sensor_word_blocks.html
+│   ├── sensor_python.html
 │   └── README.md
 │
 ├── Python/                        # 🐍 Code (1 file)
@@ -291,7 +291,7 @@ After completing this curriculum, students will:
 ## 📞 Questions?
 
 1. **Where do I start?**
-   → `docs/START_HERE_SENSORS.md`
+   → `docs/START_HERE_PYTHON.md`
 
 2. **What files are where?**
    → See "File Locations" section above
@@ -303,23 +303,23 @@ After completing this curriculum, students will:
    → `Python/sensor_three_touch_near.py`
 
 5. **Where's the full curriculum?**
-   → `docs/SENSORS_WORD_BLOCKS_README.md`
+   → `docs/SENSORS_PYTHON_README.md`
 
 6. **How is everything organized?**
-   → `ORGANIZATION_COMPLETE.md`
+   → `docs/ORGANIZATION_COMPLETE.md`
 
 ---
 
 ## 🎯 Next Step
 
 **Open this file in your browser or editor:**
-👉 `docs/START_HERE_SENSORS.md`
+👉 `docs/START_HERE_PYTHON.md`
 
 **Or browse the lesson directly:**
-👉 `lessons/sensor_word_blocks.html`
+👉 `lessons/sensor_python.html`
 
 ---
 
 **Ready to teach amazing robotics? Let's go! 🚀**
 
-*Sensors Word Blocks - Making middle school STEM education accessible, engaging, and effective.*
+*Sensors Python - Making middle school STEM education accessible, engaging, and effective.*

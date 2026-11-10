@@ -1,8 +1,8 @@
-# 🤖 Sensors Word Blocks - Project Index
+# 🤖 Sensors Python - Project Index
 
 ## Complete Middle School Robotics Curriculum
 
-This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor programming to middle school students using all three sensors in combination.
+This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor programming with Python to middle school students using all three sensors in combination.
 
 ---
 
@@ -15,17 +15,17 @@ This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor prog
    - Troubleshooting guide
    - Extension ideas
 
-2. **[SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md)** - Complete curriculum guide
+2. **[SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)** - Complete curriculum guide
    - Learning objectives
    - Detailed lesson plan
    - Vocabulary and concepts
    - Standards alignment
    - Code reference
 
-3. **[sensor_word_blocks.html](./sensor_word_blocks.html)** - Interactive web lesson
+3. **[../lessons/sensor_python.html](../lessons/sensor_python.html)** - Interactive web lesson
    - Visual lesson presentation
    - Hardware setup guide
-   - 4-phase explanations
+   - 4-phase Python explanations
    - Sensor reference
    - Teacher tips
    - Extension activities
@@ -39,9 +39,9 @@ This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor prog
    - Reflection questions
    - Challenge levels
 
-2. **[Python/sensor_three_touch_near.py](./Python/sensor_three_touch_near.py)** - Working example code
+2. **[../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)** - Working example code
    - Complete 4-phase program
-   - Well-commented code
+   - Well-commented Python code
    - Ready to run on SPIKE robot
 
 ---
@@ -73,13 +73,13 @@ This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor prog
 ### Option 1: Quick Lesson (45 minutes)
 1. Read [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 2. Have students build hardware per instructions
-3. Show [sensor_word_blocks.html](./sensor_word_blocks.html) on projector
-4. Load [Python/sensor_three_touch_near.py](./Python/sensor_three_touch_near.py) on robots
+3. Show [../lessons/sensor_python.html](../lessons/sensor_python.html) on projector
+4. Load [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py) on robots
 5. Run each phase one by one
 6. Students complete [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
 
 ### Option 2: Full Unit (Multiple Classes)
-1. Follow detailed [SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md)
+1. Follow detailed [SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)
 2. Use worksheet for multiple sessions
 3. Assign extension challenges
 4. Have students design their own programs
@@ -194,10 +194,10 @@ Students will be able to:
 
 ### I want to...
 - **Start teaching immediately** → [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
-- **Show students on a screen** → [sensor_word_blocks.html](./sensor_word_blocks.html)
-- **Get detailed curriculum** → [SENSORS_WORD_BLOCKS_README.md](./SENSORS_WORD_BLOCKS_README.md)
+- **Show students on a screen** → [../lessons/sensor_python.html](../lessons/sensor_python.html)
+- **Get detailed curriculum** → [SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)
 - **Give students to work on** → [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
-- **Load working example code** → [Python/sensor_three_touch_near.py](./Python/sensor_three_touch_near.py)
+- **Load working example code** → [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)
 - **Troubleshoot a problem** → See "Troubleshooting" in SENSORS_QUICK_START.md
 - **Find extension activities** → See "Extension Ideas" in SENSORS_QUICK_START.md
 
@@ -220,7 +220,7 @@ Students will be able to:
 ## ✅ Checklist: Ready to Teach?
 
 - [ ] Read SENSORS_QUICK_START.md
-- [ ] Review sensor_word_blocks.html
+- [ ] Review lessons/sensor_python.html
 - [ ] Download Python/sensor_three_touch_near.py
 - [ ] Gather hardware (sensors, motors, hub)
 - [ ] Test one robot with example code
@@ -293,12 +293,12 @@ This curriculum is designed to be flexible:
 
 **Created for:** Middle School STEM/Robotics Classes
 
-**Curriculum Version:** 1.0 - Complete Sensors Word Blocks
+**Curriculum Version:** 1.0 - Complete Sensors Python
 
 ---
 
-# 🎉 Welcome to Sensors Word Blocks!
+# 🎉 Welcome to Sensors Python!
 
-This comprehensive curriculum will help your students understand how robots use sensors to make smart decisions. By combining the Force Sensor, Distance Sensor, and Color Sensor, students will learn the fundamental concepts of sensor-driven robotics programming.
+This comprehensive curriculum will help your students understand how robots use sensors to make smart decisions through Python programming. By combining the Force Sensor, Distance Sensor, and Color Sensor, students will learn the fundamental concepts of sensor-driven robotics programming.
 
 **Let's build amazing robots! 🤖**

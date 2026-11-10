@@ -1,15 +1,15 @@
-# ✅ SENSORS WORD BLOCKS - PROJECT COMPLETION SUMMARY
+# ✅ SENSORS PYTHON - PROJECT COMPLETION SUMMARY
 
 ## Mission Accomplished! 🎉
 
-A complete, professional, ready-to-teach middle school robotics curriculum has been created for LEGO Education SPIKE sensor programming.
+A complete, professional, ready-to-teach middle school robotics curriculum has been created for LEGO Education SPIKE sensor programming with Python.
 
 ---
 
 ## 📦 What You Now Have
 
 ### Interactive Web Content
-- **sensor_word_blocks.html** - Beautiful interactive lesson page
+- **lessons/sensor_python.html** - Beautiful interactive lesson page
   - 4 visual phase cards with animations
   - Hardware setup instructions
   - Sensor reference guide
@@ -24,9 +24,9 @@ A complete, professional, ready-to-teach middle school robotics curriculum has b
   - Demonstrates all 3 sensors
 
 ### Complete Documentation
-- **START_HERE_SENSORS.md** - Master navigation guide
+- **START_HERE_PYTHON.md** - Master navigation guide
 - **SENSORS_QUICK_START.md** - 5-minute teacher overview
-- **SENSORS_WORD_BLOCKS_README.md** - Full curriculum guide
+- **SENSORS_PYTHON_README.md** - Full curriculum guide
 - **SENSORS_INDEX.md** - Complete resource index
 - **SENSORS_PROJECT_SUMMARY.md** - Project statistics
 - **SENSORS_CHEAT_SHEET.md** - Code reference guide
@@ -129,18 +129,18 @@ is pressed           detects object       pressed again        Sensor stops it
 ## 🚀 Getting Started
 
 ### Right Now (5 minutes)
-1. Open **START_HERE_SENSORS.md**
+1. Open **START_HERE_PYTHON.md**
 2. Choose your role (teacher or student)
 3. Follow the quick links
 
 ### Before Teaching (20 minutes)
 1. Read **SENSORS_QUICK_START.md**
-2. Review **sensor_word_blocks.html**
+2. Review **lessons/sensor_python.html**
 3. Check **Python/sensor_three_touch_near.py**
 4. Gather materials
 
 ### During Class (45 minutes)
-1. Project **sensor_word_blocks.html**
+1. Project **lessons/sensor_python.html**
 2. Have students build per instructions
 3. Load Python code on robots
 4. Run Phase 1, then 2, 3, 4
@@ -156,10 +156,10 @@ is pressed           detects object       pressed again        Sensor stops it
 ## 📚 File Guide
 
 ```
-START HERE → START_HERE_SENSORS.md
+START HERE → START_HERE_PYTHON.md
               ├─ Teachers → SENSORS_QUICK_START.md
-              │           ├─ sensor_word_blocks.html (show on projector)
-              │           ├─ SENSORS_WORD_BLOCKS_README.md (full guide)
+              │           ├─ lessons/sensor_python.html (show on projector)
+              │           ├─ SENSORS_PYTHON_README.md (full guide)
               │           └─ SENSORS_PROJECT_SUMMARY.md (overview)
               │
               └─ Students → SENSORS_STUDENT_WORKSHEET.md
@@ -210,13 +210,13 @@ By the end, students will be able to:
 
 | File | Purpose | When to Use |
 |------|---------|------------|
-| START_HERE_SENSORS.md | Navigation | First thing |
+| START_HERE_PYTHON.md | Navigation | First thing |
 | SENSORS_QUICK_START.md | Teacher overview | Before class |
-| sensor_word_blocks.html | Lesson presentation | During class |
+| lessons/sensor_python.html | Lesson presentation | During class |
 | sensor_three_touch_near.py | Working code | Load on robot |
 | SENSORS_STUDENT_WORKSHEET.md | Student activities | Give to students |
 | SENSORS_CHEAT_SHEET.md | Code reference | During coding |
-| SENSORS_WORD_BLOCKS_README.md | Full curriculum | Detailed planning |
+| SENSORS_PYTHON_README.md | Full curriculum | Detailed planning |
 | SENSORS_INDEX.md | Resource map | Find anything |
 | SENSORS_PROJECT_SUMMARY.md | Project stats | Project overview |
 
@@ -291,12 +291,12 @@ By the end, students will be able to:
 - Review troubleshooting in **SENSORS_QUICK_START.md**
 
 ### Lesson Planning
-- Follow timeline in **SENSORS_WORD_BLOCKS_README.md**
+- Follow timeline in **SENSORS_PYTHON_README.md**
 - Use suggestions from **SENSORS_PROJECT_SUMMARY.md**
 
 ### Detailed Reference
 - Complete guide in **SENSORS_INDEX.md**
-- Full curriculum in **SENSORS_WORD_BLOCKS_README.md**
+- Full curriculum in **SENSORS_PYTHON_README.md**
 
 ### Student Help
 - Troubleshooting in **SENSORS_STUDENT_WORKSHEET.md**
@@ -306,9 +306,9 @@ By the end, students will be able to:
 
 ## ✅ Pre-Teaching Checklist
 
-- [ ] Read START_HERE_SENSORS.md
+- [ ] Read START_HERE_PYTHON.md
 - [ ] Review SENSORS_QUICK_START.md
-- [ ] Check sensor_word_blocks.html
+- [ ] Check lessons/sensor_python.html
 - [ ] Download Python/sensor_three_touch_near.py
 - [ ] Test code on one robot
 - [ ] Print SENSORS_STUDENT_WORKSHEET.md
@@ -324,9 +324,9 @@ By the end, students will be able to:
 You now have a complete, professional, ready-to-teach robotics curriculum.
 
 ### Your Next Steps:
-1. **Right Now:** Open **START_HERE_SENSORS.md**
+1. **Right Now:** Open **START_HERE_PYTHON.md**
 2. **Next 5 Min:** Read **SENSORS_QUICK_START.md**
-3. **Next 10 Min:** Review **sensor_word_blocks.html**
+3. **Next 10 Min:** Review **lessons/sensor_python.html**
 4. **Tomorrow:** Teach amazing robotics! 🚀
 
 ---
@@ -363,16 +363,16 @@ You now have a complete, professional, ready-to-teach robotics curriculum.
 
 ## 🚀 Let's Build Some Robots!
 
-**Start Here:** [START_HERE_SENSORS.md](./START_HERE_SENSORS.md)
+**Start Here:** [START_HERE_PYTHON.md](./START_HERE_PYTHON.md)
 
 **Questions?** See [SENSORS_INDEX.md](./SENSORS_INDEX.md)
 
 **Ready to teach?** Go to [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 
-**Show your class?** Open [sensor_word_blocks.html](./sensor_word_blocks.html)
+**Show your class?** Open [lessons/sensor_python.html](../lessons/sensor_python.html)
 
 ---
 
-**🤖 Sensors Word Blocks - Complete & Ready to Use! 🤖**
+**🤖 Sensors Python - Complete & Ready to Use! 🤖**
 
 *Making middle school robotics education accessible, engaging, and effective.*
