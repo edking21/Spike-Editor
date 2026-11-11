@@ -344,29 +344,17 @@ try {
     }
     
     try {
-        # Ask if user wants to open the files
-        Write-Host "`n📂 Would you like to open the generated files?" -ForegroundColor Yellow
-        $response = (Read-Host "  Open files in notepad? (y/n)").Trim()
-        if ($response -eq 'y' -or $response -eq 'Y') {
-            Start-Process notepad $IndexOutputFile
-            Start-Process notepad $TrainingCampOutputFile
-            Start-Process notepad $ChallengesLibraryOutputFile
-            if (-not $SkipSensorsPython) {
-                Start-Process notepad $SensorsPythonOutputFile
-            }
-        }
-
-        # Ask which file to copy to clipboard
-        Write-Host "`n📋 Which file would you like to copy to clipboard?" -ForegroundColor Yellow
+        # Step 4: Copy to clipboard (fully automated)
+        Write-Host "`n📋 Select file to copy to clipboard:" -ForegroundColor Yellow
         Write-Host "  1. Main Index" -ForegroundColor Cyan
         Write-Host "  2. Training Camp" -ForegroundColor Cyan
         Write-Host "  3. Challenges Library" -ForegroundColor Cyan
         if (-not $SkipSensorsPython) {
             Write-Host "  4. Sensors Python Lesson" -ForegroundColor Cyan
-            Write-Host "  5. Neither" -ForegroundColor Cyan
+            Write-Host "  5. Skip" -ForegroundColor Cyan
             $maxChoice = '5'
         } else {
-            Write-Host "  4. Neither" -ForegroundColor Cyan
+            Write-Host "  4. Skip" -ForegroundColor Cyan
             $maxChoice = '4'
         }
         
@@ -376,19 +364,23 @@ try {
             '1' {
                 Get-Content $IndexOutputFile -Raw | Set-Clipboard
                 Write-Host "`n✓ $(Split-Path $IndexOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
+                Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
             }
             '2' {
                 Get-Content $TrainingCampOutputFile -Raw | Set-Clipboard
                 Write-Host "`n✓ $(Split-Path $TrainingCampOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
+                Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
             }
             '3' {
                 Get-Content $ChallengesLibraryOutputFile -Raw | Set-Clipboard
                 Write-Host "`n✓ $(Split-Path $ChallengesLibraryOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
+                Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
             }
             '4' {
                 if (-not $SkipSensorsPython) {
                     Get-Content $SensorsPythonOutputFile -Raw | Set-Clipboard
                     Write-Host "`n✓ $(Split-Path $SensorsPythonOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
+                    Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
                 } else {
                     Write-Host "`n✓ Skipped clipboard copy." -ForegroundColor Gray
                 }
@@ -406,11 +398,9 @@ try {
     Restore-OriginalOutputFiles -OriginalFiles $originalOutputContent
     
     Write-Host "`n🎉 Deployment preparation complete!" -ForegroundColor Green
-    Write-Host "`n📝 Next steps:" -ForegroundColor Cyan
-    Write-Host "  1. Open the _for_copy_to_sites.html files from the utils folder" -ForegroundColor Gray
-    Write-Host "  2. Copy the HTML content" -ForegroundColor Gray
-    Write-Host "  3. Paste into your Google Sites pages" -ForegroundColor Gray
-    Write-Host "  4. See DEPLOYMENT_GUIDE.md for detailed instructions" -ForegroundColor Gray
+    Write-Host "`n✅ Your HTML is ready in the clipboard!" -ForegroundColor Green
+    Write-Host "`n📝 Next step:" -ForegroundColor Cyan
+    Write-Host "  → Paste into your Google Sites page (Ctrl+V)" -ForegroundColor Gray
     Write-Host ""
 
 } catch {
