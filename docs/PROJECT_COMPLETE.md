@@ -9,7 +9,7 @@ A complete, professional, ready-to-teach middle school robotics curriculum has b
 ## 📦 What You Now Have
 
 ### Interactive Web Content
-- **sensor_python.html** - Beautiful interactive lesson page
+- **robotics.html** - Beautiful interactive lesson page
   - 4 visual phase cards with animations
   - Hardware setup instructions
   - Sensor reference guide
@@ -135,12 +135,12 @@ is pressed           detects object       pressed again        Sensor stops it
 
 ### Before Teaching (20 minutes)
 1. Read **SENSORS_QUICK_START.md**
-2. Review **sensor_python.html**
+2. Review **robotics.html**
 3. Check **Python/sensor_three_touch_near.py**
 4. Gather materials
 
 ### During Class (45 minutes)
-1. Project **sensor_python.html**
+1. Project **robotics.html**
 2. Have students build per instructions
 3. Load Python code on robots
 4. Run Phase 1, then 2, 3, 4
@@ -158,7 +158,7 @@ is pressed           detects object       pressed again        Sensor stops it
 ```
 START HERE → START_HERE_PYTHON.md
               ├─ Teachers → SENSORS_QUICK_START.md
-              │           ├─ sensor_python.html (show on projector)
+              │           ├─ robotics.html (show on projector)
               │           ├─ SENSORS_PYTHON_README.md (full guide)
               │           └─ SENSORS_PROJECT_SUMMARY.md (overview)
               │
@@ -212,7 +212,7 @@ By the end, students will be able to:
 |------|---------|------------|
 | START_HERE_PYTHON.md | Navigation | First thing |
 | SENSORS_QUICK_START.md | Teacher overview | Before class |
-| sensor_python.html | Lesson presentation | During class |
+| robotics.html | Lesson presentation | During class |
 | sensor_three_touch_near.py | Working code | Load on robot |
 | SENSORS_STUDENT_WORKSHEET.md | Student activities | Give to students |
 | SENSORS_CHEAT_SHEET.md | Code reference | During coding |
@@ -308,7 +308,7 @@ By the end, students will be able to:
 
 - [ ] Read START_HERE_PYTHON.md
 - [ ] Review SENSORS_QUICK_START.md
-- [ ] Check sensor_python.html
+- [ ] Check robotics.html
 - [ ] Download Python/sensor_three_touch_near.py
 - [ ] Test code on one robot
 - [ ] Print SENSORS_STUDENT_WORKSHEET.md
@@ -326,7 +326,7 @@ You now have a complete, professional, ready-to-teach robotics curriculum.
 ### Your Next Steps:
 1. **Right Now:** Open **START_HERE_PYTHON.md**
 2. **Next 5 Min:** Read **SENSORS_QUICK_START.md**
-3. **Next 10 Min:** Review **sensor_python.html**
+3. **Next 10 Min:** Review **robotics.html**
 4. **Tomorrow:** Teach amazing robotics! 🚀
 
 ---
@@ -369,7 +369,7 @@ You now have a complete, professional, ready-to-teach robotics curriculum.
 
 **Ready to teach?** Go to [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 
-**Show your class?** Open [sensor_python.html](../sensor_python.html)
+**Show your class?** Open [robotics.html](../robotics.html)
 
 ---
 

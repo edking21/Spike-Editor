@@ -9,7 +9,7 @@ A comprehensive middle school robotics curriculum has been created to teach LEGO
 ## 📦 Deliverables Created
 
 ### 1. Interactive Web Lesson
-**File:** `sensor_python.html`
+**File:** `robotics.html`
 - Visual presentation of all content
 - Responsive design (works on phones, tablets, desktops)
 - 4 phase cards with explanations
@@ -92,7 +92,7 @@ Students will learn to:
 
 ```
 spike-editor/
-├── sensor_python.html                 (Interactive lesson page)
+├── robotics.html                 (Interactive lesson page)
 ├── SENSORS_INDEX.md                           (Main index & navigation)
 ├── SENSORS_QUICK_START.md                     (Teacher quick start)
 ├── SENSORS_PYTHON_README.md                   (Full curriculum)
@@ -109,11 +109,11 @@ spike-editor/
 
 1. **Start Here:**
    - Open and read `SENSORS_QUICK_START.md` (5 minutes)
-   - Review `sensor_python.html` in a browser
+   - Review `robotics.html` in a browser
    - Gather hardware per checklist
 
 2. **During Class:**
-   - Project `sensor_python.html` on screen
+   - Project `robotics.html` on screen
    - Have students follow along with setup
    - Load `Python/sensor_three_touch_near.py` on robots
    - Run one phase at a time
@@ -161,7 +161,7 @@ spike-editor/
 
 ## 📊 Content Breakdown
 
-### sensor_python.html
+### robotics.html
 - **Length:** ~18,300 characters
 - **Sections:** 8 (header, objectives, setup, phases, legends, tips, downloads, conclusion)
 - **Interactive Elements:** Yes (mobile menu, scrollable phases)
@@ -325,7 +325,7 @@ spike-editor/
 ## 🎯 Next Steps for Teachers
 
 1. ✅ Read `SENSORS_QUICK_START.md`
-2. ✅ Review `sensor_python.html`
+2. ✅ Review `robotics.html`
 3. ✅ Download `Python/sensor_three_touch_near.py`
 4. ✅ Test on one robot
 5. ✅ Print/share `SENSORS_STUDENT_WORKSHEET.md`

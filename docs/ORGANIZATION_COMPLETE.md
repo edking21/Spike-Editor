@@ -19,7 +19,7 @@ spike-editor/
 │
 ├── lessons/                           # 🎓 Interactive Lessons
 │   ├── README.md
-│   └── sensor_python.html             (interactive lesson page)
+│   └── robotics.html             (interactive lesson page)
 │
 ├── Python/                            # 🐍 Code Examples
 │   ├── sensor_three_touch_near.py     (working robot code)
@@ -52,7 +52,7 @@ spike-editor/
 **When to Use:** During class, student presentation
 
 **Files:**
-- `sensor_python.html` - Interactive 4-phase lesson page
+- `robotics.html` - Interactive 4-phase lesson page
   - 4 visual phase cards
   - Hardware setup guide
   - Sensor reference
@@ -77,7 +77,7 @@ spike-editor/
 
 1. **Start:** `docs/START_HERE_PYTHON.md`
 2. **Quick Overview:** `docs/SENSORS_QUICK_START.md` (5 min)
-3. **Show Students:** `sensor_python.html`
+3. **Show Students:** `robotics.html`
 4. **Give Worksheet:** `docs/SENSORS_STUDENT_WORKSHEET.md`
 5. **Load Code:** `Python/sensor_three_touch_near.py`
 
@@ -85,7 +85,7 @@ spike-editor/
 
 1. **Activities:** `docs/SENSORS_STUDENT_WORKSHEET.md`
 2. **Code Help:** `docs/SENSORS_CHEAT_SHEET.md`
-3. **Lesson:** `sensor_python.html`
+3. **Lesson:** `robotics.html`
 4. **Example Code:** `Python/sensor_three_touch_near.py`
 
 ### For Project Management
@@ -121,13 +121,13 @@ Open: docs/START_HERE_PYTHON.md
 ### Before Class (20 minutes)
 ```
 Read:   docs/SENSORS_QUICK_START.md
-View:   sensor_python.html
+View:   robotics.html
 Get:    Python/sensor_three_touch_near.py
 ```
 
 ### During Class (45 minutes)
 ```
-Project:   sensor_python.html
+Project:   robotics.html
 Load:      Python/sensor_three_touch_near.py
 Assign:    docs/SENSORS_STUDENT_WORKSHEET.md
 ```
@@ -140,7 +140,7 @@ Assign:    docs/SENSORS_STUDENT_WORKSHEET.md
 
 **Finding Lesson Content:**
 → Go to `lessons/` folder
-→ Open `sensor_python.html`
+→ Open `robotics.html`
 
 **Finding Code Examples:**
 → Go to `Python/` folder

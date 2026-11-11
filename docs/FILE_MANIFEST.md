@@ -67,7 +67,7 @@ utils/
 ### Lessons Folder
 ```
 lessons/
-├── sensor_python.html                           (existing - ready for deployment)
+├── robotics.html                           (existing - ready for deployment)
 ├── README.md                                    (existing - updated in Phase 2)
 └── ... other lesson files
 ```
@@ -97,7 +97,7 @@ lessons/
 **Language:** PowerShell  
 
 **What it does:**
-1. Reads source HTML files (index.html, sensor_python.html, etc.)
+1. Reads source HTML files (index.html, robotics.html, etc.)
 2. Processes them for Google Sites compatibility
 3. Removes mobile/menu elements
 4. Inlines all CSS and JavaScript
@@ -188,10 +188,10 @@ GitHub (Source Code)
 ├── index.html
 │   ├── Links to: training_camp.html
 │   ├── Links to: challenges_library.html
-│   ├── Links to: sensor_python.html (🆕 menu item)
+│   ├── Links to: robotics.html (🆕 menu item)
 │   └── Links to: Videos.html
 │
-├── sensor_python.html
+├── robotics.html
 │   ├── Includes: styles/spike-shared.css
 │   ├── Includes: scripts/spike-shared.js
 │   └── Links to: Python/sensor_three_touch_near.py

@@ -1,6 +1,6 @@
-# Integration: Adding Sensors Python to Spike Editor Menu
+# Spike Editor Navigation
 
-This guide shows exactly where and how to add Sensors Python to the Spike Editor navigation so users can access it from the main menu.
+The Robotics project hub is linked from the Spike Editor navigation for desktop and mobile users.
 
 ---
 
@@ -10,10 +10,8 @@ The Spike Editor currently has these main sections:
 1. Home (index.html)
 2. Training Camp (training_camp.html)
 3. Challenges (challenges_library.html)
-4. Videos (Videos.html)
-
-We're adding:
-5. **Sensors Python** (sensor_python.html)
+4. Robotics (robotics.html)
+5. Videos (Videos.html)
 
 ---
 
@@ -37,12 +35,12 @@ We're adding:
     <a class="active" href="/Spike-Editor/index.html">Home</a>
     <a href="/Spike-Editor/training_camp.html">Training Camp</a>
     <a href="/Spike-Editor/challenges_library.html">Challenges</a>
-    <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html">Robotics</a>
     <a href="/Spike-Editor/Videos.html">Videos</a>
 </div>
 ```
 
-**What changed:** Added one new `<a>` tag for Sensors Python between Challenges and Videos
+**What changed:** Added a `<a>` tag for Robotics between Challenges and Videos
 
 ---
 
@@ -64,12 +62,12 @@ We're adding:
     <a class="active" href="/Spike-Editor/index.html" onclick="closeMobileMenu()">Home</a>
     <a href="/Spike-Editor/training_camp.html" onclick="closeMobileMenu()">Training Camp</a>
     <a href="/Spike-Editor/challenges_library.html" onclick="closeMobileMenu()">Challenges</a>
-    <a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html" onclick="closeMobileMenu()">Robotics</a>
     <a href="/Spike-Editor/Videos.html" onclick="closeMobileMenu()">Videos</a>
 </div>
 ```
 
-**What changed:** Added same `<a>` tag with `onclick="closeMobileMenu()"` attribute for mobile users
+**What changed:** Added the Robotics link with `onclick="closeMobileMenu()"` for mobile users
 
 ---
 
@@ -87,7 +85,7 @@ We're adding:
 - Vertical layout
 - Used by students and teachers with mobile devices
 
-**Both must be updated** so all users can access Sensors Python regardless of device.
+**Both menus should match** so all users can access Robotics regardless of device.
 
 ---
 
@@ -100,9 +98,9 @@ We're adding:
 file:///C:/Users/eddyk/source/repos/spike-editor/index.html
 
 # Verify:
-- ✅ Sensors Python appears in top menu (desktop)
+- ✅ Robotics appears after Challenges and before Videos
 - ✅ Menu items are clickable
-- ✅ Clicking "Sensors Python" navigates to sensor_python.html
+- ✅ Clicking "Robotics" navigates to robotics.html
 ```
 
 ### Test 2: Mobile view
@@ -115,7 +113,7 @@ In your browser developer tools:
 4. Verify:
    - ✅ Hamburger menu (☰) appears
    - ✅ Click hamburger menu
-   - ✅ Sensors Python appears in sidebar
+   - ✅ Robotics appears in sidebar after Challenges
    - ✅ Clicking it navigates correctly
    - ✅ Menu closes after selecting
 ```
@@ -124,7 +122,7 @@ In your browser developer tools:
 
 ```
 1. Click "Sensors Python" from Home
-2. Should load: sensor_python.html
+2. Should load: robotics.html
 3. Page displays:
    - ✅ Header: "🤖 Sensors Python"
    - ✅ Learning objectives
@@ -140,7 +138,7 @@ In your browser developer tools:
 2. Click "Home" in top menu
 3. Should return to index.html
 4. ✅ Home page displays
-5. ✅ "Sensors Python" link visible in menu
+5. ✅ "Robotics" link visible in menu
 ```
 
 ---
@@ -150,7 +148,7 @@ In your browser developer tools:
 ### Option A: After Challenges (Recommended)
 ```html
 <a href="/Spike-Editor/challenges_library.html">Challenges</a>
-<a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+<a href="/Spike-Editor/robotics.html">Robotics</a>
 <a href="/Spike-Editor/Videos.html">Videos</a>
 ```
 **Why:** Sensors is a curriculum module, similar to Training Camp and Challenges
@@ -158,7 +156,7 @@ In your browser developer tools:
 ### Option B: After Training Camp
 ```html
 <a href="/Spike-Editor/training_camp.html">Training Camp</a>
-<a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+<a href="/Spike-Editor/robotics.html">Robotics</a>
 <a href="/Spike-Editor/challenges_library.html">Challenges</a>
 ```
 **Why:** Both are sequential learning experiences
@@ -167,7 +165,7 @@ In your browser developer tools:
 ```html
 <a href="/Spike-Editor/challenges_library.html">Challenges</a>
 <a href="/Spike-Editor/Videos.html">Videos</a>
-<a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+<a href="/Spike-Editor/robotics.html">Robotics</a>
 ```
 **Why:** Keeps established items first, new items last
 
@@ -177,9 +175,9 @@ In your browser developer tools:
 
 - [ ] Open `C:\Users\eddyk\source\repos\spike-editor\index.html`
 - [ ] Find desktop menu `<div class="menu-links">` section
-- [ ] Add Sensors Python link:
+- [ ] Add Robotics link:
   ```html
-  <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+  <a href="/Spike-Editor/robotics.html">Robotics</a>
   ```
 - [ ] Find mobile sidebar `<div class="mobile-sidebar">` section
 - [ ] Add same link with `onclick="closeMobileMenu()"`
@@ -199,8 +197,8 @@ In your browser developer tools:
 git add index.html
 git commit -m "Add Sensors Python to main navigation menu
 
-- Added Sensors Python link to desktop menu bar
-- Added Sensors Python link to mobile sidebar
+- Added Robotics link to desktop menu bar
+- Added Robotics link to mobile sidebar
 - Enables easy access from Spike Editor home page
 - Users can navigate between Home and Sensors Python"
 ```
@@ -227,7 +225,7 @@ A: Different users use different devices. Desktop menu for laptops, mobile sideb
 
 **Q: Can I use a different URL?**
 A: Yes, but use consistent paths:
-- GitHub: `/Spike-Editor/sensor_python.html` ✅
+- GitHub: `/Spike-Editor/robotics.html` ✅
 - Google Sites: may need relative paths (set during deployment)
 - Self-hosted: depends on your server structure
 

@@ -16,7 +16,7 @@ Add Sensors Python to the navigation menu:
     <a class="active" href="/Spike-Editor/index.html">Home</a>
     <a href="/Spike-Editor/training_camp.html">Training Camp</a>
     <a href="/Spike-Editor/challenges_library.html">Challenges</a>
-    <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html">Robotics</a>
     <a href="/Spike-Editor/Videos.html">Videos</a>
 </div>
 ```
@@ -27,7 +27,7 @@ Add Sensors Python to the navigation menu:
     <a class="active" href="/Spike-Editor/index.html" onclick="closeMobileMenu()">Home</a>
     <a href="/Spike-Editor/training_camp.html" onclick="closeMobileMenu()">Training Camp</a>
     <a href="/Spike-Editor/challenges_library.html" onclick="closeMobileMenu()">Challenges</a>
-    <a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html" onclick="closeMobileMenu()">Robotics</a>
     <a href="/Spike-Editor/Videos.html" onclick="closeMobileMenu()">Videos</a>
 </div>
 ```
@@ -47,7 +47,7 @@ cd C:\Users\eddyk\source\repos\spike-editor\utils
 ```
 
 **Output files created:**
-- ✅ `index_for_copy_to_sites.html` - Updated home page with Sensors Python link
+- ✅ `index_for_copy_to_sites.html` - Updated home page with Robotics link
 - ✅ `sensor_python_for_copy_to_sites.html` - Ready for Google Sites
 - ✅ `training_camp_for_copy_to_sites.html` - Existing (regenerated)
 - ✅ `challenges_library_for_copy_to_sites.html` - Existing (regenerated)
@@ -89,7 +89,7 @@ Just create one Google Sites page for Sensors Python:
 ## Step 4: Verify It Works
 
 **Test these user flows:**
-- [ ] Click Sensors Python link from home page
+- [ ] Click Robotics link from home page
 - [ ] Hardware setup section displays
 - [ ] 4 phase cards are visible
 - [ ] Code examples look correct
@@ -109,7 +109,7 @@ Just create one Google Sites page for Sensors Python:
 
 **Updated with:** Link to Sensors Python lesson
 
-### `sensor_python.html` (Source)
+### `robotics.html` (Source)
 - Complete interactive lesson
 - Hardware setup instructions
 - 4-phase cards with explanations
@@ -194,7 +194,7 @@ If you prefer not to use Google Sites:
 yourschool.edu/spike-editor/
 ├── index.html
 ├── lessons/
-│   ├── sensor_python.html
+│   ├── robotics.html
 │   └── ...
 ├── styles/
 ├── scripts/
@@ -239,5 +239,5 @@ Get-Item *.html | Where Name -Match "for_copy_to_sites"
 
 Questions? Check the full `DEPLOYMENT_GUIDE.md` or test on localhost first:
 ```
-file:///C:/Users/eddyk/source/repos/spike-editor/sensor_python.html
+file:///C:/Users/eddyk/source/repos/spike-editor/robotics.html
 ```

@@ -36,12 +36,12 @@ Search for: `class="menu-links"`
 
 **Action:** Add this line after `Challenges` and before `Videos`:
 ```html
-    <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html">Robotics</a>
 ```
 
 - [ ] Inserted line in correct position
 - [ ] Link text is exactly: `Sensors Python`
-- [ ] Path is exactly: `/Spike-Editor/sensor_python.html`
+- [ ] Path is exactly: `/Spike-Editor/robotics.html`
 - [ ] Indentation matches other links
 
 ### Step 1.4: Find Mobile Sidebar Section
@@ -63,12 +63,12 @@ Search for: `class="mobile-sidebar"`
 
 **Action:** Add this line after `Challenges` and before `Videos`:
 ```html
-    <a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html" onclick="closeMobileMenu()">Robotics</a>
 ```
 
 - [ ] Inserted line in correct position
 - [ ] Link text is exactly: `Sensors Python`
-- [ ] Path is exactly: `/Spike-Editor/sensor_python.html`
+- [ ] Path is exactly: `/Spike-Editor/robotics.html`
 - [ ] Includes: `onclick="closeMobileMenu()"`
 - [ ] Indentation matches other links
 
@@ -76,8 +76,8 @@ Search for: `class="mobile-sidebar"`
 - [ ] Save file (Ctrl+S)
 - [ ] Close editor
 - [ ] Open `index.html` in browser: `file:///C:/Users/eddyk/source/repos/spike-editor/index.html`
-- [ ] Verify "Sensors Python" appears in top menu
-- [ ] Click it → should navigate to `sensor_python.html`
+- [ ] Verify "Robotics" appears in top menu
+- [ ] Click it → should navigate to `robotics.html`
 - [ ] Click "Home" → should return to index.html
 - [ ] Verify in mobile view (F12 → mobile icon)
   - [ ] Hamburger menu (☰) appears
@@ -149,7 +149,7 @@ Processing files for Google Sites deployment...
   ✓ Created training_camp_for_copy_to_sites.html
   → challenges_library.html
   ✓ Created challenges_library_for_copy_to_sites.html
-  → sensor_python.html
+  → robotics.html
   ✓ Created sensor_python_for_copy_to_sites.html
 ```
 
@@ -229,7 +229,7 @@ ls *.html | Where Name -Match "for_copy_to_sites"
 - [ ] Click "Preview" to see how it looks
 - [ ] Verify:
   - [ ] Menu items visible
-  - [ ] "Sensors Python" link present
+  - [ ] "Robotics" link present
   - [ ] Page layout looks correct
   - [ ] Text readable
 - [ ] Click back to edit
@@ -242,7 +242,7 @@ ls *.html | Where Name -Match "for_copy_to_sites"
 - [ ] Name it: "Sensors Python"
 - [ ] Click "Edit" on the new page
 
-### Step 3.8: Paste sensor_python.html Content
+### Step 3.8: Paste robotics.html Content
 - [ ] Go back to File Explorer
 - [ ] Open: `sensor_python_for_copy_to_sites.html`
 - [ ] Ctrl+A → Ctrl+C (copy all)
@@ -269,7 +269,7 @@ Repeat steps 3.2-3.6 for:
 ### Step 4.1: Test Main Menu Links
 - [ ] Open Google Sites Home page
 - [ ] Verify you can see menu
-- [ ] Click "Sensors Python" link
+- [ ] Click "Robotics" link
 - [ ] Should navigate to Sensors Python page
 
 ### Step 4.2: Test Back Navigation
@@ -398,6 +398,6 @@ Sensors Python is now:
 **Questions while implementing?**
 - Check the relevant guide above
 - Review DEPLOYMENT_GUIDE.md troubleshooting section
-- Test locally first: `file:///...sensor_python.html`
+- Test locally first: `file:///...robotics.html`
 
 **Ready to teach? Share the Google Sites URL with your teachers and let the learning begin!**

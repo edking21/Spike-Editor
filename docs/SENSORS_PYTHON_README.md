@@ -114,7 +114,7 @@ motor_pair.stop(motor_pair.PAIR_1)
 - **`is_near_explanation.md`** - Detailed explanation of distance sensor usage
 
 ### HTML/Web Content
-- **`../sensor_python.html`** - Interactive lesson page with:
+- **`../robotics.html`** - Interactive lesson page with:
   - Learning objectives
   - Hardware setup guide
   - 4 phase cards with explanations

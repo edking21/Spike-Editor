@@ -7,7 +7,7 @@ This guide explains how to deploy the Sensors Python curriculum to Google Sites 
 ## 📋 Overview
 
 The Sensors Python curriculum consists of:
-- **Interactive Lesson**: `sensor_python.html` - Interactive 4-phase lesson with hardware setup
+- **Interactive Lesson**: `robotics.html` - Interactive 4-phase lesson with hardware setup
 - **Student Worksheet**: `docs/SENSORS_STUDENT_WORKSHEET.md` - 75+ hands-on activities
 - **Cheat Sheet**: `docs/SENSORS_CHEAT_SHEET.md` - Code reference and snippets
 - **Python Code**: `Python/sensor_three_touch_near.py` - Working 4-phase program
@@ -20,8 +20,8 @@ The Sensors Python curriculum consists of:
 **Best for:** Teachers who want Sensors Python seamlessly integrated into Spike Editor experience
 
 **Setup:**
-1. Add "Sensors Python" link to the Spike Editor main menu
-2. sensor_python.html displays with full Spike Editor navigation
+1. Add "Robotics" link to the Spike Editor main menu
+2. robotics.html displays with full Spike Editor navigation
 3. Users can navigate: Home → Sensors Python → Back to Home
 4. Run `merge_for_sites.ps1` to generate Google Sites version
 
@@ -59,7 +59,7 @@ The Sensors Python curriculum consists of:
 
 ### Step 1: Prepare Merge Script (One-Time Setup)
 
-The updated `merge_for_sites.ps1` now includes sensor_python.html. Run it:
+The updated `merge_for_sites.ps1` now includes robotics.html. Run it:
 
 ```powershell
 cd C:\Users\eddyk\source\repos\spike-editor\utils
@@ -67,7 +67,7 @@ cd C:\Users\eddyk\source\repos\spike-editor\utils
 ```
 
 This creates:
-- `index_for_copy_to_sites.html` - Updated with Sensors Python menu link
+- `index_for_copy_to_sites.html` - Updated with Robotics menu link
 - `sensor_python_for_copy_to_sites.html` - Ready for Google Sites
 - `training_camp_for_copy_to_sites.html` - Existing content
 - `challenges_library_for_copy_to_sites.html` - Existing content
@@ -81,14 +81,14 @@ Edit `index.html` to add Sensors Python to the main menu:
     <a class="active" href="/Spike-Editor/index.html">Home</a>
     <a href="/Spike-Editor/training_camp.html">Training Camp</a>
     <a href="/Spike-Editor/challenges_library.html">Challenges</a>
-    <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+    <a href="/Spike-Editor/robotics.html">Robotics</a>
     <a href="/Spike-Editor/Videos.html">Videos</a>
 </div>
 ```
 
 And in mobile sidebar:
 ```html
-<a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+<a href="/Spike-Editor/robotics.html" onclick="closeMobileMenu()">Robotics</a>
 ```
 
 ### Step 3: Deploy to Google Sites
@@ -109,7 +109,7 @@ And in mobile sidebar:
 ### Step 4: Verify Navigation
 
 Test these user flows:
-- ✅ Home → Sensors Python link works
+- ✅ Home → Robotics link works
 - ✅ Sensors Python page displays correctly
 - ✅ Menu items are clickable
 - ✅ Mobile menu opens/closes
@@ -142,7 +142,7 @@ Google Sites (your-site.sites.google.com)
 
 ### For Teachers Using Google Sites:
 1. Navigate to Google Sites home
-2. Click "Sensors Python" menu link
+2. Click "Robotics" menu link
 3. Show lesson on projector (full screen)
 4. Guide students through 4 phases
 5. Link students to worksheet from lesson page
@@ -166,7 +166,7 @@ When you update source files in GitHub:
    ```powershell
    cd C:\Users\eddyk\source\repos\spike-editor
    # Edit your files
-   # Test in browser: file:///C:/Users/eddyk/source/repos/spike-editor/sensor_python.html
+   # Test in browser: file:///C:/Users/eddyk/source/repos/spike-editor/robotics.html
    ```
 
 2. **Generate Deployment Files:**

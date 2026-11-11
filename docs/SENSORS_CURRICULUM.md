@@ -12,7 +12,7 @@ Welcome! This guide helps you find everything related to the Sensors Python curr
 **Time: 5 minutes to get started**
 1. Open: [`docs/START_HERE_PYTHON.md`](./docs/START_HERE_PYTHON.md)
 2. Read: [`docs/SENSORS_QUICK_START.md`](./docs/SENSORS_QUICK_START.md)
-3. View: [`sensor_python.html`](../sensor_python.html)
+3. View: [`robotics.html`](../robotics.html)
 
 ### 👨‍🎓 I'm a Student
 **Time: Start with the worksheet**
@@ -52,10 +52,10 @@ Ready-to-use lesson materials.
 
 | File | Purpose |
 |------|---------|
-| **sensor_python.html** | Interactive 4-phase lesson page |
+| **robotics.html** | Interactive 4-phase lesson page |
 | **README.md** | How to use the lessons |
 
-👉 **Show students:** `sensor_python.html`
+👉 **Show students:** `robotics.html`
 
 ### 🐍 `Python/` - Code Examples
 Working robot code.
@@ -123,7 +123,7 @@ Robot bounces → Force Sensor stops it
 
 ### Finding Lessons
 → Go to `lessons/` folder
-→ Open `sensor_python.html`
+→ Open `robotics.html`
 → Read `README.md` for instructions
 
 ### Finding Code
@@ -198,7 +198,7 @@ Robot bounces → Force Sensor stops it
 
 Before teaching:
 - [ ] Read `docs/START_HERE_PYTHON.md`
-- [ ] Review `sensor_python.html`
+- [ ] Review `robotics.html`
 - [ ] Test `Python/sensor_three_touch_near.py` on one robot
 - [ ] Print/prepare `docs/SENSORS_STUDENT_WORKSHEET.md`
 - [ ] Gather all hardware
@@ -212,7 +212,7 @@ Before teaching:
 📖 [`docs/START_HERE_PYTHON.md`](./docs/START_HERE_PYTHON.md)
 
 ### Step 2: Review (10 min)
-🌐 [`sensor_python.html`](../sensor_python.html)
+🌐 [`robotics.html`](../robotics.html)
 
 ### Step 3: Prepare (15 min)
 📝 Gather materials per checklist
@@ -238,7 +238,7 @@ spike-editor/
 │   └── README.md
 │
 ├── lessons/                       # 🎓 Lessons (2 files)
-│   ├── sensor_python.html
+│   ├── robotics.html
 │   └── README.md
 │
 ├── Python/                        # 🐍 Code (1 file)
@@ -316,7 +316,7 @@ After completing this curriculum, students will:
 👉 `docs/START_HERE_PYTHON.md`
 
 **Or browse the lesson directly:**
-👉 `sensor_python.html`
+👉 `robotics.html`
 
 ---
 

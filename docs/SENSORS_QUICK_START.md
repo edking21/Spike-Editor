@@ -5,14 +5,14 @@
 This is a complete middle school robotics curriculum teaching LEGO SPIKE sensor programming with Python:
 
 ### Files Created:
-1. **sensor_python.html** - Interactive web lesson page
+1. **robotics.html** - Interactive web lesson page
 2. **sensor_three_touch_near.py** - Complete working example code
 3. **SENSORS_PYTHON_README.md** - Full curriculum documentation
 
 ## 🚀 Quick Start (5 Minutes)
 
 ### Step 1: Access the Lesson
-Open [sensor_python.html](../sensor_python.html) in a web browser. This shows:
+Open [robotics.html](../robotics.html) in a web browser. This shows:
 - Learning objectives
 - Hardware setup instructions
 - 4-phase Python robot movement explanation
@@ -142,7 +142,7 @@ Action: Loop stops
 - **Port**: Numbered connection point on hub (A, B, C, D, E, F)
 
 ### Code Examples in HTML
-Open sensor_python.html and scroll down for:
+Open robotics.html and scroll down for:
 - Phase descriptions with code snippets
 - Teacher tips section
 - Vocabulary explanations
@@ -202,4 +202,4 @@ For questions about:
 
 **You've got this! Happy teaching! 🤖**
 
-*For more information, see SENSORS_PYTHON_README.md or open sensor_python.html*
+*For more information, see SENSORS_PYTHON_README.md or open robotics.html*

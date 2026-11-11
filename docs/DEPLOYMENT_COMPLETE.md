@@ -14,7 +14,7 @@ Your Sensors Python curriculum is **fully prepared for Google Sites deployment**
 **Location:** `utils/merge_for_sites_enhanced.ps1`  
 **Size:** 370 lines  
 **What it does:**
-- Reads source HTML files (index.html, sensor_python.html, etc.)
+- Reads source HTML files (index.html, robotics.html, etc.)
 - Removes Google Sites incompatible elements
 - Inlines CSS and JavaScript
 - Converts images to base64
@@ -121,7 +121,7 @@ cd C:\Users\eddyk\source\repos\spike-editor\utils
 ```
 PHASE 1: UPDATE MENU (5 min)
 ├─ Edit: index.html
-├─ Add: Sensors Python links (desktop + mobile)
+├─ Add: Robotics links (desktop + mobile)
 ├─ Test: Locally in browser
 └─ Commit: To GitHub
 
@@ -153,12 +153,12 @@ PHASE 4: VERIFY & TEACH (5 min)
 
 **Change 1:** Add to desktop menu (~line 20)
 ```html
-<a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
+<a href="/Spike-Editor/robotics.html">Robotics</a>
 ```
 
 **Change 2:** Add to mobile sidebar (~line 12)
 ```html
-<a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+<a href="/Spike-Editor/robotics.html" onclick="closeMobileMenu()">Robotics</a>
 ```
 
 That's it! Everything else is:
@@ -173,7 +173,7 @@ That's it! Everything else is:
 ```
 GitHub (Source)
 ├─ index.html (WITH menu links)
-├─ sensor_python.html
+├─ robotics.html
 ├─ styles/spike-shared.css
 ├─ scripts/spike-shared.js
 └─ Python/sensor_three_touch_near.py
@@ -197,7 +197,7 @@ Google Sites (Live Pages)
     ↓ (users access)
 
 Classrooms (Teachers & Students)
-├─ See Sensors Python in menu
+├─ See Robotics in menu
 ├─ Click to access interactive lesson
 ├─ Follow 4-phase instruction
 └─ Download code and worksheet
@@ -243,7 +243,7 @@ Classrooms (Teachers & Students)
 ### Before You Start
 - ✅ All documentation written
 - ✅ Merge script enhanced and tested
-- ✅ Lesson file (sensor_python.html) ready
+- ✅ Lesson file (robotics.html) ready
 - ✅ Curriculum content (docs) complete
 
 ### Immediate (Today/This Week)

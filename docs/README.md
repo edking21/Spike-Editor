@@ -27,7 +27,7 @@ Complete middle school robotics curriculum for LEGO Education SPIKE sensor progr
 
 **For Teachers:**
 1. Read [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md) (5 min)
-2. Review [../sensor_python.html](../sensor_python.html)
+2. Review [../robotics.html](../robotics.html)
 3. Download [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)
 
 **For Students:**
@@ -56,7 +56,7 @@ docs/
 
 Other related files:
 ../lessons/
-└── sensor_python.html (interactive lesson)
+└── robotics.html (interactive lesson)
 
 ../Python/
 └── sensor_three_touch_near.py (working code)

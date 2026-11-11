@@ -13,7 +13,7 @@ This document explains the entire deployment pipeline from GitHub to Google Site
 │                                                                  │
 │  Source Files:                                                  │
 │  • index.html (main menu)                                       │
-│  • sensor_python.html (lesson page)                     │
+│  • robotics.html (lesson page)                     │
 │  • styles/spike-shared.css (styling)                            │
 │  • scripts/spike-shared.js (interaction)                        │
 │  • Python/sensor_three_touch_near.py (code)                     │
@@ -21,7 +21,7 @@ This document explains the entire deployment pipeline from GitHub to Google Site
 └─────────────────────────────────────────────────────────────────┘
                               ↓
                     Local Testing (Desktop)
-                   file:///...sensor_python.html
+                   file:///...robotics.html
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │              merge_for_sites_enhanced.ps1 Script                 │
@@ -79,13 +79,13 @@ This document explains the entire deployment pipeline from GitHub to Google Site
 ### Phase 1: Development (You)
 ```
 1. Create/Edit curriculum files
-   • sensor_python.html
+   • robotics.html
    • docs/SENSORS_PYTHON_README.md
    • docs/SENSORS_QUICK_START.md
    • Python/sensor_three_touch_near.py
 
 2. Test locally
-   • Open in browser: file:///...sensor_python.html
+   • Open in browser: file:///...robotics.html
    • Verify all sections display correctly
    • Test links and navigation
    • Check mobile responsiveness
@@ -166,10 +166,10 @@ This document explains the entire deployment pipeline from GitHub to Google Site
 index.html (main menu)
     ├─ Links to: training_camp.html
     ├─ Links to: challenges_library.html
-    ├─ Links to: sensor_python.html (NEW)
+    ├─ Links to: robotics.html (NEW)
     └─ Links to: Videos.html
 
-sensor_python.html (lesson page)
+robotics.html (lesson page)
     ├─ Includes: styles/spike-shared.css
     ├─ Includes: scripts/spike-shared.js
     ├─ Links back to: index.html (Home)
@@ -232,7 +232,7 @@ Excludes:
 ```
 1. Browser → yourschool.sites.google.com (home)
 2. Click "Sensors Python" link
-3. Load: sensor_python.html
+3. Load: robotics.html
 4. See: Lesson with hardware setup + 4 phases
 5. Can: Show on projector for class
 6. Can: Share links to student worksheet
@@ -244,7 +244,7 @@ Excludes:
 1. Browser → yourschool.sites.google.com
 2. Tap hamburger menu (☰)
 3. Tap "Sensors Python"
-4. Load: sensor_python.html (responsive)
+4. Load: robotics.html (responsive)
 5. See: Same lesson, mobile-friendly
 6. Can: Follow along on phone
 7. Can: Access code from link
@@ -272,7 +272,7 @@ Input Files:
 │   Contains: desktop menu, mobile sidebar, emoji groups
 │   Size: ~30-40 KB
 │
-├─ sensor_python.html
+├─ robotics.html
 │   Contains: full lesson with hardware setup
 │   Size: ~80-100 KB
 │
@@ -336,7 +336,7 @@ Note: Larger due to inlined CSS, JS, and base64 images
 
 ### Before Running Script
 - [ ] index.html has Sensors Python link in both menus
-- [ ] sensor_python.html exists and is complete
+- [ ] robotics.html exists and is complete
 - [ ] All CSS and JS files exist
 - [ ] Images directory populated
 - [ ] No broken links in source files
