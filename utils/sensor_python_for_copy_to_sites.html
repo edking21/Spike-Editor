@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensors Python - LEGO Education SPIKE</title>
+    <title>Robotics Projects - LEGO Education SPIKE</title>
     <link rel="stylesheet" href="./styles/spike-shared.css">
     <style>
         .sensor-blocks-container {
@@ -266,10 +266,83 @@
         .success-example strong {
             color: #228B22;
         }
+
+        .project-picker {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 12px;
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 20px;
+        }
+
+        .project-button {
+            min-height: 52px;
+            padding: 12px 16px;
+            border: 2px solid #4169E1;
+            border-radius: 8px;
+            background: white;
+            color: #2447a8;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .project-button:hover,
+        .project-button[aria-pressed="true"] {
+            background: #4169E1;
+            color: white;
+        }
+
+        .project-content[hidden] {
+            display: none;
+        }
+
+        .maze-content,
+        .project-placeholder {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 20px;
+        }
+
+        .maze-content h2,
+        .maze-content h3,
+        .project-placeholder h2 {
+            color: #4169E1;
+        }
+
+        .maze-reference-images {
+            margin: 20px 0;
+        }
+
+        .maze-reference-images img {
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            height: auto;
+            border: 2px solid #87CEEB;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .project-picker {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
     </style>
 </head>
 <body>
-    
+    <nav class="project-picker" aria-label="Robotics projects">
+        <button class="project-button" type="button" data-project="sensors" aria-controls="sensors-project" aria-pressed="true">Sensors</button>
+        <button class="project-button" type="button" data-project="maze" aria-controls="maze-project" aria-pressed="false">Maze</button>
+        <button class="project-button" type="button" data-project="project-3" aria-controls="project-3" aria-pressed="false">Project 3</button>
+        <button class="project-button" type="button" data-project="project-4" aria-controls="project-4" aria-pressed="false">Project 4</button>
+        <button class="project-button" type="button" data-project="project-5" aria-controls="project-5" aria-pressed="false">Project 5</button>
+    </nav>
+
+    <section class="project-content" id="sensors-project" data-project-panel="sensors">
+    <div class="sensor-blocks-container">
+        <div class="lesson-header">
             <h1>🤖 SPIKE Robotics</h1>
             <p>Sensors with Word Blocks and Python</p>
             <p>Learn to Program All Three SPIKE Sensors</p>
@@ -360,7 +433,7 @@ await runloop.until(is_pressed)</pre>
                         <div class="comparison-title">Python</div>
                         <div class="code-block-wrapper">
                             <div class="code-block"><pre>motor_pair.move(PAIR_1, 0)
-await runloop.until(lambda: is_near(8))</pre>
+await runloop.until(lambda: is_near(8*INCHES_TO_DEGREES))</pre>
                             </div>
                         </div>
                     </div>
@@ -494,6 +567,53 @@ await runloop.until(is_pressed)</pre>
             <p>Or explore our <a href="./challenges_library.html">Challenge Library</a> for robotics competitions and projects.</p>
         </div>
     </div>
+    </section>
+
+    <section class="project-content" id="maze-project" data-project-panel="maze" hidden>
+        <div class="maze-content">
+            <div class="lesson-header">
+                <h1>Maze Challenge</h1>
+                <p>Use Word Blocks or Python to guide the SPIKE robot through the maze.</p>
+            </div>
+
+            <div class="learning-objectives">
+                <h2>📚 Learning Objectives</h2>
+                <p>By the end of this lesson, students will be able to:</p>
+                <ul>
+                    <li><strong>Use the Force Sensor (Touch)</strong> to detect when something is pressed and stop robot movement</li>
+                    <li><strong>Use the Distance Sensor (Ultrasonic)</strong> to detect when an object is near and trigger actions</li>
+                    <li><strong>Use the Color Sensor</strong> to detect colors (ready for future lessons)</li>
+                    <li><strong>Program robot sequences</strong> that use multiple sensors in combination</li>
+                    <li><strong>Implement repeat loops</strong> that continue until a sensor detects something</li>
+                    <li><strong>Understand Python sensor programming</strong> concepts for robot control in LEGO Education SPIKE</li>
+                </ul>
+            </div>
+
+            <h2>Asynchronous Solution #1</h2>
+            <p>Two tasks take turns watching for colors: blue starts the robot moving, and black stops it. The example uses <code>lambda</code> to check the Color Sensor on Port B.</p>
+
+            <div class="maze-reference-images">
+                <img src="./images/maze_runner_3a.png" alt="Asynchronous color checks using lambda functions">
+            </div>
+
+            <h2>If Then Else Solution #2</h2>
+            <p>One loop checks the Color Sensor on Port F: blue moves forward, green reverses, and black stops the robot and ends the program. Other colors leave the last movement unchanged. The motors use Ports C and D. In Word Blocks, use a repeat loop with if / else if checks.</p>
+            <div class="maze-reference-images">
+                <img src="./images/maze_runner_4.png" alt="If and elif maze code: blue moves forward, green reverses, black stops, and other colors leave movement unchanged">
+            </div>
+            <p><a class="download-button" href="./Python/maze_runner_5.py">Download the Maze Python example</a></p>
+        </div>
+    </section>
+
+    <section class="project-content" id="project-3" data-project-panel="project-3" hidden>
+        <div class="project-placeholder"><h2>Project 3</h2><p>This robotics project is a placeholder and will be added later.</p></div>
+    </section>
+    <section class="project-content" id="project-4" data-project-panel="project-4" hidden>
+        <div class="project-placeholder"><h2>Project 4</h2><p>This robotics project is a placeholder and will be added later.</p></div>
+    </section>
+    <section class="project-content" id="project-5" data-project-panel="project-5" hidden>
+        <div class="project-placeholder"><h2>Project 5</h2><p>This robotics project is a placeholder and will be added later.</p></div>
+    </section>
     <script src="./utils/utils.js"></script>
 <script src="./scripts/spike-shared.js"></script>
     <script>
@@ -516,11 +636,22 @@ await runloop.until(is_pressed)</pre>
         }
 
         function searchCurrentPage() {
-            alert('Search: Search functionality would be implemented here to search within the Python sensor content.');
+            alert('Search: Search functionality would be implemented here to search within the robotics projects.');
         }
+
+        document.querySelectorAll('.project-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedProject = button.dataset.project;
+                document.querySelectorAll('.project-button').forEach(projectButton => {
+                    projectButton.setAttribute('aria-pressed', String(projectButton === button));
+                });
+                document.querySelectorAll('[data-project-panel]').forEach(panel => {
+                    panel.hidden = panel.dataset.projectPanel !== selectedProject;
+                });
+            });
+        });
     </script>
 </body>
 </html>
-
 
 

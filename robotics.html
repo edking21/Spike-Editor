@@ -312,26 +312,16 @@
         }
 
         .maze-reference-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
             margin: 20px 0;
         }
 
         .maze-reference-images img {
+            display: block;
+            box-sizing: border-box;
             width: 100%;
             height: auto;
             border: 2px solid #87CEEB;
             border-radius: 8px;
-        }
-
-        .maze-code {
-            overflow-x: auto;
-            padding: 16px;
-            border-radius: 8px;
-            background: #1f2937;
-            color: #f9fafb;
-            line-height: 1.5;
         }
 
         @media (max-width: 700px) {
@@ -465,7 +455,7 @@ await runloop.until(is_pressed)</pre>
                         <div class="comparison-title">Python</div>
                         <div class="code-block-wrapper">
                             <div class="code-block"><pre>motor_pair.move(PAIR_1, 0)
-await runloop.until(lambda: is_near(8))</pre>
+await runloop.until(lambda: is_near(8*INCHES_TO_DEGREES))</pre>
                             </div>
                         </div>
                     </div>
@@ -621,45 +611,18 @@ await runloop.until(is_pressed)</pre>
                 </ul>
             </div>
 
-            <h2>How the Maze Challenge Works</h2>
-            <p>Build a program that reads the color under the robot and chooses the right movement. In this example, blue tells the robot to move forward, green tells it to reverse, and black marks the finish where the robot stops.</p>
-            <p>In Word Blocks, place the movement logic inside a <strong>repeat forever</strong> loop. Add <strong>if / else if</strong> branches to check the Color Sensor: move forward for blue, move backward for green, and stop on black. Keep checking the sensor so the robot responds as it travels through the maze.</p>
-            <p>Connect the Color Sensor to Port F and the drive motors to Ports C and D. Test the robot at low speed, then adjust the route and color actions to match your maze.</p>
+            <h2>Asynchronous Solution #1</h2>
+            <p>Two tasks take turns watching for colors: blue starts the robot moving, and black stops it. The example uses <code>lambda</code> to check the Color Sensor on Port B.</p>
 
             <div class="maze-reference-images">
-                <img src="./images/maze_runner_2a.png" alt="Maze robot setup reference">
-                <img src="./images/maze_runner_3a.png" alt="Maze challenge reference">
+                <img src="./images/maze_runner_3a.png" alt="Asynchronous color checks using lambda functions">
             </div>
 
-            <h3>Python Example</h3>
-            <p>This program checks the color sensor repeatedly and selects the corresponding movement.</p>
-            <pre class="maze-code"><code>import color
-import color_sensor
-import motor_pair
-import runloop
-from hub import port
-
-COLOR_PORT = port.F
-SPEED = int(0.2 * 1100)
-
-motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
-
-def is_color(expected_color):
-    return color_sensor.color(COLOR_PORT) == expected_color
-
-async def main():
-    while True:
-        if is_color(color.BLUE):
-            motor_pair.move(motor_pair.PAIR_1, 0, velocity=SPEED)
-        elif is_color(color.GREEN):
-            motor_pair.move(motor_pair.PAIR_1, 0, velocity=-SPEED)
-        elif is_color(color.BLACK):
-            motor_pair.stop(motor_pair.PAIR_1)
-            break
-
-        await runloop.sleep_ms(50)
-
-runloop.run(main())</code></pre>
+            <h2>If Then Else Solution #2</h2>
+            <p>One loop checks the Color Sensor on Port F: blue moves forward, green reverses, and black stops the robot and ends the program. Other colors leave the last movement unchanged. The motors use Ports C and D. In Word Blocks, use a repeat loop with if / else if checks.</p>
+            <div class="maze-reference-images">
+                <img src="./images/maze_runner_4.png" alt="If and elif maze code: blue moves forward, green reverses, black stops, and other colors leave movement unchanged">
+            </div>
             <p><a class="download-button" href="./Python/maze_runner_5.py">Download the Maze Python example</a></p>
         </div>
     </section>

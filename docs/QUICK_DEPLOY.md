@@ -48,7 +48,7 @@ cd C:\Users\eddyk\source\repos\spike-editor\utils
 
 **Output files created:**
 - ✅ `index_for_copy_to_sites.html` - Updated home page with Robotics link
-- ✅ `sensor_python_for_copy_to_sites.html` - Ready for Google Sites
+- ✅ `sensor_python_for_copy_to_sites.html` - Robotics output; use clipboard option 4 for the fully inlined embed
 - ✅ `training_camp_for_copy_to_sites.html` - Existing (regenerated)
 - ✅ `challenges_library_for_copy_to_sites.html` - Existing (regenerated)
 
@@ -66,22 +66,21 @@ cd C:\Users\eddyk\source\repos\spike-editor\utils
    - Paste into Google Sites "Home" page
    - Update links from `/Spike-Editor/` to relative paths if needed
 
-2. **Sensors Python Page:**
-   - Create new Google Sites page: "Sensors Python"
-   - Open `sensor_python_for_copy_to_sites.html`
-   - Copy all content
-   - Paste into the new page
+2. **Robotics Page:**
+   - Choose **4. Robotics projects** when the script asks which page to copy.
+   - In the Google Sites Robotics page, replace the existing HTML embed with the clipboard contents, then publish the site.
+   - The script inlines the styles, scripts, and referenced images for the clipboard copy. The saved `sensor_python_for_copy_to_sites.html` file is restored afterward and is not the fully inlined embed.
 
 3. **Training Camp & Challenges:**
    - Repeat same process with their respective files
 
 ### Option B: Standalone Page (Simpler)
 
-Just create one Google Sites page for Sensors Python:
+Just create one Google Sites page for Robotics:
 
-1. New Google Sites page: "Sensors Python Lesson"
-2. Copy content from `sensor_python_for_copy_to_sites.html`
-3. Paste into the page
+1. New Google Sites page: "Robotics"
+2. Run the merge script and select **4. Robotics projects** to copy the fully inlined HTML.
+3. Paste the clipboard contents into an HTML embed on the page and publish.
 4. Add manual back-link if desired
 
 ---

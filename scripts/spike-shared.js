@@ -785,23 +785,22 @@ def is_near(distance_threshold=200):  # 200 milimeters (7.874 inches)
 
 
 ########################################################################
-# 🛑 is the color sensor seeing blue
+# 🛑 is the color sensor seeing expected color 
 ########################################################################
-def is_blue():
+def is_color(expected_color=color.BLUE):
     """
     Teacher tip:
         wait until the color is blue
-            await runloop.until(is_blue) # pass the function itself
+            await runloop.until(lambda: is_color(color.BLUE)) # pass the function itself
 
         repeat until the color is blue
-            while not is_blue(): # call the function to get True/False
+            while not is_color(color.BLUE): # call the function to get True/False
 
     Why:
         - wait until needs a function
         - repeat until needs a True/False result
     """
-    return color_sensor.color(color_port) == color.BLUE
-
+    return color_sensor.color(color_port) == expected_color
 ########################################################################
 # 🛑 is the force sensor pressed
 ########################################################################
@@ -819,38 +818,6 @@ def is_pressed():
         - repeat until needs a True/False result
     """
     return force_sensor.pressed(force_port)
-
-
-########################################################################
-# 🤖 when_left_button_pressed_lower_and_raise_the_arm
-########################################################################
-async def when_left_button_pressed_lower_and_raise_the_arm():
-    await until(lambda: bool(button.pressed(button.LEFT)) != 0)
-    sleep_ms(1000)
-
-    # Go shortest path to position -50 degrees then back to 0
-    await motor.run_to_absolute_position(arm_motor_port, 0, 100, direction=motor.SHORTEST_PATH)
-    await motor.run_to_absolute_position(arm_motor_port, -50, 100, direction=motor.SHORTEST_PATH)
-    sleep_ms(200)
-
-    await motor.run_to_absolute_position(arm_motor_port, 0, 100, direction=motor.SHORTEST_PATH)
-
-
-########################################################################
-# 🤖 when_right_button_pressed_detect_blue_line
-########################################################################
-async def when_right_button_pressed_detect_blue_line():
-    await until(lambda: bool(button.pressed(button.RIGHT)) != 0)
-    sleep_ms(1000)
-
-    # start moving forward
-    motor_pair.move(motor_pair.PAIR_1, 0, velocity=int(0.2 * 1100))
-
-    await until (is_blue)
-
-    # backup 10 cm
-    await motor_pair.move_for_degrees(motor_pair.PAIR_1, -10 * CM_TO_DEGREES, 0)
-    sleep_ms(200)
 
 
 ########################################################################
@@ -1220,8 +1187,7 @@ when`
                     color: '#DAA520',
                     textPython: `
     # repeat until "repeat the block until function is true"
-    while not ( 
-        # <your function sensor below this line> 
+    while not ( # <replace this comment with your sensor> 
 `
                 },
             ]
@@ -1250,7 +1216,7 @@ when`
                     buttonText: 'is near (condition)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `        is_near) # is closer than 7.8 inches condition
+                    textPython: `is_near) # is closer than 7.8 inches condition
             `
                 },
                 {
@@ -1283,9 +1249,9 @@ when`
                     buttonText: 'is near (function)',
                     emoji: '🧿',
                     color: '#87CEEB',
-                    textPython: `           is_near()):
-            # <replace this line with your code>
-            `
+                    textPython: `is_near()):
+        pass # indent your motion blocks here
+        `
                 },
                 {
                     id: 'sensor7',
@@ -1652,14 +1618,14 @@ test for figures
                     emoji: '🧿',
                     color: '#FF8C00',
                     textPython: `
-# This challenge requires the student to code the The Driving Base to perform the
-# basic drive movements (forward, backward, left and right) using the color
-# sensor. The student must choose an appropriate power/speed to ensure the desired
-# response time from their Driving Base. The layout of the maze will change.
+    # This challenge requires the student to code the The Driving Base to perform the
+    # basic drive movements (forward, backward, left and right) using the color
+    # sensor. The student must choose an appropriate power/speed to ensure the desired
+    # response time from their Driving Base. The layout of the maze will change.
 
-# 1. The Driving Base tires are placed in the center of a 10”x10” opening into a 
-#    simple maze design laid out on a 4 by 8 table surrounded by walls. Since the design 
-#    of the maze will vary, you must make sure to program the Driving Base correctly.
+    # 1. The Driving Base tires are placed in the center of a 10”x10” opening into a 
+    #    simple maze design laid out on a 4 by 8 table surrounded by walls. Since the design 
+    #    of the maze will vary, you must make sure to program the Driving Base correctly.
 
     # 2. When the student starts their robot, the Driving Base should begin driving forward.
 

@@ -109,7 +109,7 @@ function Update-PageWithUtils {
     # Remove mobile/sidebar/top-menu/menu-links/menu-search markup for Google Sites output.
     $patternMobileSidebar = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-sidebar\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
     $patternMobileOverlay = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmobile-overlay\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
-    $patternTopMenu = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\btop-menu\b[^"'']*["''])[^>]*>.*?(?=\s*<div\s+class=["'']left-column["'']|\s*<h1\b)'
+    $patternTopMenu = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\btop-menu\b[^"'']*["''])[^>]*>(?:(?>[^<]+)|<(?!/?div\b)|<div\b[^>]*>(?<depth>)|</div\s*>(?<-depth>))*(?(depth)(?!))</div\s*>\s*'
     $patternMenuLinks = '(?is)<div\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-links\b[^"'']*["''])[^>]*>.*?<\/div>\s*'
     $patternMenuSearchButton = '(?is)<button\b(?=[^>]*\bclass\s*=\s*["''][^"'']*\bmenu-search\b[^"'']*["''])[^>]*>.*?<\/button>\s*'
     $updated = $updated -replace $patternMobileSidebar, ''
@@ -223,10 +223,15 @@ function Inline-FigureImagesInOutput {
     $updated = $content
     $imageCount = 0
 
-    foreach ($imageFile in Get-ChildItem -Path $ImagesDirectory -File -ErrorAction SilentlyContinue | Where-Object Extension -Match '^\.jpe?g$') {
-        $relativePath = './images/' + $imageFile.Name
+    foreach ($imageFile in Get-ChildItem -LiteralPath $ImagesDirectory -File -Recurse -ErrorAction Stop | Where-Object Extension -Match '^\.(jpe?g|png)$') {
+        $relativePath = './images/' + $imageFile.FullName.Substring($ImagesDirectory.Length).TrimStart('\', '/').Replace('\', '/')
+        if (-not $updated.Contains("'$relativePath'") -and -not $updated.Contains('"' + $relativePath + '"')) {
+            continue
+        }
+
         $base64 = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes($imageFile.FullName))
-        $dataUri = "data:image/jpeg;base64,$base64"
+        $mediaType = if ($imageFile.Extension -match '^\.png$') { 'image/png' } else { 'image/jpeg' }
+        $dataUri = "data:${mediaType};base64,$base64"
         $updated = $updated.Replace("'$relativePath'", "'$dataUri'")
         $updated = $updated.Replace('"' + $relativePath + '"', '"' + $dataUri + '"')
         $imageCount++
@@ -298,8 +303,7 @@ try {
     # Process robotics.html (if not skipped)
     if (-not $SkipSensorsPython) {
         Write-Host "  → robotics.html" -ForegroundColor Cyan
-        $sensorsPythonInputFile = Get-PreferredInputFile -SourceFile $SensorsPythonFile -OutputFile $SensorsPythonOutputFile
-        Update-PageWithUtils -InputFile $sensorsPythonInputFile -OutputFile $SensorsPythonOutputFile -UtilsReplacement $utilsReplacement
+        Update-PageWithUtils -InputFile $SensorsPythonFile -OutputFile $SensorsPythonOutputFile -UtilsReplacement $utilsReplacement
         Write-Host "    ✓ Created $(Split-Path $SensorsPythonOutputFile -Leaf)" -ForegroundColor Green
     }
     
@@ -342,6 +346,12 @@ try {
     foreach ($outputFile in $allOutputFiles) {
         Inline-FigureImagesInOutput -OutputFile $outputFile -ImagesDirectory $ImagesDirectory
     }
+
+    if (-not $SkipSensorsPython) {
+        $roboticsContent = Get-Content $SensorsPythonOutputFile -Raw -Encoding UTF8
+        $roboticsContent = $roboticsContent.Replace('href="./Python/', 'href="https://edking21.github.io/Spike-Editor/Python/')
+        $roboticsContent | Set-Content $SensorsPythonOutputFile -Encoding UTF8
+    }
     
     try {
         # Step 4: Copy to clipboard (fully automated)
@@ -350,7 +360,7 @@ try {
         Write-Host "  2. Training Camp" -ForegroundColor Cyan
         Write-Host "  3. Challenges Library" -ForegroundColor Cyan
         if (-not $SkipSensorsPython) {
-            Write-Host "  4. Sensors Python Lesson" -ForegroundColor Cyan
+            Write-Host "  4. Robotics projects" -ForegroundColor Cyan
             Write-Host "  5. Skip" -ForegroundColor Cyan
             $maxChoice = '5'
         } else {
@@ -362,23 +372,23 @@ try {
 
         switch ($clipboardChoice) {
             '1' {
-                Get-Content $IndexOutputFile -Raw | Set-Clipboard
+                Get-Content $IndexOutputFile -Raw -Encoding UTF8 | Set-Clipboard
                 Write-Host "`n✓ $(Split-Path $IndexOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
                 Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
             }
             '2' {
-                Get-Content $TrainingCampOutputFile -Raw | Set-Clipboard
+                Get-Content $TrainingCampOutputFile -Raw -Encoding UTF8 | Set-Clipboard
                 Write-Host "`n✓ $(Split-Path $TrainingCampOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
                 Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
             }
             '3' {
-                Get-Content $ChallengesLibraryOutputFile -Raw | Set-Clipboard
+                Get-Content $ChallengesLibraryOutputFile -Raw -Encoding UTF8 | Set-Clipboard
                 Write-Host "`n✓ $(Split-Path $ChallengesLibraryOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
                 Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
             }
             '4' {
                 if (-not $SkipSensorsPython) {
-                    Get-Content $SensorsPythonOutputFile -Raw | Set-Clipboard
+                    Get-Content $SensorsPythonOutputFile -Raw -Encoding UTF8 | Set-Clipboard
                     Write-Host "`n✓ $(Split-Path $SensorsPythonOutputFile -Leaf) copied to clipboard!" -ForegroundColor Green
                     Write-Host "  Ready to paste into Google Sites" -ForegroundColor Green
                 } else {
