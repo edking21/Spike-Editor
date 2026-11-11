@@ -1255,7 +1255,7 @@ when`
                 },
                 {
                     id: 'sensor3a',
-                    buttonText: 'is near (condition) override',
+                    buttonText: 'is near (condition) lambda',
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `        lambda: (is_near(10 * INCHES_TO_MILLIMETERS))) # is closer than 10 inches
@@ -1284,8 +1284,8 @@ when`
                     emoji: '🧿',
                     color: '#87CEEB',
                     textPython: `           is_near()):
-            # <your repeat blocks below this line>
-        `
+            # <replace this line with your code>
+            `
                 },
                 {
                     id: 'sensor7',
