@@ -36,12 +36,12 @@ Search for: `class="menu-links"`
 
 **Action:** Add this line after `Challenges` and before `Videos`:
 ```html
-    <a href="/Spike-Editor/lessons/sensor_python.html">Sensors Python</a>
+    <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
 ```
 
 - [ ] Inserted line in correct position
 - [ ] Link text is exactly: `Sensors Python`
-- [ ] Path is exactly: `/Spike-Editor/lessons/sensor_python.html`
+- [ ] Path is exactly: `/Spike-Editor/sensor_python.html`
 - [ ] Indentation matches other links
 
 ### Step 1.4: Find Mobile Sidebar Section
@@ -63,12 +63,12 @@ Search for: `class="mobile-sidebar"`
 
 **Action:** Add this line after `Challenges` and before `Videos`:
 ```html
-    <a href="/Spike-Editor/lessons/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+    <a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
 ```
 
 - [ ] Inserted line in correct position
 - [ ] Link text is exactly: `Sensors Python`
-- [ ] Path is exactly: `/Spike-Editor/lessons/sensor_python.html`
+- [ ] Path is exactly: `/Spike-Editor/sensor_python.html`
 - [ ] Includes: `onclick="closeMobileMenu()"`
 - [ ] Indentation matches other links
 
@@ -77,7 +77,7 @@ Search for: `class="mobile-sidebar"`
 - [ ] Close editor
 - [ ] Open `index.html` in browser: `file:///C:/Users/eddyk/source/repos/spike-editor/index.html`
 - [ ] Verify "Sensors Python" appears in top menu
-- [ ] Click it → should navigate to `lessons/sensor_python.html`
+- [ ] Click it → should navigate to `sensor_python.html`
 - [ ] Click "Home" → should return to index.html
 - [ ] Verify in mobile view (F12 → mobile icon)
   - [ ] Hamburger menu (☰) appears
@@ -149,7 +149,7 @@ Processing files for Google Sites deployment...
   ✓ Created training_camp_for_copy_to_sites.html
   → challenges_library.html
   ✓ Created challenges_library_for_copy_to_sites.html
-  → lessons/sensor_python.html
+  → sensor_python.html
   ✓ Created sensor_python_for_copy_to_sites.html
 ```
 

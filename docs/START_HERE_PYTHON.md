@@ -15,7 +15,7 @@ You now have a comprehensive, ready-to-teach middle school robotics curriculum f
 - Understand what you'll teach
 - See the 45-minute lesson plan
 
-**Step 2 (10 min):** Review [sensor_python.html](../lessons/sensor_python.html)
+**Step 2 (10 min):** Review [sensor_python.html](../sensor_python.html)
 - This is what you'll show students
 - Open it in a web browser
 - See the visual 4-phase breakdown
@@ -26,7 +26,7 @@ You now have a comprehensive, ready-to-teach middle school robotics curriculum f
 - Small objects for testing
 
 **Step 4:** Teach!
-- Project [sensor_python.html](../lessons/sensor_python.html) on your screen
+- Project [sensor_python.html](../sensor_python.html) on your screen
 - Have students follow hardware setup
 - Load [sensor_three_touch_near.py](../Python/sensor_three_touch_near.py) on their robots
 - Distribute [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
@@ -72,7 +72,7 @@ Read files in this order:
 ## 📦 What's Included
 
 ### 🌐 Web Content
-- **[../lessons/sensor_python.html](../lessons/sensor_python.html)** - Interactive lesson page to project in class
+- **[../sensor_python.html](../sensor_python.html)** - Interactive lesson page to project in class
 
 ### 🐍 Working Code
 - **[../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)** - Complete, working example
@@ -166,7 +166,7 @@ By the end, students will be able to:
 4. Have all materials ready
 
 ### During Class
-1. Project [../lessons/sensor_python.html](../lessons/sensor_python.html)
+1. Project [../sensor_python.html](../sensor_python.html)
 2. Explain Phase 1 using the visual
 3. Have students build and test Phase 1
 4. Repeat for Phases 2-4
@@ -189,7 +189,7 @@ Sensors Python Project
 ├── START_HERE.md (you are here)
 │
 ├── 🌐 Interactive Lesson
-│   └── lessons/sensor_python.html (Project this in class!)
+│   └── sensor_python.html (Project this in class!)
 │
 ├── 🐍 Working Code
 │   └── Python/sensor_three_touch_near.py (Load on robot)
@@ -216,7 +216,7 @@ Sensors Python Project
 ### **RIGHT NOW - 15 Minutes**
 
 1. Open [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md) and read the first section
-2. Look at [../lessons/sensor_python.html](../lessons/sensor_python.html) in your browser
+2. Look at [../sensor_python.html](../sensor_python.html) in your browser
 3. Decide: Am I teaching tomorrow, next week, or next month?
 4. Plan your timeline
 
@@ -229,7 +229,7 @@ Sensors Python Project
 
 ### **IN CLASS**
 
-1. Project [../lessons/sensor_python.html](../lessons/sensor_python.html)
+1. Project [../sensor_python.html](../sensor_python.html)
 2. Follow the lesson plan
 3. Have students code and test
 4. Distribute worksheet
@@ -292,7 +292,7 @@ A: Yes - see Challenge Levels in the worksheet and extensions in teacher guide
 - [ ] I understand what this curriculum covers
 - [ ] I have access to SPIKE robots with sensors
 - [ ] I've read SENSORS_QUICK_START.md
-- [ ] I've reviewed lessons/sensor_python.html
+- [ ] I've reviewed sensor_python.html
 - [ ] I can access Python/sensor_three_touch_near.py
 - [ ] I can print or share SENSORS_STUDENT_WORKSHEET.md
 - [ ] I have a lesson time scheduled
@@ -325,6 +325,6 @@ It will take 5 minutes and get you ready to teach amazing robots! 🤖
 
 **Ready to teach?** Go to [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 
-**Want to see the full lesson?** Open [lessons/sensor_python.html](../lessons/sensor_python.html)
+**Want to see the full lesson?** Open [sensor_python.html](../sensor_python.html)
 
 **Need the code?** Download [Python/sensor_three_touch_near.py](./Python/sensor_three_touch_near.py)

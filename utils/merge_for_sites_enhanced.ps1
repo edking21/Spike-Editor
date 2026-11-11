@@ -2,7 +2,7 @@ param(
     [string]$IndexFile = "index.html",
     [string]$TrainingCampFile = "training_camp.html",
     [string]$ChallengesLibraryFile = "challenges_library.html",
-    [string]$SensorsPythonFile = "lessons/sensor_python.html",
+    [string]$SensorsPythonFile = "sensor_python.html",
     [string]$StylesFile = "styles/spike-shared.css",
     [string]$ScriptsFile = "scripts/spike-shared.js",
     [string]$UtilsFile = "utils.js",
@@ -297,7 +297,7 @@ try {
     
     # Process sensor_python.html (if not skipped)
     if (-not $SkipSensorsPython) {
-        Write-Host "  → lessons/sensor_python.html" -ForegroundColor Cyan
+        Write-Host "  → sensor_python.html" -ForegroundColor Cyan
         $sensorsPythonInputFile = Get-PreferredInputFile -SourceFile $SensorsPythonFile -OutputFile $SensorsPythonOutputFile
         Update-PageWithUtils -InputFile $sensorsPythonInputFile -OutputFile $SensorsPythonOutputFile -UtilsReplacement $utilsReplacement
         Write-Host "    ✓ Created $(Split-Path $SensorsPythonOutputFile -Leaf)" -ForegroundColor Green

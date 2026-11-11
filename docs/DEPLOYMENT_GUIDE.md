@@ -7,7 +7,7 @@ This guide explains how to deploy the Sensors Python curriculum to Google Sites 
 ## 📋 Overview
 
 The Sensors Python curriculum consists of:
-- **Interactive Lesson**: `lessons/sensor_python.html` - Interactive 4-phase lesson with hardware setup
+- **Interactive Lesson**: `sensor_python.html` - Interactive 4-phase lesson with hardware setup
 - **Student Worksheet**: `docs/SENSORS_STUDENT_WORKSHEET.md` - 75+ hands-on activities
 - **Cheat Sheet**: `docs/SENSORS_CHEAT_SHEET.md` - Code reference and snippets
 - **Python Code**: `Python/sensor_three_touch_near.py` - Working 4-phase program
@@ -81,14 +81,14 @@ Edit `index.html` to add Sensors Python to the main menu:
     <a class="active" href="/Spike-Editor/index.html">Home</a>
     <a href="/Spike-Editor/training_camp.html">Training Camp</a>
     <a href="/Spike-Editor/challenges_library.html">Challenges</a>
-    <a href="/Spike-Editor/lessons/sensor_python.html">Sensors Python</a>
+    <a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
     <a href="/Spike-Editor/Videos.html">Videos</a>
 </div>
 ```
 
 And in mobile sidebar:
 ```html
-<a href="/Spike-Editor/lessons/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+<a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
 ```
 
 ### Step 3: Deploy to Google Sites
@@ -166,7 +166,7 @@ When you update source files in GitHub:
    ```powershell
    cd C:\Users\eddyk\source\repos\spike-editor
    # Edit your files
-   # Test in browser: file:///C:/Users/eddyk/source/repos/spike-editor/lessons/sensor_python.html
+   # Test in browser: file:///C:/Users/eddyk/source/repos/spike-editor/sensor_python.html
    ```
 
 2. **Generate Deployment Files:**

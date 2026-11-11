@@ -22,7 +22,7 @@ This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor prog
    - Standards alignment
    - Code reference
 
-3. **[../lessons/sensor_python.html](../lessons/sensor_python.html)** - Interactive web lesson
+3. **[../sensor_python.html](../sensor_python.html)** - Interactive web lesson
    - Visual lesson presentation
    - Hardware setup guide
    - 4-phase Python explanations
@@ -73,7 +73,7 @@ This is a comprehensive curriculum for teaching LEGO Education SPIKE sensor prog
 ### Option 1: Quick Lesson (45 minutes)
 1. Read [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
 2. Have students build hardware per instructions
-3. Show [../lessons/sensor_python.html](../lessons/sensor_python.html) on projector
+3. Show [../sensor_python.html](../sensor_python.html) on projector
 4. Load [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py) on robots
 5. Run each phase one by one
 6. Students complete [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
@@ -194,7 +194,7 @@ Students will be able to:
 
 ### I want to...
 - **Start teaching immediately** → [SENSORS_QUICK_START.md](./SENSORS_QUICK_START.md)
-- **Show students on a screen** → [../lessons/sensor_python.html](../lessons/sensor_python.html)
+- **Show students on a screen** → [../sensor_python.html](../sensor_python.html)
 - **Get detailed curriculum** → [SENSORS_PYTHON_README.md](./SENSORS_PYTHON_README.md)
 - **Give students to work on** → [SENSORS_STUDENT_WORKSHEET.md](./SENSORS_STUDENT_WORKSHEET.md)
 - **Load working example code** → [../Python/sensor_three_touch_near.py](../Python/sensor_three_touch_near.py)
@@ -220,7 +220,7 @@ Students will be able to:
 ## ✅ Checklist: Ready to Teach?
 
 - [ ] Read SENSORS_QUICK_START.md
-- [ ] Review lessons/sensor_python.html
+- [ ] Review sensor_python.html
 - [ ] Download Python/sensor_three_touch_near.py
 - [ ] Gather hardware (sensors, motors, hub)
 - [ ] Test one robot with example code

@@ -153,12 +153,12 @@ PHASE 4: VERIFY & TEACH (5 min)
 
 **Change 1:** Add to desktop menu (~line 20)
 ```html
-<a href="/Spike-Editor/lessons/sensor_python.html">Sensors Python</a>
+<a href="/Spike-Editor/sensor_python.html">Sensors Python</a>
 ```
 
 **Change 2:** Add to mobile sidebar (~line 12)
 ```html
-<a href="/Spike-Editor/lessons/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
+<a href="/Spike-Editor/sensor_python.html" onclick="closeMobileMenu()">Sensors Python</a>
 ```
 
 That's it! Everything else is:
@@ -173,7 +173,7 @@ That's it! Everything else is:
 ```
 GitHub (Source)
 ├─ index.html (WITH menu links)
-├─ lessons/sensor_python.html
+├─ sensor_python.html
 ├─ styles/spike-shared.css
 ├─ scripts/spike-shared.js
 └─ Python/sensor_three_touch_near.py

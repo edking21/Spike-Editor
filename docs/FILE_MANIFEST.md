@@ -188,10 +188,10 @@ GitHub (Source Code)
 ├── index.html
 │   ├── Links to: training_camp.html
 │   ├── Links to: challenges_library.html
-│   ├── Links to: lessons/sensor_python.html (🆕 menu item)
+│   ├── Links to: sensor_python.html (🆕 menu item)
 │   └── Links to: Videos.html
 │
-├── lessons/sensor_python.html
+├── sensor_python.html
 │   ├── Includes: styles/spike-shared.css
 │   ├── Includes: scripts/spike-shared.js
 │   └── Links to: Python/sensor_three_touch_near.py

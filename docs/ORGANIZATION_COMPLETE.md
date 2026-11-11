@@ -77,7 +77,7 @@ spike-editor/
 
 1. **Start:** `docs/START_HERE_PYTHON.md`
 2. **Quick Overview:** `docs/SENSORS_QUICK_START.md` (5 min)
-3. **Show Students:** `lessons/sensor_python.html`
+3. **Show Students:** `sensor_python.html`
 4. **Give Worksheet:** `docs/SENSORS_STUDENT_WORKSHEET.md`
 5. **Load Code:** `Python/sensor_three_touch_near.py`
 
@@ -85,7 +85,7 @@ spike-editor/
 
 1. **Activities:** `docs/SENSORS_STUDENT_WORKSHEET.md`
 2. **Code Help:** `docs/SENSORS_CHEAT_SHEET.md`
-3. **Lesson:** `lessons/sensor_python.html`
+3. **Lesson:** `sensor_python.html`
 4. **Example Code:** `Python/sensor_three_touch_near.py`
 
 ### For Project Management
@@ -121,13 +121,13 @@ Open: docs/START_HERE_PYTHON.md
 ### Before Class (20 minutes)
 ```
 Read:   docs/SENSORS_QUICK_START.md
-View:   lessons/sensor_python.html
+View:   sensor_python.html
 Get:    Python/sensor_three_touch_near.py
 ```
 
 ### During Class (45 minutes)
 ```
-Project:   lessons/sensor_python.html
+Project:   sensor_python.html
 Load:      Python/sensor_three_touch_near.py
 Assign:    docs/SENSORS_STUDENT_WORKSHEET.md
 ```

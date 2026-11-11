@@ -267,7 +267,7 @@ All ready to copy/paste into Google Sites!
 1. **Test Locally First**
    ```
    file:///C:/Users/eddyk/source/repos/spike-editor/index.html
-   file:///C:/Users/eddyk/source/repos/spike-editor/lessons/sensor_python.html
+   file:///C:/Users/eddyk/source/repos/spike-editor/sensor_python.html
    ```
 
 2. **Use Mobile Dev Tools**

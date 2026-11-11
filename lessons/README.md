@@ -5,7 +5,7 @@ Interactive lesson materials for Spike Editor robotics curriculum.
 ## 📚 Available Lessons
 
 ### Sensors Python
-**File:** [sensor_python.html](./sensor_python.html)
+**File:** [sensor_python.html](../sensor_python.html)
 
 Complete interactive lesson for teaching LEGO Education SPIKE sensor programming in Python to middle school students.
 
@@ -16,7 +16,7 @@ Complete interactive lesson for teaching LEGO Education SPIKE sensor programming
 - 4-phase Python robot behavior programming
 
 **How to Use:**
-1. Open `lessons/sensor_python.html` in a web browser
+1. Open `sensor_python.html` in a web browser
 2. Project it on your classroom screen
 3. Guide students through each phase
 4. Use the explanations and code examples
@@ -33,7 +33,7 @@ Complete interactive lesson for teaching LEGO Education SPIKE sensor programming
 ## 🚀 How to Open
 
 ### Option 1: Open in Browser
-- Double-click `lessons/sensor_python.html`
+- Double-click `sensor_python.html`
 - Or drag to browser window
 
 ### Option 2: Project in Class
@@ -114,7 +114,7 @@ Per robot:
 
 ## 🎓 Teaching Tips
 
-1. **Show the full lesson** - Project `lessons/sensor_python.html`
+1. **Show the full lesson** - Project `sensor_python.html`
 2. **Go phase by phase** - Don't skip ahead
 3. **Let students build** - Hands-on experience
 4. **Test early** - Verify hardware works
@@ -135,4 +135,4 @@ Per robot:
 
 ---
 
-**Ready to teach? Open [sensor_python.html](./sensor_python.html) now! 🚀**
+**Ready to teach? Open [sensor_python.html](../sensor_python.html) now! 🚀**

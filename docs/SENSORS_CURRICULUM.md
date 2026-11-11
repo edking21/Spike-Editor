@@ -12,7 +12,7 @@ Welcome! This guide helps you find everything related to the Sensors Python curr
 **Time: 5 minutes to get started**
 1. Open: [`docs/START_HERE_PYTHON.md`](./docs/START_HERE_PYTHON.md)
 2. Read: [`docs/SENSORS_QUICK_START.md`](./docs/SENSORS_QUICK_START.md)
-3. View: [`lessons/sensor_python.html`](./lessons/sensor_python.html)
+3. View: [`sensor_python.html`](../sensor_python.html)
 
 ### 👨‍🎓 I'm a Student
 **Time: Start with the worksheet**
@@ -55,7 +55,7 @@ Ready-to-use lesson materials.
 | **sensor_python.html** | Interactive 4-phase lesson page |
 | **README.md** | How to use the lessons |
 
-👉 **Show students:** `lessons/sensor_python.html`
+👉 **Show students:** `sensor_python.html`
 
 ### 🐍 `Python/` - Code Examples
 Working robot code.
@@ -198,7 +198,7 @@ Robot bounces → Force Sensor stops it
 
 Before teaching:
 - [ ] Read `docs/START_HERE_PYTHON.md`
-- [ ] Review `lessons/sensor_python.html`
+- [ ] Review `sensor_python.html`
 - [ ] Test `Python/sensor_three_touch_near.py` on one robot
 - [ ] Print/prepare `docs/SENSORS_STUDENT_WORKSHEET.md`
 - [ ] Gather all hardware
@@ -212,7 +212,7 @@ Before teaching:
 📖 [`docs/START_HERE_PYTHON.md`](./docs/START_HERE_PYTHON.md)
 
 ### Step 2: Review (10 min)
-🌐 [`lessons/sensor_python.html`](./lessons/sensor_python.html)
+🌐 [`sensor_python.html`](../sensor_python.html)
 
 ### Step 3: Prepare (15 min)
 📝 Gather materials per checklist
@@ -316,7 +316,7 @@ After completing this curriculum, students will:
 👉 `docs/START_HERE_PYTHON.md`
 
 **Or browse the lesson directly:**
-👉 `lessons/sensor_python.html`
+👉 `sensor_python.html`
 
 ---
 

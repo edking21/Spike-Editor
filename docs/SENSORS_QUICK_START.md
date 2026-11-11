@@ -12,7 +12,7 @@ This is a complete middle school robotics curriculum teaching LEGO SPIKE sensor 
 ## 🚀 Quick Start (5 Minutes)
 
 ### Step 1: Access the Lesson
-Open [sensor_python.html](../lessons/sensor_python.html) in a web browser. This shows:
+Open [sensor_python.html](../sensor_python.html) in a web browser. This shows:
 - Learning objectives
 - Hardware setup instructions
 - 4-phase Python robot movement explanation
@@ -142,7 +142,7 @@ Action: Loop stops
 - **Port**: Numbered connection point on hub (A, B, C, D, E, F)
 
 ### Code Examples in HTML
-Open lessons/sensor_python.html and scroll down for:
+Open sensor_python.html and scroll down for:
 - Phase descriptions with code snippets
 - Teacher tips section
 - Vocabulary explanations
@@ -202,4 +202,4 @@ For questions about:
 
 **You've got this! Happy teaching! 🤖**
 
-*For more information, see SENSORS_PYTHON_README.md or open lessons/sensor_python.html*
+*For more information, see SENSORS_PYTHON_README.md or open sensor_python.html*
