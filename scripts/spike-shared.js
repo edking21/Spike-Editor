@@ -505,19 +505,19 @@
                         return;
                     }
                     if (snippet?.id === 'challenge2') {
-                        showChallengeImage('./images/Challenge 1 Figure.jpg', 'Challenge 1 Figure');
+                        showChallengeImage('./images/challenge-figures/Challenge 1 Figure.jpg', 'Challenge 1 Figure');
                         return;
                     }
                     if (snippet?.id === 'challenge4') {
-                        showChallengeImage('./images/Challenge 2 Figure.jpg', 'Challenge 2 Figure');
+                        showChallengeImage('./images/challenge-figures/Challenge 2 Figure.jpg', 'Challenge 2 Figure');
                         return;
                     }
                     if (snippet?.id === 'challenge6') {
-                        showChallengeImage('./images/Challenge 3 Figure.jpg', 'Challenge 3 Figure');
+                        showChallengeImage('./images/challenge-figures/Challenge 3 Figure.jpg', 'Challenge 3 Figure');
                         return;
                     }
                     if (snippet?.id === 'challenge8') {
-                        showChallengeImage('./images/Challenge 4 Figure.jpg', 'Challenge 4 Figure');
+                        showChallengeImage('./images/challenge-figures/Challenge 4 Figure.jpg', 'Challenge 4 Figure');
                         return;
                     }
                     if (snippet?.id === 'challenge9') {
