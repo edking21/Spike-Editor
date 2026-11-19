@@ -51,6 +51,7 @@ try {
     Assert-Contains $clipboardContent 'data:image/png;base64,'
     $mazeImage = [Convert]::ToBase64String([System.IO.File]::ReadAllBytes((Join-Path $projectRoot 'images\maze_runner_4.png')))
     Assert-Contains $clipboardContent "data:image/png;base64,$mazeImage"
+    Assert-Contains $clipboardContent 'href="https://edking21.github.io/Spike-Editor/Python/maze_runner_async.py"'
     Assert-Contains $clipboardContent 'href="https://edking21.github.io/Spike-Editor/Python/maze_runner_5.py"'
     Assert-Contains $clipboardContent '// Shared script (from scripts/spike-shared.js)'
     Assert-Contains $clipboardContent '// Utility functions (from utils.js)'

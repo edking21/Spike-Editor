@@ -644,6 +644,7 @@ CM_TO_DEGREES = int(360/17.5)   # degrees_wheel_diameter:360 cm_wheel_circumfere
 INCHES_TO_DEGREES = int(360/6.89)   # degrees_wheel_diameter:360 inches_wheel_circumference:6.89
 INCHES_TO_MILLIMETERS = int(25.4)   # 1 inch = 25.4 millimeters
 
+
 ########################################################################
 # 🤖 wink one eye
 ########################################################################
@@ -1166,7 +1167,16 @@ when`
                     emoji: '',
                     color: '#DAA520',
                     textPython: `
-    if # <your condition or function here>
+        if # <your condition or function here>
+`
+                },
+                {
+                    id: 'control4a',
+                    buttonText: `elif    ${ICON_HEX} then`,
+                    emoji: '',
+                    color: '#DAA520',
+                    textPython: `
+    elif # <your condition or function here>
 `
                 },
                 {
@@ -1195,6 +1205,15 @@ when`
         7: {   // sensors 
             colorClass: 'sensors-color',
             snippets: [
+                {
+                    id: 'sensor0',
+                    buttonText: 'is color (color.BLUE)',
+                    emoji: '🧿',
+                    color: '#87CEEB',
+                    textPython: `is_color(color.BLUE):
+            pass
+           `
+                },
                 {
                     id: 'sensor1',
                     buttonText: 'is blue (condition)',
@@ -1629,18 +1648,18 @@ test for figures
 
     # 2. When the student starts their robot, the Driving Base should begin driving forward.
 
-    # 2a Runloop.run here to continuously check the color sensor and respond accordingly.
+    # 2a Forever here or Async task to continuously check the color sensor and respond accordingly.
 
-# 3. When the color sensor detects Black, the Driving Base should stop moving.
+    # 3. When the color sensor detects Black, the Driving Base should stop moving.
 
-# 4. When the color sensor detects Green, the Driving Base should turn right 90 degrees.
+    # 4. When the color sensor detects Green, the Driving Base should turn right 90 degrees.
 
-# 5. When the color sensor detects Yellow, the Driving Base should turn left 90 degrees.
+    # 5. When the color sensor detects Yellow, the Driving Base should turn left 90 degrees.
 
-# 6. When the sensor detects Blue, the Driving Base should begin driving forward again.
+    # 6. When the sensor detects Blue, the Driving Base should begin driving forward again.
 
-       # 8. When the Driving Base reaches the exit, the Driving Base needs to stop moving, the 
-       #    hub must display a heart and play the recorded message, “We made it!”
+    # 8. When the Driving Base reaches the exit, the Driving Base needs to stop moving, the 
+    #    hub must display a heart and play the recorded message, “We made it!”
 
 `
                 },

@@ -221,6 +221,8 @@
                 groups: {
                     3: ['light1', 'light2', 'light3', 'light4'],
                     5: ['event9', 'event8'],
+                    7: ['sensor0','sensor1', 'sensor2', 'sensor3', 'sensor3a', 'sensor4',
+                        'sensor4a','sensor5', 'sensor6'],
                     12: ['gettingstarted6']
                 }
             },
@@ -248,7 +250,7 @@
                 })
                 : [],
             camp5: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP5_COMBINED_ID, 3, 5, 35, 12], {
+                ? colorUtils.getEmojiButtons([CAMP5_COMBINED_ID, 3, 5, 6, 7, 35, 12], {
                     [CAMP5_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp5 snippets', className: 'pink-circle' }
                 })
                 : [],
