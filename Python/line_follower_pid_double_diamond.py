@@ -1,16 +1,24 @@
-# Line Follower - Proportional Control (Double Diamond)
+# Line Follower - PID Double Diamond
 #########################################################################
 # 🛻 main
 #########################################################################
 async def main():
-    motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
 
-    robot = LineFollow(target_light=70, speed=140, kp=6.5)
+    normal_speed = int(0.3 * 1100)
+    slow_speed = int(0.2 * 1100)
+    robot = LineFollow(target_light=70, speed=normal_speed, kp=6.5)
 
-    for i in range(300):
-        if distance_sensor.distance(port.B) < 50 and distance_sensor.distance(port.B) != -1:
-            motor_pair.stop(motor_pair.PAIR_1)
-            sleep(2)
+    for i in range(300): # number of times to repeat the loop
+        if is_near(100): # is the stanchion within 10 cm
+            await robot.stop_motors()
+            while True:
+                await runloop.until(lambda: not is_near(100))
+                await runloop.until(lambda: not button.pressed(button.LEFT))
+                await runloop.until(lambda: bool(button.pressed(button.LEFT)))
+                if not is_near(100):
+                    break
+
+        robot.speed = slow_speed if is_near(200) else normal_speed
         await robot.follow_line()
         sleep_ms(100)
 
@@ -18,43 +26,74 @@ async def main():
 ##############################################################################
 ##############################################################################
 ##############################################################################
-
-import runloop, time, sys, motor_pair, motor, force_sensor
-import color, color_sensor, distance_sensor
-from hub import light_matrix, port, sound
+import sys, motor_pair, motor, runloop, time
+import color, color_sensor, distance_sensor, force_sensor
+from hub import port, motion_sensor,button, light_matrix
+from runloop import run, until
 from time import sleep, sleep_ms
 
-##############################################################################
-# 🚙 Class LineFollow
-############################################################
-class LineFollow:
-    """A robot that follows a line using proportional control.
+# Ports
+motor_pair.pair(motor_pair.PAIR_1, port.C, port.D)
+force_port = port.A
+distance_port = port.B
+color_port = port.F
+arm_motor_port = port.E
 
-    The color sensor measures reflected light, and the robot adjusts its
-    motor speeds to follow the target reflection value.
+# Constants
+CM_TO_DEGREES = int(360/17.5)# degrees_wheel_diameter:360 cm_wheel_circumference:17.5
+INCHES_TO_DEGREES = int(360/6.89)# degrees_wheel_diameter:360 inches_wheel_circumference:6.89
+INCHES_TO_MILLIMETERS = int(25.4)# 1 inch = 25.4 millimeters
+
+########################################################################
+# ☀️ is the distance sensor seeing something close
+########################################################################
+def is_near(distance_threshold=200):# 200 milimeters (7.874 inches)
+    distance = distance_sensor.distance(distance_port)
+    if distance == -1:
+        return False
+    return distance <= distance_threshold
+
+
+##############################################################################
+# 🚙Class LineFollow
+######################################################
+class LineFollow:
+    """A robot that can follow a line.
+
+    This robot uses a light sensor to see the edge between the dark and light and automatically steers
+    the wheels to stay over the edge by adjusting the motor speeds.
 
     Attributes:
-        target_light (int): Target reflection value. Defaults to 60.
-        speed (int): Base motor speed. Defaults to 180.
-        kp (float): Proportional gain for steering correction. Defaults to 6.8.
+        target_light (int): The desired light intensity the robot tries to stay on.
+            Defaults to 60.
+        speed (int): How fast the robot moves.
+            Defaults to 180.
+        kp (float): Proportional gain for steering correction.
+            Defaults to 6.8.
 
     Args:
-        target_light (int): Target reflection value.
-        speed (int): Base motor speed.
+        target_light (int): The desired light intensity the robot tries to stay on.
+            Defaults to 60.
+        speed (int): How fast the robot moves.
+            Defaults to 180.
         kp (float): Proportional gain for steering correction.
+            Defaults to 6.8.
 
     Example:
-        line_follower = LineFollow(target_light=60, speed=180, kp=6.8)
+        Basic usage example:
 
-        for i in range(100):
-            await line_follower.follow_line()
+            line_follower = LineFollow(target_light=60, speed=180, kp=6.8)
+
+            # Parent code controls the loop
+            for i in range(100):
+                await line_follower.follow_line()
 
     Note:
-        - Set target_light to the midpoint of the measured reflection values
-          for the line and its background.
-        - Higher speeds are generally suited to competition runs.
-        - kp controls how strongly the robot responds to reflection error.
-    """
+        - Target_light is computed from half the difference between the value returned from the sensor when positioning over the light then over the dark.
+        - Higher speeds are mostly for competition runs.
+        - kp is the gain in a PID controller.
+        """
+
     def __init__(self, target_light=60, speed=180, kp=6.8):
         self.target_light = target_light
         self.speed = speed
@@ -64,9 +103,10 @@ class LineFollow:
     async def follow_line(self):
         """Execute one iteration of line following behavior.
 
-        This method performs one iteration of the line-following control loop.
-        It reads the color sensor, calculates a proportional steering correction,
-        and adjusts the motor speeds. The parent code calls this method repeatedly.
+        This method performs a single iteration of the line following control loop.
+        It reads the light sensor value, calculates steering correction using proportional
+        control, and adjusts motor speeds accordingly. The parent code is responsible
+        for calling this method repeatedly in a loop.
 
         The control algorithm works by:
         1. Reading light reflection from the color sensor
@@ -75,56 +115,61 @@ class LineFollow:
         4. Adjusting left/right motor speeds based on correction
 
         Motor behavior:
-        - The left motor (port C) runs at `-(speed + steering_correction)`.
-        - The right motor (port D) runs at `speed - steering_correction`.
+        - Left motor (port C): Runs in reverse direction (-speed)
+        - Right motor (port D): Runs in forward direction (+speed)
+        - Steering correction added or subtracted from left, added or subtracted from right
 
         Returns:
-            None.
+            None: Executes one control iteration and returns.
+
+        Raises:
+            Usually no errors, but the robot might have problems if the motors or sensors stop working properly.
 
         Note:
-            - Each call reads the color sensor on port F once and adjusts the
-              motor speeds once.
-            - Call this method repeatedly for continuous line following.
-            - Each call prints debug values for the current iteration.
+            - Color sensor must be set to reflection mode before calling this method.
+            - Parent code should call this method repeatedly in a loop for continuous line following
+            - Each call performs one sensor reading and motor speed adjustment
+            - Debug information is printed each iteration showing sensor readings and calculated motor speeds
 
         Example:
+            # Parent code controls the loop
             line_follower = LineFollow(60, 180, 6.8)
 
+            # Run for specific number of iterations
             for i in range(100):
                 await line_follower.follow_line()
-                sleep_ms(100)  # Add a delay between iterations.
+                await sleep_ms(100)# Add delay between iterations
 
+            # Or run indefinitely
             while True:
                 await line_follower.follow_line()
-                sleep_ms(100)
+                await sleep_ms(100)
         """
 
-        light_intensity = color_sensor.reflection(port.F)  
+        light_intensity = color_sensor.reflection(port.F) # pyright: ignore[reportUndefinedVariable]
         steering_correction = self.kp * (self.target_light - light_intensity)
 
         left_speed = self.speed + steering_correction
         right_speed = self.speed - steering_correction
 
-        motor.run(port.C, -int(left_speed))  
-        motor.run(port.D, int(right_speed))  
+        motor.run(port.C, -int(left_speed)) # pyright: ignore[reportUndefinedVariable]
+        motor.run(port.D, int(right_speed)) # pyright: ignore[reportUndefinedVariable]
 
-        self.debug_print(self.iteration, self.target_light, self.speed, self.kp, 
-                         light_intensity, steering_correction, left_speed, right_speed)
+        self.debug_print(self.iteration, self.target_light, self.speed, self.kp, light_intensity,
+                        steering_correction, left_speed, right_speed)
 
         self.iteration += 1
 
-    def debug_print(self, iteration, target_light, speed, kp, light_intensity, 
-                    steering_correction, left_speed, right_speed):
-        print("Iteration: {:3d} | Target_Light: {:3d} | Speed: {:3d} | KP: {:6.2f} | " \
-            "Steering_Correction: {:6.2f} | Left_Speed: {:6.2f} | Right_Speed: {:6.2f}".format(
-            iteration, target_light, speed, kp, light_intensity, steering_correction,
-            left_speed, right_speed))
+    def debug_print(self, iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed):
+        """Debug printing utility"""
+        print("Iteration: {:3d} | Target_Light: {:3d} | Speed: {:3d} | KP: {:6.2f} | Steering_Correction: {:6.2f} | Left_Speed: {:6.2f} | Right_Speed: {:6.2f}".format(
+            iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed))
 
 
     async def stop_motors(self):
         """Stop both motors"""
-        motor.stop(port.C)  
-        motor.stop(port.D)  
-        
+        motor.stop(port.C) # pyright: ignore[reportUndefinedVariable]
+        motor.stop(port.D) # pyright: ignore[reportUndefinedVariable]
+
 runloop.run(main())
 sys.exit()
