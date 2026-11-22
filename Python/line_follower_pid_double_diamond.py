@@ -11,7 +11,7 @@ async def main():
     for i in range(300): # number of times to repeat the loop
         if is_near(100): # is the stanchion within 10 cm
             await robot.stop_motors()
-            while True:
+            while True: # wait until stanchion no longer near and left button pressed
                 await runloop.until(lambda: not is_near(100))
                 await runloop.until(lambda: bool(button.pressed(button.LEFT)))
                 if not is_near(100):

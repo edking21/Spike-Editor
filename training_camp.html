@@ -135,13 +135,16 @@
         const CAMP3_COMBINED_ID = 3001;
         const CAMP4_COMBINED_ID = 4001;
         const CAMP5_COMBINED_ID = 5001;
+        const CAMP6_COMBINED_ID = 6001;
+
 
         const trainingCampOptions = [
             { key: 'camp1', label: 'Training Camp Robot Shuffle' },
             { key: 'camp2', label: 'Training Camp Round the Garage' },
             { key: 'camp3', label: 'Training Camp Hay Bale' },
             { key: 'camp4', label: 'Training Camp Sensors' },
-            { key: 'camp5', label: 'Training Camp Maze' }
+            { key: 'camp5', label: 'Training Camp Maze' },
+            { key: 'camp6', label: 'Training Camp LineFollower' }
         ];
 
         const trainingCampSnippetSelections = {
@@ -189,7 +192,7 @@
                     12: ['gettingstarted3']
                 }
             },
-            camp4: {
+            camp4: {    // sensors 
                 combined: {
                     [CAMP4_COMBINED_ID]: {
                         colorClass: 'movement-color',
@@ -208,9 +211,27 @@
                     12: ['gettingstarted4']
                 }
             },
-            camp5: {
+            camp5: {    // maze runner
                 combined: {
                     [CAMP5_COMBINED_ID]: {
+                        colorClass: 'movement-color',
+                        groups: [2],
+                        snippetIdsByGroup: {
+                            12: ['gettingstarted5'],
+                        }
+                    }
+                },
+                groups: {
+                    3: ['light1', 'light2', 'light3', 'light4'],
+                    5: ['event9', 'event8'],
+                    7: ['sensor0','sensor1', 'sensor2', 'sensor3', 'sensor3a', 'sensor4',
+                        'sensor4a','sensor5', 'sensor6'],
+                    12: ['gettingstarted5']
+                }
+            },
+            camp6: {    // line follower
+                combined: {
+                    [CAMP6_COMBINED_ID]: {
                         colorClass: 'movement-color',
                         groups: [2],
                         snippetIdsByGroup: {
@@ -250,8 +271,13 @@
                 })
                 : [],
             camp5: (typeof colorUtils.getEmojiButtons === 'function')
-                ? colorUtils.getEmojiButtons([CAMP5_COMBINED_ID, 3, 5, 6, 7, 35, 12], {
-                    [CAMP5_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp5 snippets', className: 'pink-circle' }
+                ? colorUtils.getEmojiButtons([CAMP6_COMBINED_ID, 3, 5, 6, 7, 35, 12], {
+                    [CAMP6_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp5 snippets', className: 'pink-circle' }
+                })
+                : [],
+            CAMP6: (typeof colorUtils.getEmojiButtons === 'function')
+                ? colorUtils.getEmojiButtons([CAMP6_COMBINED_ID, 3, 5, 6, 7, 35, 12], {
+                    [CAMP6_COMBINED_ID]: { label: 'Movement', bubbleLabel: 'Camp6 snippets', className: 'pink-circle' }
                 })
                 : [],
         };
