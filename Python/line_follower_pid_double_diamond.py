@@ -55,7 +55,6 @@ class LineFollow:
         - Higher speeds are generally suited to competition runs.
         - kp controls how strongly the robot responds to reflection error.
     """
-
     def __init__(self, target_light=60, speed=180, kp=6.8):
         self.target_light = target_light
         self.speed = speed
@@ -100,30 +99,32 @@ class LineFollow:
                 sleep_ms(100)
         """
 
-        light_intensity = color_sensor.reflection(port.F)  # pyright: ignore[reportUndefinedVariable]
+        light_intensity = color_sensor.reflection(port.F)  
         steering_correction = self.kp * (self.target_light - light_intensity)
 
         left_speed = self.speed + steering_correction
         right_speed = self.speed - steering_correction
 
-        motor.run(port.C, -int(left_speed))  # pyright: ignore[reportUndefinedVariable]
-        motor.run(port.D, int(right_speed))  # pyright: ignore[reportUndefinedVariable]
+        motor.run(port.C, -int(left_speed))  
+        motor.run(port.D, int(right_speed))  
 
-        self.debug_print(self.iteration, self.target_light, self.speed, self.kp, light_intensity,
-                        steering_correction, left_speed, right_speed)
+        self.debug_print(self.iteration, self.target_light, self.speed, self.kp, 
+                         light_intensity, steering_correction, left_speed, right_speed)
 
         self.iteration += 1
 
-    def debug_print(self, iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed):
-        """Print the supplied line-following debug values."""
-        print("Iteration: {:3d} | Target_Light: {:3d} | Speed: {:3d} | KP: {:6.2f} | Steering_Correction: {:6.2f} | Left_Speed: {:6.2f} | Right_Speed: {:6.2f}".format(
-            iteration, target_light, speed, kp, light_intensity, steering_correction, left_speed, right_speed))
+    def debug_print(self, iteration, target_light, speed, kp, light_intensity, 
+                    steering_correction, left_speed, right_speed):
+        print("Iteration: {:3d} | Target_Light: {:3d} | Speed: {:3d} | KP: {:6.2f} | " \
+            "Steering_Correction: {:6.2f} | Left_Speed: {:6.2f} | Right_Speed: {:6.2f}".format(
+            iteration, target_light, speed, kp, light_intensity, steering_correction,
+            left_speed, right_speed))
 
 
     async def stop_motors(self):
         """Stop both motors"""
-        motor.stop(port.C)  # pyright: ignore[reportUndefinedVariable]
-        motor.stop(port.D)  # pyright: ignore[reportUndefinedVariable]
-
+        motor.stop(port.C)  
+        motor.stop(port.D)  
+        
 runloop.run(main())
 sys.exit()
