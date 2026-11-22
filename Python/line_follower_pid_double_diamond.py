@@ -13,7 +13,6 @@ async def main():
             await robot.stop_motors()
             while True:
                 await runloop.until(lambda: not is_near(100))
-                await runloop.until(lambda: not button.pressed(button.LEFT))
                 await runloop.until(lambda: bool(button.pressed(button.LEFT)))
                 if not is_near(100):
                     break
