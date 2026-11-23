@@ -1948,9 +1948,40 @@ except SystemExit:
     # to maneuver around a 30 cm sided double diamond layout, with two planned
     # speed adjustments and stops. To complete this challenge:
 
-1. Starting at a minimum of 30% speed, the robot follows all eight sides of the 30 cm sided double diamond layout and finishes where it starts.  The robot may start anywhere on the layout. Note: blue painters tape will be used for the course layout.
-2. Two “distance sensor stanchions” will be placed at the end of one of the 30 cm sides on the layout by the judge.  When the robot turns the corner, entering a 30 cm side, and comes within 20 cm of a stanchion, the robot must reduce its speed to 20% but continue traveling towards the stanchion.  When the robot comes within 10 cm of the stanchion, the robot will stop. The judge will then remove the stanchion and the student can then restart the robot to continue on its path.
-3. The robot can start at any point on the layout, but must stop within 5 cm of its starting point after following the entire layout.
+    # 1. Starting at a minimum of 30% speed, the robot follows all eight
+    # sides of the 30 cm sided double diamond layout and finishes where it
+    # starts. The robot may start anywhere on the layout. Note: blue
+    # painters tape will be used for the course layout.
+    #
+    # Coding Hint: 
+    #   normal_speed = int(0.3 * 1100)
+    #   slow_speed = int(0.2 * 1100)
+    #   robot = LineFollow(target_light=70, speed=normal_speed, kp=6.5)
+    #
+    # 2. Two "distance sensor stanchions" will be placed at the end of one
+    # of the 30 cm sides on the layout by the judge. When the robot turns
+    # the corner, entering a 30 cm side, and comes within 20 cm of a
+    # stanchion, the robot must reduce its speed to 20% but continue
+    # traveling towards the stanchion. When the robot comes within 10 cm of
+    # the stanchion, the robot will stop. The judge will then remove the
+    # stanchion and the student can then restart the robot to continue on
+    # its path.
+    # Codeing Hint:
+    #   for i in range(300): # number of times to repeat the loop
+    #       if is_near(100): # is the stanchion within 10 cm
+    #           await robot.stop_motors()
+    #           while True:
+    #               await runloop.until(lambda: not is_near(100))
+    #               await runloop.until(lambda: bool(button.pressed(button.LEFT)))
+    #               if not is_near(100):
+    #                   break
+    #
+    #           robot.speed = slow_speed if is_near(200) else normal_speed
+    #           await robot.follow_line()
+    #           sleep_ms(100)
+    #
+    # 3. The robot can start at any point on the layout, but must stop
+    # within 5 cm of its starting point after following the entire layout.
 
 `
                 },
