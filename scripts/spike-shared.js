@@ -1230,7 +1230,7 @@ sys.exit()
                     textPython: `
 
 ########################################################################
-# 🤖 Main - Training Camp #2 Playing with objects
+# 🤖 Main 
 ########################################################################
 async def main():
 
@@ -1292,15 +1292,6 @@ async def main():
                     color: '#FFD700',
                     textPython: `    runloop.run(when_color_is_black(), when_color_is_blue(), when_color_is_green())
 `
-                },
-                {
-                    id: 'event7',
-                    buttonText: 'When',
-                    emoji: '🧿',
-                    color: '#FFD700',
-                    textPython: `
-# When 
-when`
                 },
             ]
         },
